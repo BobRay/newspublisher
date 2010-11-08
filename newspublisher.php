@@ -39,6 +39,15 @@
 #
 #::::::::::::::::::::::::::::::::::::::::
 
+$modx->regClientCSS(MODX_MANAGER_URL . 'assets/ext3/resources/css/ext-all-notheme-min.css');
+$modx->regClientCSS(MODX_MANAGER_URL . 'templates/default/css/xtheme-modx.css');
+$modx->regClientCSS(MODX_MANAGER_URL . 'templates/default/css/index.css');
+
+
+$modx->regClientScript(MODX_MANAGER_URL . 'assets/ext3/adapter/ext/ext-base.js');
+$modx->regClientScript(MODX_MANAGER_URL . 'assets/ext3/ext-all.js');
+$modx->regClientScript(MODX_ASSETS_URL . 'components/newspublisher/newspublisher.js');
+
 // get user groups that can post articles
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
 $allowAnyPost = count($postgrp)==0 ? true : false;
@@ -95,35 +104,17 @@ $message = '';
 if(isset($formtpl)) $formTpl = $modx->getChunk($formtpl);
 if(empty($formTpl)) $formTpl = '
     <form name="NewsPublisher" method="post">
-        <input name="NewsPublisherForm" type="hidden" value="on" />
+        <input name="NewsPublisherForm" type="hidden" value="on" /><br />
+        <label>Enter a date: </label><input type="text" id="dateField"><button id="openCalendar" type="button">Open Calendar</button><div id="calendar"></div>
         Page title:<br /><input name="pagetitle" type="text" size="40" value="[[+pagetitle]]" /><br />
         Long title:<br /><input name="longtitle" type="text" size="40" value="[[+longtitle]]" /><br />
         Description:<br /><input name="description" type="text" size="40" value="[[+description]]" /><br />
         Published date:<br /><input name="pub_date" type="text" value="[[+pub_date]]" size="40" readonly="readonly" />
-        <a onClick="nwpub_cal1.popup();" onMouseover="window.status=\'Select date\'; return true;" onMouseout="window.status=\'\'; return true;" style="cursor:pointer; cursor:hand"><img align="absmiddle" src="manager/media/images/icons/cal.gif" width="16" height="16" border="0" alt="Select date" /></a>
-        <a onClick="document.NewsPublisher.pub_date.value=\'\'; return true;" onMouseover="window.status=\'Remove date\'; return true;" onMouseout="window.status=\'\'; return true;" style="cursor:pointer; cursor:hand"><img align="absmiddle" src="manager/media/images/icons/cal_nodate.gif" width="16" height="16" border="0" alt="Remove date"></a><br />
         Unpublished date:<br /><input name="unpub_date" type="text" value="[[+unpub_date]]" size="40" readonly="readonly" />
-        <a onClick="nwpub_cal2.popup();" onMouseover="window.status=\'Select date\'; return true;" onMouseout="window.status=\'\'; return true;" style="cursor:pointer; cursor:hand"><img align="absmiddle" src="manager/media/images/icons/cal.gif" width="16" height="16" border="0" alt="Select date" /></a>
-        <a onClick="document.NewsPublisher.unpub_date.value=\'\'; return true;" onMouseover="window.status=\'Remove date\'; return true;" onMouseout="window.status=\'\'; return true;" style="cursor:pointer; cursor:hand"><img align="absmiddle" src="manager/media/images/icons/cal_nodate.gif" width="16" height="16" border="0" alt="Remove date"></a><br />
         Summary:<br /><textarea name="introtext" cols="50" rows="5">[[+introtext]]</textarea><br />
         Content:<br /><textarea name="content" cols="50" rows="8">[[+content]]</textarea><br />
         <input name="send" type="submit" value="Submit" />
-    </form>
-    <script language="JavaScript" src="manager/media/script/datefunctions.js"></script>
-    <script type="text/javascript">
-        var elm_txt = {}; // dummy
-        var pub = document.forms["NewsPublisher"].elements["pub_date"];
-        var nwpub_cal1 = new calendar1(pub,elm_txt);
-        nwpub_cal1.path="[(base_url)]manager/media/";
-        nwpub_cal1.year_scroll = true;
-        nwpub_cal1.time_comp = true;
-
-        var unpub = document.forms["NewsPublisher"].elements["unpub_date"];
-        var nwpub_cal2 = new calendar1(unpub,elm_txt);
-        nwpub_cal2.path="[(base_url)]manager/media/";
-        nwpub_cal2.year_scroll = true;
-        nwpub_cal2.time_comp = true;
-    </script>';
+    </form>';
 
 
 // switch block
