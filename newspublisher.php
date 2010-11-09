@@ -216,6 +216,8 @@ switch ($isPostBack) {
             //if($mnuidx<1) $mnuidx = 0;
 
             // post news content
+            $createdBy = $modx->user->get('id');
+
             $flds = array(
                 'pagetitle'     => $title,
                 'longtitle'     => $longtitle,
@@ -224,7 +226,7 @@ switch ($isPostBack) {
                 'alias'             => $alias,
                 'parent'            => $folder,
                 'createdon'     => $createdon,
-                'createdby'     => ($userid>0 ? $userid * -1:0),
+                'createdby'     => $createdBy,
                 'editedon'        => '0',
                 'editedby'        => '0',
                 'published'     => $published,
