@@ -236,7 +236,7 @@ switch ($isPostBack) {
                 'hidemenu'        => $hidemenu,
                 'menuindex'     => $mnuidx,
                 'template'        => $template,
-                'content'         => mysql_escape_string($header.$content.$footer)
+                'content'         => $header.$content.$footer
             );
             //$redirectid = $modx->db->insert($flds,$modx->getFullTableName('site_content'));
             $resource = $modx->newObject('modResource',$flds);
