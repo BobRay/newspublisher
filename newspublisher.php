@@ -36,17 +36,18 @@
 #    &showinmenu  - sets the flag to true or false (1|0) as to whether or not it shows in the menu. defaults to false (0)
 #    &aliastitle  - set to 1 to use page title as alias suffix. Defaults to 0 - date created.
 #    &clearcache  - when set to 1 the system will automatically clear the site cache after publishing an article.
+#    &hour        - Hour, minute and second for published and unpublished dates; defaults to 12:01 am.
+#    &minute
+#    &second
 #
 #::::::::::::::::::::::::::::::::::::::::
 
-$modx->regClientCSS(MODX_MANAGER_URL . 'assets/ext3/resources/css/ext-all-notheme-min.css');
-$modx->regClientCSS(MODX_MANAGER_URL . 'templates/default/css/xtheme-modx.css');
-$modx->regClientCSS(MODX_MANAGER_URL . 'templates/default/css/index.css');
 
+// $modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
+$modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
+$modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
 
-$modx->regClientScript(MODX_MANAGER_URL . 'assets/ext3/adapter/ext/ext-base.js');
-$modx->regClientScript(MODX_MANAGER_URL . 'assets/ext3/ext-all.js');
-$modx->regClientScript(MODX_ASSETS_URL . 'components/newspublisher/newspublisher.js');
+//$modx->regClientScript(MODX_ASSETS_URL . 'components/newspublisher/js/mydp.js');
 
 // get user groups that can post articles
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
@@ -103,18 +104,22 @@ $message = '';
 // get form template
 if(isset($formtpl)) $formTpl = $modx->getChunk($formtpl);
 if(empty($formTpl)) $formTpl = '
+    <div class="dp">
     <form name="NewsPublisher" method="post">
-        <input name="NewsPublisherForm" type="hidden" value="on" /><br />
-        <label>Enter a date: </label><input type="text" id="dateField"><button id="openCalendar" type="button">Open Calendar</button><div id="calendar"></div>
-        Page title:<br /><input name="pagetitle" type="text" size="40" value="[[+pagetitle]]" /><br />
-        Long title:<br /><input name="longtitle" type="text" size="40" value="[[+longtitle]]" /><br />
-        Description:<br /><input name="description" type="text" size="40" value="[[+description]]" /><br />
-        Published date:<br /><input name="pub_date" type="text" value="[[+pub_date]]" size="40" readonly="readonly" />
-        Unpublished date:<br /><input name="unpub_date" type="text" value="[[+unpub_date]]" size="40" readonly="readonly" />
-        Summary:<br /><textarea name="introtext" cols="50" rows="5">[[+introtext]]</textarea><br />
-        Content:<br /><textarea name="content" cols="50" rows="8">[[+content]]</textarea><br />
-        <input name="send" type="submit" value="Submit" />
-    </form>';
+
+        <input name="NewsPublisherForm" type="hidden" value="on" />
+
+        <p><label for="pagetitle">Page title: </label><input name="pagetitle" type="text" size="40" value="[[+pagetitle]]" /></p>
+        <p><label for="longtitle">Long title: </label><input name="longtitle" type="text" size="40" value="[[+longtitle]]" /></p>
+        <p><label for="description">Description: </label><input name="description" type="text" size="40" value="[[+description]]" /></p>
+        <p><label for="pub_date">Published Date: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" maxlength="10" size="9" readonly="readonly" value="[[+pub_date]]"/></p>
+        <p><label for="unpub_date">Unpublished Date: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" maxlength="10" size="9" readonly="readonly" value="[[+unpub_date]]" /></p>
+        <p><label for="introtext">Summary: </label><br /><textarea name="introtext" cols="50" rows="5">[[+introtext]]</textarea></p>
+        <p><label for="content">Content: </label><br /><textarea name="content" cols="70" rows="20">[[+content]]</textarea></p>
+        <p><input name="send" type="submit" value="Submit" /></p>
+
+    </form></div>';
+
 
 
 // switch block
@@ -175,11 +180,16 @@ switch ($isPostBack) {
             $unpub_date = $_POST['unpub_date'];
             $published = 1;
 
+            $H=isset($hours)? $hours : 0;
+            $M=isset($minutes)? $minutes: 1;
+            $S=isset($seconds)? $seconds: 0;
+
             // check published date
             if($pub_date=="") {
                 $pub_date="0";
             } else {
-                list($d, $m, $Y, $H, $M, $S) = sscanf($pub_date, "%2d-%2d-%4d %2d:%2d:%2d");
+                list($d, $m, $Y) = sscanf($pub_date, "%2d-%2d-%4d");
+
                 $pub_date = strtotime("$m/$d/$Y $H:$M:$S");
 
                 if($pub_date < $createdon) {
@@ -193,7 +203,8 @@ switch ($isPostBack) {
             if($unpub_date=="") {
                 $unpub_date="0";
             } else {
-                list($d, $m, $Y, $H, $M, $S) = sscanf($unpub_date, "%2d-%2d-%4d %2d:%2d:%2d");
+                list($d, $m, $Y) = sscanf($unpub_date, "%2d-%2d-%4d");
+
                 $unpub_date = strtotime("$m/$d/$Y $H:$M:$S");
                 if($unpub_date < $createdon) {
                     $published = 0;
@@ -299,7 +310,7 @@ switch ($isPostBack) {
 
            $resource->save();
            // Make sure we have the ID.
-           $resource = $modx->getObject('modResource',array('pagetitle'=>$flds['pagetitle']));
+           // $resource = $modx->getObject('modResource',array('pagetitle'=>$flds['pagetitle']));
            $postid = isset($postid) ? $postid: $resource->get('id');
 
 
