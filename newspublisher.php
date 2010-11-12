@@ -44,12 +44,14 @@
 
 
 // $modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
-$modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
-$modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
+//$modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
+// $modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
 
 //$modx->regClientScript(MODX_ASSETS_URL . 'components/newspublisher/js/mydp.js');
 
 // get user groups that can post articles
+
+$modx->runSnippet('loadrichtext');
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
 $allowAnyPost = count($postgrp)==0 ? true : false;
 
@@ -100,7 +102,24 @@ $template = $modx->getOption('default_template');
 }
 
 $message = '';
+// **************
+$id = 'xcontent';
+$w= $params['w'] ? $params['w'] : '100%';
+$h= $params['h'] ? $params['h'] : '400px';
+//$richtexteditor= $params['edt'] ? $params['edt'] : "";
+//$richtexteditor = $modx->getOption('which_editor');
 
+//$richtexteditor = 'TinyMCE';
+$value = 'SomeValue';
+
+$o= '<div class="MODX_RichTextWidget"><textarea class="modx-richtext"  id="' . $id . '" name="' . $id . '" style="width:' . $w . '; height:' . $h . ';">';
+$o .= htmlspecialchars($value);
+$o .= '</textarea></div>';
+
+// setup editors
+
+return $o;
+// **************
 // get form template
 if(isset($formtpl)) $formTpl = $modx->getChunk($formtpl);
 if(empty($formTpl)) $formTpl = '
