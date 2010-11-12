@@ -21,6 +21,8 @@
 #    Only meant to be used once per page.
 #::::::::::::::::::::::::::::::::::::::::
 #
+# NOTE: Bruno17's tinymcefe component must be installed for rich text fields
+#
 #  Parameters:
 #    &folder      - folder id where comments are stored
 #    &makefolder  - set to 1 to automatically convert the parent document to a folder. Defaults to 0
@@ -31,6 +33,7 @@
 #    &headertpl   - header template (chunk name) to be inserted at the begining of the news content
 #    &footertpl   - footer template (chunk name) to be inserted at the end of the news content
 #    &formtpl     - form template (chunk name)
+#    &richtext    - Initialize rich text editor
 #    &rtcontent   - name of a richtext content form field
 #    &rtsummary   - name of a richtext summary form field
 #    &showinmenu  - sets the flag to true or false (1|0) as to whether or not it shows in the menu. defaults to false (0)
@@ -43,15 +46,51 @@
 #::::::::::::::::::::::::::::::::::::::::
 
 
-// $modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
-//$modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
-// $modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
+$modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
+$modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
+$modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
 
-//$modx->regClientScript(MODX_ASSETS_URL . 'components/newspublisher/js/mydp.js');
+$modx->regClientScript(MODX_ASSETS_URL . 'components/newspublisher/js/mydp.js');
 
 // get user groups that can post articles
 
-$modx->runSnippet('loadrichtext');
+$corePath=$modx->getOption('core_path').'components/tinymcefe/';
+$modx->regClientStartupScript($modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
+$modx->regClientStartupScript($modx->getOption('manager_url').'assets/ext3/ext-all.js');
+$modx->regClientStartupScript($modx->getOption('manager_url').'assets/modext/build/core/modx-min.js');
+$modx->regClientStartupScript($modx->getOption('manager_url').'assets/modext/util/datetime.js');
+
+$useEditor = $modx->getOption('use_editor',null,false);
+$whichEditor = $modx->getOption('which_editor',null,'');
+
+$plugin=$modx->getObject('modPlugin',array('name'=>$whichEditor));
+$tinyUrl = $modx->getOption('assets_url').'components/tinymcefe/';
+
+/* OnRichTextEditorInit */
+        if ($useEditor && $whichEditor == 'TinyMCE') {
+            $tinyproperties=$plugin->getProperties();
+            require_once $corePath.'tinymce.class.php';
+            $tiny = new TinyMCE($modx,$tinyproperties,$tinyUrl);
+            if (isset($forfrontend) || $modx->isFrontend()) {
+                $def = $modx->getOption('cultureKey',null,$modx->getOption('manager_language',null,'en'));
+                $tiny->properties['language'] = $modx->getOption('fe_editor_lang',array(),$def);
+                $tiny->properties['frontend'] = true;
+                unset($def);
+            }
+            $tiny->setProperties($tinyproperties);
+            $html = $tiny->initialize();
+
+            $modx->regClientStartupScript($tiny->config['assetsUrl'].'jscripts/tiny_mce/langs/'.$tiny->properties['language'].'.js');
+            $modx->regClientStartupScript($tiny->config['assetsUrl'].'tiny.browser.js');
+            $modx->regClientStartupHTMLBlock('<script type="text/javascript">
+                Ext.onReady(function() {
+                MODx.loadRTE();
+                });
+            </script>');
+
+        }
+
+
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
 $allowAnyPost = count($postgrp)==0 ? true : false;
 
@@ -102,6 +141,8 @@ $template = $modx->getOption('default_template');
 }
 
 $message = '';
+
+if (false) {
 // **************
 $id = 'xcontent';
 $w= $params['w'] ? $params['w'] : '100%';
@@ -120,6 +161,8 @@ $o .= '</textarea></div>';
 
 return $o;
 // **************
+
+}
 // get form template
 if(isset($formtpl)) $formTpl = $modx->getChunk($formtpl);
 if(empty($formTpl)) $formTpl = '
@@ -134,7 +177,7 @@ if(empty($formTpl)) $formTpl = '
         <p><label for="pub_date">Published Date: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" maxlength="10" size="9" readonly="readonly" value="[[+pub_date]]"/></p>
         <p><label for="unpub_date">Unpublished Date: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" maxlength="10" size="9" readonly="readonly" value="[[+unpub_date]]" /></p>
         <p><label for="introtext">Summary: </label><br /><textarea name="introtext" cols="50" rows="5">[[+introtext]]</textarea></p>
-        <p><label for="content">Content: </label><br /><textarea name="content" cols="70" rows="20">[[+content]]</textarea></p>
+        <p><label for="content">Content: </label><br /></p><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content" cols="70" rows="20">[[+content]]</textarea></div>
         <p><input name="send" type="submit" value="Submit" /></p>
 
     </form></div>';
@@ -257,7 +300,7 @@ switch ($isPostBack) {
                 'template'        => $template,
                 'content'         => $header.$content.$footer
             );
-            //$redirectid = $modx->db->insert($flds,$modx->getFullTableName('site_content'));
+
             $resource = $modx->newObject('modResource',$flds);
 
             $parentObj = $modx->getObject('modResource',$flds['parent']);
@@ -288,36 +331,6 @@ switch ($isPostBack) {
 
             }
 
-
-
-            // Handle privateweb
-           // $modx->db->query("UPDATE ".$modx->getFullTableName("site_content")." SET privateweb = 0 WHERE id='$lastInsertId';");
-            //$privatewebSql =    "
-            //    SELECT DISTINCT ".$modx->getFullTableName('document_groups').".document_group
-            //    FROM ".$modx->getFullTableName('document_groups').", ".$modx->getFullTableName('webgroup_access')."
-            //    WHERE
-            //    ".$modx->getFullTableName('document_groups').".document_group = ".$modx->getFullTableName('webgroup_access').".documentgroup
-            //    AND
-             //   ".$modx->getFullTableName('document_groups').".document = $lastInsertId;";
-             //   $privatewebIds = $modx->db->getColumn("document_group",$privatewebSql);
-             //   if(count($privatewebIds)>0) {
-              //      $modx->db->query("UPDATE ".$modx->getFullTableName("site_content")." SET privateweb = 1 WHERE id = $lastInsertId;");
-              //  }
-
-                // And privatemgr
-              //  $modx->db->query("UPDATE ".$modx->getFullTableName("site_content")." SET privatemgr = 0 WHERE id='$lastInsertId';");
-              //  $privatemgrSql =    "
-               //     SELECT DISTINCT ".$modx->getFullTableName('document_groups').".document_group
-               //     FROM ".$modx->getFullTableName('document_groups').", ".$modx->getFullTableName('membergroup_access')."
-               //     WHERE
-               //     ".$modx->getFullTableName('document_groups').".document_group = ".$modx->getFullTableName('membergroup_access')." .documentgroup
-               //     AND
-               //     ".$modx->getFullTableName('document_groups').".document = $lastInsertId;";
-               //     $privatemgrIds = $modx->db->getColumn("document_group",$privatemgrSql);
-               //     if(count($privatemgrIds)>0) {
-               //         $modx->db->query("UPDATE ".$modx->getFullTableName("site_content")." SET privatemgr = 1 WHERE id = $lastInsertId;");
-               //     }
-            // end of document_groups stuff!
 
            if(!empty($makefolder)) {
                 // convert parent into folder
