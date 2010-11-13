@@ -177,12 +177,69 @@ if(empty($formTpl)) $formTpl = '
         <p><label for="pub_date">Published Date: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" maxlength="10" size="9" readonly="readonly" value="[[+pub_date]]"/></p>
         <p><label for="unpub_date">Unpublished Date: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" maxlength="10" size="9" readonly="readonly" value="[[+unpub_date]]" /></p>
         <p><label for="introtext">Summary: </label><br /><textarea name="introtext" cols="50" rows="5">[[+introtext]]</textarea></p>
-        <p><label for="content">Content: </label><br /></p><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content" cols="70" rows="20">[[+content]]</textarea></div>
-        <p><input name="send" type="submit" value="Submit" /></p>
+        <p><label for="content">Content: </label><br /></p><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content" cols="70" rows="20">[[+content]]</textarea></div>';
+
+/* Display TVs */
+
+$allTvs = array();
+$template = 1;
+$templateObj = $modx->getObject('modTemplate',$template);
+
+$tvTemplates = $modx->getCollection('modTemplateVarTemplate',array('templateid'=>$template));
+
+if (! $templateObj) {
+    die('Failed to get Template: ' . $template);
+}
+$formTpl .= '<br />Template: ' . $template;
+$formTpl .= '<br />TV Count: ' . count($tvTemplates);
+foreach($tvTemplates as $tvTemplate) {
+    $tvObj = $tvTemplate->getOne('TemplateVar');
+    if ($tvObj) {
+       $allTvs[] = $tvObj;
+    }
+}
+
+if (! empty($allTvs)) {
+  foreach ($allTvs as $tv) {
+      // $formTpl .= '<br />TV Found: ' . $tv->get('name');
+      $fields = $tv->toArray();
+     // if (! empty($fields['default_text'])) {
+     //     $modx->setPlaceholder($fields['name'],$fields['default_text']);
+     // }
+      switch($tv->get('type') ) {
+      case 'text':
+      case 'textbox':
+          $formTpl .= "\n" . '<p><label for="' . $fields['name'] . '">'. $fields['caption']  . '</label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" /></p>';
+          break;
+
+      case 'textarea':
+          $formTpl .= "\n" . '<p><label for="' . $fields['name'] . '">'. $fields['caption']  . '</label><textarea name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" cols="50" rows="5" value="[[+' . $fields['name'] . ']]"></textarea></p>';
+          break;
+      case option:
+          $options = explode('||',$fields['elements']);
+          if (empty($fields['default_text'])) {
+              $fields['default_text'] = $options[0];
+          }
+
+          $formTpl .= '<p><label for="' . $fields['name'] . '">'. $fields['caption']  . '</label></p><br />';
+
+          foreach ($options as $option) {
+              $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<input type="radio" value="' . $option .  '" name="' . $fields['name'] . '"' . ' id="' . $fields['name'] . '"';
+              $formTpl .= $fields['default_text'] == $option? ' checked ': ' ';
+              $formTpl .= ' />' . $option . '<br />';
+
+          }
+      default:
+          break;
+
+      }
+  }
+
+}
+
+$formTpl .= '<p><input name="send" type="submit" value="Submit" /></p>
 
     </form></div>';
-
-
 
 // switch block
 switch ($isPostBack) {
@@ -323,7 +380,7 @@ switch ($isPostBack) {
                         $intersect->addOne($resourceGroupObj);
                         $intersect->save();
 
-                        echo '<br />Document Group: ' . $docGroupNum . ' . . . ' . 'Document: ' . $docNum;
+                        // echo '<br />Document Group: ' . $docGroupNum . ' . . . ' . 'Document: ' . $docNum;
                     }
 
                 }
@@ -353,12 +410,32 @@ switch ($isPostBack) {
                 $cacheManager = $modx->getCacheManager();
                 $cacheManager->clearCache();
             }
-             //   include_once $modx->config['base_path']."manager/processors/cache_sync.class.processor.php";
-             //   $sync = new synccache();
-             //   $sync->setCachepath("assets/cache/");
-             //   $sync->setReport(false);
-             //   $sync->emptyCache(); // first empty the cache
-            //}
+
+/* handle TVs */
+if (! empty ($allTvs)) {
+    $resourceId = $resource->get('id');
+    foreach($allTvs as $tv) {
+        $fields = $tv->toArray();
+        switch ($fields['type']) {
+            case 'text':
+            case 'textbox':
+            case 'textarea':
+            case 'option':
+                echo '<br />Value: ' . $value;
+                $value = $_POST[$fields['name']];
+                $value = mysql_escape_string($modx->stripTags($value,$allowedTags));
+
+                if (!empty($value)) {
+                    $tv->setValue($resourceId,$value);
+                    $tv->save();
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+}
 
             // get redirect/post id
             //$redirectid = $modx->db->getValue('SELECT id as \'redirectid\' FROM '.$modx->getFullTableName('site_content').' WHERE createdon=\''.$createdon.'\'');
