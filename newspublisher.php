@@ -224,8 +224,11 @@ if (! empty($allTvs)) {
           $formTpl .= '<p><label for="' . $fields['name'] . '">'. $fields['caption']  . '</label></p><br />';
 
           foreach ($options as $option) {
-              $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<input type="radio" value="' . $option .  '" name="' . $fields['name'] . '"' . ' id="' . $fields['name'] . '"';
-              $formTpl .= $fields['default_text'] == $option? ' checked ': ' ';
+              $option = strtok($option,'=');
+              $rvalue = strtok('=');
+              $rvalue = $rvalue? $rvalue : $option;
+              $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<input type="radio" value="' . $rvalue .  '" name="' . $fields['name'] . '"' . ' id="' . $fields['name'] . '"';
+              $formTpl .= $fields['default_text'] == $rvalue? ' checked ': ' ';
               $formTpl .= ' />' . $option . '<br />';
 
           }
@@ -423,6 +426,9 @@ if (! empty ($allTvs)) {
             case 'option':
                 echo '<br />Value: ' . $value;
                 $value = $_POST[$fields['name']];
+                $lvalue = strtok($value,'=');
+                $rvalue = strtok('=');
+                $value = $rvalue? $rvalue: $lvalue;
                 $value = mysql_escape_string($modx->stripTags($value,$allowedTags));
 
                 if (!empty($value)) {
