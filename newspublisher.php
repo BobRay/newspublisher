@@ -46,11 +46,12 @@
 #::::::::::::::::::::::::::::::::::::::::
 
 
+
 $modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
 $modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
 $modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
 
-$modx->regClientScript(MODX_ASSETS_URL . 'components/newspublisher/js/mydp.js');
+
 
 // get user groups that can post articles
 
@@ -58,7 +59,7 @@ $corePath=$modx->getOption('core_path').'components/tinymcefe/';
 $modx->regClientStartupScript($modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
 $modx->regClientStartupScript($modx->getOption('manager_url').'assets/ext3/ext-all.js');
 $modx->regClientStartupScript($modx->getOption('manager_url').'assets/modext/build/core/modx-min.js');
-$modx->regClientStartupScript($modx->getOption('manager_url').'assets/modext/util/datetime.js');
+
 
 $useEditor = $modx->getOption('use_editor',null,false);
 $whichEditor = $modx->getOption('which_editor',null,'');
@@ -67,6 +68,7 @@ $plugin=$modx->getObject('modPlugin',array('name'=>$whichEditor));
 $tinyUrl = $modx->getOption('assets_url').'components/tinymcefe/';
 
 /* OnRichTextEditorInit */
+if (true) {
         if ($useEditor && $whichEditor == 'TinyMCE') {
             $tinyproperties=$plugin->getProperties();
             require_once $corePath.'tinymce.class.php';
@@ -90,7 +92,7 @@ $tinyUrl = $modx->getOption('assets_url').'components/tinymcefe/';
 
         }
 
-
+}
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
 $allowAnyPost = count($postgrp)==0 ? true : false;
 
@@ -117,7 +119,7 @@ $header = isset($headertpl) ? "[[$".$headertpl."]]":'';
 $footer = isset($footertpl) ? "[[+".$footertpl."]]":'';
 
 // get postback status
-$isPostBack = isset($_POST['NewsPublisherForm']) ? true:false;
+$isPostBack = isset($_POST['hidSubmit']) ? true:false;
 
 // get badwords
 if(isset($badwords)) {
@@ -165,18 +167,19 @@ return $o;
 }
 // get form template
 if(isset($formtpl)) $formTpl = $modx->getChunk($formtpl);
+
 if(empty($formTpl)) $formTpl = '
     <div class="dp">
-    <form name="NewsPublisher" method="post">
+    <form action="[[~[[*id]]]]" method="post">
 
-        <input name="NewsPublisherForm" type="hidden" value="on" />
+        <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
 
-        <p><label for="pagetitle">Page title: </label><input name="pagetitle" type="text" size="40" value="[[+pagetitle]]" /></p>
-        <p><label for="longtitle">Long title: </label><input name="longtitle" type="text" size="40" value="[[+longtitle]]" /></p>
-        <p><label for="description">Description: </label><input name="description" type="text" size="40" value="[[+description]]" /></p>
+        <p><label for="pagetitle">Page title: </label><input name="pagetitle" id="pagetitle" type="text" size="40" value="[[+pagetitle]]" /></p>
+        <p><label for="longtitle">Long title: </label><input name="longtitle" id="longtitle" type="text" size="40" value="[[+longtitle]]" /></p>
+        <p><label for="description">Description: </label><input name="description" id="description" type="text" size="40" value="[[+description]]" /></p>
         <p><label for="pub_date">Published Date: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" maxlength="10" size="9" readonly="readonly" value="[[+pub_date]]"/></p>
         <p><label for="unpub_date">Unpublished Date: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" maxlength="10" size="9" readonly="readonly" value="[[+unpub_date]]" /></p>
-        <p><label for="introtext">Summary: </label><br /><textarea name="introtext" cols="50" rows="5">[[+introtext]]</textarea></p>
+        <p><label for="introtext">Summary: </label><br /><textarea name="introtext" id="introtext" cols="50" rows="5">[[+introtext]]</textarea></p>
         <p><label for="content">Content: </label><br /></p><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content" cols="70" rows="20">[[+content]]</textarea></div>';
 
 /* Display TVs */
@@ -190,8 +193,8 @@ $tvTemplates = $modx->getCollection('modTemplateVarTemplate',array('templateid'=
 if (! $templateObj) {
     die('Failed to get Template: ' . $template);
 }
-$formTpl .= '<br />Template: ' . $template;
-$formTpl .= '<br />TV Count: ' . count($tvTemplates);
+//$formTpl .= '<br />Template: ' . $template;
+//$formTpl .= '<br />TV Count: ' . count($tvTemplates);
 foreach($tvTemplates as $tvTemplate) {
     $tvObj = $tvTemplate->getOne('TemplateVar');
     if ($tvObj) {
@@ -201,7 +204,7 @@ foreach($tvTemplates as $tvTemplate) {
 
 if (! empty($allTvs)) {
   foreach ($allTvs as $tv) {
-      // $formTpl .= '<br />TV Found: ' . $tv->get('name');
+      //$formTpl .= '<br />TV Found: ' . $tv->get('name');
       $fields = $tv->toArray();
      // if (! empty($fields['default_text'])) {
      //     $modx->setPlaceholder($fields['name'],$fields['default_text']);
@@ -209,11 +212,12 @@ if (! empty($allTvs)) {
       switch($tv->get('type') ) {
       case 'text':
       case 'textbox':
-          $formTpl .= "\n" . '<p><label for="' . $fields['name'] . '">'. $fields['caption']  . '</label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" /></p>';
+      case 'email';
+          $formTpl .= "\n" . '<p><label for="' . $fields['name']. '">'. $fields['caption']  . ' </label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" /></p>';
           break;
 
       case 'textarea':
-          $formTpl .= "\n" . '<p><label for="' . $fields['name'] . '">'. $fields['caption']  . '</label><textarea name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" cols="50" rows="5" value="[[+' . $fields['name'] . ']]"></textarea></p>';
+          $formTpl .= "\n" . '<p><label>'. $fields['caption']  . '</label><br /><textarea name="' . $fields['name'] . '" id="' . $fields['name'] . '" cols="50" rows="5">' . '[[+' . $fields['name'] . ']]</textarea></p>';
           break;
       case option:
           $options = explode('||',$fields['elements']);
@@ -221,17 +225,40 @@ if (! empty($allTvs)) {
               $fields['default_text'] = $options[0];
           }
 
-          $formTpl .= '<p><label for="' . $fields['name'] . '">'. $fields['caption']  . '</label></p><br />';
+          $formTpl .= '<fieldset style="width:20em"><label>'. $fields['caption']  . '</label><br />';
 
           foreach ($options as $option) {
               $option = strtok($option,'=');
               $rvalue = strtok('=');
               $rvalue = $rvalue? $rvalue : $option;
-              $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<input type="radio" value="' . $rvalue .  '" name="' . $fields['name'] . '"' . ' id="' . $fields['name'] . '"';
-              $formTpl .= $fields['default_text'] == $rvalue? ' checked ': ' ';
-              $formTpl .= ' />' . $option . '<br />';
+              $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<input type="radio" value="' . $rvalue .  '" name="' . $fields['name'] . '"';
+              $formTpl .= $fields['default_text'] == $rvalue? ' checked="checked" ': ' ';
+              $formTpl .= '/>' . $option . '<br/>';
 
           }
+          $formTpl .= '</fieldset>';
+          break;
+      case checkbox:
+          $options = explode('||',$fields['elements']);
+          if (empty($fields['default_text'])) {
+              $fields['default_text'] = $options[0];
+          }
+          $formTpl .= '<br />';
+          $formTpl .= "\n" . '<fieldset style="width:20em"><label>'. $fields['caption']  . '</label><br />';
+
+          foreach ($options as $option) {
+              $defaults = explode('||',$fields['default_text']);
+              $option = strtok($option,'=');
+              $rvalue = strtok('=');
+              $rvalue = $rvalue? $rvalue : $option;
+              $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<input type="checkbox" value="' . $rvalue .  '" name="' . $fields['name'] . '[]"';
+              $formTpl .= in_array($rvalue,$defaults)? ' checked="checked" ': ' ';
+              $formTpl .= '/>' . $option . '<br />';
+
+          }
+          $formTpl .= '</fieldset>';
+
+          break;
       default:
           break;
 
@@ -240,7 +267,7 @@ if (! empty($allTvs)) {
 
 }
 
-$formTpl .= '<p><input name="send" type="submit" value="Submit" /></p>
+$formTpl .= "\n" . '<p><input type="submit" name="Submit" value="Submit" /></p>
 
     </form></div>';
 
@@ -250,10 +277,12 @@ switch ($isPostBack) {
         // process post back
         // remove magic quotes from POST
         if(get_magic_quotes_gpc()){
-            $_POST = array_map("stripslashes", $_POST);
+           // $_POST = array_map("stripslashes", $_POST);
+          $_POST = array_map($strip_slashes_deep, $_POST);
+
         }
-        if(trim($_POST['pagetitle'])=='') $modx->webAlert('Missing page title.');
-        elseif($_POST[$rtcontent]=='') $modx->webAlert('Missing news content.');
+        if(trim($_POST['pagetitle'])=='') $message = '<p><b>Missing page title.</b></p><br /><br />';
+        elseif($_POST[$rtcontent]=='') $message = '<p><b>Missing content.</b></p><br /><br />';
         else {
             // get created date
             $createdon = time();
@@ -385,12 +414,8 @@ switch ($isPostBack) {
 
                         // echo '<br />Document Group: ' . $docGroupNum . ' . . . ' . 'Document: ' . $docNum;
                     }
-
                 }
-
-
             }
-
 
            if(!empty($makefolder)) {
                 // convert parent into folder
@@ -424,7 +449,7 @@ if (! empty ($allTvs)) {
             case 'textbox':
             case 'textarea':
             case 'option':
-                echo '<br />Value: ' . $value;
+                //echo '<br />Value: ' . $value;
                 $value = $_POST[$fields['name']];
                 $lvalue = strtok($value,'=');
                 $rvalue = strtok('=');
@@ -436,6 +461,23 @@ if (! empty ($allTvs)) {
                     $tv->save();
                 }
                 break;
+            case 'checkbox':
+                $boxes = $_POST["MyTV"];
+                // return print_r($boxes,true);
+                // echo '<br />TvName: ' . $fields['name'];
+                //echo '<br />ARRAY: ' . $_POST[$fields['name']];
+
+                // echo '<br />COUNT: ' . count($boxes);
+                $value = implode('||',$boxes);
+                $value = mysql_escape_string($modx->stripTags($value,$allowedTags));
+
+                if (!empty($value)) {
+                    $tv->setValue($resourceId,$value);
+                    $tv->save();
+                }
+                // echo '<br />Checkboxes: ' . $value;
+
+                break;
 
             default:
                 break;
@@ -446,11 +488,10 @@ if (! empty ($allTvs)) {
             // get redirect/post id
             //$redirectid = $modx->db->getValue('SELECT id as \'redirectid\' FROM '.$modx->getFullTableName('site_content').' WHERE createdon=\''.$createdon.'\'');
 
-
             // redirect to post id
             $goToUrl = $modx->makeUrl($postid);
             if (empty($goToUrl)) {
-                die ('Postid: ' . $postid . '<br />goToUrl: ' . $goToUrl);
+                // die ('Postid: ' . $postid . '<br />goToUrl: ' . $goToUrl);
             }
             $modx->sendRedirect($goToUrl);
         }
@@ -470,5 +511,14 @@ if (! empty ($allTvs)) {
         // return form
         return $message.$formTpl;
         break;
+}
+
+function stripslashes_deep($value)
+{
+    $value = is_array($value) ?
+                array_map('stripslashes_deep', $value) :
+                stripslashes($value);
+
+    return $value;
 }
 ?>
