@@ -203,69 +203,98 @@ foreach($tvTemplates as $tvTemplate) {
 }
 
 if (! empty($allTvs)) {
-  foreach ($allTvs as $tv) {
+    foreach ($allTvs as $tv) {
       //$formTpl .= '<br />TV Found: ' . $tv->get('name');
       $fields = $tv->toArray();
      // if (! empty($fields['default_text'])) {
      //     $modx->setPlaceholder($fields['name'],$fields['default_text']);
      // }
-      switch($tv->get('type') ) {
-      case 'text':
-      case 'textbox':
-      case 'email';
-          $formTpl .= "\n" . '<p><label for="' . $fields['name']. '">'. $fields['caption']  . ' </label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" /></p>';
-          break;
+        $tvType = $tv->get('type');
+        $tvType = $tvType == 'option'? 'radio' : $tvType;
 
-      case 'textarea':
-          $formTpl .= "\n" . '<p><label>'. $fields['caption']  . '</label><br /><textarea name="' . $fields['name'] . '" id="' . $fields['name'] . '" cols="50" rows="5">' . '[[+' . $fields['name'] . ']]</textarea></p>';
-          break;
-      case option:
-          $options = explode('||',$fields['elements']);
-          if (empty($fields['default_text'])) {
-              $fields['default_text'] = $options[0];
-          }
+        switch($tvType) {
+            case 'text':
+            case 'textbox':
+            case 'email';
+                $formTpl .= "\n" . '<p><label for="' . $fields['name']. '">'. $fields['caption']  . ' </label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" /></p>';
+                break;
 
-          $formTpl .= '<fieldset style="width:20em"><label>'. $fields['caption']  . '</label><br />';
+            case 'textarea':
+                $formTpl .= "\n" . '<p><label>'. $fields['caption']  . '</label><br /><textarea name="' . $fields['name'] . '" id="' . $fields['name'] . '" cols="50" rows="5">' . '[[+' . $fields['name'] . ']]</textarea></p>';
+                break;
+// *********
 
-          foreach ($options as $option) {
-              $option = strtok($option,'=');
-              $rvalue = strtok('=');
-              $rvalue = $rvalue? $rvalue : $option;
-              $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<input type="radio" value="' . $rvalue .  '" name="' . $fields['name'] . '"';
-              $formTpl .= $fields['default_text'] == $rvalue? ' checked="checked" ': ' ';
-              $formTpl .= '/>' . $option . '<br/>';
+            case 'radio':
+            case 'checkbox':
+            case 'listbox':
+                $iType = 'input';
+                $iType = ($tvType == 'listbox')? 'option' : $iType;
+                $arrayPostfix = ($tvType == 'checkbox' || $tvType=='listbox')? '[]' : '';
+                $options = explode('||',$fields['elements']);
+                if (empty($fields['default_text'])) {
+                    $fields['default_text'] = $options[0];
+                }
 
-          }
-          $formTpl .= '</fieldset>';
-          break;
-      case checkbox:
-          $options = explode('||',$fields['elements']);
-          if (empty($fields['default_text'])) {
-              $fields['default_text'] = $options[0];
-          }
-          $formTpl .= '<br />';
-          $formTpl .= "\n" . '<fieldset style="width:20em"><label>'. $fields['caption']  . '</label><br />';
+                $formTpl .= "\n" . '<fieldset style="width:20em"><label>'. $fields['caption']  . '</label><br />';
 
-          foreach ($options as $option) {
-              $defaults = explode('||',$fields['default_text']);
-              $option = strtok($option,'=');
-              $rvalue = strtok('=');
-              $rvalue = $rvalue? $rvalue : $option;
-              $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<input type="checkbox" value="' . $rvalue .  '" name="' . $fields['name'] . '[]"';
-              $formTpl .= in_array($rvalue,$defaults)? ' checked="checked" ': ' ';
-              $formTpl .= '/>' . $option . '<br />';
+                if($tvType == 'listbox') {
+                    $formTpl .= '<select>' . "\n";
+                }
 
-          }
-          $formTpl .= '</fieldset>';
+                foreach ($options as $option) {
+                    $defaults = explode('||',$fields['default_text']);
+                    $option = strtok($option,'=');
+                    $rvalue = strtok('=');
+                    $rvalue = $rvalue? $rvalue : $option;
+                    if ($tvType == 'listbox') {
+                        $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<' . $iType . ' value="' . $rvalue .  '" name="' . $fields['name'] . $arrayPostfix . '"';
+                    } else {
+                        $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<' . $iType . ' type="' . $tvType . '" value="' . $rvalue .  '" name="' . $fields['name'] . $arrayPostFix . '"';
+                    }
+                    if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
+                        if ($tvType == 'radio' || $tvType == 'checkbox') {
+                            $formTpl .= ' checked="checked" ';
+                        } else {
+                            $formTpl .= ' selected="selected" ';
+                        }
+                    }
+                    $formTpl .= '/>' . $option . '<br/>';
 
-          break;
-      default:
-          break;
+                }
+                if($tvType == 'listbox') {
+                    $formTpl .= "\n" . '</select>';
+                }
+                $formTpl .= '</fieldset>';
+                break;
+            case 'xcheckbox':
+                $options = explode('||',$fields['elements']);
+                if (empty($fields['default_text'])) {
+                  $fields['default_text'] = $options[0];
+                }
+                $formTpl .= '<br />';
+                $formTpl .= "\n" . '<fieldset style="width:20em"><label>'. $fields['caption']  . '</label><br />';
 
-      }
-  }
+                foreach ($options as $option) {
+                  $defaults = explode('||',$fields['default_text']);
+                  $option = strtok($option,'=');
+                  $rvalue = strtok('=');
+                  $rvalue = $rvalue? $rvalue : $option;
+                  $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<input type="checkbox" value="' . $rvalue .  '" name="' . $fields['name'] . '[]"';
+                  $formTpl .= in_array($rvalue,$defaults)? ' checked="checked" ': ' ';
+                  $formTpl .= '/>' . $option . '<br />';
 
-}
+                }
+                $formTpl .= '</fieldset>';
+
+                break;
+            default:
+                break;
+
+        }  /* end switch */
+    } /* end foreach */
+} /* end if (!empty $allTvs) */
+
+/* done displaying TVs */
 
 $formTpl .= "\n" . '<p><input type="submit" name="Submit" value="Submit" /></p>
 
@@ -281,9 +310,11 @@ switch ($isPostBack) {
           $_POST = array_map($strip_slashes_deep, $_POST);
 
         }
-        if(trim($_POST['pagetitle'])=='') $message = '<p><b>Missing page title.</b></p><br /><br />';
-        elseif($_POST[$rtcontent]=='') $message = '<p><b>Missing content.</b></p><br /><br />';
-        else {
+        if(trim($_POST['pagetitle'])=='') {
+            $message = '<p><b>Missing page title.</b></p><br /><br />';
+        } elseif($_POST[$rtcontent]=='') {
+            $message = '<p><b>Missing content.</b></p><br /><br />';
+        } else {
             // get created date
             $createdon = time();
 
@@ -345,7 +376,7 @@ switch ($isPostBack) {
 
                 if($pub_date < $createdon) {
                     $published = 1;
-                }    elseif($pub_date > $createdon) {
+                } elseif($pub_date > $createdon) {
                     $published = 0;
                 }
             }
@@ -439,53 +470,53 @@ switch ($isPostBack) {
                 $cacheManager->clearCache();
             }
 
-/* handle TVs */
-if (! empty ($allTvs)) {
-    $resourceId = $resource->get('id');
-    foreach($allTvs as $tv) {
-        $fields = $tv->toArray();
-        switch ($fields['type']) {
-            case 'text':
-            case 'textbox':
-            case 'textarea':
-            case 'option':
-                //echo '<br />Value: ' . $value;
-                $value = $_POST[$fields['name']];
-                $lvalue = strtok($value,'=');
-                $rvalue = strtok('=');
-                $value = $rvalue? $rvalue: $lvalue;
-                $value = mysql_escape_string($modx->stripTags($value,$allowedTags));
+            /* Save TVs */
+            if (! empty ($allTvs)) {
+                $resourceId = $resource->get('id');
+                foreach($allTvs as $tv) {
+                    $fields = $tv->toArray();
+                    switch ($fields['type']) {
+                        case 'text':
+                        case 'textbox':
+                        case 'textarea':
+                        case 'option':
+                            //echo '<br />Value: ' . $value;
+                            $value = $_POST[$fields['name']];
+                            $lvalue = strtok($value,'=');
+                            $rvalue = strtok('=');
+                            $value = $rvalue? $rvalue: $lvalue;
+                            $value = mysql_escape_string($modx->stripTags($value,$allowedTags));
 
-                if (!empty($value)) {
-                    $tv->setValue($resourceId,$value);
-                    $tv->save();
-                }
-                break;
-            case 'checkbox':
-                $boxes = $_POST["MyTV"];
-                // return print_r($boxes,true);
-                // echo '<br />TvName: ' . $fields['name'];
-                //echo '<br />ARRAY: ' . $_POST[$fields['name']];
+                            if (!empty($value)) {
+                                $tv->setValue($resourceId,$value);
+                                $tv->save();
+                            }
+                            break;
+                        case 'checkbox':
+                            $boxes = $_POST["MyTV"];
+                            // return print_r($boxes,true);
+                            // echo '<br />TvName: ' . $fields['name'];
+                            //echo '<br />ARRAY: ' . $_POST[$fields['name']];
 
-                // echo '<br />COUNT: ' . count($boxes);
-                $value = implode('||',$boxes);
-                $value = mysql_escape_string($modx->stripTags($value,$allowedTags));
+                            // echo '<br />COUNT: ' . count($boxes);
+                            $value = implode('||',$boxes);
+                            $value = mysql_escape_string($modx->stripTags($value,$allowedTags));
 
-                if (!empty($value)) {
-                    $tv->setValue($resourceId,$value);
-                    $tv->save();
-                }
-                // echo '<br />Checkboxes: ' . $value;
+                            if (!empty($value)) {
+                                $tv->setValue($resourceId,$value);
+                                $tv->save();
+                            }
+                            // echo '<br />Checkboxes: ' . $value;
 
-                break;
+                            break;
 
-            default:
-                break;
-        }
-    }
-}
+                        default:
+                            break;
+                    } /* end switch(fieldType) */
+                } /* end foreach($allTvs) */
+            } /* end if (!empty($allTVs)) -- Done saving TVs */
 
-            // get redirect/post id
+           // get redirect/post id
             //$redirectid = $modx->db->getValue('SELECT id as \'redirectid\' FROM '.$modx->getFullTableName('site_content').' WHERE createdon=\''.$createdon.'\'');
 
             // redirect to post id
@@ -494,27 +525,27 @@ if (! empty ($allTvs)) {
                 // die ('Postid: ' . $postid . '<br />goToUrl: ' . $goToUrl);
             }
             $modx->sendRedirect($goToUrl);
-        }
+        }  /* end else (empty pagetitle or content */
 
 
-    default:
-        // display news form
-        // check if user has rights to post comments
-        // if(!$allowAnyPost && !$modx->isMemberOfWebGroup($postgrp)) {
-         if(!$allowAnyPost && !$modx->user->isMember($postgrp)) {
-            $formTpl = '';
-        } else {
-            foreach($_POST as $n=>$v) {
-                $formTpl = str_replace('[[+'.$n.']]',$v,$formTpl);
+        default:
+            // display news form
+            // check if user has rights to post comments
+            // if(!$allowAnyPost && !$modx->isMemberOfWebGroup($postgrp)) {
+            if(!$allowAnyPost && !$modx->user->isMember($postgrp)) {
+                $formTpl = '';
+            } else {
+                foreach($_POST as $n=>$v) {
+                    $formTpl = str_replace('[[+'.$n.']]',$v,$formTpl);
+                }
             }
-        }
-        // return form
-        return $message.$formTpl;
-        break;
-}
+            // return form
+            return $message.$formTpl;
+            break;
+    } /* end isPostback switch */
 
-function stripslashes_deep($value)
-{
+/* fix allowing stripslashes to act on an array */
+function stripslashes_deep($value) {
     $value = is_array($value) ?
                 array_map('stripslashes_deep', $value) :
                 stripslashes($value);
