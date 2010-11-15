@@ -227,9 +227,10 @@ if (! empty($allTvs)) {
             case 'radio':
             case 'checkbox':
             case 'listbox':
+            case 'listbox-multiple':
                 $iType = 'input';
-                $iType = ($tvType == 'listbox')? 'option' : $iType;
-                $arrayPostfix = ($tvType == 'checkbox' || $tvType=='listbox')? '[]' : '';
+                $iType = ($tvType == 'listbox' || $tvType == 'listbox-multiple')? 'option' : $iType;
+                $arrayPostfix = ($tvType == 'checkbox' || $tvType=='listbox-multiple')? '[]' : '';
                 $options = explode('||',$fields['elements']);
                 if (empty($fields['default_text'])) {
                     $fields['default_text'] = $options[0];
@@ -237,8 +238,11 @@ if (! empty($allTvs)) {
 
                 $formTpl .= "\n" . '<fieldset style="width:20em"><label>'. $fields['caption']  . '</label><br />';
 
-                if($tvType == 'listbox') {
-                    $formTpl .= '<select>' . "\n";
+                if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
+                    $multiple = ($tvType == 'listbox-multiple')? 'multiple="multiple" ': '';
+                    $count = count($options);
+                    $size = ($count <= 8)? $count : 8;
+                    $formTpl .= '<select ' . $multiple . 'size="' . $size . '">' . "\n";
                 }
 
                 foreach ($options as $option) {
@@ -246,7 +250,7 @@ if (! empty($allTvs)) {
                     $option = strtok($option,'=');
                     $rvalue = strtok('=');
                     $rvalue = $rvalue? $rvalue : $option;
-                    if ($tvType == 'listbox') {
+                    if ($tvType == 'listbox' || $tvType =='listbox-multiple') {
                         $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<' . $iType . ' value="' . $rvalue .  '" name="' . $fields['name'] . $arrayPostfix . '"';
                     } else {
                         $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<' . $iType . ' type="' . $tvType . '" value="' . $rvalue .  '" name="' . $fields['name'] . $arrayPostFix . '"';
@@ -261,7 +265,7 @@ if (! empty($allTvs)) {
                     $formTpl .= '/>' . $option . '<br/>';
 
                 }
-                if($tvType == 'listbox') {
+                if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
                     $formTpl .= "\n" . '</select>';
                 }
                 $formTpl .= '</fieldset>';
@@ -480,6 +484,7 @@ switch ($isPostBack) {
                         case 'textbox':
                         case 'textarea':
                         case 'option':
+                        case 'listbox':
                             //echo '<br />Value: ' . $value;
                             $value = $_POST[$fields['name']];
                             $lvalue = strtok($value,'=');
@@ -493,7 +498,8 @@ switch ($isPostBack) {
                             }
                             break;
                         case 'checkbox':
-                            $boxes = $_POST["MyTV"];
+                        case 'listbox-multiple':
+                            $boxes = $_POST[$fields['name']];
                             // return print_r($boxes,true);
                             // echo '<br />TvName: ' . $fields['name'];
                             //echo '<br />ARRAY: ' . $_POST[$fields['name']];
