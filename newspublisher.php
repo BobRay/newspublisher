@@ -45,8 +45,16 @@
 #
 #::::::::::::::::::::::::::::::::::::::::
 
+$npPath = MODX_ASSETS_PATH . 'components/newspublisher/';
+
+require_once($npPath . 'classes/newspublisher.class.php');
+
+$np = new Newspublisher(&$modx, &$scriptProperties);
+
+$np->init(true);
 
 
+if (false) {
 $modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
 $modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
 $modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
@@ -68,7 +76,7 @@ $plugin=$modx->getObject('modPlugin',array('name'=>$whichEditor));
 $tinyUrl = $modx->getOption('assets_url').'components/tinymcefe/';
 
 /* OnRichTextEditorInit */
-if (true) {
+if (false) {
         if ($useEditor && $whichEditor == 'TinyMCE') {
             $tinyproperties=$plugin->getProperties();
             require_once $corePath.'tinymce.class.php';
@@ -93,6 +101,9 @@ if (true) {
         }
 
 }
+} /* end if(false) */
+
+
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
 $allowAnyPost = count($postgrp)==0 ? true : false;
 
