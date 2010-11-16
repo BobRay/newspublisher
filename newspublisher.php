@@ -52,7 +52,7 @@ require_once($npPath . 'classes/newspublisher.class.php');
 
 $np = new Newspublisher(&$modx, &$scriptProperties);
 
-$np->init(true);
+$np->init($scriptProperties['richtext']);
 
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
 $allowAnyPost = count($postgrp)==0 ? true : false;

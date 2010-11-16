@@ -34,7 +34,6 @@ class Newspublisher {
         $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
         $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
         $this->modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
-        if (false) {
 
         if ($richText) {
             $corePath=$this->modx->getOption('core_path').'components/tinymcefe/';
@@ -70,7 +69,6 @@ class Newspublisher {
                     MODx.loadRTE();
                     });
                 </script>');
-            } /* end if (false) */
             } /* end if ($whichEditor == 'TinyMCE') */
 
         } /* end if ($richtext) */
