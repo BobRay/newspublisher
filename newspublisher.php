@@ -44,6 +44,7 @@
 #    &second
 #
 #::::::::::::::::::::::::::::::::::::::::
+$scriptProperties['allowAnyPost'] = 'true';  // remove this
 
 $npPath = MODX_ASSETS_PATH . 'components/newspublisher/';
 
@@ -52,57 +53,6 @@ require_once($npPath . 'classes/newspublisher.class.php');
 $np = new Newspublisher(&$modx, &$scriptProperties);
 
 $np->init(true);
-
-
-if (false) {
-$modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
-$modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
-$modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
-
-
-
-// get user groups that can post articles
-
-$corePath=$modx->getOption('core_path').'components/tinymcefe/';
-$modx->regClientStartupScript($modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
-$modx->regClientStartupScript($modx->getOption('manager_url').'assets/ext3/ext-all.js');
-$modx->regClientStartupScript($modx->getOption('manager_url').'assets/modext/build/core/modx-min.js');
-
-
-$useEditor = $modx->getOption('use_editor',null,false);
-$whichEditor = $modx->getOption('which_editor',null,'');
-
-$plugin=$modx->getObject('modPlugin',array('name'=>$whichEditor));
-$tinyUrl = $modx->getOption('assets_url').'components/tinymcefe/';
-
-/* OnRichTextEditorInit */
-if (false) {
-        if ($useEditor && $whichEditor == 'TinyMCE') {
-            $tinyproperties=$plugin->getProperties();
-            require_once $corePath.'tinymce.class.php';
-            $tiny = new TinyMCE($modx,$tinyproperties,$tinyUrl);
-            if (isset($forfrontend) || $modx->isFrontend()) {
-                $def = $modx->getOption('cultureKey',null,$modx->getOption('manager_language',null,'en'));
-                $tiny->properties['language'] = $modx->getOption('fe_editor_lang',array(),$def);
-                $tiny->properties['frontend'] = true;
-                unset($def);
-            }
-            $tiny->setProperties($tinyproperties);
-            $html = $tiny->initialize();
-
-            $modx->regClientStartupScript($tiny->config['assetsUrl'].'jscripts/tiny_mce/langs/'.$tiny->properties['language'].'.js');
-            $modx->regClientStartupScript($tiny->config['assetsUrl'].'tiny.browser.js');
-            $modx->regClientStartupHTMLBlock('<script type="text/javascript">
-                Ext.onReady(function() {
-                MODx.loadRTE();
-                });
-            </script>');
-
-        }
-
-}
-} /* end if(false) */
-
 
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
 $allowAnyPost = count($postgrp)==0 ? true : false;
@@ -129,8 +79,7 @@ $header = isset($headertpl) ? "[[$".$headertpl."]]":'';
 // get footer
 $footer = isset($footertpl) ? "[[+".$footertpl."]]":'';
 
-// get postback status
-$isPostBack = isset($_POST['hidSubmit']) ? true:false;
+
 
 // get badwords
 if(isset($badwords)) {
@@ -141,6 +90,7 @@ if(isset($badwords)) {
 // get menu status
 $hidemenu = isset($showinmenu) && $showinmenu==1 ? 0 : 1;
 
+if (false) {
 // get template
 if (isset($template)) {
     if(is_numeric($template) ) {
@@ -153,420 +103,28 @@ if (isset($template)) {
 $template = $modx->getOption('default_template');
 }
 
+}
+// ************************
 $message = '';
 
-if (false) {
-// **************
-$id = 'xcontent';
-$w= $params['w'] ? $params['w'] : '100%';
-$h= $params['h'] ? $params['h'] : '400px';
-//$richtexteditor= $params['edt'] ? $params['edt'] : "";
-//$richtexteditor = $modx->getOption('which_editor');
-
-//$richtexteditor = 'TinyMCE';
-$value = 'SomeValue';
-
-$o= '<div class="MODX_RichTextWidget"><textarea class="modx-richtext"  id="' . $id . '" name="' . $id . '" style="width:' . $w . '; height:' . $h . ';">';
-$o .= htmlspecialchars($value);
-$o .= '</textarea></div>';
-
-// setup editors
-
-return $o;
-// **************
-
-}
-// get form template
-if(isset($formtpl)) $formTpl = $modx->getChunk($formtpl);
-
-if(empty($formTpl)) $formTpl = '
-    <div class="dp">
-    <form action="[[~[[*id]]]]" method="post">
-
-        <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
-
-        <p><label for="pagetitle">Page title: </label><input name="pagetitle" id="pagetitle" type="text" size="40" value="[[+pagetitle]]" /></p>
-        <p><label for="longtitle">Long title: </label><input name="longtitle" id="longtitle" type="text" size="40" value="[[+longtitle]]" /></p>
-        <p><label for="description">Description: </label><input name="description" id="description" type="text" size="40" value="[[+description]]" /></p>
-        <p><label for="pub_date">Published Date: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" maxlength="10" size="9" readonly="readonly" value="[[+pub_date]]"/></p>
-        <p><label for="unpub_date">Unpublished Date: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" maxlength="10" size="9" readonly="readonly" value="[[+unpub_date]]" /></p>
-        <p><label for="introtext">Summary: </label><br /><textarea name="introtext" id="introtext" cols="50" rows="5">[[+introtext]]</textarea></p>
-        <p><label for="content">Content: </label><br /></p><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content" cols="70" rows="20">[[+content]]</textarea></div>';
-
-/* Display TVs */
-
-$allTvs = array();
-$template = 1;
-$templateObj = $modx->getObject('modTemplate',$template);
-
-$tvTemplates = $modx->getCollection('modTemplateVarTemplate',array('templateid'=>$template));
-
-if (! $templateObj) {
-    die('Failed to get Template: ' . $template);
-}
-//$formTpl .= '<br />Template: ' . $template;
-//$formTpl .= '<br />TV Count: ' . count($tvTemplates);
-foreach($tvTemplates as $tvTemplate) {
-    $tvObj = $tvTemplate->getOne('TemplateVar');
-    if ($tvObj) {
-       $allTvs[] = $tvObj;
+$formTpl .= $np->displayForm();
+// get postback status
+$isPostBack = isset($_POST['hidSubmit']) ? true:false;
+if ($isPostBack) {
+    $success = $np->saveResource();
+    if (! $success) {
+        die($np->getMessage());
     }
-}
 
-if (! empty($allTvs)) {
-    foreach ($allTvs as $tv) {
-      //$formTpl .= '<br />TV Found: ' . $tv->get('name');
-      $fields = $tv->toArray();
-     // if (! empty($fields['default_text'])) {
-     //     $modx->setPlaceholder($fields['name'],$fields['default_text']);
-     // }
-        $tvType = $tv->get('type');
-        $tvType = $tvType == 'option'? 'radio' : $tvType;
-
-        switch($tvType) {
-            case 'text':
-            case 'textbox':
-            case 'email';
-                $formTpl .= "\n" . '<p><label for="' . $fields['name']. '">'. $fields['caption']  . ' </label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" /></p>';
-                break;
-
-            case 'textarea':
-                $formTpl .= "\n" . '<p><label>'. $fields['caption']  . '</label><br /><textarea name="' . $fields['name'] . '" id="' . $fields['name'] . '" cols="50" rows="5">' . '[[+' . $fields['name'] . ']]</textarea></p>';
-                break;
-// *********
-
-            case 'radio':
-            case 'checkbox':
-            case 'listbox':
-            case 'listbox-multiple':
-                $iType = 'input';
-                $iType = ($tvType == 'listbox' || $tvType == 'listbox-multiple')? 'option' : $iType;
-                $arrayPostfix = ($tvType == 'checkbox' || $tvType=='listbox-multiple')? '[]' : '';
-                $options = explode('||',$fields['elements']);
-                if (empty($fields['default_text'])) {
-                    $fields['default_text'] = $options[0];
-                }
-
-                $formTpl .= "\n" . '<fieldset style="width:20em"><label>'. $fields['caption']  . '</label><br />';
-
-                if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
-                    $multiple = ($tvType == 'listbox-multiple')? 'multiple="multiple" ': '';
-                    $count = count($options);
-                    $size = ($count <= 8)? $count : 8;
-                    $formTpl .= '<select ' . $multiple . 'size="' . $size . '">' . "\n";
-                }
-
-                foreach ($options as $option) {
-                    $defaults = explode('||',$fields['default_text']);
-                    $option = strtok($option,'=');
-                    $rvalue = strtok('=');
-                    $rvalue = $rvalue? $rvalue : $option;
-                    if ($tvType == 'listbox' || $tvType =='listbox-multiple') {
-                        $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<' . $iType . ' value="' . $rvalue .  '" name="' . $fields['name'] . $arrayPostfix . '"';
-                    } else {
-                        $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<' . $iType . ' type="' . $tvType . '" value="' . $rvalue .  '" name="' . $fields['name'] . $arrayPostFix . '"';
-                    }
-                    if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
-                        if ($tvType == 'radio' || $tvType == 'checkbox') {
-                            $formTpl .= ' checked="checked" ';
-                        } else {
-                            $formTpl .= ' selected="selected" ';
-                        }
-                    }
-                    $formTpl .= '/>' . $option . '<br/>';
-
-                }
-                if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
-                    $formTpl .= "\n" . '</select>';
-                }
-                $formTpl .= '</fieldset>';
-                break;
-            case 'xcheckbox':
-                $options = explode('||',$fields['elements']);
-                if (empty($fields['default_text'])) {
-                  $fields['default_text'] = $options[0];
-                }
-                $formTpl .= '<br />';
-                $formTpl .= "\n" . '<fieldset style="width:20em"><label>'. $fields['caption']  . '</label><br />';
-
-                foreach ($options as $option) {
-                  $defaults = explode('||',$fields['default_text']);
-                  $option = strtok($option,'=');
-                  $rvalue = strtok('=');
-                  $rvalue = $rvalue? $rvalue : $option;
-                  $formTpl .= "\n&nbsp;&nbsp;&nbsp;" . '<input type="checkbox" value="' . $rvalue .  '" name="' . $fields['name'] . '[]"';
-                  $formTpl .= in_array($rvalue,$defaults)? ' checked="checked" ': ' ';
-                  $formTpl .= '/>' . $option . '<br />';
-
-                }
-                $formTpl .= '</fieldset>';
-
-                break;
-            default:
-                break;
-
-        }  /* end switch */
-    } /* end foreach */
-} /* end if (!empty $allTvs) */
-
-/* done displaying TVs */
-
-$formTpl .= "\n" . '<p><input type="submit" name="Submit" value="Submit" /></p>
-
-    </form></div>';
-
-// switch block
-switch ($isPostBack) {
-    case true:
-        // process post back
-        // remove magic quotes from POST
-        if(get_magic_quotes_gpc()){
-           // $_POST = array_map("stripslashes", $_POST);
-          $_POST = array_map($strip_slashes_deep, $_POST);
-
-        }
-        if(trim($_POST['pagetitle'])=='') {
-            $message = '<p><b>Missing page title.</b></p><br /><br />';
-        } elseif($_POST[$rtcontent]=='') {
-            $message = '<p><b>Missing content.</b></p><br /><br />';
-        } else {
-            // get created date
-            $createdon = time();
-
-            // set alias name of document used to store articles
-            if(!$aliastitle) {
-                $alias = 'article-'.$createdon;
-            } else {
-                $alias = $modx->stripTags($_POST['pagetitle']);
-                $alias = strtolower($alias);
-                $alias = preg_replace('/&.+?;/', '', $alias); // kill entities
-                $alias = preg_replace('/[^\.%a-z0-9 _-]/', '', $alias);
-                $alias = preg_replace('/\s+/', '-', $alias);
-                $alias = preg_replace('|-+|', '-', $alias);
-                $alias = trim($alias, '-');
-                $alias = 'article-'. mysql_escape_string($alias);
-            }
-
-            $user = $modx->user;
-            $userid = $modx->user->get('id');
-            if(!$user && $allowAnyPost) $user = '(anonymous)';
-
-            // check if user has rights
-            if(!$allowAnyPost && !$modx->isMember($postgrp)) {
-                return 'You are not allowed to publish articles';
-            }
-
-            $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
-
-            // format content
-            $content = $modx->stripTags($_POST[$rtcontent],$allowedTags);
-            $content = str_replace('[[+user]]',$user,$content);
-            $content = str_replace('[[+createdon]]',strftime('%d-%b-%Y %H:%M',$createdon),$content);
-            foreach($_POST as $n=>$v) {
-                if(!empty($badwords)) $v = preg_replace($badwords,'[Filtered]',$v); // remove badwords
-                $v = $modx->stripTags(htmlspecialchars($v));
-                $v = str_replace("\n",'<br />',$v);
-                $content = str_replace('[+'.$n.'+]',$v,$content);
-            }
-
-            $title = mysql_escape_string($modx->stripTags($_POST['pagetitle']));
-            $longtitle = mysql_escape_string($modx->stripTags($_POST['longtitle']));
-            $description = mysql_escape_string($modx->stripTags($_POST['description']));
-            $introtext = mysql_escape_string($modx->stripTags($_POST[$rtsummary],$allowedTags));
-            $pub_date = $_POST['pub_date'];
-            $unpub_date = $_POST['unpub_date'];
-            $published = 1;
-
-            $H=isset($hours)? $hours : 0;
-            $M=isset($minutes)? $minutes: 1;
-            $S=isset($seconds)? $seconds: 0;
-
-            // check published date
-            if($pub_date=="") {
-                $pub_date="0";
-            } else {
-                list($d, $m, $Y) = sscanf($pub_date, "%2d-%2d-%4d");
-
-                $pub_date = strtotime("$m/$d/$Y $H:$M:$S");
-
-                if($pub_date < $createdon) {
-                    $published = 1;
-                } elseif($pub_date > $createdon) {
-                    $published = 0;
-                }
-            }
-
-            // check unpublished date
-            if($unpub_date=="") {
-                $unpub_date="0";
-            } else {
-                list($d, $m, $Y) = sscanf($unpub_date, "%2d-%2d-%4d");
-
-                $unpub_date = strtotime("$m/$d/$Y $H:$M:$S");
-                if($unpub_date < $createdon) {
-                    $published = 0;
-                }
-            }
-
-            // set menu index
-            //$mnuidx = $modx->db->getValue('SELECT MAX(menuindex)+1 as \'mnuidx\' FROM '.$modx->getFullTableName('site_content').' WHERE parent=\''.$folder.'\'');
-            //if($mnuidx<1) $mnuidx = 0;
-
-            // post news content
-            $createdBy = $modx->user->get('id');
-
-            $flds = array(
-                'pagetitle'     => $title,
-                'longtitle'     => $longtitle,
-                'description' => $description,
-                'introtext'     => $introtext,
-                'alias'             => $alias,
-                'parent'            => $folder,
-                'createdon'     => $createdon,
-                'createdby'     => $createdBy,
-                'editedon'        => '0',
-                'editedby'        => '0',
-                'published'     => $published,
-                'pub_date'        => $pub_date,
-                'unpub_date'    => $unpub_date,
-                'deleted'         => '0',
-                'hidemenu'        => $hidemenu,
-                'menuindex'     => $mnuidx,
-                'template'        => $template,
-                'content'         => $header.$content.$footer
-            );
-
-            $resource = $modx->newObject('modResource',$flds);
-
-            $parentObj = $modx->getObject('modResource',$flds['parent']);
-
-             // If there's a parent object, put the new doc in the same resource groups as the parent
-
-            if ($parentObj) {  // skip if no parent
-
-
-                $resourceGroups = $parentObj->getMany('ResourceGroupResources');
-
-                if (! empty($resourceGroups)) { // skip if parent doesn't belong to any resource groups
-                    foreach ($resourceGroups as $resourceGroup) {
-                        $docGroupNum = $resourceGroup->get('document_group');
-                        $docNum = $resourceGroup->get('document');
-
-                        $resourceGroupObj = $modx->getObject('modResourceGroup', $docGroupNum);
-                        $intersect = $modx->newObject('modResourceGroupResource');
-                        $intersect->addOne($resource);
-                        $intersect->addOne($resourceGroupObj);
-                        $intersect->save();
-
-                        // echo '<br />Document Group: ' . $docGroupNum . ' . . . ' . 'Document: ' . $docNum;
-                    }
-                }
-            }
-
-           if(!empty($makefolder)) {
-                // convert parent into folder
-           //   $modx->db->update(array('isfolder'=>'1'),$modx->getFullTableName('site_content'),'id=\''.$folder.'\'');
-                if (! $parentObj->get('isfolder')) {
-                    $parentObj->set('isfolder','1');
-                    $parentObj->save();
-                }
-
-           }
-
-           $resource->save();
-           // Make sure we have the ID.
-           // $resource = $modx->getObject('modResource',array('pagetitle'=>$flds['pagetitle']));
-           $postid = isset($postid) ? $postid: $resource->get('id');
-
-
-            // empty cache
-            if($clearcache==1){
-                $cacheManager = $modx->getCacheManager();
-                $cacheManager->clearCache();
-            }
-
-            /* Save TVs */
-            if (! empty ($allTvs)) {
-                $resourceId = $resource->get('id');
-                foreach($allTvs as $tv) {
-                    $fields = $tv->toArray();
-                    switch ($fields['type']) {
-                        case 'text':
-                        case 'textbox':
-                        case 'textarea':
-                        case 'option':
-                        case 'listbox':
-                            //echo '<br />Value: ' . $value;
-                            $value = $_POST[$fields['name']];
-                            $lvalue = strtok($value,'=');
-                            $rvalue = strtok('=');
-                            $value = $rvalue? $rvalue: $lvalue;
-                            $value = mysql_escape_string($modx->stripTags($value,$allowedTags));
-
-                            if (!empty($value)) {
-                                $tv->setValue($resourceId,$value);
-                                $tv->save();
-                            }
-                            break;
-                        case 'checkbox':
-                        case 'listbox-multiple':
-                            $boxes = $_POST[$fields['name']];
-                            // return print_r($boxes,true);
-                            // echo '<br />TvName: ' . $fields['name'];
-                            //echo '<br />ARRAY: ' . $_POST[$fields['name']];
-
-                            // echo '<br />COUNT: ' . count($boxes);
-                            $value = implode('||',$boxes);
-                            $value = mysql_escape_string($modx->stripTags($value,$allowedTags));
-
-                            if (!empty($value)) {
-                                $tv->setValue($resourceId,$value);
-                                $tv->save();
-                            }
-                            // echo '<br />Checkboxes: ' . $value;
-
-                            break;
-
-                        default:
-                            break;
-                    } /* end switch(fieldType) */
-                } /* end foreach($allTvs) */
-            } /* end if (!empty($allTVs)) -- Done saving TVs */
-
-           // get redirect/post id
-            //$redirectid = $modx->db->getValue('SELECT id as \'redirectid\' FROM '.$modx->getFullTableName('site_content').' WHERE createdon=\''.$createdon.'\'');
-
-            // redirect to post id
-            $goToUrl = $modx->makeUrl($postid);
-            if (empty($goToUrl)) {
-                // die ('Postid: ' . $postid . '<br />goToUrl: ' . $goToUrl);
-            }
-            $modx->sendRedirect($goToUrl);
-        }  /* end else (empty pagetitle or content */
-
-
-        default:
-            // display news form
-            // check if user has rights to post comments
-            // if(!$allowAnyPost && !$modx->isMemberOfWebGroup($postgrp)) {
-            if(!$allowAnyPost && !$modx->user->isMember($postgrp)) {
+} else {
+    if(!$allowAnyPost && !$modx->user->isMember($postgrp)) {
                 $formTpl = '';
-            } else {
-                foreach($_POST as $n=>$v) {
-                    $formTpl = str_replace('[[+'.$n.']]',$v,$formTpl);
-                }
-            }
+    } else {
+        foreach($_POST as $n=>$v) {
+            $formTpl = str_replace('[[+'.$n.']]',$v,$formTpl);
+        }
+    }
             // return form
-            return $message.$formTpl;
-            break;
-    } /* end isPostback switch */
-
-/* fix allowing stripslashes to act on an array */
-function stripslashes_deep($value) {
-    $value = is_array($value) ?
-                array_map('stripslashes_deep', $value) :
-                stripslashes($value);
-
-    return $value;
+    return $message.$formTpl;
 }
 ?>
