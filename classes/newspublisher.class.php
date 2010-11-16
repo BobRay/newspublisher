@@ -31,10 +31,11 @@ class Newspublisher {
         $this->rtsummary = isset($props['rtsummary']) ? $props['rtsummary']:'introtext';
         $this->folder = isset($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');
         $this->template = $this->getTemplate();
-        if (false) {
         $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
         $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
         $this->modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
+        if (false) {
+
         if ($richText) {
             $corePath=$this->modx->getOption('core_path').'components/tinymcefe/';
             $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
@@ -168,7 +169,7 @@ if (! empty($this->allTvs)) {
                     $multiple = ($tvType == 'listbox-multiple')? 'multiple="multiple" ': '';
                     $count = count($options);
                     $size = ($count <= 8)? $count : 8;
-                    $formTpl .= "\n" . '<select ' . $multiple . 'size="' . $size . '">' . "\n";
+                    $formTpl .= "\n" . '<select ' . 'name="'. $fields['name'] . $arrayPostfix . '" ' .  $multiple . 'size="' . $size . '">' . "\n";
                 }
 
                 foreach ($options as $option) {
@@ -177,9 +178,9 @@ if (! empty($this->allTvs)) {
                     $rvalue = strtok('=');
                     $rvalue = $rvalue? $rvalue : $option;
                     if ($tvType == 'listbox' || $tvType =='listbox-multiple') {
-                        $formTpl .= '<' . $iType . ' value="' . $rvalue .  '" id="' . $fields['name'] . $arrayPostfix . '"';
+                        $formTpl .= '<' . $iType . ' value="' . $rvalue . '"';
                     } else {
-                        $formTpl .= '<' . $iType . ' type="' . $tvType . '" value="' . $rvalue .  '" id="' . $fields['name'] . $arrayPostFix . '"';
+                        $formTpl .= '<' . $iType . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
                     }
                     if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
                         if ($tvType == 'radio' || $tvType == 'checkbox') {
@@ -196,24 +197,6 @@ if (! empty($this->allTvs)) {
                 }
                 $formTpl .= '</fieldset>';
                 break;
-            case 'xcheckbox':
-                $options = explode('||',$fields['elements']);
-                if (empty($fields['default_text'])) {
-                  $fields['default_text'] = $options[0];
-                }
-                $formTpl .= '<br />';
-                $formTpl .= "\n" . '<fieldset style="width:20em"><label>'. $fields['caption']  . '</label><br />';
-
-                foreach ($options as $option) {
-                  $defaults = explode('||',$fields['default_text']);
-                  $option = strtok($option,'=');
-                  $rvalue = strtok('=');
-                  $rvalue = $rvalue? $rvalue : $option;
-                  $formTpl .= '<input type="checkbox" value="' . $rvalue .  '" name="' . $fields['name'] . '[]"';
-                  $formTpl .= in_array($rvalue,$defaults)? ' checked="checked" ': ' ';
-                  $formTpl .= '/>' . $option . '<br />';
-
-                }
                 $formTpl .= '</fieldset>';
 
                 break;
@@ -227,11 +210,11 @@ return $formTpl;
 }
 
 public function saveResource() {
-    //die (print_r($_POST,true));
+    // $this->message=print_r($_POST,true);
 
     if(get_magic_quotes_gpc()){
 
-        //$_POST = array_map($this->strip_slashes_deep, $_POST);
+        // $_POST = array_map($this->strip_slashes_deep, $_POST);
 
     }
 
@@ -454,7 +437,7 @@ public function saveResource() {
 
         // get redirect/post id
         //$redirectid = $modx->db->getValue('SELECT id as \'redirectid\' FROM '.$modx->getFullTableName('site_content').' WHERE createdon=\''.$createdon.'\'');
-        return false;
+        return true;
 
         // redirect to post id
         $goToUrl = $this->modx->makeUrl($postid);

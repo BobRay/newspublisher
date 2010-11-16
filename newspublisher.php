@@ -44,7 +44,7 @@
 #    &second
 #
 #::::::::::::::::::::::::::::::::::::::::
-$scriptProperties['allowAnyPost'] = 'true';  // remove this
+
 
 $npPath = MODX_ASSETS_PATH . 'components/newspublisher/';
 
@@ -113,7 +113,9 @@ $isPostBack = isset($_POST['hidSubmit']) ? true:false;
 if ($isPostBack) {
     $success = $np->saveResource();
     if (! $success) {
-        die($np->getMessage());
+        return $np->getMessage();
+    } else {
+        return 'Thank You';
     }
 
 } else {
