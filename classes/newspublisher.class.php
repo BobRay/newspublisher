@@ -112,13 +112,33 @@ public function displayTVs() {
 $this->allTvs = array();
 $template = 1;
 $templateObj = $this->modx->getObject('modTemplate',$template);
-
-$tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',array('templateid'=>$template));
-
 if (! $templateObj) {
     $this->message = 'Failed to get Template: ' . $template;
     return false;
 
+}
+$tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',array('templateid'=>$template));
+if (! empty ($this->props['orderTVs'])) {
+      $ids = explode(',', $this->props['orderTVs']);
+      if (count($ids) == 0) {
+         $this->message = 'You wanted to order TVs, but this template has none';
+         return false;
+     }
+     foreach($ids as $id) {
+         foreach ($tvTemplates as $tvTemplate) {
+             if ($tvTemplate->get('tmplvarid') == $id) {
+
+                 $tvts[] = $tvTemplate;
+             }
+
+         }
+     }
+     $tvTemplates = $tvts;
+}
+
+if (count($tvTemplates) == 0) {
+    $this->message = 'No TvTemplates retrieved';
+    return false;
 }
 //$formTpl .= '<br />Template: ' . $template;
 //$formTpl .= '<br />TV Count: ' . count($tvTemplates);
@@ -130,9 +150,16 @@ foreach($tvTemplates as $tvTemplate) {
 }
 
 if (! empty($this->allTvs)) {
+    $hidden = explode(',',$this->props['hideTVs']);
+
     foreach ($this->allTvs as $tv) {
       //$formTpl .= '<br />TV Found: ' . $tv->get('name');
       $fields = $tv->toArray();
+
+      /* skip hidden TVs */
+      if (in_array($fields['id'],$hidden)) {
+          continue;
+      }
      // if (! empty($fields['default_text'])) {
      //     $modx->setPlaceholder($fields['name'],$fields['default_text']);
      // }
