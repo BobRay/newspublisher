@@ -45,6 +45,14 @@
 #
 #::::::::::::::::::::::::::::::::::::::::
 
+/* To Do:
+richtext TVs
+email TVs
+image TVs
+Hide TVs
+Order TVs
+Check permissions?
+*/
 
 $npPath = MODX_ASSETS_PATH . 'components/newspublisher/';
 
