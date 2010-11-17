@@ -26,6 +26,9 @@ class Newspublisher {
     }
 
     public function init($richText) {
+        if (! $richtext) {
+            return;
+        }
 
         $this->rtcontent = isset($props['rtcontent']) ? $props['rtcontent']:'content';
         $this->rtsummary = isset($props['rtsummary']) ? $props['rtsummary']:'introtext';
@@ -93,18 +96,17 @@ if(empty($formTpl)) $formTpl = '
         <p><label for="unpub_date">Unpublished Date: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" maxlength="10" size="9" readonly="readonly" value="[[+unpub_date]]" /></p>
         <p><label for="introtext">Summary: </label><br /><textarea name="introtext" id="introtext" cols="50" rows="5">[[+introtext]]</textarea></p>
         <p><label for="content">Content: </label><br /></p><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content" cols="70" rows="20">[[+content]]</textarea></div>';
-$formTpl .= $this->displayTVs();
 
+    $formTpl .= '[[+np.allTVs]]';
 
-$formTpl .= "\n" . '<p><input type="submit" name="Submit" value="Submit" /></p>
-
+    $formTpl .= "\n" . '<p><input type="submit" name="Submit" value="Submit" /></p>
     </form></div>';
 
 return $formTpl;
 /* done displaying TVs */
 } /* end displayForm */
 
-protected function displayTVs() {
+public function displayTVs() {
     /* Display TVs */
 
 $this->allTvs = array();

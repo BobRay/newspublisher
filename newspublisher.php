@@ -26,6 +26,8 @@
 #  Parameters:
 #    &folder      - folder id where comments are stored
 #    &makefolder  - set to 1 to automatically convert the parent document to a folder. Defaults to 0
+#    &hideAllTVs  - set to 1 to hide all TVs
+#    &hideTVs     - comma-separated list of TV IDs to hide
 #    &postid      - document id to load after posting news item. Defaults to the page created
 #    &canpost     - comma delimitted user groups that can post comments. leave blank for public posting
 #    &badwords    - comma delimited list of words not allowed in post
@@ -64,12 +66,17 @@ $np->init($scriptProperties['richtext']);
 
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
 $allowAnyPost = count($postgrp)==0 ? true : false;
+$scriptProperties['allowAnyPost'] = $allowAnyPost;
 
 // get clear cache
 $clearcache     = isset($clearcache) ? 1:0;
 
 // get alias title
 $aliastitle     = isset($aliastitle) ? 1:0;
+
+// get rich text
+
+$richtext = isset($richtext) ? $richtext : 1;
 
 // get folder id where we should store articles
 // else store under current document
@@ -116,6 +123,10 @@ $template = $modx->getOption('default_template');
 $message = '';
 
 $formTpl .= $np->displayForm();
+
+if (empty($scriptProperties['hideAllTVs'])) {
+    $formTpl = str_replace('[[+np.allTVs]]',$np->displayTVs(),$formTpl);
+}
 // get postback status
 $isPostBack = isset($_POST['hidSubmit']) ? true:false;
 if ($isPostBack) {
