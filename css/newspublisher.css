@@ -3,7 +3,7 @@ div.newspublisher {
 }
 
 div.newspublisher label {
-    width: 8em;
+    width: 10em;
     float: left;
     text-align: left;
     margin-right: 0.5em;
@@ -14,20 +14,12 @@ div.newspublisher input {
     width:20em;
 }
 div.newspublisher input.checkbox {
-    margin-right:.5em;
-    width:1em;
-
+    width:2em;
 }
 div.newspublisher input.radio {
-    margin-right:.5em;
-    width:1em;
-
+    width:2em;
 }
 
-div.newspublisher textarea#introtext {
-    width:40em !important
-    height:10em;
-}
 div.newspublisher fieldset {
     margin:20 0 0 0;
 }

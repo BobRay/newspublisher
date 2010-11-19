@@ -91,11 +91,11 @@ if(empty($formTpl)) $formTpl = '
         <p><label for="longtitle">[[%resource_longtitle]]: </label><input name="longtitle" title="[[%resource_longtitle_help]]" id="longtitle" type="text"  value="[[+longtitle]]" maxlength="100" /></p>
         <p><label for="description">[[%resource_description]]: </label><input name="description" title="[[%resource_description_help]]" id="description" type="text"  value="[[+description]]" maxlength="100" /></p>
         <div class="dp">
-        <p><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" title="[[%resource_publishdate_help]]" maxlength="10" size="9" readonly="readonly" value="[[+pub_date]]" /></p>
-        <p><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" size="9" readonly="readonly" value="[[+unpub_date]]" />
+        <p><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" title="[[%resource_publishdate_help]]" maxlength="10" readonly="readonly" value="[[+pub_date]]" /></p>
+        <p><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" readonly="readonly" value="[[+unpub_date]]" />
         </div>
-        <p><label for="introtext">[[%resource_summary]]: </label><br /><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="introtext" id="introtext" cols="50" rows="5">[[+introtext]]</textarea></p>
-        <p><label for="content">[[%resource_content]]: </label><br /><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content" cols="70" rows="20">[[+content]]</textarea></div></p>';
+        <p><label for="introtext">[[%resource_summary]]: </label><br /><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="introtext" id="introtext">[[+introtext]]</textarea></p>
+        <p><label for="content">[[%resource_content]]: </label><br /><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content">[[+content]]</textarea></div></p>';
 
     $formTpl .= '[[+np.allTVs]]';
 
