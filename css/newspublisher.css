@@ -1,0 +1,55 @@
+div.newspublisher {
+    margin-left:10em;
+}
+
+div.newspublisher label {
+    width: 8em;
+    float: left;
+    text-align: left;
+    margin-right: 0.5em;
+    display: block;
+    font-weight: bold;
+}
+div.newspublisher input {
+    width:20em;
+}
+div.newspublisher input.checkbox {
+    margin-right:.5em;
+    width:1em;
+
+}
+div.newspublisher input.radio {
+    margin-right:.5em;
+    width:1em;
+
+}
+
+div.newspublisher textarea#introtext {
+    width:40em !important
+    height:10em;
+}
+div.newspublisher fieldset {
+    margin:20 0 0 0;
+}
+fieldset.np-tv-radio {
+   width:10em;
+}
+fieldset.np-tv-checkbox {
+   width:10em;
+}
+fieldset.np-tv-listbox {
+   width:10em;
+}
+fieldset.np-tv-listbox-multiple {
+   width:10em;
+}
+
+fieldset.np-tv-text {
+   width:10em;
+}
+fieldset.np-tv-textbox {
+   width:10em;
+}
+fieldset.np-tv-email {
+   width:10em;
+}

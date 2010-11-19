@@ -34,6 +34,7 @@ class Newspublisher {
         $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
         $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
         $this->modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
+        $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/newspublisher.css');
 
         if ($richText) {
             $corePath=$this->modx->getOption('core_path').'components/tinymcefe/';
@@ -81,18 +82,20 @@ class Newspublisher {
 if(isset($formtpl)) $formTpl = $this->modx->getChunk($formtpl);
 
 if(empty($formTpl)) $formTpl = '
-    <div class="dp">
+    <div class="newspublisher">
     <form action="[[~[[*id]]]]" method="post">
 
         <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
 
-        <p><label for="pagetitle">[[%resource_pagetitle]]: </label><input name="pagetitle" id="pagetitle" type="text" size="40" value="[[+pagetitle]]" /></p>
-        <p><label for="longtitle">[[%resource_longtitle]]: </label><input name="longtitle" id="longtitle" type="text" size="40" value="[[+longtitle]]" /></p>
-        <p><label for="description">[[%resource_description]]: </label><input name="description" id="description" type="text" size="40" value="[[+description]]" /></p>
-        <p><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" maxlength="10" size="9" readonly="readonly" value="[[+pub_date]]" /></p>
-        <p><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" maxlength="10" size="9" readonly="readonly" value="[[+unpub_date]]" /></p>
+        <p><label for="pagetitle">[[%resource_pagetitle]]: </label><input name="pagetitle" title="[[%resource_pagetitle_help]]" id="pagetitle" type="text"  value="[[+pagetitle]]" maxlength="60" /></p>
+        <p><label for="longtitle">[[%resource_longtitle]]: </label><input name="longtitle" title="[[%resource_longtitle_help]]" id="longtitle" type="text"  value="[[+longtitle]]" maxlength="100" /></p>
+        <p><label for="description">[[%resource_description]]: </label><input name="description" title="[[%resource_description_help]]" id="description" type="text"  value="[[+description]]" maxlength="100" /></p>
+        <div class="dp">
+        <p><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" title="[[%resource_publishdate_help]]" maxlength="10" size="9" readonly="readonly" value="[[+pub_date]]" /></p>
+        <p><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" size="9" readonly="readonly" value="[[+unpub_date]]" />
+        </div>
         <p><label for="introtext">[[%resource_summary]]: </label><br /><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="introtext" id="introtext" cols="50" rows="5">[[+introtext]]</textarea></p>
-        <p><label for="content">[[%resource_content]]: </label><br /></p><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content" cols="70" rows="20">[[+content]]</textarea></div>';
+        <p><label for="content">[[%resource_content]]: </label><br /><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content" cols="70" rows="20">[[+content]]</textarea></div></p>';
 
     $formTpl .= '[[+np.allTVs]]';
 
@@ -137,8 +140,7 @@ if (count($tvTemplates) == 0) {
     $this->message = 'No TvTemplates retrieved';
     return false;
 }
-//$formTpl .= '<br />Template: ' . $template;
-//$formTpl .= '<br />TV Count: ' . count($tvTemplates);
+
 foreach($tvTemplates as $tvTemplate) {
     $tvObj = $tvTemplate->getOne('TemplateVar');
     if ($tvObj) {
@@ -147,6 +149,7 @@ foreach($tvTemplates as $tvTemplate) {
 }
 
 if (! empty($this->allTvs)) {
+    $formTpl .= '<br />';
     $hidden = explode(',',$this->props['hidetvs']);
 
     foreach ($this->allTvs as $tv) {
@@ -187,7 +190,7 @@ if (! empty($this->allTvs)) {
                     $fields['default_text'] = $options[0];
                 }
 
-                $formTpl .= "\n" . '<fieldset style="width:20em"><label>'. $fields['caption']  . '</label><br />';
+                $formTpl .= "\n" . '<fieldset class="np-tv-' . $tvType . '"><label>'. $fields['caption']  . '</label><br />';
 
                 if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
                     $multiple = ($tvType == 'listbox-multiple')? 'multiple="multiple" ': '';
@@ -205,7 +208,7 @@ if (! empty($this->allTvs)) {
                     if ($tvType == 'listbox' || $tvType =='listbox-multiple') {
                         $formTpl .= '<' . $iType . ' value="' . $rvalue . '"';
                     } else {
-                        $formTpl .= '<' . $iType . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
+                        $formTpl .= '<' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
                     }
                     if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
                         if ($tvType == 'radio' || $tvType == 'checkbox') {
@@ -227,7 +230,9 @@ if (! empty($this->allTvs)) {
                 break;
 
         }  /* end switch */
+        $formTpl .= '<br />';
     } /* end foreach */
+    // $formTpl = "\n" . '<div class = "tvs">' . $formTpl . '</div>' . "\n";
 } /* end if (!empty $allTvs) */
 return $formTpl;
 }

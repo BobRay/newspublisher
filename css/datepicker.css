@@ -240,18 +240,7 @@ div.datePicker table tbody td.date-picker-hover
         }
 
 
-div.dp {
-margin-left:10em;
-}
 
-label
-{
-width: 8em;
-float: left;
-text-align: left;
-margin-right: 0.5em;
-display: block
-}
 
         /*
    Quirksmode necessity?
