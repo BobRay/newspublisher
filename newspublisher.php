@@ -8,9 +8,20 @@
  * The NewsPublisher snippet presents a form in the front end for
  * creating resources. Rich text editing is available for text fields.
  * /
+/* To Do:
+get rid of <br> <p>
+make rtcontent and rtsummary work
+spacing on summary and content labels
+modx.js
+remove table css
+ditch demo.css
+richtext TVs
+image TVs
+Check permissions?
+*/
 
 /*
-  Version: 3.0.1
+  Version: 3.0.2
   Modified: November 06, 2010
 
   Changelog:
@@ -43,12 +54,6 @@
     &minute
     &second
     &listboxmax  - maximum length for listboxes. Default is 8 items.
-*/
-
-/* To Do:
-richtext TVs
-image TVs
-Check permissions?
 */
 
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
