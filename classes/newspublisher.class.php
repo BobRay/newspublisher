@@ -27,10 +27,6 @@ class Newspublisher {
 
     public function init($richText) {
         $this->modx->lexicon->load('core:resource');
-        if (! $richtext) {
-            return;
-        }
-
         $this->rtcontent = isset($props['rtcontent']) ? $props['rtcontent']:'content';
         $this->rtsummary = isset($props['rtsummary']) ? $props['rtsummary']:'introtext';
         $this->folder = isset($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');
