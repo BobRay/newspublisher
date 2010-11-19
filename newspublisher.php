@@ -38,12 +38,13 @@
 #    &richtext    - Initialize rich text editor
 #    &rtcontent   - name of a richtext content form field
 #    &rtsummary   - name of a richtext summary form field
-#    &showinmenu  - sets the flag to true or false (1|0) as to whether or not it shows in the menu. defaults to false (0)
+#    &showinmenu  - sets the flag to true or false (1|0) as to whether or not the new page shows in the menu. defaults to false (0)
 #    &aliastitle  - set to 1 to use page title as alias suffix. Defaults to 0 - date created.
 #    &clearcache  - when set to 1 the system will automatically clear the site cache after publishing an article.
 #    &hour        - Hour, minute and second for published and unpublished dates; defaults to 12:01 am.
 #    &minute
 #    &second
+#    &textsize    - length of one-line text input fields
 #
 #::::::::::::::::::::::::::::::::::::::::
 
