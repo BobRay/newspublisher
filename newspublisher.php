@@ -51,14 +51,6 @@ image TVs
 Check permissions?
 */
 
-$npPath = MODX_ASSETS_PATH . 'components/newspublisher/';
-
-require_once($npPath . 'classes/newspublisher.class.php');
-
-$np = new Newspublisher(&$modx, &$scriptProperties);
-
-$np->init($scriptProperties['richtext']);
-
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
 $allowAnyPost = count($postgrp)==0 ? true : false;
 $scriptProperties['allowAnyPost'] = $allowAnyPost;
@@ -121,6 +113,13 @@ $template = $modx->getOption('default_template');
 }
 // ************************
 $message = '';
+$npPath = MODX_ASSETS_PATH . 'components/newspublisher/';
+
+require_once($npPath . 'classes/newspublisher.class.php');
+
+$np = new Newspublisher(&$modx, &$scriptProperties);
+
+$np->init($scriptProperties['richtext']);
 
 $formTpl .= $np->displayForm();
 

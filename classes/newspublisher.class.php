@@ -91,7 +91,7 @@ if(empty($formTpl)) $formTpl = '
         <p><label for="description">[[%resource_description]]: </label><input name="description" id="description" type="text" size="40" value="[[+description]]" /></p>
         <p><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" maxlength="10" size="9" readonly="readonly" value="[[+pub_date]]" /></p>
         <p><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" maxlength="10" size="9" readonly="readonly" value="[[+unpub_date]]" /></p>
-        <p><label for="introtext">[[%resource_summary]]: </label><br /><textarea name="introtext" id="introtext" cols="50" rows="5">[[+introtext]]</textarea></p>
+        <p><label for="introtext">[[%resource_summary]]: </label><br /><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="introtext" id="introtext" cols="50" rows="5">[[+introtext]]</textarea></p>
         <p><label for="content">[[%resource_content]]: </label><br /></p><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content" cols="70" rows="20">[[+content]]</textarea></div>';
 
     $formTpl .= '[[+np.allTVs]]';
@@ -268,7 +268,7 @@ public function saveResource() {
 
         $user = $this->modx->user;
         $userid = $this->modx->user->get('id');
-        if(!$user && $allowAnyPost) $user = '(anonymous)';
+        if(!$userid && $allowAnyPost) $user = '(anonymous)';
 
         // check if user has rights
 
