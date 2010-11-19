@@ -192,7 +192,8 @@ if (! empty($this->allTvs)) {
                 if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
                     $multiple = ($tvType == 'listbox-multiple')? 'multiple="multiple" ': '';
                     $count = count($options);
-                    $size = ($count <= 8)? $count : 8;
+                    $max = $this->props['listboxmax'];
+                    $size = ($count <= $max)? $count : $max;
                     $formTpl .= "\n" . '<select ' . 'name="'. $fields['name'] . $arrayPostfix . '" ' .  $multiple . 'size="' . $size . '">' . "\n";
                 }
 
@@ -221,9 +222,7 @@ if (! empty($this->allTvs)) {
                 }
                 $formTpl .= '</fieldset>';
                 break;
-                $formTpl .= '</fieldset>';
 
-                break;
             default:
                 break;
 

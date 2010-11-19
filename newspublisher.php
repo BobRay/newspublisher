@@ -44,7 +44,7 @@
 #    &hour        - Hour, minute and second for published and unpublished dates; defaults to 12:01 am.
 #    &minute
 #    &second
-#    &textsize    - length of one-line text input fields
+#    &listboxmax  - maximum length for listboxes. Default is 8 items.
 #
 #::::::::::::::::::::::::::::::::::::::::
 
@@ -86,11 +86,16 @@ $rtcontent = isset($rtcontent) ? $rtcontent:'content';
 // set rich text summary field
 $rtsummary = isset($rtsummary) ? $rtsummary:'introtext';
 
+//set listbox max size
+$scriptProperties['listboxmax'] = isset($listboxmax)? $listboxmax : 8;
+
 // get header
 $header = isset($headertpl) ? "[[$".$headertpl."]]":'';
 
 // get footer
 $footer = isset($footertpl) ? "[[+".$footertpl."]]":'';
+
+
 
 
 
