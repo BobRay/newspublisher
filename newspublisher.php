@@ -87,10 +87,10 @@ $rtsummary = isset($rtsummary) ? $rtsummary:'introtext';
 $scriptProperties['listboxmax'] = isset($listboxmax)? $listboxmax : 8;
 
 // get header
-$header = isset($headertpl) ? "[[$".$headertpl."]]":'';
+$scriptProperties['header'] = isset($headertpl) ? "[[$".$headertpl."]]":'';
 
 // get footer
-$footer = isset($footertpl) ? "[[+".$footertpl."]]":'';
+$scriptProperties['footer'] = isset($footertpl) ? "[[$".$footertpl."]]":'';
 
 
 

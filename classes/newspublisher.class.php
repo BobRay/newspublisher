@@ -355,7 +355,7 @@ public function saveResource() {
             'hidemenu'        => $hidemenu,
             'menuindex'     => $mnuidx,
             'template'        => $template,
-            'content'         => $header.$content.$footer
+            'content'         => $this->props['header'].$content.$this->props['footer']
         );
 
         $resource = $this->modx->newObject('modResource',$flds);
