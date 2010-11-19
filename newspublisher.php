@@ -1,52 +1,49 @@
 <?php
-#::::::::::::::::::::::::::::::::::::::::
-#
-#  Snippet Name: NewsPublisher
-#  Short Desc: Create articles directly from front end (news, blogs, PR, etc.)
-#  Created By: Raymond Irving (xwisdom@yahoo.com), August 2005
-#
-#  Version: 3.0.1
-#  Modified: November 06, 2010
-#
-#  Changelog:
-#     Mar 05, 06 -- modx_ prefix removed [Mark]
-#     Dec 13, 05 -- Now inherrits web/manager docgroups thanks to Jared Carlow
-#     Nov 06, 10 -- Revolution Conversion by Bob Ray
-#
-#::::::::::::::::::::::::::::::::::::::::
-#  Description:
-#    Checks to see if users belong to a certain group and
-#    displays the specified chunk if they do. Performs several
-#    sanity checks and allows to be used multiple times on a page.
-#    Only meant to be used once per page.
-#::::::::::::::::::::::::::::::::::::::::
-#
-# NOTE: Bruno17's tinymcefe component must be installed for rich text fields
-#
-#  Parameters:
-#    &folder      - folder id where comments are stored
-#    &makefolder  - set to 1 to automatically convert the parent document to a folder. Defaults to 0
-#    &hidealltvs  - set to 1 to hide all TVs
-#    &hidetvs     - comma-separated list of TV IDs to hide
-#    &postid      - document id to load after posting news item. Defaults to the page created
-#    &canpost     - comma delimitted user groups that can post comments. leave blank for public posting
-#    &badwords    - comma delimited list of words not allowed in post
-#    &template    - name of template to use for news post
-#    &headertpl   - header template (chunk name) to be inserted at the begining of the news content
-#    &footertpl   - footer template (chunk name) to be inserted at the end of the news content
-#    &formtpl     - form template (chunk name)
-#    &richtext    - Initialize rich text editor
-#    &rtcontent   - name of a richtext content form field
-#    &rtsummary   - name of a richtext summary form field
-#    &showinmenu  - sets the flag to true or false (1|0) as to whether or not the new page shows in the menu. defaults to false (0)
-#    &aliastitle  - set to 1 to use page title as alias suffix. Defaults to 0 - date created.
-#    &clearcache  - when set to 1 the system will automatically clear the site cache after publishing an article.
-#    &hour        - Hour, minute and second for published and unpublished dates; defaults to 12:01 am.
-#    &minute
-#    &second
-#    &listboxmax  - maximum length for listboxes. Default is 8 items.
-#
-#::::::::::::::::::::::::::::::::::::::::
+/**
+ * @name newspublisher.class.php
+ * @author Raymond Irving
+ * @author Bob Ray
+ * @package newspublisher
+ *
+ * The NewsPublisher snippet presents a form in the front end for
+ * creating resources. Rich text editing is available for text fields.
+ * /
+
+/*
+  Version: 3.0.1
+  Modified: November 06, 2010
+
+  Changelog:
+     Mar 05, 06 -- modx_ prefix removed [Mark]
+     Dec 13, 05 -- Now inherrits web/manager docgroups thanks to Jared Carlow
+     Nov 06, 10 -- Revolution Conversion by Bob Ray
+     Nov 15, 10 -- Added TVs to form
+
+     NOTE: Bruno17's tinymcefe component must be installed for rich text fields
+
+  Parameters:
+    &folder      - folder id where comments are stored
+    &makefolder  - set to 1 to automatically convert the parent document to a folder. Defaults to 0
+    &hidealltvs  - set to 1 to hide all TVs
+    &hidetvs     - comma-separated list of TV IDs to hide
+    &postid      - document id to load after posting news item. Defaults to the page created
+    &canpost     - comma delimitted user groups that can post comments. leave blank for public posting
+    &badwords    - comma delimited list of words not allowed in post
+    &template    - name of template to use for news post
+    &headertpl   - header template (chunk name) to be inserted at the begining of the news content
+    &footertpl   - footer template (chunk name) to be inserted at the end of the news content
+    &formtpl     - form template (chunk name)
+    &richtext    - Initialize rich text editor
+    &rtcontent   - name of a richtext content form field
+    &rtsummary   - name of a richtext summary form field
+    &showinmenu  - sets the flag to true or false (1|0) as to whether or not the new page shows in the menu. defaults to false (0)
+    &aliastitle  - set to 1 to use page title as alias suffix. Defaults to 0 - date created.
+    &clearcache  - when set to 1 the system will automatically clear the site cache after publishing an article.
+    &hour        - Hour, minute and second for published and unpublished dates; defaults to 12:01 am.
+    &minute
+    &second
+    &listboxmax  - maximum length for listboxes. Default is 8 items.
+*/
 
 /* To Do:
 richtext TVs
