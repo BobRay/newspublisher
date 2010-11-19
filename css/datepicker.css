@@ -240,14 +240,14 @@ div.datePicker table tbody td.date-picker-hover
         }
 
 
-div.dp {
+div.datepicker {
     margin-left:0;
 }
-div.dp input {
+div.datepicker input {
     width:6em !important;
 }
 
-div.dp label
+div.datepicker label
 {
 width: 8em;
 float: left;

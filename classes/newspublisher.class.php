@@ -90,7 +90,7 @@ if(empty($formTpl)) $formTpl = '
         <p><label for="pagetitle">[[%resource_pagetitle]]: </label><input name="pagetitle" title="[[%resource_pagetitle_help]]" id="pagetitle" type="text"  value="[[+pagetitle]]" maxlength="60" /></p>
         <p><label for="longtitle">[[%resource_longtitle]]: </label><input name="longtitle" title="[[%resource_longtitle_help]]" id="longtitle" type="text"  value="[[+longtitle]]" maxlength="100" /></p>
         <p><label for="description">[[%resource_description]]: </label><input name="description" title="[[%resource_description_help]]" id="description" type="text"  value="[[+description]]" maxlength="100" /></p>
-        <div class="dp">
+        <div class="datepicker">
         <p><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" title="[[%resource_publishdate_help]]" maxlength="10" readonly="readonly" value="[[+pub_date]]" /></p>
         <p><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" readonly="readonly" value="[[+unpub_date]]" />
         </div>
@@ -99,7 +99,7 @@ if(empty($formTpl)) $formTpl = '
 
     $formTpl .= '[[+np.allTVs]]';
 
-    $formTpl .= "\n" . '<p><input type="submit" name="Submit" value="Submit" /></p>
+    $formTpl .= "\n" . '<p><input class="submit" type="submit" name="Submit" value="Submit" /></p>
     </form></div>';
 
 return $formTpl;

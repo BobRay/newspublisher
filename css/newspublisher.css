@@ -13,6 +13,9 @@ div.newspublisher label {
 div.newspublisher input {
     width:20em;
 }
+div.newspublisher input.submit {
+    width:8em;
+}
 div.newspublisher input.checkbox {
     width:2em;
 }
