@@ -150,7 +150,7 @@ foreach($tvTemplates as $tvTemplate) {
 }
 
 if (! empty($this->allTvs)) {
-    $hidden = explode(',',$this->props['hideTVs']);
+    $hidden = explode(',',$this->props['hidetvs']);
 
     foreach ($this->allTvs as $tv) {
       //$formTpl .= '<br />TV Found: ' . $tv->get('name');

@@ -26,8 +26,8 @@
 #  Parameters:
 #    &folder      - folder id where comments are stored
 #    &makefolder  - set to 1 to automatically convert the parent document to a folder. Defaults to 0
-#    &hideAllTVs  - set to 1 to hide all TVs
-#    &hideTVs     - comma-separated list of TV IDs to hide
+#    &hidealltvs  - set to 1 to hide all TVs
+#    &hidetvs     - comma-separated list of TV IDs to hide
 #    &postid      - document id to load after posting news item. Defaults to the page created
 #    &canpost     - comma delimitted user groups that can post comments. leave blank for public posting
 #    &badwords    - comma delimited list of words not allowed in post
@@ -49,10 +49,7 @@
 
 /* To Do:
 richtext TVs
-email TVs
 image TVs
-Hide TVs
-Order TVs
 Check permissions?
 */
 
@@ -124,7 +121,7 @@ $message = '';
 
 $formTpl .= $np->displayForm();
 
-if (empty($scriptProperties['hideAllTVs'])) {
+if (empty($scriptProperties['hidealltvs'])) {
     $formTpl = str_replace('[[+np.allTVs]]',$np->displayTVs(),$formTpl);
 }
 // get postback status
