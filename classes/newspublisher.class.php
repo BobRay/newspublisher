@@ -124,13 +124,27 @@ public function displayTVs() {
     /* Display TVs */
 
 $this->allTvs = array();
-$template = 1;
-$templateObj = $this->modx->getObject('modTemplate',$template);
+
+/* get template */
+
+if (isset($this->props['template'])) {
+    if(is_numeric($this->props['template']) ) {
+        /* User sent an ID, use it */
+        $templateObj = $this->modx->getObject('modTemplate',$this->props['template']);
+    } else {
+        /* User sent a name, use it */
+        $templateObj = $this->modx->getObject('modTemplate',array('templatename'=>$this->props['template']));
+    }
+} else { /* not set, use default template */
+    $templateObj = $this->modx->getObject('modTemplate',$this->modx->getOption('default_template'));
+}
+
 if (! $templateObj) {
     $this->message = 'Failed to get Template: ' . $template;
     return false;
 
 }
+
 $tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',array('templateid'=>$template));
 if (! empty ($this->props['orderTVs'])) {
       $ids = explode(',', $this->props['orderTVs']);

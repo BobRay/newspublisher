@@ -90,10 +90,6 @@ $scriptProperties['header'] = isset($headertpl) ? "[[$".$headertpl."]]":'';
 // get footer
 $scriptProperties['footer'] = isset($footertpl) ? "[[$".$footertpl."]]":'';
 
-
-
-
-
 // get badwords
 if(isset($badwords)) {
     $badwords = str_replace(' ','', $badwords);
@@ -103,20 +99,7 @@ if(isset($badwords)) {
 // get menu status
 $hidemenu = isset($showinmenu) && $showinmenu==1 ? 0 : 1;
 
-if (false) {
-// get template
-if (isset($template)) {
-    if(is_numeric($template) ) {
-        // use it
-    } else {
-        $t = $modx->getObject('modTemplate',array('templatename'=>'$template'));
-        $template = $t? $t->get('id') : $modx->getOption('default_template');
-    }
-} else {
-$template = $modx->getOption('default_template');
-}
 
-}
 // ************************
 $message = '';
 $npPath = MODX_ASSETS_PATH . 'components/newspublisher/';
