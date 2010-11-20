@@ -34,7 +34,21 @@ class Newspublisher {
         $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
         $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
         $this->modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
-        $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/newspublisher.css');
+
+        /* inject NP CSS file */
+        /* empty but sent parameter means use no CSS file at all */
+
+        if ( ! isset($this->props['cssfile'])) { /* nothing sent - use default */
+            $css = MODX_ASSETS_URL . 'components/newspublisher/css/newspublisher.css';
+        } else if (empty($this->props['cssfile']) ) { /* empty param -- no css file */
+            $css = false;
+        } else {  /* set but not empty -- use it */
+            $css = MODX_ASSETS_URL . 'components/newspublisher/css/' . $this->props['cssfile'];
+        }
+
+        if ($css !== false) {
+            $this->modx->regClientCSS($css);
+        }
 
         if ($richText) {
             $corePath=$this->modx->getOption('core_path').'components/tinymcefe/';

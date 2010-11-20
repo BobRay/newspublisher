@@ -54,6 +54,7 @@ Check permissions?
     &minute
     &second
     &listboxmax  - maximum length for listboxes. Default is 8 items.
+    &cssfile     - name of CSS file to use, or '' for no CSS file; defaults to newspublisher.css.
 */
 
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
