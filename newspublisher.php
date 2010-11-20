@@ -112,18 +112,42 @@ $np->init($scriptProperties['richtext']);
 
 $formTpl .= $np->displayForm();
 
+/* handle pre-submission errors */
+$errors = $np->getErrors();
+
+if (! empty($errors) ) {
+    foreach($errors as $error) {
+        $formTpl = $error . '<br />' . $formTpl;
+    }
+    return($formTpl);
+ }
+
 if (empty($scriptProperties['hidealltvs'])) {
     $formTpl = str_replace('[[+np.allTVs]]',$np->displayTVs(),$formTpl);
 }
 // get postback status
 $isPostBack = isset($_POST['hidSubmit']) ? true:false;
 if ($isPostBack) {
-    $success = $np->saveResource();
-    if (! $success) {
-        return $np->getMessage();
+
+    $errors = $_POST['np.errors'];
+
+    $np->saveResource();
+
+    $errors = $np->getErrors();
+
+    if (! empty($errors) ) {
+        foreach($errors as $error) {
+            $formTpl = $error . '<br />' . $formTpl;
+        }
+        foreach($_POST as $n=>$v) {
+            $formTpl = str_replace('[[+'.$n.']]',$v,$formTpl);
+        }
+        return($formTpl);
     } else {
-        return 'Thank You';
+            // redirect goes here
+            return 'Thank You';
     }
+
 
 } else {
     if(!$allowAnyPost && !$modx->user->isMember($postgrp)) {
@@ -134,6 +158,6 @@ if ($isPostBack) {
         }
     }
             // return form
-    return $message.$formTpl;
+    return $formTpl;
 }
 ?>

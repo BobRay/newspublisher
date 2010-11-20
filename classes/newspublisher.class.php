@@ -18,6 +18,7 @@ class Newspublisher {
     protected $rtSummary;
     protected $folder;
     protected $template;
+    protected $errors;
 
 
     public function __construct(&$modx, &$props) {
@@ -34,6 +35,8 @@ class Newspublisher {
         $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
         $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
         $this->modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
+        $this->header = $this->modx->getChunk($this->props['headerTpl']);
+        $this->footer = $this->modx->getChunk($this->props['footerTpl']);
 
         /* inject NP CSS file */
         /* empty but sent parameter means use no CSS file at all */
@@ -104,6 +107,7 @@ if(empty($formTpl)) $formTpl = '
         <p><label for="pagetitle">[[%resource_pagetitle]]: </label><input name="pagetitle" title="[[%resource_pagetitle_help]]" id="pagetitle" type="text"  value="[[+pagetitle]]" maxlength="60" /></p>
         <p><label for="longtitle">[[%resource_longtitle]]: </label><input name="longtitle" title="[[%resource_longtitle_help]]" id="longtitle" type="text"  value="[[+longtitle]]" maxlength="100" /></p>
         <p><label for="description">[[%resource_description]]: </label><input name="description" title="[[%resource_description_help]]" id="description" type="text"  value="[[+description]]" maxlength="100" /></p>
+        <p><label for="menutitle">[[%resource_menutitle]]: </label><input name="menutitle" title="[[%resource_menutitle_help]]" id="menutitle" type="text"  value="[[+menutitle]]" maxlength="60" /></p>
         <div class="datepicker">
         <p><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" title="[[%resource_publishdate_help]]" maxlength="10" readonly="readonly" value="[[+pub_date]]" /></p>
         <p><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" readonly="readonly" value="[[+unpub_date]]" />
@@ -123,35 +127,30 @@ return $formTpl;
 public function displayTVs() {
     /* Display TVs */
 
-$this->allTvs = array();
-
-/* get template */
-
-if (isset($this->props['template'])) {
-    if(is_numeric($this->props['template']) ) {
-        /* User sent an ID, use it */
-        $templateObj = $this->modx->getObject('modTemplate',$this->props['template']);
-    } else {
-        /* User sent a name, use it */
-        $templateObj = $this->modx->getObject('modTemplate',array('templatename'=>$this->props['template']));
+    $this->allTvs = array();
+    if (false) {
+    if (isset($this->props['template'])) {
+        if(is_numeric($this->props['template']) ) {
+            /* User sent an ID, use it */
+            $templateObj = $this->modx->getObject('modTemplate',$this->props['template']);
+        } else {
+            /* User sent a name, use it */
+            $templateObj = $this->modx->getObject('modTemplate',array('templatename'=>$this->props['template']));
+        }
+    } else { /* not set, use default template */
+        $templateObj = $this->modx->getObject('modTemplate',$this->modx->getOption('default_template'));
     }
-} else { /* not set, use default template */
-    $templateObj = $this->modx->getObject('modTemplate',$this->modx->getOption('default_template'));
-}
 
-if (! $templateObj) {
-    $this->message = 'Failed to get Template: ' . $template;
-    return false;
-
-}
-
-$tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',array('templateid'=>$template));
-if (! empty ($this->props['orderTVs'])) {
-      $ids = explode(',', $this->props['orderTVs']);
-      if (count($ids) == 0) {
-         $this->message = 'You wanted to order TVs, but this template has none';
-         return false;
-     }
+    if (! $templateObj) {
+        $this->errors[] = 'Failed to get Template: ' . $this->template;
+    }
+    }
+    $tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',array('templateid'=>$this->template));
+    if (! empty ($this->props['orderTVs'])) {
+        $ids = explode(',', $this->props['orderTVs']);
+        if (count($ids) == 0) {
+            $this->errors[] = 'You wanted to order TVs, but this template has none';
+        }
      foreach($ids as $id) {
          foreach ($tvTemplates as $tvTemplate) {
              if ($tvTemplate->get('tmplvarid') == $id) {
@@ -162,19 +161,19 @@ if (! empty ($this->props['orderTVs'])) {
          }
      }
      $tvTemplates = $tvts;
-}
+     }
 
-if (count($tvTemplates) == 0) {
-    $this->message = 'No TvTemplates retrieved';
-    return false;
-}
+    if (count($tvTemplates) == 0) {
+        $this->errors[] = 'No TvTemplates retrieved';
 
-foreach($tvTemplates as $tvTemplate) {
-    $tvObj = $tvTemplate->getOne('TemplateVar');
-    if ($tvObj) {
-       $this->allTvs[] = $tvObj;
     }
-}
+
+    foreach($tvTemplates as $tvTemplate) {
+        $tvObj = $tvTemplate->getOne('TemplateVar');
+        if ($tvObj) {
+           $this->allTvs[] = $tvObj;
+        }
+    }
 
 if (! empty($this->allTvs)) {
     $formTpl .= '<br />';
@@ -275,10 +274,9 @@ public function saveResource() {
     }
 
     if(trim($_POST['pagetitle'])=='') {
-        $this->message = '<p><b>Missing page title.</b></p><br /><br />';
-        return false;
+        $this->errors[] = 'Missing page title';
     } elseif($_POST[$this->rtcontent]=='') {
-        $this->message = '<p><b>Missing content.</b></p><br /><br />';
+        $this->errors[] = 'Missing content';
         return false;
     } else {
     // get created date
@@ -306,8 +304,8 @@ public function saveResource() {
         // check if user has rights
 
         if(!$this->props['allowAnyPost'] && !$this->modx->user->isMember($this->props['postgrp'])) {
-            $this->message = 'You are not allowed to publish articles';
-            return false;
+            $this->errors[] = 'You are not allowed to publish articles';
+
         }
 
         $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
@@ -326,6 +324,7 @@ public function saveResource() {
 
         $title = mysql_escape_string($this->modx->stripTags($_POST['pagetitle']));
         $longtitle = mysql_escape_string($this->modx->stripTags($_POST['longtitle']));
+        $menutitle = mysql_escape_string($this->modx->stripTags($_POST['menutitle']));
         $description = mysql_escape_string($this->modx->stripTags($_POST['description']));
         $introtext = mysql_escape_string($this->modx->stripTags($_POST[$this->rtsummary],$allowedTags));
         $pub_date = $_POST['pub_date'];
@@ -373,22 +372,23 @@ public function saveResource() {
         $flds = array(
             'pagetitle'     => $title,
             'longtitle'     => $longtitle,
-            'description' => $description,
+            'menutitle'     => $menutitle,
+            'description'   => $description,
             'introtext'     => $introtext,
-            'alias'             => $alias,
-            'parent'            => $folder,
+            'alias'         => $alias,
+            'parent'        => $folder,
             'createdon'     => $createdon,
             'createdby'     => $createdBy,
-            'editedon'        => '0',
-            'editedby'        => '0',
+            'editedon'      => '0',
+            'editedby'      => '0',
             'published'     => $published,
-            'pub_date'        => $pub_date,
+            'pub_date'      => $pub_date,
             'unpub_date'    => $unpub_date,
-            'deleted'         => '0',
-            'hidemenu'        => $hidemenu,
+            'deleted'       => '0',
+            'hidemenu'      => $hidemenu,
             'menuindex'     => $mnuidx,
-            'template'        => $template,
-            'content'         => $this->props['header'].$content.$this->props['footer']
+            'template'      => $this->template,
+            'content'       => $this->header . $content . $this->footer
         );
 
         $resource = $this->modx->newObject('modResource',$flds);
@@ -508,14 +508,12 @@ protected function stripslashes_deep($value) {
     $value = is_array($value) ?
                 array_map('stripslashes_deep', $value) :
                 stripslashes($value);
-
     return $value;
 }
 
-public function getMessage() {
-    return $this->message;
+public function getErrors() {
+    return $this->errors;
 }
-
 protected function getTemplate() {
     // get template
 if (isset($this->props['template'])) {
@@ -523,6 +521,9 @@ if (isset($this->props['template'])) {
         // use it
     } else {
         $t = $this->modx->getObject('modTemplate',array('templatename'=>$this->props['template']));
+        if (! $t) {
+            $this->errors[] = 'Failed to get template';
+        }
         $template = $t? $t->get('id') : $this->modx->getOption('default_template');
 
     }
