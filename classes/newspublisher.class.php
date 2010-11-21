@@ -32,7 +32,7 @@ class Newspublisher {
         $this->rtsummary = isset($props['rtsummary']) ? $props['rtsummary']:'introtext';
         $this->folder = isset($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');
         $this->template = $this->getTemplate();
-        $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
+        //$this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
         $this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/datepicker.css');
         $this->modx->regClientStartupScript(MODX_ASSETS_URL . 'components/newspublisher/js/datepicker.js');
         $this->header = $this->modx->getChunk($this->props['headerTpl']);
@@ -100,20 +100,30 @@ if(isset($formtpl)) $formTpl = $this->modx->getChunk($formtpl);
 
 if(empty($formTpl)) $formTpl = '
     <div class="newspublisher">
+    <h2>Create Resource</h2>
+    [[!+np.error_header:ifnotempty=`<h3>[[!+np.error_header]]</h3>`]]
+    [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
     <form action="[[~[[*id]]]]" method="post">
 
         <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
-
+        [[+np.error_pagetitle]]
         <p><label for="pagetitle">[[%resource_pagetitle]]: </label><input name="pagetitle" title="[[%resource_pagetitle_help]]" id="pagetitle" type="text"  value="[[+pagetitle]]" maxlength="60" /></p>
+        [[+np.error_longtitle]]
         <p><label for="longtitle">[[%resource_longtitle]]: </label><input name="longtitle" title="[[%resource_longtitle_help]]" id="longtitle" type="text"  value="[[+longtitle]]" maxlength="100" /></p>
+        [[+np.error_description]]
         <p><label for="description">[[%resource_description]]: </label><input name="description" title="[[%resource_description_help]]" id="description" type="text"  value="[[+description]]" maxlength="100" /></p>
+        [[+np.error_menutitle]]
         <p><label for="menutitle">[[%resource_menutitle]]: </label><input name="menutitle" title="[[%resource_menutitle_help]]" id="menutitle" type="text"  value="[[+menutitle]]" maxlength="60" /></p>
+        [[+np.error_pub_date]]
         <div class="datepicker">
         <p><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" title="[[%resource_publishdate_help]]" maxlength="10" readonly="readonly" value="[[+pub_date]]" /></p>
-        <p><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" readonly="readonly" value="[[+unpub_date]]" />
+        [[+np.error__unpub_date]]
+        <p><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" readonly="readonly" value="[[+unpub_date]]" /></p>
         </div>
-        <p><label for="introtext">[[%resource_summary]]: </label><br /><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="introtext" id="introtext">[[+introtext]]</textarea></p>
-        <p><label for="content">[[%resource_content]]: </label><br /><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content">[[+content]]</textarea></div></p>';
+        [[+np.error_introtext]]
+        <label for="introtext">[[%resource_summary]]: </label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="introtext" id="introtext">[[+introtext]]</textarea></div>
+        [[+np.error_content]]
+        <label for="content">[[%resource_content]]: </label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content">[[+content]]</textarea></div>';
 
     $formTpl .= '[[+np.allTVs]]';
 
@@ -181,15 +191,14 @@ if (! empty($this->allTvs)) {
 
     foreach ($this->allTvs as $tv) {
       //$formTpl .= '<br />TV Found: ' . $tv->get('name');
+
       $fields = $tv->toArray();
 
       /* skip hidden TVs */
       if (in_array($fields['id'],$hidden)) {
           continue;
       }
-     // if (! empty($fields['default_text'])) {
-     //     $modx->setPlaceholder($fields['name'],$fields['default_text']);
-     // }
+      $formTpl .=  "\n" . '[[+np.error_'. $fields['name'] . ']]' . "\n";
         $tvType = $tv->get('type');
         $tvType = $tvType == 'option'? 'radio' : $tvType;
 //$formTpl .= '<br />TYPE: ' . $tvType . '<br />';
@@ -217,7 +226,7 @@ if (! empty($this->allTvs)) {
                     $fields['default_text'] = $options[0];
                 }
 
-                $formTpl .= "\n" . '<fieldset class="np-tv-' . $tvType . '"><label>'. $fields['caption']  . '</label><br />';
+                $formTpl .= "\n" . '<fieldset class="np-tv-' . $tvType . '"><legend>'. $fields['caption']  . '</legend>';
 
                 if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
                     $multiple = ($tvType == 'listbox-multiple')? 'multiple="multiple" ': '';
@@ -233,9 +242,9 @@ if (! empty($this->allTvs)) {
                     $rvalue = strtok('=');
                     $rvalue = $rvalue? $rvalue : $option;
                     if ($tvType == 'listbox' || $tvType =='listbox-multiple') {
-                        $formTpl .= '<' . $iType . ' value="' . $rvalue . '"';
+                        $formTpl .= '<p><' . $iType . ' value="' . $rvalue . '"';
                     } else {
-                        $formTpl .= '<' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
+                        $formTpl .= '<p><' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
                     }
                     if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
                         if ($tvType == 'radio' || $tvType == 'checkbox') {
@@ -244,7 +253,7 @@ if (! empty($this->allTvs)) {
                             $formTpl .= ' selected="selected" ';
                         }
                     }
-                    $formTpl .= ' />' . $option . '<br />';
+                    $formTpl .= ' />' . $option . '</p>';
 
                 }
                 if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
@@ -274,10 +283,10 @@ public function saveResource() {
     }
 
     if(trim($_POST['pagetitle'])=='') {
-        $this->errors[] = 'Missing page title';
+        //$this->errors[] = 'Missing page title';
     } elseif($_POST[$this->rtcontent]=='') {
-        $this->errors[] = 'Missing content';
-        return false;
+        //$this->errors[] = 'Missing content';
+        // return false;
     } else {
     // get created date
 
@@ -534,7 +543,22 @@ if (isset($this->props['template'])) {
 return $template;
 
 }
-
+public function validate() {
+    $success = true;
+    $fields = explode(',',$this->props['required']);
+    if (! empty($fields)) {
+        foreach($fields as $field) {
+            if (empty($_POST[$field]) ) {
+                $success = false;
+                $msg = '<p class="errormessage">' . $this->modx->lexicon('np.error_required') . '</p>';
+                $msg = str_replace('[[+name]]',$field,$msg);
+                $ph =  'np.error_' . $field;
+                $this->modx->setPlaceholder($ph,$msg);
+            }
+        }
+    }
+   return $success;
+}
 
 } /* end class */
 ?>

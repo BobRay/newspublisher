@@ -9,6 +9,10 @@
  * creating resources. Rich text editing is available for text fields.
  * /
 /* To Do:
+Prettify error messages
+Error Tpl.
+Error Header / error placeholder in form
+Validate function
 get rid of <br> <p>
 make rtcontent and rtsummary work
 spacing on summary and content labels
@@ -56,10 +60,17 @@ Check permissions?
     &listboxmax  - maximum length for listboxes. Default is 8 items.
     &cssfile     - name of CSS file to use, or '' for no CSS file; defaults to newspublisher.css.
 */
+$npPath = MODX_CORE_PATH . 'components/';
+$modx->addPackage('newspublisher',$npPath);
+$language = isset($language) ? $language . ':' : '';
+$modx->lexicon->load($language.'newspublisher:default');
 
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
 $allowAnyPost = count($postgrp)==0 ? true : false;
 $scriptProperties['allowAnyPost'] = $allowAnyPost;
+
+$errorHeaderPresubmit = $modx->lexicon('np.error_presubmit');
+$errorHeader = isset($errorHeader) ? $errorHeader : $modx->lexicon('np.error_submit');
 
 // get clear cache
 $clearcache     = isset($clearcache) ? 1:0;
@@ -116,9 +127,11 @@ $formTpl .= $np->displayForm();
 $errors = $np->getErrors();
 
 if (! empty($errors) ) {
+    $modx->setPlaceholder('np.error_header',$errorHeaderPresubmit);
     foreach($errors as $error) {
-        $formTpl = $error . '<br />' . $formTpl;
+        $errorMessage .= '<p class = "error">' . $error . '</p>';
     }
+    $modx->setPlaceholder('np.errors_presubmit',$errorMessage);
     return($formTpl);
  }
 
@@ -130,12 +143,25 @@ $isPostBack = isset($_POST['hidSubmit']) ? true:false;
 if ($isPostBack) {
 
     $errors = $_POST['np.errors'];
+    /* handle pre-save errors */
+    $success = $np->validate();
+
+    if (! $success) {
+       foreach($_POST as $n=>$v) {
+            $formTpl = str_replace('[[+'.$n.']]',$v,$formTpl);
+        }
+        return $formTpl;
+    }
+
+
 
     $np->saveResource();
 
+    /* handle save errors */
     $errors = $np->getErrors();
 
     if (! empty($errors) ) {
+        die("submission errors");
         foreach($errors as $error) {
             $formTpl = $error . '<br />' . $formTpl;
         }

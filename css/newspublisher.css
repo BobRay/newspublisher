@@ -4,14 +4,33 @@ div.newspublisher {
 
 div.newspublisher label {
     width: 10em;
-    float: left;
     text-align: left;
     margin-right: 0.5em;
+    margin-bottom: 3px;
+    margin-top:2px;
+    padding:0;
+    padding-top:0px;
     display: block;
     font-weight: bold;
 }
+div.newspublisher legend {
+   font-weight: bold;
+   padding:0px 6px 0px 6px;
+}
 div.newspublisher input {
     width:20em;
+}
+div.newspublisher p.error {
+    font-weight: bold;
+    color: red;
+}
+form p.errormessage {
+    margin-top:15px;
+    margin-bottom:0px;
+    padding:0;
+    padding-top:15px;
+    font-weight: bold;
+    color: red;
 }
 div.newspublisher input.submit {
     width:8em;
@@ -25,6 +44,20 @@ div.newspublisher input.radio {
 
 div.newspublisher fieldset {
     margin:20 0 0 0;
+    padding:5px 5px 10px 10px;
+}
+fieldset p {
+  margin:0;
+  padding: 0;
+}
+fieldset select {
+  width:10em;
+  margin:0;
+  padding: 0;
+}
+fieldset option {
+  margin:0;
+  padding: 0;
 }
 fieldset.np-tv-radio {
    width:10em;
