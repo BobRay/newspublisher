@@ -235,7 +235,7 @@ if (! empty($this->allTvs)) {
                     $size = ($count <= $max)? $count : $max;
                     $formTpl .= "\n" . '<select ' . 'name="'. $fields['name'] . $arrayPostfix . '" ' .  $multiple . 'size="' . $size . '">' . "\n";
                 }
-
+                $i=0;
                 foreach ($options as $option) {
                     $val = $_POST[$fields['name']];
                     if(empty($val)) {
@@ -243,11 +243,13 @@ if (! empty($this->allTvs)) {
                         $option = strtok($option,'=');
                         $rvalue = strtok('=');
                         $rvalue = $rvalue? $rvalue : $option;
+                    } else {
+                        $rvalue = $option;
                     }
                     if ($tvType == 'listbox' || $tvType =='listbox-multiple') {
-                        $formTpl .= '<p><' . $iType . ' value="' . $rvalue . '"';
+                        $formTpl .= '<p>'. "\n    " . '<' . $iType . ' value="' . $rvalue . '"';
                     } else {
-                        $formTpl .= '<p><' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
+                        $formTpl .= '<p>'. "\n    " . '<' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
                     }
                     if (empty($val)) {
                         if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
@@ -259,9 +261,7 @@ if (! empty($this->allTvs)) {
                         }
                     } else {  /* post is not empty */
                         if (is_array($val) ) {
-
                             if(in_array($option,$val)) {
-
                                 if ($tvType == 'radio' || $tvType == 'checkbox') {
                                     $formTpl .= ' checked="checked" ';
                                 } else {
@@ -269,10 +269,12 @@ if (! empty($this->allTvs)) {
                                 }
                             }
                         } else {
-                            if ($tvType == 'radio' || $tvType == 'checkbox') {
-                                $formTpl .= ' checked="checked" ';
-                            } else {
-                                $formTpl .= ' selected="selected" ';
+                            if ($option == $val) {
+                                if ($tvType == 'radio' || $tvType == 'checkbox') {
+                                    $formTpl .= ' checked="checked" ';
+                                } else {
+                                    $formTpl .= ' selected="selected" ';
+                                }
                             }
                         }
                     }
