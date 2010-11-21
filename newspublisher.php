@@ -60,8 +60,10 @@ Check permissions?
     &listboxmax  - maximum length for listboxes. Default is 8 items.
     &cssfile     - name of CSS file to use, or '' for no CSS file; defaults to newspublisher.css.
 */
-$npPath = MODX_CORE_PATH . 'components/';
-$modx->addPackage('newspublisher',$npPath);
+
+/* This has to change !!! */
+define('NEWSPUBLISHER_URL', 'core/components/newspublisher/');
+
 $language = isset($language) ? $language . ':' : '';
 $modx->lexicon->load($language.'newspublisher:default');
 
@@ -113,7 +115,7 @@ $hidemenu = isset($showinmenu) && $showinmenu==1 ? 0 : 1;
 
 // ************************
 $message = '';
-$npPath = MODX_ASSETS_PATH . 'components/newspublisher/';
+$npPath = MODX_CORE_PATH . 'components/newspublisher/';
 
 require_once($npPath . 'classes/newspublisher.class.php');
 
