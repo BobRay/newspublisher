@@ -237,20 +237,43 @@ if (! empty($this->allTvs)) {
                 }
 
                 foreach ($options as $option) {
-                    $defaults = explode('||',$fields['default_text']);
-                    $option = strtok($option,'=');
-                    $rvalue = strtok('=');
-                    $rvalue = $rvalue? $rvalue : $option;
+                    $val = $_POST[$fields['name']];
+                    if(empty($val)) {
+                        $defaults = explode('||',$fields['default_text']);
+                        $option = strtok($option,'=');
+                        $rvalue = strtok('=');
+                        $rvalue = $rvalue? $rvalue : $option;
+                    }
                     if ($tvType == 'listbox' || $tvType =='listbox-multiple') {
                         $formTpl .= '<p><' . $iType . ' value="' . $rvalue . '"';
                     } else {
                         $formTpl .= '<p><' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
                     }
-                    if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
-                        if ($tvType == 'radio' || $tvType == 'checkbox') {
-                            $formTpl .= ' checked="checked" ';
+                    if (empty($val)) {
+                        if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
+                            if ($tvType == 'radio' || $tvType == 'checkbox') {
+                                $formTpl .= ' checked="checked" ';
+                            } else {
+                                $formTpl .= ' selected="selected" ';
+                            }
+                        }
+                    } else {  /* post is not empty */
+                        if (is_array($val) ) {
+
+                            if(in_array($option,$val)) {
+
+                                if ($tvType == 'radio' || $tvType == 'checkbox') {
+                                    $formTpl .= ' checked="checked" ';
+                                } else {
+                                    $formTpl .= ' selected="selected" ';
+                                }
+                            }
                         } else {
-                            $formTpl .= ' selected="selected" ';
+                            if ($tvType == 'radio' || $tvType == 'checkbox') {
+                                $formTpl .= ' checked="checked" ';
+                            } else {
+                                $formTpl .= ' selected="selected" ';
+                            }
                         }
                     }
                     $formTpl .= ' />' . $option . '</p>';
