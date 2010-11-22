@@ -32,7 +32,6 @@ class Newspublisher {
         $this->rtsummary = isset($props['rtsummary']) ? $props['rtsummary']:'introtext';
         $this->folder = isset($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');
         $this->template = $this->getTemplate();
-        //$this->modx->regClientCSS(MODX_ASSETS_URL . 'components/newspublisher/css/demo.css');
         $this->modx->regClientCSS(NEWSPUBLISHER_URL . 'css/datepicker.css');
         $this->modx->regClientStartupScript(NEWSPUBLISHER_URL . 'js/datepicker.js');
         $this->header = $this->modx->getChunk($this->props['headerTpl']);

@@ -9,16 +9,10 @@
  * creating resources. Rich text editing is available for text fields.
  * /
 /* To Do:
-Prettify error messages
-Error Tpl.
-Error Header / error placeholder in form
-Validate function
 get rid of <br> <p>
 make rtcontent and rtsummary work
-spacing on summary and content labels
 modx.js
 remove table css
-ditch demo.css
 richtext TVs
 image TVs
 Check permissions?
