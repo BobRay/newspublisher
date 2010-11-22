@@ -138,23 +138,6 @@ public function displayTVs() {
     /* Display TVs */
 
     $this->allTvs = array();
-    if (false) {
-    if (isset($this->props['template'])) {
-        if(is_numeric($this->props['template']) ) {
-            /* User sent an ID, use it */
-            $templateObj = $this->modx->getObject('modTemplate',$this->props['template']);
-        } else {
-            /* User sent a name, use it */
-            $templateObj = $this->modx->getObject('modTemplate',array('templatename'=>$this->props['template']));
-        }
-    } else { /* not set, use default template */
-        $templateObj = $this->modx->getObject('modTemplate',$this->modx->getOption('default_template'));
-    }
-
-    if (! $templateObj) {
-        $this->errors[] = 'Failed to get Template: ' . $this->template;
-    }
-    }
 
     $c = $this->modx->newQuery('modTemplateVarTemplate');
     $where = array('templateid'=>$this->template);
