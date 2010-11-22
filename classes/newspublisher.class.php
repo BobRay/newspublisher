@@ -155,7 +155,13 @@ public function displayTVs() {
         $this->errors[] = 'Failed to get Template: ' . $this->template;
     }
     }
-    $tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',array('templateid'=>$this->template));
+
+    $c = $this->modx->newQuery('modTemplateVarTemplate');
+    $where = array('templateid'=>$this->template);
+    $c->where($where);
+    $c->sortby('tmplvarid','ASC');
+    $tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',$c);
+    // $tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',array('templateid'=>$this->template));
     if (! empty ($this->props['orderTVs'])) {
         $ids = explode(',', $this->props['orderTVs']);
         if (count($ids) == 0) {
@@ -186,7 +192,7 @@ public function displayTVs() {
     }
 
 if (! empty($this->allTvs)) {
-    $formTpl .= '<br />';
+    //$formTpl .= '<br />';
     $hidden = explode(',',$this->props['hidetvs']);
 
     foreach ($this->allTvs as $tv) {
@@ -210,7 +216,7 @@ if (! empty($this->allTvs)) {
                 break;
 
             case 'textarea':
-                $formTpl .= "\n" . '<p><label>'. $fields['caption']  . '</label><br /><textarea name="' . $fields['name'] . '" id="' . $fields['name'] . '" cols="50" rows="5">' . '[[+' . $fields['name'] . ']]</textarea></p>';
+                $formTpl .= "\n" . '<p><label>'. $fields['caption']  . '</label><br /><textarea name="' . $fields['name'] . '" id="' . $fields['name'] . '" cols="50" rows="5">' . '[[+' . $fields['name'] . ']]</textarea>';
                 break;
 // *********
 
@@ -222,9 +228,6 @@ if (! empty($this->allTvs)) {
                 $iType = ($tvType == 'listbox' || $tvType == 'listbox-multiple')? 'option' : $iType;
                 $arrayPostfix = ($tvType == 'checkbox' || $tvType=='listbox-multiple')? '[]' : '';
                 $options = explode('||',$fields['elements']);
-                if (empty($fields['default_text'])) {
-                    $fields['default_text'] = $options[0];
-                }
 
                 $formTpl .= "\n" . '<fieldset class="np-tv-' . $tvType . '"><legend>'. $fields['caption']  . '</legend>';
 
@@ -291,7 +294,7 @@ if (! empty($this->allTvs)) {
                 break;
 
         }  /* end switch */
-        $formTpl .= '<br />';
+        //$formTpl .= '<br />';
     } /* end foreach */
     // $formTpl = "\n" . '<div class = "tvs">' . $formTpl . '</div>' . "\n";
 } /* end if (!empty $allTvs) */
@@ -351,7 +354,7 @@ public function saveResource() {
         foreach($_POST as $n=>$v) {
             if(!empty($badwords)) $v = preg_replace($badwords,'[Filtered]',$v); // remove badwords
             $v = $this->modx->stripTags(htmlspecialchars($v));
-            $v = str_replace("\n",'<br />',$v);
+            // $v = str_replace("\n",'<br />',$v);
             $content = str_replace('[+'.$n.'+]',$v,$content);
         }
         $folder = $this->folder;
@@ -568,15 +571,17 @@ if (isset($this->props['template'])) {
 return $template;
 
 }
-public function validate() {
+public function validate($errorTpl) {
     $success = true;
     $fields = explode(',',$this->props['required']);
     if (! empty($fields)) {
         foreach($fields as $field) {
             if (empty($_POST[$field]) ) {
                 $success = false;
-                $msg = '<p class="errormessage">' . $this->modx->lexicon('np.error_required') . '</p>';
+                $msg = $this->modx->lexicon('np.error_required');
                 $msg = str_replace('[[+name]]',$field,$msg);
+                // if (empty($errorTpl)) die('No error Tpl');
+                $msg = str_replace('[[+np.error]]',$msg,$errorTpl);
                 $ph =  'np.error_' . $field;
                 $this->modx->setPlaceholder($ph,$msg);
             }

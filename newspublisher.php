@@ -59,6 +59,7 @@ Check permissions?
     &second
     &listboxmax  - maximum length for listboxes. Default is 8 items.
     &cssfile     - name of CSS file to use, or '' for no CSS file; defaults to newspublisher.css.
+    &errortpl    - name of Tpl chunk for formatting field errors
 */
 
 /* This has to change !!! */
@@ -112,6 +113,14 @@ if(isset($badwords)) {
 // get menu status
 $hidemenu = isset($showinmenu) && $showinmenu==1 ? 0 : 1;
 
+// get errorTpl
+
+$errorTpl = isset($errortpl)? $modx->getChunk($errortpl): '<span class = "errormessage">[[+np.error]]</span>';
+
+if(empty($errorTpl)) {
+    return 'Failed to get &amp;errortpl chunk: ' . $errortpl;
+}
+
 
 // ************************
 $message = '';
@@ -131,7 +140,8 @@ $errors = $np->getErrors();
 if (! empty($errors) ) {
     $modx->setPlaceholder('np.error_header',$errorHeaderPresubmit);
     foreach($errors as $error) {
-        $errorMessage .= '<p class = "error">' . $error . '</p>';
+        // $errorMessage .= '<p class = "error">' . $error . '</p>';
+        $errorMessage .= str_replace('[[+np.error]]',$error,$errorTpl);
     }
     $modx->setPlaceholder('np.errors_presubmit',$errorMessage);
     return($formTpl);
@@ -146,7 +156,7 @@ if ($isPostBack) {
 
     $errors = $_POST['np.errors'];
     /* handle pre-save errors */
-    $success = $np->validate();
+    $success = $np->validate($errorTpl);
 
     if (! $success) {
        foreach($_POST as $n=>$v) {
@@ -163,9 +173,10 @@ if ($isPostBack) {
     $errors = $np->getErrors();
 
     if (! empty($errors) ) {
-        die("submission errors");
         foreach($errors as $error) {
-            $formTpl = $error . '<br />' . $formTpl;
+            $modx->setPlaceholder('np.error_header',$errorHeader);
+            $errorMessage .= str_replace('[[+np.error]]',$error,$errorTpl);
+            $formTpl = $errorMessage . $formTpl;
         }
         foreach($_POST as $n=>$v) {
             $formTpl = str_replace('[[+'.$n.']]',$v,$formTpl);
