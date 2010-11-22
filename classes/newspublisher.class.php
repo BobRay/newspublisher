@@ -116,9 +116,9 @@ if(empty($formTpl)) $formTpl = '
         <p><label for="menutitle">[[%resource_menutitle]]: </label><input name="menutitle" title="[[%resource_menutitle_help]]" id="menutitle" type="text"  value="[[+menutitle]]" maxlength="60" /></p>
         [[+np.error_pub_date]]
         <div class="datepicker">
-        <p><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" title="[[%resource_publishdate_help]]" maxlength="10" readonly="readonly" value="[[+pub_date]]" /></p>
+        <span class="npdate"><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" title="[[%resource_publishdate_help]]" maxlength="10" readonly="readonly" value="[[+pub_date]]" /></span>
         [[+np.error__unpub_date]]
-        <p><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" readonly="readonly" value="[[+unpub_date]]" /></p>
+        <span class="npdate"><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" readonly="readonly" value="[[+unpub_date]]" /><span class="npdate">
         </div>
         [[+np.error_introtext]]
         <label for="introtext">[[%resource_summary]]: </label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="introtext" id="introtext">[[+introtext]]</textarea></div>
