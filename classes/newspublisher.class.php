@@ -100,7 +100,7 @@ if(isset($formtpl)) $formTpl = $this->modx->getChunk($formtpl);
 
 if(empty($formTpl)) $formTpl = '
     <div class="newspublisher">
-    <h2>Create Resource</h2>
+    <h2>[[%np.main_header]]</h2>
     [[!+np.error_header:ifnotempty=`<h3>[[!+np.error_header]]</h3>`]]
     [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
     <form action="[[~[[*id]]]]" method="post">

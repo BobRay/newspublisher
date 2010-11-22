@@ -25,7 +25,8 @@
  * @package newspublisher
  * @subpackge lexicon
  */
+$_lang['np.main_header'] = 'Create Resource';
 $_lang['np.error_presubmit'] = 'Sorry . . . There were one or more problems in producing the form:';
 $_lang['np.error_submit'] = 'Sorry . . .There were one or more problems with your submission';
 $_lang['np.error_required'] = 'The [[+name]] field is required';
-$_lang['np.new_item'] = 'This is a new string';
+
