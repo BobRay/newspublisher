@@ -19,6 +19,7 @@ class Newspublisher {
     protected $folder;
     protected $template;
     protected $errors;
+    protected $resource;
 
 
     public function __construct(&$modx, &$props) {
@@ -413,7 +414,7 @@ public function saveResource() {
             'content'       => $this->header . $content . $this->footer
         );
 
-        $resource = $this->modx->newObject('modResource',$flds);
+        $this->resource = $this->modx->newObject('modResource',$flds);
 
         $parentObj = $this->modx->getObject('modResource',$flds['parent']);
 
@@ -431,7 +432,7 @@ public function saveResource() {
 
                     $resourceGroupObj = $this->modx->getObject('modResourceGroup', $docGroupNum);
                     $intersect = $this->modx->newObject('modResourceGroupResource');
-                    $intersect->addOne($resource);
+                    $intersect->addOne($this->resource);
                     $intersect->addOne($resourceGroupObj);
                     $intersect->save();
 
@@ -450,10 +451,10 @@ public function saveResource() {
 
         }
 
-        $resource->save();
+        $this->resource->save();
         // Make sure we have the ID.
         // $resource = $modx->getObject('modResource',array('pagetitle'=>$flds['pagetitle']));
-        $postid = isset($postid) ? $postid: $resource->get('id');
+        $postid = isset($postid) ? $postid: $this->resource->get('id');
 
 
         // empty cache
@@ -465,7 +466,7 @@ public function saveResource() {
         /* Save TVs */
         if (! empty ($this->allTvs)) {
             //$this->message .=  '<br />' . 'Saving ' . count($this->allTvs);
-            $resourceId = $resource->get('id');
+            $resourceId = $this->resource->get('id');
             //$this->message .=  '<br />' . 'Resource ID: '.$resourceId;
             foreach($this->allTvs as $tv) {
                 $fields = $tv->toArray();
