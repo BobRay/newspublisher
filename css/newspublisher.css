@@ -1,5 +1,6 @@
 div.newspublisher {
     margin-left:10em;
+    font-family: arial, sans-serif;
 }
 
 div.newspublisher label {
@@ -12,6 +13,7 @@ div.newspublisher label {
 }
 
 div.newspublisher textarea {
+    font-family: arial, sans-serif;
     width:60em;
     height:10em;
 }
@@ -31,6 +33,7 @@ div.newspublisher legend {
    padding:0px 6px 0px 6px;
 }
 div.newspublisher input {
+    font-family: arial, sans-serif;
     width:20em;
     display:inline;
 }
