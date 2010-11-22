@@ -475,6 +475,7 @@ public function saveResource() {
                     case 'text':
                     case 'textbox':
                     case 'textarea':
+                    case 'textareamini';
                     case 'option':
                     case 'listbox':
                         //echo '<br />Value: ' . $value;
