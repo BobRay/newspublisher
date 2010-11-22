@@ -106,18 +106,18 @@ if(empty($formTpl)) $formTpl = '
 
         <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
         [[+np.error_pagetitle]]
-        <p><label for="pagetitle">[[%resource_pagetitle]]: </label><input name="pagetitle" title="[[%resource_pagetitle_help]]" id="pagetitle" type="text"  value="[[+pagetitle]]" maxlength="60" /></p>
+        <label for="pagetitle">[[%resource_pagetitle]]: </label><input name="pagetitle" title="[[%resource_pagetitle_help]]" id="pagetitle" type="text"  value="[[+pagetitle]]" maxlength="60" />
         [[+np.error_longtitle]]
-        <p><label for="longtitle">[[%resource_longtitle]]: </label><input name="longtitle" title="[[%resource_longtitle_help]]" id="longtitle" type="text"  value="[[+longtitle]]" maxlength="100" /></p>
+        <label for="longtitle">[[%resource_longtitle]]: </label><input name="longtitle" title="[[%resource_longtitle_help]]" id="longtitle" type="text"  value="[[+longtitle]]" maxlength="100" />
         [[+np.error_description]]
-        <p><label for="description">[[%resource_description]]: </label><input name="description" title="[[%resource_description_help]]" id="description" type="text"  value="[[+description]]" maxlength="100" /></p>
+        <label for="description">[[%resource_description]]: </label><input name="description" title="[[%resource_description_help]]" id="description" type="text"  value="[[+description]]" maxlength="100" />
         [[+np.error_menutitle]]
-        <p><label for="menutitle">[[%resource_menutitle]]: </label><input name="menutitle" title="[[%resource_menutitle_help]]" id="menutitle" type="text"  value="[[+menutitle]]" maxlength="60" /></p>
+        <label for="menutitle">[[%resource_menutitle]]: </label><input name="menutitle" title="[[%resource_menutitle_help]]" id="menutitle" type="text"  value="[[+menutitle]]" maxlength="60" />
         [[+np.error_pub_date]]
         <div class="datepicker">
-        <span class="npdate"><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" title="[[%resource_publishdate_help]]" maxlength="10" readonly="readonly" value="[[+pub_date]]" /></span>
-        [[+np.error__unpub_date]]
-        <span class="npdate"><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" readonly="readonly" value="[[+unpub_date]]" /><span class="npdate">
+            <span class="npdate"><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" title="[[%resource_publishdate_help]]" maxlength="10" readonly="readonly" value="[[+pub_date]]" /></span>
+            [[+np.error__unpub_date]]
+            <span class="npdate"><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" readonly="readonly" value="[[+unpub_date]]" /><span class="npdate">
         </div>
         [[+np.error_introtext]]
         <label for="introtext">[[%resource_summary]]: </label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="introtext" id="introtext">[[+introtext]]</textarea></div>
@@ -126,7 +126,7 @@ if(empty($formTpl)) $formTpl = '
 
     $formTpl .= '[[+np.allTVs]]';
 
-    $formTpl .= "\n" . '<p><input class="submit" type="submit" name="Submit" value="Submit" /></p>
+    $formTpl .= "\n" . '<input class="submit" type="submit" name="Submit" value="Submit" />
     </form></div>';
 
 return $formTpl;
@@ -174,11 +174,10 @@ public function displayTVs() {
     }
 
 if (! empty($this->allTvs)) {
-    //$formTpl .= '<br />';
+
     $hidden = explode(',',$this->props['hidetvs']);
 
     foreach ($this->allTvs as $tv) {
-      //$formTpl .= '<br />TV Found: ' . $tv->get('name');
 
       $fields = $tv->toArray();
 
@@ -189,16 +188,17 @@ if (! empty($this->allTvs)) {
       $formTpl .=  "\n" . '[[+np.error_'. $fields['name'] . ']]' . "\n";
         $tvType = $tv->get('type');
         $tvType = $tvType == 'option'? 'radio' : $tvType;
-//$formTpl .= '<br />TYPE: ' . $tvType . '<br />';
+
         switch($tvType) {
             case 'text':
             case 'textbox':
             case 'email';
-                $formTpl .= "\n" . '<p><label for="' . $fields['name']. '">'. $fields['caption']  . ' </label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" /></p>';
+                $formTpl .= "\n" . '<label for="' . $fields['name']. '">'. $fields['caption']  . ' </label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" />';
                 break;
 
             case 'textarea':
-                $formTpl .= "\n" . '<p><label>'. $fields['caption']  . '</label><br /><textarea name="' . $fields['name'] . '" id="' . $fields['name'] . '" cols="50" rows="5">' . '[[+' . $fields['name'] . ']]</textarea>';
+            case 'textareamini':
+                $formTpl .= "\n" . '<label>'. $fields['caption']  . '</label><textarea name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $fields['name'] . ']]</textarea>';
                 break;
 // *********
 
@@ -232,9 +232,9 @@ if (! empty($this->allTvs)) {
                         $rvalue = $option;
                     }
                     if ($tvType == 'listbox' || $tvType =='listbox-multiple') {
-                        $formTpl .= '<p>'. "\n    " . '<' . $iType . ' value="' . $rvalue . '"';
+                        $formTpl .= "\n    " . '<' . $iType . ' value="' . $rvalue . '"';
                     } else {
-                        $formTpl .= '<p>'. "\n    " . '<' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
+                        $formTpl .= "\n    " . '<span class="option"><' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
                     }
                     if (empty($val)) {
                         if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
@@ -263,22 +263,25 @@ if (! empty($this->allTvs)) {
                             }
                         }
                     }
-                    $formTpl .= ' />' . $option . '</p>';
+                    $formTpl .= ' />' . $option;
+                    if ($tvType != 'listbox' && $tvType != 'listbox-multiple') {
+                        $formTpl .= '</span>';
+                    }
 
                 }
                 if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
                     $formTpl .= "\n" . '</select>';
                 }
-                $formTpl .= '</fieldset>';
+                $formTpl .= "\n" . '</fieldset>';
                 break;
 
             default:
                 break;
 
         }  /* end switch */
-        //$formTpl .= '<br />';
+
     } /* end foreach */
-    // $formTpl = "\n" . '<div class = "tvs">' . $formTpl . '</div>' . "\n";
+
 } /* end if (!empty $allTvs) */
 return $formTpl;
 }

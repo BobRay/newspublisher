@@ -10,6 +10,22 @@ div.newspublisher label {
     display: block;
     font-weight: bold;
 }
+
+div.newspublisher textarea {
+    width:60em;
+    height:10em;
+}
+/* you can size a partcular textarea or textarea (mini) TV
+   by using its name like this:
+div.newspublisher textarea#MyTv6 {
+    width:10em;
+    height:5em;
+}
+
+*/
+div.newspublisher span.option {
+    display:block;
+}
 div.newspublisher legend {
    font-weight: bold;
    padding:0px 6px 0px 6px;
@@ -32,6 +48,9 @@ span.errormessage {
 }
 
 div.newspublisher input.submit {
+    display:block;
+    margin: 20px 0px 0px 0px;
+    padding:0;
     width:8em;
 }
 div.newspublisher input.checkbox {
