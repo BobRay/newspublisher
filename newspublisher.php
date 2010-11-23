@@ -19,7 +19,7 @@ Check permissions?
 */
 
 /*
-  Version: 3.0.2
+  Version: 3.0.3
   Modified: November 06, 2010
 
   Changelog:
