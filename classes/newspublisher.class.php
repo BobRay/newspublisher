@@ -434,7 +434,7 @@ public function saveResource() {
             $fields['editedon'] = '0';
             $fields['editedby'] = '0';
             $fields['deleted'] = '0';
-            $fields['hidemenu'] = $hidemenu;  // fix this
+            $fields['hidemenu'] = $this->props->hidemenu;  // fix this
             $fields['template'] = $this->template;
             $fields['content']  = $this->header . $content . $this->footer;
             $fields['parent'] = isset($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');;
