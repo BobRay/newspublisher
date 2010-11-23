@@ -20,6 +20,8 @@ class Newspublisher {
     protected $template;
     protected $errors;
     protected $resource;
+    protected $existing; // editing an existing resource
+    protected $isPostBack;
 
 
     public function __construct(&$modx, &$props) {
@@ -27,7 +29,25 @@ class Newspublisher {
         $this->props = $props;
     }
 
-    public function init($richText) {
+    public function setPostBack($setting) {
+        $this->isPostBack = $setting;
+    }
+
+    public function init($richText, $existing=false) {
+        if ($existing) {
+            $this->existing=$existing;
+            $this->resource = $this->modx->getObject('modResource',$existing);
+            if ($this->resource) {
+                $ph = $this->resource->toArray();
+                $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
+                $ph['unpub_date'] = $ph['unpub_date']? substr($ph['unpub_date'],0,10) : '';
+
+                $this->modx->toPlaceholders($ph);
+            } else {
+                $msg = str_replace('[[+id]]',$existing, $this->modx->lexicon('np.no_resource'));
+                $this->errors[] = $msg;
+            }
+        }
         $this->modx->lexicon->load('core:resource');
         $this->rtcontent = isset($props['rtcontent']) ? $props['rtcontent']:'content';
         $this->rtsummary = isset($props['rtsummary']) ? $props['rtsummary']:'introtext';
@@ -92,46 +112,46 @@ class Newspublisher {
         } /* end if ($richtext) */
 
     } /* end init */
-    public function displayForm() {
+public function displayForm() {
 
 
 // get form template
-if(isset($formtpl)) $formTpl = $this->modx->getChunk($formtpl);
+    if(isset($formtpl)) $formTpl = $this->modx->getChunk($formtpl);
 
-if(empty($formTpl)) $formTpl = '
-    <div class="newspublisher">
-    <h2>[[%np.main_header]]</h2>
-    [[!+np.error_header:ifnotempty=`<h3>[[!+np.error_header]]</h3>`]]
-    [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
-    <form action="[[~[[*id]]]]" method="post">
+    if(empty($formTpl)) $formTpl = '
+        <div class="newspublisher">
+        <h2>[[%np.main_header]]</h2>
+        [[!+np.error_header:ifnotempty=`<h3>[[!+np.error_header]]</h3>`]]
+        [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
+        <form action="[[~[[*id]]]]" method="post">
 
-        <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
-        [[+np.error_pagetitle]]
-        <label for="pagetitle">[[%resource_pagetitle]]: </label><input name="pagetitle" title="[[%resource_pagetitle_help]]" id="pagetitle" type="text"  value="[[+pagetitle]]" maxlength="60" />
-        [[+np.error_longtitle]]
-        <label for="longtitle">[[%resource_longtitle]]: </label><input name="longtitle" title="[[%resource_longtitle_help]]" id="longtitle" type="text"  value="[[+longtitle]]" maxlength="100" />
-        [[+np.error_description]]
-        <label for="description">[[%resource_description]]: </label><input name="description" title="[[%resource_description_help]]" id="description" type="text"  value="[[+description]]" maxlength="100" />
-        [[+np.error_menutitle]]
-        <label for="menutitle">[[%resource_menutitle]]: </label><input name="menutitle" title="[[%resource_menutitle_help]]" id="menutitle" type="text"  value="[[+menutitle]]" maxlength="60" />
-        [[+np.error_pub_date]]
-        <div class="datepicker">
-            <span class="npdate"><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="pub_date" name="pub_date" title="[[%resource_publishdate_help]]" maxlength="10" readonly="readonly" value="[[+pub_date]]" /></span>
-            [[+np.error__unpub_date]]
-            <span class="npdate"><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-d-m-y divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" readonly="readonly" value="[[+unpub_date]]" /><span class="npdate">
-        </div>
-        [[+np.error_introtext]]
-        <label for="introtext">[[%resource_summary]]: </label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="introtext" id="introtext">[[+introtext]]</textarea></div>
-        [[+np.error_content]]
-        <label for="content">[[%resource_content]]: </label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content">[[+content]]</textarea></div>';
+            <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
+            [[+np.error_pagetitle]]
+            <label for="pagetitle">[[%resource_pagetitle]]: </label><input name="pagetitle" title="[[%resource_pagetitle_help]]" id="pagetitle" type="text"  value="[[+pagetitle]]" maxlength="60" />
+            [[+np.error_longtitle]]
+            <label for="longtitle">[[%resource_longtitle]]: </label><input name="longtitle" title="[[%resource_longtitle_help]]" id="longtitle" type="text"  value="[[+longtitle]]" maxlength="100" />
+            [[+np.error_description]]
+            <label for="description">[[%resource_description]]: </label><input name="description" title="[[%resource_description_help]]" id="description" type="text"  value="[[+description]]" maxlength="100" />
+            [[+np.error_menutitle]]
+            <label for="menutitle">[[%resource_menutitle]]: </label><input name="menutitle" title="[[%resource_menutitle_help]]" id="menutitle" type="text"  value="[[+menutitle]]" maxlength="60" />
+            [[+np.error_pub_date]]
+            <div class="datepicker">
+                <span class="npdate"><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="pub_date" name="pub_date" title="[[%resource_publishdate_help]]" maxlength="10" readonly="readonly" value="[[+pub_date]]" /></span>
+                [[+np.error__unpub_date]]
+                <span class="npdate"><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" readonly="readonly" value="[[+unpub_date]]" /><span class="npdate">
+            </div>
+            [[+np.error_introtext]]
+            <label for="introtext">[[%resource_summary]]: </label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="introtext" id="introtext">[[+introtext]]</textarea></div>
+            [[+np.error_content]]
+            <label for="content">[[%resource_content]]: </label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content">[[+content]]</textarea></div>';
 
-    $formTpl .= '[[+np.allTVs]]';
+        $formTpl .= '[[+np.allTVs]]';
 
-    $formTpl .= "\n" . '<input class="submit" type="submit" name="Submit" value="Submit" />
-    </form></div>';
+        $formTpl .= "\n" . '<input class="submit" type="submit" name="Submit" value="Submit" />
+        </form></div>';
 
-return $formTpl;
-/* done displaying TVs */
+    return $formTpl;
+    /* done displaying TVs */
 } /* end displayForm */
 
 public function displayTVs() {
@@ -186,6 +206,7 @@ if (! empty($this->allTvs)) {
       if (in_array($fields['id'],$hidden)) {
           continue;
       }
+
       $formTpl .=  "\n" . '[[+np.error_'. $fields['name'] . ']]' . "\n";
         $tvType = $tv->get('type');
         $tvType = $tvType == 'option'? 'radio' : $tvType;
@@ -195,10 +216,19 @@ if (! empty($this->allTvs)) {
             case 'textbox':
             case 'email';
                 $formTpl .= "\n" . '<label for="' . $fields['name']. '">'. $fields['caption']  . ' </label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" />';
+                if ($this->existing && !$this->isPostBack) {
+                    //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
+                    $this->modx->setPlaceholder($fields['name'],$tv->renderOutput($this->existing) );
+                }
+
                 break;
 
             case 'textarea':
             case 'textareamini':
+                if ($this->existing  && ! $this->isPostBack) {
+                    //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
+                    $this->modx->setPlaceholder($fields['name'],$tv->renderOutput($this->existing) );
+                }
                 $formTpl .= "\n" . '<label>'. $fields['caption']  . '</label><textarea name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $fields['name'] . ']]</textarea>';
                 break;
 // *********
@@ -223,7 +253,19 @@ if (! empty($this->allTvs)) {
                 }
                 $i=0;
                 foreach ($options as $option) {
-                    $val = $_POST[$fields['name']];
+                    if ($this->existing  && ! $this->isPostBack)  {
+                        //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
+                        if (is_array($options)) {
+                            $val = explode('||',$tv->getValue($this->existing));
+                            // die('VAL: ' . print_r($val,true) . '<br />OPTIONS: ' . print_r($options,true));
+
+                        } else {
+                            $val = $tv->renderOutput($this->existing);
+                        }
+
+                    } else {
+                        $val = $_POST[$fields['name']];
+                    }
                     if(empty($val)) {
                         $defaults = explode('||',$fields['default_text']);
                         $option = strtok($option,'=');
@@ -245,7 +287,7 @@ if (! empty($this->allTvs)) {
                                 $formTpl .= ' selected="selected" ';
                             }
                         }
-                    } else {  /* post is not empty */
+                    } else {  /* field value is not empty */
                         if (is_array($val) ) {
                             if(in_array($option,$val)) {
                                 if ($tvType == 'radio' || $tvType == 'checkbox') {
@@ -295,16 +337,17 @@ public function saveResource() {
         // $_POST = array_map($this->strip_slashes_deep, $_POST);
 
     }
+    $user = $this->modx->user;
+    $userid = $this->modx->user->get('id');
+    if(!$userid && $allowAnyPost) $user = '(anonymous)';
 
-    if(trim($_POST['pagetitle'])=='') {
-        //$this->errors[] = 'Missing page title';
-    } elseif($_POST[$this->rtcontent]=='') {
-        //$this->errors[] = 'Missing content';
-        // return false;
-    } else {
-    // get created date
+    // check if user has rights
 
-        $createdon = time();
+    if(!$this->props['allowAnyPost'] && !$this->modx->user->isMember($this->props['postgrp'])) {
+        $this->errors[] = 'You are not allowed to publish articles';
+
+    }
+    $createdon = time();
 
     // set alias name of document used to store articles
         if(!$aliastitle) {
@@ -320,16 +363,7 @@ public function saveResource() {
             $alias = 'article-'. mysql_escape_string($alias);
         }
 
-        $user = $this->modx->user;
-        $userid = $this->modx->user->get('id');
-        if(!$userid && $allowAnyPost) $user = '(anonymous)';
 
-        // check if user has rights
-
-        if(!$this->props['allowAnyPost'] && !$this->modx->user->isMember($this->props['postgrp'])) {
-            $this->errors[] = 'You are not allowed to publish articles';
-
-        }
 
         $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
 
@@ -362,7 +396,7 @@ public function saveResource() {
         if($pub_date=="") {
             $pub_date="0";
         } else {
-            list($d, $m, $Y) = sscanf($pub_date, "%2d-%2d-%4d");
+            list($Y, $m, $d) = sscanf($pub_date, "%4d-%2d-%2d");
 
             $pub_date = strtotime("$m/$d/$Y $H:$M:$S");
 
@@ -377,7 +411,7 @@ public function saveResource() {
         if($unpub_date=="") {
             $unpub_date="0";
         } else {
-            list($d, $m, $Y) = sscanf($unpub_date, "%2d-%2d-%4d");
+            list($Y, $m, $d) = sscanf($unpub_date, "%4d-%2d-%2d");
 
             $unpub_date = strtotime("$m/$d/$Y $H:$M:$S");
             if($unpub_date < $createdon) {
@@ -385,36 +419,37 @@ public function saveResource() {
             }
         }
 
-        // set menu index
-        //$mnuidx = $modx->db->getValue('SELECT MAX(menuindex)+1 as \'mnuidx\' FROM '.$modx->getFullTableName('site_content').' WHERE parent=\''.$folder.'\'');
-        //if($mnuidx<1) $mnuidx = 0;
-
         // post news content
-        $createdBy = $this->modx->user->get('id');
+        if (! $this->existing) {
+            $createdBy = $this->modx->user->get('id');
 
-        $flds = array(
-            'pagetitle'     => $title,
-            'longtitle'     => $longtitle,
-            'menutitle'     => $menutitle,
-            'description'   => $description,
-            'introtext'     => $introtext,
-            'alias'         => $alias,
-            'parent'        => $folder,
-            'createdon'     => $createdon,
-            'createdby'     => $createdBy,
-            'editedon'      => '0',
-            'editedby'      => '0',
-            'published'     => $published,
-            'pub_date'      => $pub_date,
-            'unpub_date'    => $unpub_date,
-            'deleted'       => '0',
-            'hidemenu'      => $hidemenu,
-            'menuindex'     => $mnuidx,
-            'template'      => $this->template,
-            'content'       => $this->header . $content . $this->footer
-        );
+            $flds = array(
+                'pagetitle'     => $title,
+                'longtitle'     => $longtitle,
+                'menutitle'     => $menutitle,
+                'description'   => $description,
+                'introtext'     => $introtext,
+                'alias'         => $alias,
+                'parent'        => $folder,
+                'createdon'     => $createdon,
+                'createdby'     => $createdBy,
+                'editedon'      => '0',
+                'editedby'      => '0',
+                'published'     => $published,
+                'pub_date'      => $pub_date,
+                'unpub_date'    => $unpub_date,
+                'deleted'       => '0',
+                'hidemenu'      => $hidemenu,
+                'menuindex'     => $mnuidx,
+                'template'      => $this->template,
+                'content'       => $this->header . $content . $this->footer
+            );
 
-        $this->resource = $this->modx->newObject('modResource',$flds);
+            $this->resource = $this->modx->newObject('modResource',$flds);
+        } else {
+            $this->resource->set('editedby',$this->modx->user->get('id') );
+            $this->resource->set('editidon',time() );
+        }
 
         $parentObj = $this->modx->getObject('modResource',$flds['parent']);
 
@@ -493,11 +528,6 @@ public function saveResource() {
                     case 'checkbox':
                     case 'listbox-multiple':
                         $boxes = $_POST[$fields['name']];
-                        // return print_r($boxes,true);
-                        // echo '<br />TvName: ' . $fields['name'];
-                        //echo '<br />ARRAY: ' . $_POST[$fields['name']];
-
-                        // echo '<br />COUNT: ' . count($boxes);
                         $value = implode('||',$boxes);
                         $value = mysql_escape_string($this->modx->stripTags($value,$allowedTags));
 

@@ -124,7 +124,7 @@ require_once($npPath . 'classes/newspublisher.class.php');
 
 $np = new Newspublisher(&$modx, &$scriptProperties);
 
-$np->init($scriptProperties['richtext']);
+$np->init($scriptProperties['richtext'],'147');
 
 $formTpl .= $np->displayForm();
 
@@ -141,13 +141,17 @@ if (! empty($errors) ) {
     return($formTpl);
  }
 
+$isPostBack = isset($_POST['hidSubmit']) ? true:false;
+$np->setPostBack($isPostBack);
+
 if (empty($scriptProperties['hidealltvs'])) {
     $formTpl = str_replace('[[+np.allTVs]]',$np->displayTVs(),$formTpl);
 }
 // get postback status
-$isPostBack = isset($_POST['hidSubmit']) ? true:false;
+
 if ($isPostBack) {
 
+     // die('<pre>' . print_r($_POST,true));
     $errors = $_POST['np.errors'];
     /* handle pre-save errors */
     $success = $np->validate($errorTpl);
