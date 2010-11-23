@@ -46,7 +46,7 @@ class Newspublisher {
             } else {
                 $msg = str_replace('[[+id]]',$existing, $this->modx->lexicon('np.no_resource'));
                 $this->errors[] = $msg;
-                $this->folder = isset($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');
+
             }
         }
         $this->modx->lexicon->load('core:resource');
@@ -436,7 +436,7 @@ public function saveResource() {
             $fields['hidemenu'] = $hidemenu;  // fix this
             $fields['template'] = $this->template;
             $fields['content']  = $this->header . $content . $this->footer;
-            $fields['parent'] = $this->folder;
+            $fields['parent'] = isset($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');;
         }
 
         $parentObj = $this->modx->getObject('modResource',$this->modx->resource->get('parent') ); // parent of this page, not new page
