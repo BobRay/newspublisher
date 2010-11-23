@@ -137,7 +137,7 @@ public function displayForm() {
             [[+np.error_pub_date]]
             <div class="datepicker">
                 <span class="npdate"><label for="pub_date">[[%resource_publishdate]]: </label><input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="pub_date" name="pub_date" title="[[%resource_publishdate_help]]" maxlength="10" readonly="readonly" value="[[+pub_date]]" /></span>
-                [[+np.error__unpub_date]]
+                [[+np.error_unpub_date]]
                 <span class="npdate"><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" readonly="readonly" value="[[+unpub_date]]" /><span class="npdate">
             </div>
             [[+np.error_introtext]]
@@ -359,7 +359,7 @@ public function saveResource() {
 
    // set alias name of document used to store articles
         if(!$aliastitle) {
-            $alias = 'article-'.$createdon;
+            $alias = 'article-' . $time();
         } else {
             $alias = $this->modx->stripTags($_POST['pagetitle']);
             $alias = strtolower($alias);
@@ -406,13 +406,13 @@ public function saveResource() {
             $fields['pub_date']="0";
         } else {
             list($Y, $m, $d) = sscanf($fields['pub_date'], "%4d-%2d-%2d");
-
+            $fields['pub_date'] = strtotime("$m-$d-$Y $H:$M:$S");
             if($fields['pub_date'] <= time()) {
                 $published = 1;
             } elseif($fields['pub_date'] > time()) {
                 $fields['published'] = 0;
             }
-            $fields['pub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
+
         }
 
         // check unpublished date
@@ -420,11 +420,11 @@ public function saveResource() {
             $fields['unpub_date']="0";
         } else {
             list($Y, $m, $d) = sscanf($fields['unpub_date'], "%4d-%2d-%2d");
-
+            $fields['unpub_date'] = strtotime("$m-$d-$Y $H:$M:$S");
             if($fields['unpub_date'] < time()) {
                 $fields['published'] = 0;
             }
-            $fields['unpub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
+
         }
 
         // post news content
