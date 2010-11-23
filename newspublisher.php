@@ -9,7 +9,7 @@
  * creating resources. Rich text editing is available for text fields.
  * /
 /* To Do:
-get rid of <br> <p>
+implement update strategy
 make rtcontent and rtsummary work
 modx.js
 remove table css
