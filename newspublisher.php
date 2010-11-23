@@ -124,7 +124,8 @@ require_once($npPath . 'classes/newspublisher.class.php');
 
 $np = new Newspublisher(&$modx, &$scriptProperties);
 
-$np->init($scriptProperties['richtext'],'147');
+// $np->init($scriptProperties['richtext'],'147');
+ $np->init($scriptProperties['richtext']);
 
 $formTpl .= $np->displayForm();
 

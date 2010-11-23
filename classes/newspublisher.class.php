@@ -46,12 +46,12 @@ class Newspublisher {
             } else {
                 $msg = str_replace('[[+id]]',$existing, $this->modx->lexicon('np.no_resource'));
                 $this->errors[] = $msg;
+                $this->folder = isset($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');
             }
         }
         $this->modx->lexicon->load('core:resource');
         $this->rtcontent = isset($props['rtcontent']) ? $props['rtcontent']:'content';
         $this->rtsummary = isset($props['rtsummary']) ? $props['rtsummary']:'introtext';
-        $this->folder = isset($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');
         $this->template = $this->getTemplate();
         $this->modx->regClientCSS(NEWSPUBLISHER_URL . 'css/datepicker.css');
         $this->modx->regClientStartupScript(NEWSPUBLISHER_URL . 'js/datepicker.js');
@@ -330,7 +330,13 @@ return $formTpl;
 }
 
 public function saveResource() {
-    // $this->message=print_r($_POST,true);
+    //die('<pre>' . print_r($_POST,true));
+    if (! $this->existing) {
+        $this->resource = $this->modx->newObject('modResource');
+    }
+    $oldFields = $this->resource->toArray();
+    $newFields = $_POST;
+    $fields = array_replace($oldFields, $newFields);
 
     if(get_magic_quotes_gpc()){
 
@@ -347,9 +353,11 @@ public function saveResource() {
         $this->errors[] = 'You are not allowed to publish articles';
 
     }
-    $createdon = time();
+    if (! $this->existing) {
 
-    // set alias name of document used to store articles
+        $fields['createdon'] = time();
+
+   // set alias name of document used to store articles
         if(!$aliastitle) {
             $alias = 'article-'.$createdon;
         } else {
@@ -363,99 +371,79 @@ public function saveResource() {
             $alias = 'article-'. mysql_escape_string($alias);
         }
 
-
+    } else {
+        $fields['editedon'] = time();
+        $fields['editedby'] = $userid;
+    }
 
         $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
 
         // format content
         $content = $this->modx->stripTags($_POST[$this->rtcontent],$allowedTags);
-        $content = str_replace('[[+user]]',$user,$content);
-        $content = str_replace('[[+createdon]]',strftime('%d-%b-%Y %H:%M',$createdon),$content);
-        foreach($_POST as $n=>$v) {
+        // $content = str_replace('[[+user]]',$user,$content);
+        // $content = str_replace('[[+createdon]]',strftime('%d-%b-%Y %H:%M',$createdon),$content);
+        foreach($fields as $n=>$v) {
             if(!empty($badwords)) $v = preg_replace($badwords,'[Filtered]',$v); // remove badwords
             $v = $this->modx->stripTags(htmlspecialchars($v));
             // $v = str_replace("\n",'<br />',$v);
             $content = str_replace('[+'.$n.'+]',$v,$content);
         }
-        $folder = $this->folder;
 
-        $title = mysql_escape_string($this->modx->stripTags($_POST['pagetitle']));
-        $longtitle = mysql_escape_string($this->modx->stripTags($_POST['longtitle']));
-        $menutitle = mysql_escape_string($this->modx->stripTags($_POST['menutitle']));
-        $description = mysql_escape_string($this->modx->stripTags($_POST['description']));
-        $introtext = mysql_escape_string($this->modx->stripTags($_POST[$this->rtsummary],$allowedTags));
-        $pub_date = $_POST['pub_date'];
-        $unpub_date = $_POST['unpub_date'];
-        $published = 1;
+
+        $fields['title'] = mysql_escape_string($this->modx->stripTags($fields['pagetitle']));
+        $fields['longtitle'] = mysql_escape_string($this->modx->stripTags($fields['longtitle']));
+        $fields['menutitle'] = mysql_escape_string($this->modx->stripTags($fields['menutitle']));
+        $fields['description'] = mysql_escape_string($this->modx->stripTags($fields['description']));
+        $fields['introtext'] = mysql_escape_string($this->modx->stripTags($fields[$this->rtsummary],$allowedTags));
+        $published = 1; /* Fix this */
 
         $H=isset($hours)? $hours : 0;
         $M=isset($minutes)? $minutes: 1;
         $S=isset($seconds)? $seconds: 0;
 
         // check published date
-        if($pub_date=="") {
-            $pub_date="0";
+        if($fields['pub_date']=="") {
+            $fields['pub_date']="0";
         } else {
-            list($Y, $m, $d) = sscanf($pub_date, "%4d-%2d-%2d");
+            list($Y, $m, $d) = sscanf($fields['pub_date'], "%4d-%2d-%2d");
 
-            $pub_date = strtotime("$m/$d/$Y $H:$M:$S");
-
-            if($pub_date < $createdon) {
+            if($fields['pub_date'] <= time()) {
                 $published = 1;
-            } elseif($pub_date > $createdon) {
-                $published = 0;
+            } elseif($fields['pub_date'] > time()) {
+                $fields['published'] = 0;
             }
+            $fields['pub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
         }
 
         // check unpublished date
-        if($unpub_date=="") {
-            $unpub_date="0";
+        if($fields['unpub_date']=="") {
+            $fields['unpub_date']="0";
         } else {
-            list($Y, $m, $d) = sscanf($unpub_date, "%4d-%2d-%2d");
+            list($Y, $m, $d) = sscanf($fields['unpub_date'], "%4d-%2d-%2d");
 
-            $unpub_date = strtotime("$m/$d/$Y $H:$M:$S");
-            if($unpub_date < $createdon) {
-                $published = 0;
+            if($fields['unpub_date'] < time()) {
+                $fields['published'] = 0;
             }
+            $fields['unpub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
         }
 
         // post news content
         if (! $this->existing) {
-            $createdBy = $this->modx->user->get('id');
-
-            $flds = array(
-                'pagetitle'     => $title,
-                'longtitle'     => $longtitle,
-                'menutitle'     => $menutitle,
-                'description'   => $description,
-                'introtext'     => $introtext,
-                'alias'         => $alias,
-                'parent'        => $folder,
-                'createdon'     => $createdon,
-                'createdby'     => $createdBy,
-                'editedon'      => '0',
-                'editedby'      => '0',
-                'published'     => $published,
-                'pub_date'      => $pub_date,
-                'unpub_date'    => $unpub_date,
-                'deleted'       => '0',
-                'hidemenu'      => $hidemenu,
-                'menuindex'     => $mnuidx,
-                'template'      => $this->template,
-                'content'       => $this->header . $content . $this->footer
-            );
-
-            $this->resource = $this->modx->newObject('modResource',$flds);
-        } else {
-            $this->resource->set('editedby',$this->modx->user->get('id') );
-            $this->resource->set('editidon',time() );
+            $fields['alias'] = $alias;
+            $fields['editedon'] = '0';
+            $fields['editedby'] = '0';
+            $fields['deleted'] = '0';
+            $fields['hidemenu'] = $hidemenu;  // fix this
+            $fields['template'] = $this->template;
+            $fields['content']  = $this->header . $content . $this->footer;
+            $fields['parent'] = $this->folder;
         }
 
-        $parentObj = $this->modx->getObject('modResource',$flds['parent']);
+        $parentObj = $this->modx->getObject('modResource',$this->modx->resource->get('parent') ); // parent of this page, not new page
 
          // If there's a parent object, put the new doc in the same resource groups as the parent
 
-        if ($parentObj) {  // skip if no parent
+        if ($parentObj && (! $existing)) {  // skip if no parent or existing resource
 
 
             $resourceGroups = $parentObj->getMany('ResourceGroupResources');
@@ -479,12 +467,14 @@ public function saveResource() {
         if(!empty($makefolder)) {
             // convert parent into folder
         //   $modx->db->update(array('isfolder'=>'1'),$modx->getFullTableName('site_content'),'id=\''.$folder.'\'');
-            if (! $parentObj->get('isfolder')) {
+            if ($parentObj && $parentObj->get('isfolder')) {
                 $parentObj->set('isfolder','1');
                 $parentObj->save();
             }
 
         }
+
+        $this->resource->fromArray($fields);
 
         $this->resource->save();
         // Make sure we have the ID.
@@ -555,7 +545,7 @@ public function saveResource() {
             // die ('Postid: ' . $postid . '<br />goToUrl: ' . $goToUrl);
         }
         $this->modx->sendRedirect($goToUrl);
-    }  /* end else (empty pagetitle or content */
+
 
 }
 protected function stripslashes_deep($value) {
@@ -608,4 +598,30 @@ public function validate($errorTpl) {
 }
 
 } /* end class */
+
+if (!function_exists('array_replace'))
+{
+  function array_replace( array &$array, array &$array1 )
+  {
+    $args = func_get_args();
+    $count = func_num_args();
+
+    for ($i = 0; $i < $count; ++$i) {
+      if (is_array($args[$i])) {
+        foreach ($args[$i] as $key => $val) {
+          $array[$key] = $val;
+        }
+      }
+      else {
+        trigger_error(
+          __FUNCTION__ . '(): Argument #' . ($i+1) . ' is not an array',
+          E_USER_WARNING
+        );
+        return NULL;
+      }
+    }
+
+    return $array;
+  }
+}
 ?>
