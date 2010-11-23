@@ -359,7 +359,7 @@ public function saveResource() {
 
    // set alias name of document used to store articles
         if(!$aliastitle) {
-            $alias = 'article-' . $time();
+            $alias = 'article-' . time();
         } else {
             $alias = $this->modx->stripTags($_POST['pagetitle']);
             $alias = strtolower($alias);
@@ -406,11 +406,12 @@ public function saveResource() {
             $fields['pub_date']="0";
         } else {
             list($Y, $m, $d) = sscanf($fields['pub_date'], "%4d-%2d-%2d");
-            $fields['pub_date'] = strtotime("$m-$d-$Y $H:$M:$S");
+            $fields['pub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
+
             if($fields['pub_date'] <= time()) {
-                $published = 1;
-            } elseif($fields['pub_date'] > time()) {
-                $fields['published'] = 0;
+                $fields['published'] = '1';
+            } else {
+                $fields['published'] = '0';
             }
 
         }
@@ -420,9 +421,9 @@ public function saveResource() {
             $fields['unpub_date']="0";
         } else {
             list($Y, $m, $d) = sscanf($fields['unpub_date'], "%4d-%2d-%2d");
-            $fields['unpub_date'] = strtotime("$m-$d-$Y $H:$M:$S");
+            $fields['unpub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
             if($fields['unpub_date'] < time()) {
-                $fields['published'] = 0;
+                $fields['published'] = '0';
             }
 
         }
