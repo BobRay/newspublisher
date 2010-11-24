@@ -35,7 +35,8 @@ Check permissions?
     &makefolder  - set to 1 to automatically convert the parent document to a folder. Defaults to 0
     &hidealltvs  - set to 1 to hide all TVs
     &hidetvs     - comma-separated list of TV IDs to hide
-    &postid      - document id to load after posting news item. Defaults to the page created
+    &postid      - document id to load on success. Defaults to the page created
+    &cancelid    - document id to load on cancel. Defaults to http_referer.
     &canpost     - comma delimitted user groups that can post comments. leave blank for public posting
     &badwords    - comma delimited list of words not allowed in post
     &template    - name of template to use for news post
@@ -53,7 +54,8 @@ Check permissions?
     &second
     &listboxmax  - maximum length for listboxes. Default is 8 items.
     &cssfile     - name of CSS file to use, or '' for no CSS file; defaults to newspublisher.css.
-    &errortpl    - name of Tpl chunk for formatting field errors
+    &errortpl    -  (optional) name of Tpl chunk for formatting field errors
+
 */
 
 /* This has to change !!! */
@@ -61,6 +63,14 @@ define('NEWSPUBLISHER_URL', 'core/components/newspublisher/');
 
 $language = isset($language) ? $language . ':' : '';
 $modx->lexicon->load($language.'newspublisher:default');
+
+if (isset($cancelId)) {
+    $cancelUrl = $modx->makeUrl($cancelId,'','','full');
+} else {
+    $cancelUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $modx->resource->get('id');
+}
+
+$modx->setPlaceholder('np.cancel_url',$cancelUrl);
 
 $postgrp = isset($canpost) ? explode(",",$canpost):array();
 $allowAnyPost = count($postgrp)==0 ? true : false;

@@ -16,6 +16,10 @@ div.newspublisher textarea {
     font-family: arial, sans-serif;
     width:60em;
     height:10em;
+    display:block;
+}
+div.newspublisher span.buttons {
+    display:block;
 }
 /* you can size a partcular textarea or textarea (mini) TV
    by using its name like this:
@@ -51,8 +55,14 @@ span.errormessage {
 }
 
 div.newspublisher input.submit {
-    display:block;
-    margin: 20px 0px 0px 0px;
+    display:inline;
+    margin: 30px;
+    padding:0;
+    width:8em;
+}
+div.newspublisher input.cancel {
+    display:inline;
+    margin: 30px;
     padding:0;
     width:8em;
 }
