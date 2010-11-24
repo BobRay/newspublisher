@@ -227,6 +227,11 @@ if (! empty($this->allTvs)) {
                 }
                 $formTpl .= "\n" . '<label>'. $fields['caption']  . '</label><textarea name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $fields['name'] . ']]</textarea>';
                 break;
+            case 'richtext':
+                $formTpl .= "\n" . '<label>'. $fields['caption']  . '</label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $fields['name'] . ']]</textarea></div>';
+                break;
+               //<label for="content">[[%resource_content]]: </label><div class="[[+np.rt_content_1]]"><textarea class="[[+np.rt_content_2]]" name="content" id="content">[[+content]]</textarea></div>';
+
 // *********
 
             case 'radio':
@@ -500,6 +505,7 @@ public function saveResource() {
                     case 'textareamini';
                     case 'option':
                     case 'listbox':
+                    case 'richtext':
                         //echo '<br />Value: ' . $value;
                         $value = $_POST[$fields['name']];
                         $lvalue = strtok($value,'=');

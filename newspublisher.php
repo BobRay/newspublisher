@@ -107,8 +107,8 @@ $modx->setPlaceholder('np.rt_summary_2', $ph );
 
 unset($ph);
 /* set TV rich text fields */
-$modx->setPlaceholder('np.tv_rt1','MODX_RichTextWidget');
-$modx->setPlaceholder('np.tv_rt2','modx-richtext');
+//$modx->setPlaceholder('np.tv_rt1','MODX_RichTextWidget');
+//$modx->setPlaceholder('np.tv_rt2','modx-richtext');
 
 
 
