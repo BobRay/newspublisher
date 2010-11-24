@@ -93,11 +93,26 @@ $richtext = isset($richtext) ? $richtext : 1;
 // else store under current document
 $folder = isset($folder) ? intval($folder):$modx->resource->get('id');
 
-// set rich text content field
-//$rtcontent = isset($rtcontent) ? $rtcontent:'content';
+/* set rich text content field */
+$ph = isset($rtcontent) ? 'MODX_RichTextWidget':'content';
+$modx->setPlaceholder('np.rt_content_1', $ph );
+$ph = isset($rtcontent) ? 'modx-richtext':'content';
+$modx->setPlaceholder('np.rt_content_2', $ph );
 
-// set rich text summary field
-// $rtsummary = isset($rtsummary) ? $rtsummary:'introtext';
+/* set rich text summary field */
+$ph = isset($rtsummary) ? 'MODX_RichTextWidget':'introtext';
+$modx->setPlaceholder('np.rt_summary_1', $ph );
+$ph = isset($rtsummary) ? 'modx-richtext':'introtext';
+$modx->setPlaceholder('np.rt_summary_2', $ph );
+
+unset($ph);
+/* set TV rich text fields */
+$modx->setPlaceholder('np.tv_rt1','MODX_RichTextWidget');
+$modx->setPlaceholder('np.tv_rt2','modx-richtext');
+
+
+
+
 
 //set listbox max size
 $scriptProperties['listboxmax'] = isset($listboxmax)? $listboxmax : 8;

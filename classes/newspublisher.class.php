@@ -137,9 +137,9 @@ public function displayForm() {
                 <span class="npdate"><label for="unpub_date">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="unpub_date" name="unpub_date" title="[[%resource_unpublishdate_help]]" maxlength="10" readonly="readonly" value="[[+unpub_date]]" /><span class="npdate">
             </div>
             [[+np.error_introtext]]
-            <label for="introtext">[[%resource_summary]]: </label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="introtext" id="introtext">[[+introtext]]</textarea></div>
+            <label for="introtext">[[%resource_summary]]: </label><div class="[[+np.rt_summary_1]]"><textarea class="[[+np.rt_summary_2]]" name="introtext" id="introtext">[[+introtext]]</textarea></div>
             [[+np.error_content]]
-            <label for="content">[[%resource_content]]: </label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="content" id="content">[[+content]]</textarea></div>';
+            <label for="content">[[%resource_content]]: </label><div class="[[+np.rt_content_1]]"><textarea class="[[+np.rt_content_2]]" name="content" id="content">[[+content]]</textarea></div>';
 
         $formTpl .= '[[+np.allTVs]]';
 
