@@ -119,6 +119,7 @@ public function displayForm() {
         <h2>[[%np.main_header]]</h2>
         [[!+np.error_header:ifnotempty=`<h3>[[!+np.error_header]]</h3>`]]
         [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
+        [[!+np.errors:ifnotempty=`[[!+np.errors]]`]]
         <form action="[[~[[*id]]]]" method="post">
 
             <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
@@ -445,28 +446,50 @@ public function saveResource() {
 
         $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
 
+        if (isset($this->props['groups']) && (! $existing) ) {
+            if ($this->props['groups'] == 'parent') {
+
         // If there's a parent object, put the new doc in the same resource groups as the parent
+                if ($parentObj) {  // skip if no parent
 
-        if ($parentObj && (! $existing)) {  // skip if no parent or existing resource
+                    $resourceGroups = $parentObj->getMany('ResourceGroupResources');
 
+                    if (! empty($resourceGroups)) { // skip if parent doesn't belong to any resource groups
+                        foreach ($resourceGroups as $resourceGroup) {
+                            $docGroupNum = $resourceGroup->get('document_group');
+                            $docNum = $resourceGroup->get('document');
 
-            $resourceGroups = $parentObj->getMany('ResourceGroupResources');
+                            $resourceGroupObj = $this->modx->getObject('modResourceGroup', $docGroupNum);
+                            $intersect = $this->modx->newObject('modResourceGroupResource');
+                            $intersect->addOne($this->resource);
+                            $intersect->addOne($resourceGroupObj);
+                            $intersect->save();
 
-            if (! empty($resourceGroups)) { // skip if parent doesn't belong to any resource groups
-                foreach ($resourceGroups as $resourceGroup) {
-                    $docGroupNum = $resourceGroup->get('document_group');
-                    $docNum = $resourceGroup->get('document');
+                            // echo '<br />Document Group: ' . $docGroupNum . ' . . . ' . 'Document: ' . $docNum;
+                        }
+                    } /* end if (! empty($resourceGroups)) */
 
-                    $resourceGroupObj = $this->modx->getObject('modResourceGroup', $docGroupNum);
-                    $intersect = $this->modx->newObject('modResourceGroupResource');
-                    $intersect->addOne($this->resource);
-                    $intersect->addOne($resourceGroupObj);
-                    $intersect->save();
+                } /* end if ($parentObj) { */
+            } else {  /* use group list in parameter */
+                /* get group names */
+                $rGroups = explode(',', $this->props['groups']);
+                if (count($rGroups)) {
+                    foreach($rGroups as $rGroup) {
+                        $resourceGroupObj = $this->modx->getObject('modResourceGroup',array('name'=>$rGroup));
+                        if ($resourceGroupObj) {
+                            $intersect = $this->modx->newObject('modResourceGroupResource');
+                            $intersect->addOne($this->resource);
+                            $intersect->addOne($resourceGroupObj);
+                            $intersect->save();
 
-                    // echo '<br />Document Group: ' . $docGroupNum . ' . . . ' . 'Document: ' . $docNum;
+                        } else {
+                            $msg = str_replace('[[+name]]',$rGroup,$this->modx->lexicon('np.no_resource_group') );
+                            $this->errors[] = $msg;
+                        }
+                    }
                 }
-            }
 
+            }
         }
 
         if(!empty($makefolder)) {

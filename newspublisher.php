@@ -62,6 +62,8 @@ Check permissions?
     &listboxmax  - maximum length for listboxes. Default is 8 items.
     &cssfile     - name of CSS file to use, or '' for no CSS file; defaults to newspublisher.css.
     &errortpl    -  (optional) name of Tpl chunk for formatting field errors
+    &groups      - resource groups to put new document in (no effect with existing docs).
+                   set to 'parent' to use parent's groups.
 
 */
 
@@ -205,11 +207,13 @@ if ($isPostBack) {
     $errors = $np->getErrors();
 
     if (! empty($errors) ) {
+        $modx->setPlaceholder('np.error_header',$errorHeader);
         foreach($errors as $error) {
-            $modx->setPlaceholder('np.error_header',$errorHeader);
+
             $errorMessage .= str_replace('[[+np.error]]',$error,$errorTpl);
-            $formTpl = $errorMessage . $formTpl;
+
         }
+        $modx->setPlaceholder('np.errors' , $errorMessage);
         foreach($_POST as $n=>$v) {
             $formTpl = str_replace('[[+'.$n.']]',$v,$formTpl);
         }
