@@ -396,12 +396,13 @@ public function saveResource() {
         $fields['menutitle'] = mysql_escape_string($this->modx->stripTags($fields['menutitle']));
         $fields['description'] = mysql_escape_string($this->modx->stripTags($fields['description']));
         $fields['introtext'] = mysql_escape_string($this->modx->stripTags($fields['introtext'],$allowedTags));
-        $published = 1; /* Fix this */
+
 
         $H=isset($hours)? $hours : 0;
         $M=isset($minutes)? $minutes: 1;
         $S=isset($seconds)? $seconds: 0;
 
+        $published = 'notSet';
         // check published date
         if($fields['pub_date']=="") {
             $fields['pub_date']="0";
@@ -429,7 +430,8 @@ public function saveResource() {
 
         }
 
-        // post news content
+
+        /* post news content, resource groups, and published status */
         if (! $this->existing) {
             $fields['alias'] = $alias;
             $fields['editedon'] = '0';
@@ -441,9 +443,9 @@ public function saveResource() {
             $fields['parent'] = isset($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');;
         }
 
-        $parentObj = $this->modx->getObject('modResource',$this->modx->resource->get('parent') ); // parent of this page, not new page
+        $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
 
-         // If there's a parent object, put the new doc in the same resource groups as the parent
+        // If there's a parent object, put the new doc in the same resource groups as the parent
 
         if ($parentObj && (! $existing)) {  // skip if no parent or existing resource
 
@@ -464,17 +466,37 @@ public function saveResource() {
                     // echo '<br />Document Group: ' . $docGroupNum . ' . . . ' . 'Document: ' . $docNum;
                 }
             }
+
         }
 
         if(!empty($makefolder)) {
             // convert parent into folder
         //   $modx->db->update(array('isfolder'=>'1'),$modx->getFullTableName('site_content'),'id=\''.$folder.'\'');
-            if ($parentObj && $parentObj->get('isfolder')) {
+            if ($parentObj && $parentObj->get('isfolder') && ($parentObj->get('isFolder') == '0')) {
                 $parentObj->set('isfolder','1');
                 $parentObj->save();
             }
 
         }
+        /* while we have the parent object -
+           set published status if not set by pub dates above */
+        if ($published == 'notSet') {
+
+            $prop = $this->props['published'];
+
+            if ( ($prop == 'parent') && $parentObj) { /* set from parent */
+
+                $fields['published'] = $parentObj->get('published');
+            } else if ($prop === '1') {
+                $fields['published'] = '1';
+            } else if ($prop === '0') {
+                $fields['published'] = '0';
+            } else { /* use system default */
+                $fields['published'] = $this->modx->getOption('publish_default');
+            }
+
+        }
+
 
         $this->resource->fromArray($fields);
 

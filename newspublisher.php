@@ -32,12 +32,18 @@ Check permissions?
 
   Parameters:
     &folder      - folder id where comments are stored
-    &makefolder  - set to 1 to automatically convert the parent document to a folder. Defaults to 0
+    &published   - set new resource as published or not
+                   (will be overridden by publish and unpublish dates)
+                   set to `parent` to match parent's pub status
+                   defaults to publish_default system setting
+    &makefolder  - set to 1 to automatically convert the parent document to a folder.
+                   Defaults to 0
     &hidealltvs  - set to 1 to hide all TVs
     &hidetvs     - comma-separated list of TV IDs to hide
     &postid      - document id to load on success. Defaults to the page created
     &cancelid    - document id to load on cancel. Defaults to http_referer.
-    &canpost     - comma delimitted user groups that can post comments. leave blank for public posting
+    &canpost     - comma delimitted user groups that can use the form.
+                   Leave blank for public posting
     &badwords    - comma delimited list of words not allowed in post
     &template    - name of template to use for news post
     &headertpl   - header template (chunk name) to be inserted at the begining of the news content
@@ -46,7 +52,8 @@ Check permissions?
     &richtext    - Initialize rich text editor; set this if there are any rich text fields
     &rtcontent   - use rich text for the content form field
     &rtsummary   - use rich text for the summary (introtext) form field
-    &showinmenu  - sets the flag to true or false (1|0) as to whether or not the new page shows in the menu. defaults to false (0)
+    &showinmenu  - sets the flag to true or false (1|0) as to whether or not the new page
+                   shows in the menu. defaults to false (0)
     &aliastitle  - set to 1 to use page title as alias suffix. Defaults to 0 - date created.
     &clearcache  - when set to 1 the system will automatically clear the site cache after publishing an article.
     &hour        - Hour, minute and second for published and unpublished dates; defaults to 12:01 am.
