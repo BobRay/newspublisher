@@ -9,11 +9,11 @@
  * creating resources. Rich text editing is available for text fields.
  * /
 /* To Do:
-implement update strategy
-make rtcontent and rtsummary work
+implement update strategy/edit button
+allow 'parent' for &template
+add &groups parameter
 modx.js
 remove table css
-richtext TVs
 image TVs
 Check permissions?
 */
