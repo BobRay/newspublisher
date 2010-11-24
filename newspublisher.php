@@ -43,9 +43,9 @@ Check permissions?
     &headertpl   - header template (chunk name) to be inserted at the begining of the news content
     &footertpl   - footer template (chunk name) to be inserted at the end of the news content
     &formtpl     - form template (chunk name)
-    &richtext    - Initialize rich text editor
-    &rtcontent   - name of a richtext content form field
-    &rtsummary   - name of a richtext summary form field
+    &richtext    - Initialize rich text editor; set this if there are any rich text fields
+    &rtcontent   - use rich text for the content form field
+    &rtsummary   - use rich text for the summary (introtext) form field
     &showinmenu  - sets the flag to true or false (1|0) as to whether or not the new page shows in the menu. defaults to false (0)
     &aliastitle  - set to 1 to use page title as alias suffix. Defaults to 0 - date created.
     &clearcache  - when set to 1 the system will automatically clear the site cache after publishing an article.
@@ -94,10 +94,10 @@ $richtext = isset($richtext) ? $richtext : 1;
 $folder = isset($folder) ? intval($folder):$modx->resource->get('id');
 
 // set rich text content field
-$rtcontent = isset($rtcontent) ? $rtcontent:'content';
+//$rtcontent = isset($rtcontent) ? $rtcontent:'content';
 
 // set rich text summary field
-$rtsummary = isset($rtsummary) ? $rtsummary:'introtext';
+// $rtsummary = isset($rtsummary) ? $rtsummary:'introtext';
 
 //set listbox max size
 $scriptProperties['listboxmax'] = isset($listboxmax)? $listboxmax : 8;

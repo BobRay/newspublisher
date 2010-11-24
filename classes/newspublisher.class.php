@@ -14,8 +14,6 @@ class Newspublisher {
     protected $props;  //scriptProperties array
     protected $allTvs;  // array of TVs.
     protected $message;
-    protected $rtContent;
-    protected $rtSummary;
     protected $folder;
     protected $template;
     protected $errors;
@@ -50,8 +48,6 @@ class Newspublisher {
             }
         }
         $this->modx->lexicon->load('core:resource');
-        $this->rtcontent = isset($props['rtcontent']) ? $props['rtcontent']:'content';
-        $this->rtsummary = isset($props['rtsummary']) ? $props['rtsummary']:'introtext';
         $this->template = $this->getTemplate();
         $this->modx->regClientCSS(NEWSPUBLISHER_URL . 'css/datepicker.css');
         $this->modx->regClientStartupScript(NEWSPUBLISHER_URL . 'js/datepicker.js');
@@ -379,7 +375,7 @@ public function saveResource() {
         $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
 
         // format content
-        $content = $this->modx->stripTags($_POST[$this->rtcontent],$allowedTags);
+        $content = $this->modx->stripTags($_POST['content'],$allowedTags);
         // $content = str_replace('[[+user]]',$user,$content);
         // $content = str_replace('[[+createdon]]',strftime('%d-%b-%Y %H:%M',$createdon),$content);
         foreach($fields as $n=>$v) {
@@ -394,7 +390,7 @@ public function saveResource() {
         $fields['longtitle'] = mysql_escape_string($this->modx->stripTags($fields['longtitle']));
         $fields['menutitle'] = mysql_escape_string($this->modx->stripTags($fields['menutitle']));
         $fields['description'] = mysql_escape_string($this->modx->stripTags($fields['description']));
-        $fields['introtext'] = mysql_escape_string($this->modx->stripTags($fields[$this->rtsummary],$allowedTags));
+        $fields['introtext'] = mysql_escape_string($this->modx->stripTags($fields['introtext'],$allowedTags));
         $published = 1; /* Fix this */
 
         $H=isset($hours)? $hours : 0;
