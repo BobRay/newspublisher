@@ -187,7 +187,7 @@ if (empty($scriptProperties['hidealltvs'])) {
 
 if ($isPostBack) {
 
-     // die('<pre>' . print_r($_POST,true));
+    // die('<pre>' . print_r($_POST,true));
     $errors = $_POST['np.errors'];
     /* handle pre-save errors */
     $success = $np->validate($errorTpl);
@@ -198,8 +198,6 @@ if ($isPostBack) {
         }
         return $formTpl;
     }
-
-
 
     $np->saveResource();
 

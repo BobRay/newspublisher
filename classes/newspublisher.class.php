@@ -20,13 +20,13 @@ class Newspublisher {
     protected $resource;
     protected $existing; // editing an existing resource
     protected $isPostBack;
-    protected $intersectsToSave;  // array of intersect objects to save
-    protected $resourcesToSave;  // array of resource objects to save
+
+
 
 
     public function __construct(&$modx, &$props) {
         $this->modx =& $modx;
-        $this->props =$ $props;
+        $this->props =& $props;
     }
 
     public function setPostBack($setting) {
@@ -34,8 +34,6 @@ class Newspublisher {
     }
 
     public function init($richText, $existing=false) {
-        $intersectsToSave = array();  // array of intersect objects to save
-        $resourcesToSave = array();  // array of resource objects to save
         if ($existing) {
             $this->existing=$existing;
             $this->resource = $this->modx->getObject('modResource',$existing);
@@ -356,6 +354,7 @@ public function saveResource() {
 
     if(!$this->props['allowAnyPost'] && !$this->modx->user->isMember($this->props['postgrp'])) {
         $this->errors[] = $this->modx->lexicon('unauthorized'); // 'You are not allowed to publish articles';
+        return;
 
     }
     if (! $this->existing) {
@@ -451,64 +450,7 @@ public function saveResource() {
 
         $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
 
-        if (isset($this->props['groups']) && (! $existing) ) {
-            if ($this->props['groups'] == 'parent') {
 
-        // If there's a parent object, put the new doc in the same resource groups as the parent
-                if ($parentObj) {  // skip if no parent
-
-                    $resourceGroups = $parentObj->getMany('ResourceGroupResources');
-
-                    if (! empty($resourceGroups)) { // skip if parent doesn't belong to any resource groups
-                        foreach ($resourceGroups as $resourceGroup) {
-                            $docGroupNum = $resourceGroup->get('document_group');
-                            $docNum = $resourceGroup->get('document');
-
-                            $resourceGroupObj = $this->modx->getObject('modResourceGroup', $docGroupNum);
-                            $intersect = $this->modx->newObject('modResourceGroupResource');
-                            $intersect->addOne($this->resource);
-                            $intersect->addOne($resourceGroupObj);
-                            $this->intersectsToSave[]= $intersect;
-                            // $intersect->save();
-
-                            // echo '<br />Document Group: ' . $docGroupNum . ' . . . ' . 'Document: ' . $docNum;
-                        }
-                    } /* end if (! empty($resourceGroups)) */
-
-                } /* end if ($parentObj) { */
-            } else {  /* use group list in parameter */
-                /* get group names */
-                $rGroups = explode(',', $this->props['groups']);
-                if (count($rGroups)) {
-                    foreach($rGroups as $rGroup) {
-                        $resourceGroupObj = $this->modx->getObject('modResourceGroup',array('name'=>$rGroup));
-                        if ($resourceGroupObj) {
-                            $intersect = $this->modx->newObject('modResourceGroupResource');
-                            $intersect->addOne($this->resource);
-                            $intersect->addOne($resourceGroupObj);
-                            $this->intersectsToSave[]= $intersect;
-                            //$intersect->save();
-
-                        } else {
-                            $msg = str_replace('[[+name]]',$rGroup,$this->modx->lexicon('np.no_resource_group') );
-                            $this->errors[] = $msg;
-                        }
-                    }
-                }
-
-            }
-        }
-
-        if(!empty($makefolder)) {
-            // convert parent into folder
-        //   $modx->db->update(array('isfolder'=>'1'),$modx->getFullTableName('site_content'),'id=\''.$folder.'\'');
-            if ($parentObj && $parentObj->get('isfolder') && ($parentObj->get('isFolder') == '0')) {
-                $parentObj->set('isfolder','1');
-                // $parentObj->save();
-                $this->resourcesToSave[] = $parentObj;
-            }
-
-        }
         /* while we have the parent object -
            set published status if not set by pub dates above */
         if ($published == 'notSet') {
@@ -537,20 +479,20 @@ public function saveResource() {
             $this->errors[] = $this->modx->lexicon('np.resource_save_failed');
             return;
         };
-        if (! empty($this->resourcesToSave)) {
-            foreach($this->resourcesToSave as $obj) {
-                $obj->save();
+        $resourceId = $this->resource->get('id');
+        /* if these are set, we need the parent object if it's a new resource */
+        if (! $this->existing) {
+            if (($this->props['groups'] || $this->props['makefolder'])) {
+                $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
+            }
+            if ($parentObj && $this->props['groups'] ) {
+                $this->setGroups($parentObj, $resourceId);
+            }
+            if ($parentObj && $this->props['makefolder']) {
+                $this->makeFolder($parentObj);
             }
         }
-        if (! empty($this->intersectsToSave)) {
-            foreach($this->intersectsToSave as $obj) {
-                $obj->save();
-            }
-        }
-
-
-
-        // Make sure we have the ID.
+                // Make sure we have the ID.
         // $resource = $modx->getObject('modResource',array('pagetitle'=>$flds['pagetitle']));
         $postid = isset($postid) ? $postid: $this->resource->get('id');
 
@@ -656,6 +598,7 @@ public function validate($errorTpl) {
     $success = true;
     $fields = explode(',',$this->props['required']);
     if (! empty($fields)) {
+
         foreach($fields as $field) {
             if (empty($_POST[$field]) ) {
                 $success = false;
@@ -670,6 +613,59 @@ public function validate($errorTpl) {
     }
    return $success;
 }
+/* make the parent into a folder if it's not already */
+protected function makeFolder(&$parentObj) {
+    if ($parentObj->get('isFolder') == '0') {
+        $parentObj->set('isfolder','1');
+        $parentObj->save();
+    }
+}
+/* set a new object's resource groups */
+protected function setGroups($parentObj, $resourceId) {
+
+    if ($this->props['groups'] == 'parent') {
+
+        /* put the new doc in the same resource groups as the parent */
+        $resourceGroups = $parentObj->getMany('ResourceGroupResources');
+
+        if (! empty($resourceGroups)) { /* skip if parent doesn't belong to any resource groups */
+            foreach ($resourceGroups as $resourceGroup) {
+                $docGroupNum = $resourceGroup->get('document_group');
+                $docNum = $resourceGroup->get('document');
+
+                $resourceGroupObj = $this->modx->getObject('modResourceGroup', $docGroupNum);
+                $intersect = $this->modx->newObject('modResourceGroupResource');
+                $intersect->addOne($this->resource);
+                $intersect->addOne($resourceGroupObj);
+                $intersect->save();
+
+                // echo '<br />Document Group: ' . $docGroupNum . ' . . . ' . 'Document: ' . $docNum;
+            }
+        } /* end if (! empty($resourceGroups)) */
+
+
+    } else {  /* use group list in parameter */
+        /* get group names */
+        $rGroups = explode(',', $this->props['groups']);
+        if (count($rGroups)) {
+            foreach($rGroups as $rGroup) {
+                $resourceGroupObj = $this->modx->getObject('modResourceGroup',array('name'=>$rGroup));
+                if ($resourceGroupObj) {
+                    $intersect = $this->modx->newObject('modResourceGroupResource');
+                    $intersect->addOne($this->resource);
+                    $intersect->addOne($resourceGroupObj);
+                    $intersect->save();
+
+                } else {
+                    $msg = str_replace('[[+name]]',$rGroup,$this->modx->lexicon('np.no_resource_group') );
+                    $this->errors[] = $msg;
+                }
+            } /* end foreach($rGroups) */
+        } /* end if (count($rGroups)) */
+
+    } /* end use group list in praamater */
+
+} /* end setGroups function */
 
 } /* end class */
 
@@ -698,4 +694,5 @@ if (!function_exists('array_replace'))
     return $array;
   }
 }
+
 ?>
