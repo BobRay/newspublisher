@@ -20,6 +20,8 @@ class Newspublisher {
     protected $resource;
     protected $existing; // editing an existing resource
     protected $isPostBack;
+    protected $intersectsToSave;  // array of intersect objects to save
+    protected $resourcesToSave;  // array of resource objects to save
 
 
     public function __construct(&$modx, &$props) {
@@ -32,6 +34,8 @@ class Newspublisher {
     }
 
     public function init($richText, $existing=false) {
+        $intersectsToSave = array();  // array of intersect objects to save
+        $resourcesToSave = array();  // array of resource objects to save
         if ($existing) {
             $this->existing=$existing;
             $this->resource = $this->modx->getObject('modResource',$existing);
@@ -462,7 +466,8 @@ public function saveResource() {
                             $intersect = $this->modx->newObject('modResourceGroupResource');
                             $intersect->addOne($this->resource);
                             $intersect->addOne($resourceGroupObj);
-                            $intersect->save();
+                            $this->intersectsToSave[]= $intersect;
+                            // $intersect->save();
 
                             // echo '<br />Document Group: ' . $docGroupNum . ' . . . ' . 'Document: ' . $docNum;
                         }
@@ -479,7 +484,8 @@ public function saveResource() {
                             $intersect = $this->modx->newObject('modResourceGroupResource');
                             $intersect->addOne($this->resource);
                             $intersect->addOne($resourceGroupObj);
-                            $intersect->save();
+                            $this->intersectsToSave[]= $intersect;
+                            //$intersect->save();
 
                         } else {
                             $msg = str_replace('[[+name]]',$rGroup,$this->modx->lexicon('np.no_resource_group') );
@@ -496,7 +502,8 @@ public function saveResource() {
         //   $modx->db->update(array('isfolder'=>'1'),$modx->getFullTableName('site_content'),'id=\''.$folder.'\'');
             if ($parentObj && $parentObj->get('isfolder') && ($parentObj->get('isFolder') == '0')) {
                 $parentObj->set('isfolder','1');
-                $parentObj->save();
+                // $parentObj->save();
+                $this->resourcesToSave[] = $parentObj;
             }
 
         }
@@ -519,20 +526,32 @@ public function saveResource() {
 
         }
 
-
         $this->resource->fromArray($fields);
+        if ( ! empty( $this->errors)) {
+            /* return without altering the DB */
+            return;
+        }
+        if ( ! $this->resource->save() ){
+            $this->errors[] = $this->modx->lexicon('np.resource_save_failed');
+            return;
+        };
+        if (! empty($this->resourcesToSave)) {
+            foreach($this->resourcesToSave as $obj) {
+                $obj->save();
+            }
+        }
+        if (! empty($this->intersectsToSave)) {
+            foreach($this->intersectsToSave as $obj) {
+                $obj->save();
+            }
+        }
 
-        $this->resource->save();
+
+
         // Make sure we have the ID.
         // $resource = $modx->getObject('modResource',array('pagetitle'=>$flds['pagetitle']));
         $postid = isset($postid) ? $postid: $this->resource->get('id');
 
-
-        // empty cache
-        if($clearcache==1){
-            $cacheManager = $this->modx->getCacheManager();
-            $cacheManager->clearCache();
-        }
 
         /* Save TVs */
         if (! empty ($this->allTvs)) {
@@ -582,6 +601,12 @@ public function saveResource() {
             } /* end foreach($allTvs) */
         } /* end if (!empty($allTVs)) -- Done saving TVs */
 
+        // empty cache
+        if($clearcache==1){
+            $cacheManager = $this->modx->getCacheManager();
+            $cacheManager->clearCache();
+        }
+
         // get redirect/post id
         //$redirectid = $modx->db->getValue('SELECT id as \'redirectid\' FROM '.$modx->getFullTableName('site_content').' WHERE createdon=\''.$createdon.'\'');
         return true;
@@ -589,7 +614,7 @@ public function saveResource() {
         // redirect to post id
         $goToUrl = $this->modx->makeUrl($postid);
         if (empty($goToUrl)) {
-            // die ('Postid: ' . $postid . '<br />goToUrl: ' . $goToUrl);
+            die ('Postid: ' . $postid . '<br />goToUrl: ' . $goToUrl);
         }
         $this->modx->sendRedirect($goToUrl);
 
