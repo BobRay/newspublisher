@@ -25,8 +25,8 @@ class Newspublisher {
 
 
     public function __construct(&$modx, &$props) {
-        $this->modx = $modx;
-        $this->props = $props;
+        $this->modx =& $modx;
+        $this->props =$ $props;
     }
 
     public function setPostBack($setting) {
@@ -389,7 +389,9 @@ public function saveResource() {
         // $content = str_replace('[[+createdon]]',strftime('%d-%b-%Y %H:%M',$createdon),$content);
         foreach($fields as $n=>$v) {
             if(!empty($badwords)) $v = preg_replace($badwords,'[Filtered]',$v); // remove badwords
-            $v = $this->modx->stripTags(htmlspecialchars($v));
+            if (! is_array($v) ){
+                $v = $this->modx->stripTags(htmlspecialchars($v));
+            }
             // $v = str_replace("\n",'<br />',$v);
             $content = str_replace('[+'.$n.'+]',$v,$content);
         }
@@ -441,7 +443,7 @@ public function saveResource() {
             $fields['editedon'] = '0';
             $fields['editedby'] = '0';
             $fields['deleted'] = '0';
-            $fields['hidemenu'] = $this->props->hidemenu;  // fix this
+            $fields['hidemenu'] = $this->props['hidemenu'];
             $fields['template'] = $this->template;
             $fields['content']  = $this->header . $content . $this->footer;
             $fields['parent'] = isset($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');;
@@ -601,21 +603,15 @@ public function saveResource() {
             } /* end foreach($allTvs) */
         } /* end if (!empty($allTVs)) -- Done saving TVs */
 
-        // empty cache
-        if($clearcache==1){
-            $cacheManager = $this->modx->getCacheManager();
-            $cacheManager->clearCache();
-        }
 
-        // get redirect/post id
-        //$redirectid = $modx->db->getValue('SELECT id as \'redirectid\' FROM '.$modx->getFullTableName('site_content').' WHERE createdon=\''.$createdon.'\'');
-        return true;
+       /* Have to clear cache so makeUrl() will work */
+       $cacheManager = $this->modx->getCacheManager();
+       $cacheManager->clearCache();
+
 
         // redirect to post id
         $goToUrl = $this->modx->makeUrl($postid);
-        if (empty($goToUrl)) {
-            die ('Postid: ' . $postid . '<br />goToUrl: ' . $goToUrl);
-        }
+
         $this->modx->sendRedirect($goToUrl);
 
 

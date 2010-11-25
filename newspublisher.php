@@ -139,7 +139,7 @@ if(isset($badwords)) {
 }
 
 // get menu status
-$scriptProperties['hidemenu'] = isset($showinmenu) && $showinmenu==1 ? 0 : 1;
+$scriptProperties['hidemenu'] = isset($showinmenu) && $showinmenu=='1' ? '0' : '1';
 
 
 // get errorTpl
@@ -157,7 +157,7 @@ $npPath = MODX_CORE_PATH . 'components/newspublisher/';
 
 require_once($npPath . 'classes/newspublisher.class.php');
 
-$np = new Newspublisher(&$modx, &$scriptProperties);
+$np = new Newspublisher($modx, $scriptProperties);
 
 // $np->init($scriptProperties['richtext'],'147');
 $np->init($scriptProperties['richtext']);
