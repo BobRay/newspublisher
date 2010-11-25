@@ -27,8 +27,13 @@
  */
 $_lang['np.main_header'] = 'Create Resource';
 $_lang['np.error_presubmit'] = 'Sorry . . . There were one or more problems in producing the form:';
-$_lang['np.error_submit'] = 'Sorry . . .There were one or more problems with your submission';
-$_lang['np.error_required'] = 'The [[+name]] field is required';
-$_lang['np.no_resource_group'] = 'Could not find [[+name]] resource group';
-$_lang['np.no_resource'] = 'Failed to get resource: [[+id]]';
+$_lang['np.error_submit'] = 'Sorry . . .There were one or more problems with your submission:';
+$_lang['np.error_required'] = 'The [[+name]] field is required.';
+$_lang['np.no_resource_group'] = 'Could not find [[+name]] resource group.';
+$_lang['np.no_resource'] = 'Failed to get resource: [[+id]].';
+$_lang['np.no_template_name'] = 'Failed to get template: [[+name]].';
+$_lang['np.no_tvs'] = 'You wanted to order TVs, but this template has none.';
+$_lang['np.no_tv_templates'] = 'No TvTemplates retrieved.';
+$_lang['np.unauthoized'] = 'You are not allowed to publish articles.';
+
 

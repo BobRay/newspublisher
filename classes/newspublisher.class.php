@@ -165,7 +165,7 @@ public function displayTVs() {
     if (! empty ($this->props['orderTVs'])) {
         $ids = explode(',', $this->props['orderTVs']);
         if (count($ids) == 0) {
-            $this->errors[] = 'You wanted to order TVs, but this template has none';
+            $this->errors[] = $this->modx->lexicon('np.no_tvs');
         }
      foreach($ids as $id) {
          foreach ($tvTemplates as $tvTemplate) {
@@ -180,8 +180,7 @@ public function displayTVs() {
      }
 
     if (count($tvTemplates) == 0) {
-        $this->errors[] = 'No TvTemplates retrieved';
-
+        $this->errors[] = $this->modx->lexicon('np.no_tv_templates');
     }
 
     foreach($tvTemplates as $tvTemplate) {
@@ -352,7 +351,7 @@ public function saveResource() {
     // check if user has rights
 
     if(!$this->props['allowAnyPost'] && !$this->modx->user->isMember($this->props['postgrp'])) {
-        $this->errors[] = 'You are not allowed to publish articles';
+        $this->errors[] = $this->modx->lexicon('unauthorized'); // 'You are not allowed to publish articles';
 
     }
     if (! $this->existing) {
@@ -606,15 +605,21 @@ protected function stripslashes_deep($value) {
 public function getErrors() {
     return $this->errors;
 }
+/* returns the template ID */
 protected function getTemplate() {
     // get template
 if (isset($this->props['template'])) {
     if(is_numeric($this->props['template']) ) {
-        // use it
+        /* make sure it exists */
+        if ( ! $this->modx->getObject('modTemplate',$this->props['template']) ) {
+            $msg = str_replace('[[+id]]', $this->props['template'], $this->modx->lexicon('np_no_template_id') );
+            $this->errors[] = $msg;
+        }
     } else {
         $t = $this->modx->getObject('modTemplate',array('templatename'=>$this->props['template']));
         if (! $t) {
-            $this->errors[] = 'Failed to get template';
+            $msg = str_replace('[[+name]]', $this->props['template'], $this->modx->lexicon('np_no_template_name') );
+            $this->errors[] = $msg;
         }
         $template = $t? $t->get('id') : $this->modx->getOption('default_template');
 
