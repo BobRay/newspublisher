@@ -546,23 +546,25 @@ public function saveResource() {
         } /* end if (!empty($allTVs)) -- Done saving TVs */
 
 
-       /* Clear cache */
-
-        // if ($this->props['clearcache'] ) {
+        /* clear caches on parameter or new resource */
         if ($this->props['clearcache'] || (! $this->existing) ) {
            $cacheManager = $this->modx->getCacheManager();
-           $cacheManager->clearCache();
+           // $cacheManager->clearCache();
+           $cacheManager->clearCache(array (
+                "{$resource->context_key}/",
+            ),
+            array(
+                'objects' => array('modResource', 'modContext', 'modTemplateVarResource'),
+                'publishing' => true
+                )
+            );
         }
         $goToUrl = $this->modx->makeUrl($postid);
-      // } else { /* modx makeUrl only works if cache if cleared */
-      //     $goToUrl = $this->myMakeUrl($postid);
-       //  }
 
-        // redirect to post id
+        /* redirect to post id */
 
          if (empty($goToUrl)) {
-            die('POST ID: ' . $postid . '<br />URL: ' . $goToUrl);
-
+            die('Unable to Forward<br />POST ID: ' . $postid . '<br />URL: ' . $goToUrl);
          }
 
         $this->modx->sendRedirect($goToUrl);
