@@ -549,12 +549,14 @@ public function saveResource() {
        /* Clear cache */
 
         // if ($this->props['clearcache'] ) {
+        if ($this->props['clearcache'] || (! $this->existing) ) {
            $cacheManager = $this->modx->getCacheManager();
            $cacheManager->clearCache();
-           $goToUrl = $this->modx->makeUrl($postid);
+        }
+        $goToUrl = $this->modx->makeUrl($postid);
       // } else { /* modx makeUrl only works if cache if cleared */
       //     $goToUrl = $this->myMakeUrl($postid);
-       // }
+       //  }
 
         // redirect to post id
 
@@ -563,7 +565,7 @@ public function saveResource() {
 
          }
 
-        $this->modx->sendRedirect($goToUrl,0,REDIRECT_META);
+        $this->modx->sendRedirect($goToUrl);
 }
 protected function stripslashes_deep($value) {
     $value = is_array($value) ?
