@@ -160,7 +160,11 @@ require_once($npPath . 'classes/newspublisher.class.php');
 $np = new Newspublisher($modx, $scriptProperties);
 
 // $np->init($scriptProperties['richtext'],'147');
-$np->init($scriptProperties['richtext']);
+$existing = false;
+if ($isset($_POST['np_existing']) && isnumeric($_POST['np_docId']) ) {
+    $existing = $_POST['np_docId'];
+}
+$np->init($scriptProperties['richtext'], $existing);
 
 $formTpl .= $np->displayForm();
 
