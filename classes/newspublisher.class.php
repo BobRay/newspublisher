@@ -33,83 +33,86 @@ class Newspublisher {
         $this->isPostBack = $setting;
     }
 
-    public function init($richText, $existing=false) {
-        if ($existing) {
-            $this->existing=$existing;
-            $this->resource = $this->modx->getObject('modResource',$existing);
-            if ($this->resource) {
-                $ph = $this->resource->toArray();
-                $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
-                $ph['unpub_date'] = $ph['unpub_date']? substr($ph['unpub_date'],0,10) : '';
+     public function init($richText, $existing=false) {
+       if ($existing) {
+           $this->existing=$existing;
+           $this->resource = $this->modx->getObject('modResource',$existing);
+           if ($this->resource) {
+               $ph = $this->resource->toArray();
+               $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
+               $ph['unpub_date'] = $ph['unpub_date']? substr($ph['unpub_date'],0,10) : '';
 
-                $this->modx->toPlaceholders($ph);
-            } else {
-                $msg = str_replace('[[+id]]',$existing, $this->modx->lexicon('np.no_resource'));
-                $this->errors[] = $msg;
+               $this->modx->toPlaceholders($ph);
+           } else {
+               $msg = str_replace('[[+id]]',$existing, $this->modx->lexicon('np.no_resource'));
+               $this->errors[] = $msg;
 
-            }
-        }
-        $this->modx->lexicon->load('core:resource');
-        $this->template = $this->getTemplate();
-        $this->modx->regClientCSS(NEWSPUBLISHER_URL . 'css/datepicker.css');
-        $this->modx->regClientStartupScript(NEWSPUBLISHER_URL . 'js/datepicker.js');
-        $this->header = $this->modx->getChunk($this->props['headerTpl']);
-        $this->footer = $this->modx->getChunk($this->props['footerTpl']);
+           }
+       }
+       $this->modx->lexicon->load('core:resource');
+       $this->template = $this->getTemplate();
+       $this->modx->regClientCSS(NEWSPUBLISHER_URL . 'css/datepicker.css');
+       $this->modx->regClientStartupScript(NEWSPUBLISHER_URL . 'js/datepicker.js');
+       $this->header = $this->modx->getChunk($this->props['headerTpl']);
+       $this->footer = $this->modx->getChunk($this->props['footerTpl']);
 
-        /* inject NP CSS file */
-        /* empty but sent parameter means use no CSS file at all */
+       /* inject NP CSS file */
+       /* empty but sent parameter means use no CSS file at all */
 
-        if ( ! isset($this->props['cssfile'])) { /* nothing sent - use default */
-            $css = NEWSPUBLISHER_URL . 'css/newspublisher.css';
-        } else if (empty($this->props['cssfile']) ) { /* empty param -- no css file */
-            $css = false;
-        } else {  /* set but not empty -- use it */
-            $css = MODX_CORE_URL . 'components/newspublisher/css/' . $this->props['cssfile'];
-        }
+       if ( ! isset($this->props['cssfile'])) { /* nothing sent - use default */
+           $css = NEWSPUBLISHER_URL . 'css/newspublisher.css';
+       } else if (empty($this->props['cssfile']) ) { /* empty param -- no css file */
+           $css = false;
+       } else {  /* set but not empty -- use it */
+           $css = MODX_CORE_URL . 'components/newspublisher/css/' . $this->props['cssfile'];
+       }
 
-        if ($css !== false) {
-            $this->modx->regClientCSS($css);
-        }
+       if ($css !== false) {
+           $this->modx->regClientCSS($css);
+       }
 
-        if ($richText) {
-            $corePath=$this->modx->getOption('core_path').'components/tinymcefe/';
-            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
-            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/ext-all.js');
-            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/modext/build/core/modx-min.js');
+       if ($richText) {
+           //$corePath=$this->modx->getOption('core_path').'components/tinymcefe/';
+                       $tinyPath = $this->modx->getOption('core_path').'components/tinymce/';
+           $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
+           $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/ext-all.js');
+           $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/modext/build/core/modx-min.js');
 
 
-            $whichEditor = $this->modx->getOption('which_editor',null,'');
+           $whichEditor = $this->modx->getOption('which_editor',null,'');
 
-            $plugin=$this->modx->getObject('modPlugin',array('name'=>$whichEditor));
-            if ($whichEditor == 'TinyMCE' ) {
-                $tinyUrl = $this->modx->getOption('assets_url').'components/tinymcefe/';
+           $plugin=$this->modx->getObject('modPlugin',array('name'=>$whichEditor));
+           if ($whichEditor == 'TinyMCE' ) {
+               //$tinyUrl = $this->modx->getOption('assets_url').'components/tinymcefe/';
 
-                /* OnRichTextEditorInit */
+               /* OnRichTextEditorInit */
 
-                $tinyproperties=$plugin->getProperties();
-                require_once $corePath.'tinymce.class.php';
-                $tiny = new TinyMCE($this->modx,$tinyproperties,$tinyUrl);
-                if (isset($forfrontend) || $this->modx->isFrontend()) {
-                    $def = $this->modx->getOption('cultureKey',null,$this->modx->getOption('manager_language',null,'en'));
-                    $tiny->properties['language'] = $this->modx->getOption('fe_editor_lang',array(),$def);
-                    $tiny->properties['frontend'] = true;
-                    unset($def);
-                }
-                $tiny->setProperties($tinyproperties);
-                $html = $tiny->initialize();
+               $tinyproperties=$plugin->getProperties();
+                               require_once $tinyPath.'tinymce.class.php';
+               $tiny = new TinyMCE($this->modx,$tinyproperties,$tinyUrl);
+               if (isset($forfrontend) || $this->modx->isFrontend()) {
+                   $def = $this->modx->getOption('cultureKey',null,$this->modx->getOption('manager_language',null,'en'));
+                   $tinyproperties['language'] = $this->modx->getOption('fe_editor_lang',array(),$def);
+                   $tinyproperties['frontend'] = true;
+                                       //$tinyproperties['selector'] = 'modx-richtext';//alternativ to 'frontend = true' you can use a selector for texareas
+                   unset($def);
+               }
+               $tiny->setProperties($tinyproperties);
+               $html = $tiny->initialize();
 
-                $this->modx->regClientStartupScript($tiny->config['assetsUrl'].'jscripts/tiny_mce/langs/'.$tiny->properties['language'].'.js');
-                $this->modx->regClientStartupScript($tiny->config['assetsUrl'].'tiny.browser.js');
-                $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
-                    Ext.onReady(function() {
-                    MODx.loadRTE();
-                    });
-                </script>');
-            } /* end if ($whichEditor == 'TinyMCE') */
+               $this->modx->regClientStartupScript($tiny->config['assetsUrl'].'jscripts/tiny_mce/langs/'.$tiny->properties['language'].'.js');
+               $this->modx->regClientStartupScript($tiny->config['assetsUrl'].'tiny.browser.js');
+               $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
+                   Ext.onReady(function() {
+                   MODx.loadRTE();
+                   });
+               </script>');
+           } /* end if ($whichEditor == 'TinyMCE') */
 
-        } /* end if ($richtext) */
+       } /* end if ($richtext) */
 
-    } /* end init */
+   } /* end init */
+
 public function displayForm() {
 
 
