@@ -76,7 +76,7 @@ class Newspublisher {
                        $tinyPath = $this->modx->getOption('core_path').'components/tinymce/';
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/ext-all.js');
-           $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/modext/build/core/modx-min.js');
+           $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/modext/core/modx.js');
 
 
            $whichEditor = $this->modx->getOption('which_editor',null,'');
