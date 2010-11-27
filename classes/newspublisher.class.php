@@ -147,7 +147,7 @@ public function displayForm() {
         $formTpl .= '[[+np.allTVs]]';
 
         $formTpl .= "\n" . '<span class = "buttons"><input class="submit" type="submit" name="Submit" value="Submit" /><input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = \'[[+np.cancel_url]]\' " /></span>
-        </form></div>';
+        </form>' . "\n" . '</div>';
 
     return $formTpl;
     /* done displaying TVs */
