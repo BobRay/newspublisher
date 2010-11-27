@@ -677,118 +677,11 @@ protected function setGroups($parentObj, $resourceId) {
             } /* end foreach($rGroups) */
         } /* end if (count($rGroups)) */
 
-    } /* end use group list in praamater */
+    } /* end use group list in parameter */
 
 } /* end setGroups function */
 
-protected function myMakeUrl($id, $args = '', $scheme = -1) {
-        $url = '';
-        $found = false;
-        if ($id= intval($id)) {
 
-            if (is_object($this->modx->context) && $this->modx->context->get('key') !== $this->modx->context->xpdo->context->get('key')) {
-
-                //$config = array_merge($this->modx->context->xpdo->_systemConfig, $this->modx->config, $this->modx->context->xpdo->_userConfig);
-                if ($scheme === -1 || $scheme === '' || strpos($scheme, 'abs') !== false) {
-                    $scheme= 'full';
-                }
-            }
-
-            if ($this->modx->getOption('friendly_urls') == 1) {
-                if ($id == $this->modx->getOption('site_start') ) {
-                    $alias= ($scheme === '' || $scheme === -1) ? $this->modx->getOption('base_url') : '';
-                    $found= true;
-                } else {
-                    $alias = $this->resource->get('alias');
-
-                    if (!$alias) {
-                        $alias= '';
-                        $this->xpdo->log(xPDO::LOG_LEVEL_WARN, '`' . $id . '` was requested but no alias was located.');
-                    } else {
-                        $found= true;
-                    }
-                }
-            // } elseif (isset($this->resourceListing["{$id}"])) {
-            } else {
-                $found= true;
-            }
-
-            if ($found) {
-                if (is_array($args)) {
-                    $args = modX::toQueryString($args);
-                }
-                if ($args != '' && $this->modx->getOption('friendly_urls') == 1) {
-                    /* add ? to $args if missing */
-                    $c= substr($args, 0, 1);
-                    if ($c == '&') {
-                        $args= '?' . substr($args, 1);
-                    } elseif ($c != '?') {
-                        $args= '?' . $args;
-                    }
-                }
-                elseif ($args != '') {
-                    /* add & to $args if missing */
-                    $c= substr($args, 0, 1);
-                    if ($c == '?')
-                        $args= '&' . substr($args, 1);
-                    elseif ($c != '&') $args= '&' . $args;
-                }
-
-                if ($this->modx->getOption('friendly_urls') == 1) {
-                    $url= $alias . $args;
-                } else {
-                    $url= $this->modx->getOption('request_controller') . '?' . $this->modx->getOption('request_param_id') . '=' . $id . $args;
-                }
-
-                $host= '';
-                if ($scheme !== -1 && $scheme !== '') {
-                    if ($scheme === 1 || $scheme === 0) {
-                        $https_port= $this->modx->getOption('https_port',$config,443);
-                        $isSecure= ($_SERVER['SERVER_PORT'] == $https_port || (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS'])=='on')) ? 1 : 0;
-                        if ($scheme != $isSecure) {
-                            $scheme = $isSecure ? 'http' : 'https';
-                        }
-                    }
-                    switch ($scheme) {
-                        case 'full':
-                            $host= $this->modx->getOption('site_url');
-                            break;
-                        case 'abs':
-                        case 'absolute':
-                            $host= $this->modx->getOption('base_url');
-                            break;
-                        case 'https':
-                        case 'http':
-                            $host= $scheme . '://' . $this->modx->getOption('http_host') . $this->modx->getOption('base_url');
-                            break;
-                    }
-                    $url= $host . $url;
-                }
-            }
-        }
-//        if ($this->xpdo->getDebug() === true) {
-//            $this->xpdo->log(xPDO::LOG_LEVEL_DEBUG, "modContext[" . $this->get('key') . "]->makeUrl({$id}) = {$url}");
-//        }
-//die('Url: ' . $url);
-        if ($this->modx->getOption('use_alias_path') ) {
-
-            $parentObj = $this->resource;
-            while($parentObj) {
-                $parentId = $parentObj->get('parent');
-                $parentObj = $this->modx->getObject('modResource',$parentId);
-                if ($parentObj) {
-
-                    $url = $parentObj->get('alias') . '/' . $url;
-                }
-            }
-
-        }
-
-
-        $contentType = $this->modx->resource->getOne('ContentType');
-        $resourceExt= $contentType->getExtension();
-        return $url . $resourceExt;
-    }
 
 } /* end class */
 
