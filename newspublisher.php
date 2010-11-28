@@ -68,6 +68,10 @@ Check permissions?
 */
 
 /* This has to change !!! */
+// die ('Username: ' . $modx->user->get('username'));
+if ($modx->user->hasSessionContext('mgr') ){
+   // die('Logged In');
+}
 define('NEWSPUBLISHER_URL', 'core/components/newspublisher/');
 
 $language = isset($language) ? $language . ':' : '';
@@ -146,7 +150,7 @@ $scriptProperties['hidemenu'] = isset($showinmenu) && $showinmenu=='1' ? '0' : '
 
 $errorTpl = isset($errortpl)? $modx->getChunk($errortpl): '<span class = "errormessage">[[+np.error]]</span>';
 
-if(empty($errorTpl)) {
+if(empty($errorTpl)) { /* fix this: language string */
     return 'Failed to get &amp;errortpl chunk: ' . $errortpl;
 }
 
@@ -161,8 +165,9 @@ $np = new Newspublisher($modx, $scriptProperties);
 
 // $np->init($scriptProperties['richtext'],'147');
 $existing = false;
-if ($isset($_POST['np_existing']) && isnumeric($_POST['np_docId']) ) {
-    $existing = $_POST['np_docId'];
+
+if (isset($_SESSION['np_existing']) && is_numeric($_SESSION['np_doc_id']) ) {
+    $existing = $_SESSION['np_doc_id'];
 }
 $np->init($scriptProperties['richtext'], $existing);
 
