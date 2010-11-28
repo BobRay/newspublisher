@@ -9,10 +9,10 @@
  * creating resources. Rich text editing is available for text fields.
  * /
 /* To Do:
-implement update strategy/edit button
+add landing page
+populate caption with TV name if empty
 allow 'parent' for &template
 add &groups parameter
-modx.js
 remove table css
 image TVs
 Check permissions?
