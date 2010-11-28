@@ -208,7 +208,7 @@ if (! empty($this->allTvs)) {
       if (in_array($fields['id'],$hidden)) {
           continue;
       }
-
+      $caption = empty($fields['caption'])? $fields['name'] : $fields['caption'];
       $formTpl .=  "\n" . '[[+np.error_'. $fields['name'] . ']]' . "\n";
         $tvType = $tv->get('type');
         $tvType = $tvType == 'option'? 'radio' : $tvType;
@@ -217,7 +217,7 @@ if (! empty($this->allTvs)) {
             case 'text':
             case 'textbox':
             case 'email';
-                $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $fields['caption']  . ' </label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" />';
+                $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" />';
                 if ($this->existing && !$this->isPostBack) {
                     //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
                     $this->modx->setPlaceholder($fields['name'],$tv->renderOutput($this->existing) );
@@ -231,10 +231,10 @@ if (! empty($this->allTvs)) {
                     //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
                     $this->modx->setPlaceholder($fields['name'],$tv->renderOutput($this->existing) );
                 }
-                $formTpl .= "\n" . '<label title="' . $fields['description'] . '">'. $fields['caption']  . '</label><textarea name="' . $fields['name'] . '"'. $fields['description'] . ' id="' . $fields['name'] . '">' . '[[+' . $fields['name'] . ']]</textarea>';
+                $formTpl .= "\n" . '<label title="' . $fields['description'] . '">'. $caption  . '</label><textarea name="' . $fields['name'] . '"'. $fields['description'] . ' id="' . $fields['name'] . '">' . '[[+' . $fields['name'] . ']]</textarea>';
                 break;
             case 'richtext':
-                $formTpl .= "\n" . '<label title="'. $fields['description'] . '">'. $fields['caption']  . '</label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $fields['name'] . ']]</textarea></div>';
+                $formTpl .= "\n" . '<label title="'. $fields['description'] . '">'. $caption  . '</label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $fields['name'] . ']]</textarea></div>';
                 break;
                //<label for="content">[[%resource_content]]: </label><div class="[[+np.rt_content_1]]"><textarea class="[[+np.rt_content_2]]" name="content" id="content">[[+content]]</textarea></div>';
 
@@ -249,7 +249,7 @@ if (! empty($this->allTvs)) {
                 $arrayPostfix = ($tvType == 'checkbox' || $tvType=='listbox-multiple')? '[]' : '';
                 $options = explode('||',$fields['elements']);
 
-                $formTpl .= "\n" . '<fieldset class="np-tv-' . $tvType . '"' . ' title="' . $fields['description'] . '"><legend>'. $fields['caption']  . '</legend>';
+                $formTpl .= "\n" . '<fieldset class="np-tv-' . $tvType . '"' . ' title="' . $fields['description'] . '"><legend>'. $caption  . '</legend>';
 
                 if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
                     $multiple = ($tvType == 'listbox-multiple')? 'multiple="multiple" ': '';
