@@ -32,6 +32,7 @@ class Newspublisher {
     public function setPostBack($setting) {
         $this->isPostBack = $setting;
     }
+/* Check for resource to edit in $_POST */
 
      public function init($richText, $existing=false) {
        if ($existing) {
