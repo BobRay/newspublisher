@@ -36,6 +36,7 @@ class Newspublisher {
 
      public function init($richText, $existing=false) {
        if ($existing) {
+           // die('Existing: ' . $existing);
            $this->existing=$existing;
            $this->resource = $this->modx->getObject('modResource',$existing);
            if ($this->resource) {
@@ -74,7 +75,7 @@ class Newspublisher {
 
        if ($richText) {
            //$corePath=$this->modx->getOption('core_path').'components/tinymcefe/';
-                       $tinyPath = $this->modx->getOption('core_path').'components/tinymce/';
+           $tinyPath = $this->modx->getOption('core_path').'components/tinymce/';
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/ext-all.js');
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/modext/core/modx.js');
@@ -146,12 +147,18 @@ public function displayForm() {
             [[+np.error_introtext]]
             <label for="introtext" title="[[%resource_summary_help]]">[[%resource_summary]]: </label><div class="[[+np.rt_summary_1]]"><textarea class="[[+np.rt_summary_2]]" name="introtext" id="introtext">[[+introtext]]</textarea></div>
             [[+np.error_content]]
-            <label for="content">[[%resource_content]]: </label><div class="[[+np.rt_content_1]]"><textarea class="[[+np.rt_content_2]]" name="content" id="content">[[+content]]</textarea></div>';
+            <label for="content">[[%resource_content]]: </label><div class="[[+np.rt_content_1]]"><textarea class="[[+np.rt_content_2]]" name="content" id="content">[[+content]]</textarea></div>[[+np.allTVs]]
+            [[+np_post_stuff]]
+        <span class = "buttons"><input class="submit" type="submit" name="Submit" value="Submit" /><input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = \'[[+np.cancel_url]]\' " /></span>
+    </form>
+</div>';
 
-        $formTpl .= '[[+np.allTVs]]';
+    if($this->existing) {
+        $stuff = '<input type="hidden" name="np_existing" value="true">' . "\n" .
+        '<input type="hidden" name="np_doc_id" value="' . $this->resource->get('id') . '">';
+        $this->modx->setPlaceholder('np_post_stuff',$stuff);
+    }
 
-        $formTpl .= "\n" . '<span class = "buttons"><input class="submit" type="submit" name="Submit" value="Submit" /><input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = \'[[+np.cancel_url]]\' " /></span>
-        </form>' . "\n" . '</div>';
 
     return $formTpl;
     /* done displaying TVs */
@@ -234,6 +241,10 @@ if (! empty($this->allTvs)) {
                 $formTpl .= "\n" . '<label title="' . $fields['description'] . '">'. $caption  . '</label><textarea name="' . $fields['name'] . '"'. $fields['description'] . ' id="' . $fields['name'] . '">' . '[[+' . $fields['name'] . ']]</textarea>';
                 break;
             case 'richtext':
+                if ($this->existing && !$this->isPostBack) {
+                    //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
+                    $this->modx->setPlaceholder($fields['name'],$tv->renderOutput($this->existing) );
+                }
                 $formTpl .= "\n" . '<label title="'. $fields['description'] . '">'. $caption  . '</label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $fields['name'] . ']]</textarea></div>';
                 break;
                //<label for="content">[[%resource_content]]: </label><div class="[[+np.rt_content_1]]"><textarea class="[[+np.rt_content_2]]" name="content" id="content">[[+content]]</textarea></div>';
@@ -352,9 +363,9 @@ public function saveResource() {
     }
     $user = $this->modx->user;
     $userid = $this->modx->user->get('id');
-    if(!$userid && $allowAnyPost) $user = '(anonymous)';
+    if( (!$userid) && $allowAnyPost) $user = '(anonymous)';
 
-    // check if user has rights
+    // check if user has rights -- Fix: Move this to snippet.
 
     if(!$this->props['allowAnyPost'] && !$this->modx->user->isMember($this->props['postgrp'])) {
         $this->errors[] = $this->modx->lexicon('unauthorized'); // 'You are not allowed to publish articles';
@@ -550,10 +561,16 @@ public function saveResource() {
         } /* end if (!empty($allTVs)) -- Done saving TVs */
 
 
-        /* clear caches on parameter or new resource */
-        if ($this->props['clearcache'] || (! $this->existing) ) {
+
+}
+
+public function forward($postId) {
+        if (empty($postId)) {
+            $postId = $this->existing? $this->existing : $this->resource->get('id');
+        }
+    /* clear caches on parameter or new resource */
+       if ($this->props['clearcache'] || (! $this->existing) ) {
            $cacheManager = $this->modx->getCacheManager();
-           // $cacheManager->clearCache();
            $cacheManager->clearCache(array (
                 "{$resource->context_key}/",
             ),
@@ -562,10 +579,14 @@ public function saveResource() {
                 'publishing' => true
                 )
             );
-        }
-        $goToUrl = $this->modx->makeUrl($postid);
+       }
+
+        $_SESSION['np_resource_id'] = $this->resource->get('id');
+        $goToUrl = $this->modx->makeUrl($postId);
 
         /* redirect to post id */
+
+        // $goToUrl = $this->modx->makeUrl('270');
 
          if (empty($goToUrl)) {
             die('Unable to Forward<br />POST ID: ' . $postid . '<br />URL: ' . $goToUrl);

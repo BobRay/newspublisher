@@ -9,13 +9,14 @@
  * creating resources. Rich text editing is available for text fields.
  * /
 /* To Do:
-add landing page
+unset $_SESSION vars
 populate caption with TV name if empty
 allow 'parent' for &template
 add &groups parameter
 remove table css
 image TVs
 Check permissions?
+add cancel button?
 */
 
 /*
@@ -40,7 +41,7 @@ Check permissions?
                    Defaults to 0
     &hidealltvs  - set to 1 to hide all TVs
     &hidetvs     - comma-separated list of TV IDs to hide
-    &postid      - document id to load on success. Defaults to the page created
+    &postid      - document id to load on success. Defaults to the page created or edited
     &cancelid    - document id to load on cancel. Defaults to http_referer.
     &canpost     - comma delimitted user groups that can use the form.
                    Leave blank for public posting
@@ -52,8 +53,8 @@ Check permissions?
     &richtext    - Initialize rich text editor; set this if there are any rich text fields
     &rtcontent   - use rich text for the content form field
     &rtsummary   - use rich text for the summary (introtext) form field
-    &showinmenu  - sets the flag to true or false (1|0) as to whether or not the new page
-                   shows in the menu. defaults to false (0)
+    &showinmenu  - sets the flag to (1|0) as to whether or not the new page
+                   shows in the menu. defaults to 0
     &aliastitle  - set to 1 to use page title as alias suffix. Defaults to 0 - date created.
     &clearcache  - when set to 1 the system will automatically clear the site cache after publishing an article.
     &hour        - Hour, minute and second for published and unpublished dates; defaults to 12:01 am.
@@ -154,7 +155,6 @@ if(empty($errorTpl)) { /* fix this: language string */
     return 'Failed to get &amp;errortpl chunk: ' . $errortpl;
 }
 
-
 // ************************
 $message = '';
 $npPath = MODX_CORE_PATH . 'components/newspublisher/';
@@ -163,11 +163,14 @@ require_once($npPath . 'classes/newspublisher.class.php');
 
 $np = new Newspublisher($modx, $scriptProperties);
 
-// $np->init($scriptProperties['richtext'],'147');
 $existing = false;
 
-if (isset($_SESSION['np_existing']) && is_numeric($_SESSION['np_doc_id']) ) {
-    $existing = $_SESSION['np_doc_id'];
+//die('np_existing: ' . $_POST['np_existing'] . '<br />Doc ID: ' . $_POST['np_doc_id']);
+
+if (isset($_POST['np_existing']) && $_POST['np_existing'] == 'true' ) {
+    $existing = is_numeric($_POST['np_doc_id'])? $_POST['np_doc_id'] : false;
+
+    //die('np_existing: ' . $_POST['np_existing'] . '<br />Doc ID: ' . $_POST['np_doc_id']);
 }
 $np->init($scriptProperties['richtext'], $existing);
 
@@ -186,7 +189,10 @@ if (! empty($errors) ) {
     return($formTpl);
  }
 
-$isPostBack = isset($_POST['hidSubmit']) ? true:false;
+ $isPostBack = false;
+ if (isset($_POST['hidSubmit'])) {
+    $isPostBack = $_POST['hidSubmit'] == 'true' ? true:false;
+ }
 $np->setPostBack($isPostBack);
 
 if (empty($scriptProperties['hidealltvs'])) {
@@ -216,18 +222,17 @@ if ($isPostBack) {
     if (! empty($errors) ) {
         $modx->setPlaceholder('np.error_header',$errorHeader);
         foreach($errors as $error) {
-
             $errorMessage .= str_replace('[[+np.error]]',$error,$errorTpl);
-
         }
+
         $modx->setPlaceholder('np.errors' , $errorMessage);
         foreach($_POST as $n=>$v) {
             $formTpl = str_replace('[[+'.$n.']]',$v,$formTpl);
         }
         return($formTpl);
     } else {
-            // redirect goes here
-            return 'Thank You';
+        // die('UNSETTING');
+        $np->forward($scriptProperties['postId']);
     }
 
 
