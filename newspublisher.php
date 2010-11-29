@@ -9,8 +9,8 @@
  * creating resources. Rich text editing is available for text fields.
  * /
 /* To Do:
-unset $_SESSION vars
-populate caption with TV name if empty
+groups only if not existing
+placeholder prefixes
 allow 'parent' for &template
 add &groups parameter
 remove table css
