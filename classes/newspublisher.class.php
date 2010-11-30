@@ -291,7 +291,7 @@ if (! empty($this->allTvs)) {
                     } else {
                         $val = $_POST[$fields['name']];
                     }
-                    /* it field is empty, get the default value */
+                    /* if field is empty, get the default value */
                     if(empty($val)) {
                         $defaults = explode('||',$fields['default_text']);
                         $option = strtok($option,'=');
