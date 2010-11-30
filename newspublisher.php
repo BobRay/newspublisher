@@ -151,8 +151,9 @@ $scriptProperties['hidemenu'] = isset($showinmenu) && $showinmenu=='1' ? '0' : '
 
 $errorTpl = isset($errortpl)? $modx->getChunk($errortpl): '<span class = "errormessage">[[+np.error]]</span>';
 
-if(empty($errorTpl)) { /* fix this: language string */
-    return 'Failed to get &amp;errortpl chunk: ' . $errortpl;
+if(empty($errorTpl)) {
+    $msg = str_replace('[[+tpl]]',$scriptProperties['errortpl'], $this->modx->lexicon('np_no_error_tpl'));
+   return $msg;
 }
 
 // ************************

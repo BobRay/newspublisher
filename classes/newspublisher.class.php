@@ -372,7 +372,7 @@ public function saveResource() {
 
     if(!$this->props['allowAnyPost'] && !$this->modx->user->isMember($this->props['postgrp'])) {
         $this->errors[] = $this->modx->lexicon('np_unauthorized'); // 'You are not allowed to publish articles';
-        return;
+        return '';
 
     }
     if (! $this->existing) {
@@ -489,11 +489,11 @@ public function saveResource() {
         $this->resource->fromArray($fields);
         if ( ! empty( $this->errors)) {
             /* return without altering the DB */
-            return;
+            return '';
         }
         if ( ! $this->resource->save() ){
             $this->errors[] = $this->modx->lexicon('np_resource_save_failed');
-            return;
+            return '';
         };
         $resourceId = $this->resource->get('id');
         /* if these are set, we need the parent object if it's a new resource */
