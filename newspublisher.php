@@ -9,14 +9,11 @@
  * creating resources. Rich text editing is available for text fields.
  * /
 /* To Do:
-groups only if not existing
 placeholder prefixes
-allow 'parent' for &template
-add &groups parameter
 remove table css
 image TVs
+date tvs
 Check permissions?
-add cancel button?
 */
 
 /*
@@ -46,10 +43,12 @@ add cancel button?
     &canpost     - comma delimitted user groups that can use the form.
                    Leave blank for public posting
     &badwords    - comma delimited list of words not allowed in post
-    &template    - name of template to use for news post
-    &headertpl   - header template (chunk name) to be inserted at the begining of the news content
-    &footertpl   - footer template (chunk name) to be inserted at the end of the news content
-    &formtpl     - form template (chunk name)
+    &template    - name of template to use for news post; set to 'parent' to use parent's template;
+                   for 'parent', &folder must be set; defaults to system default template
+
+    &headertpl   - header Tpl chunk (chunk name) to be inserted at the begining of the news content
+    &footertpl   - footer Tpl chunk (chunk name) to be inserted at the end of the news content
+    &formtpl     - form Tpl chunk (chunk name)
     &richtext    - Initialize rich text editor; set this if there are any rich text fields
     &rtcontent   - use rich text for the content form field
     &rtsummary   - use rich text for the summary (introtext) form field
@@ -90,8 +89,8 @@ $postgrp = isset($canpost) ? explode(",",$canpost):array();
 $allowAnyPost = count($postgrp)==0 ? true : false;
 $scriptProperties['allowAnyPost'] = $allowAnyPost;
 
-$errorHeaderPresubmit = $modx->lexicon('np.error_presubmit');
-$errorHeader = isset($errorHeader) ? $errorHeader : $modx->lexicon('np.error_submit');
+$errorHeaderPresubmit = $modx->lexicon('np_error_presubmit');
+$errorHeader = isset($errorHeader) ? $errorHeader : $modx->lexicon('np_error_submit');
 
 // get clear cache
 $clearcache     = isset($clearcache) ? 1:0;

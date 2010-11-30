@@ -45,8 +45,9 @@ class Newspublisher {
                $ph['unpub_date'] = $ph['unpub_date']? substr($ph['unpub_date'],0,10) : '';
 
                $this->modx->toPlaceholders($ph);
+               unset($ph);
            } else {
-               $msg = str_replace('[[+id]]',$existing, $this->modx->lexicon('np.no_resource'));
+               $msg = str_replace('[[+id]]',$existing, $this->modx->lexicon('np_no_resource'));
                $this->errors[] = $msg;
 
            }
@@ -123,7 +124,7 @@ public function displayForm() {
 
     if(empty($formTpl)) $formTpl = '
         <div class="newspublisher">
-        <h2>[[%np.main_header]]</h2>
+        <h2>[[%np_main_header]]</h2>
         [[!+np.error_header:ifnotempty=`<h3>[[!+np.error_header]]</h3>`]]
         [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
         [[!+np.errors:ifnotempty=`[[!+np.errors]]`]]
@@ -147,21 +148,22 @@ public function displayForm() {
             [[+np.error_introtext]]
             <label for="introtext" title="[[%resource_summary_help]]">[[%resource_summary]]: </label><div class="[[+np.rt_summary_1]]"><textarea class="[[+np.rt_summary_2]]" name="introtext" id="introtext">[[+introtext]]</textarea></div>
             [[+np.error_content]]
-            <label for="content">[[%resource_content]]: </label><div class="[[+np.rt_content_1]]"><textarea class="[[+np.rt_content_2]]" name="content" id="content">[[+content]]</textarea></div>[[+np.allTVs]]
+            <label for="content">[[%resource_content]]: </label><div class="[[+np.rt_content_1]]"><textarea class="[[+np.rt_content_2]]" name="content" id="content">[[+content]]</textarea></div>
+            [[+np.allTVs]]
             [[+np_post_stuff]]
         <span class = "buttons"><input class="submit" type="submit" name="Submit" value="Submit" /><input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = \'[[+np.cancel_url]]\' " /></span>
     </form>
 </div>';
 
+/* need to forward this from $_POST so we know it's and existing dos */
     if($this->existing) {
         $stuff = '<input type="hidden" name="np_existing" value="true">' . "\n" .
         '<input type="hidden" name="np_doc_id" value="' . $this->resource->get('id') . '">';
         $this->modx->setPlaceholder('np_post_stuff',$stuff);
     }
 
-
     return $formTpl;
-    /* done displaying TVs */
+
 } /* end displayForm */
 
 public function displayTVs() {
@@ -169,16 +171,19 @@ public function displayTVs() {
 
     $this->allTvs = array();
 
+    /* get the array of TVs for this template in order of ID */
     $c = $this->modx->newQuery('modTemplateVarTemplate');
     $where = array('templateid'=>$this->template);
     $c->where($where);
     $c->sortby('tmplvarid','ASC');
     $tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',$c);
-    // $tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',array('templateid'=>$this->template));
+
+
+    /* re-sort TVs by &orderTVs if sent */
     if (! empty ($this->props['orderTVs'])) {
         $ids = explode(',', $this->props['orderTVs']);
         if (count($ids) == 0) {
-            $this->errors[] = $this->modx->lexicon('np.no_tvs');
+            $this->errors[] = $this->modx->lexicon('np_no_tvs');
         }
      foreach($ids as $id) {
          foreach ($tvTemplates as $tvTemplate) {
@@ -191,18 +196,17 @@ public function displayTVs() {
      }
      $tvTemplates = $tvts;
      }
-
-    if (count($tvTemplates) == 0) {
-        $this->errors[] = $this->modx->lexicon('np.no_tv_templates');
-    }
-
-    foreach($tvTemplates as $tvTemplate) {
-        $tvObj = $tvTemplate->getOne('TemplateVar');
-        if ($tvObj) {
-           $this->allTvs[] = $tvObj;
+    if (! empty($tvTemplates)) {
+        foreach($tvTemplates as $tvTemplate) {
+            $tvObj = $tvTemplate->getOne('TemplateVar');
+            if ($tvObj) {
+               $this->allTvs[] = $tvObj;
+            }
         }
     }
 
+/* we have some TVs to show */
+/* Build TVs dynamically based on type */
 if (! empty($this->allTvs)) {
 
     $hidden = explode(',',$this->props['hidetvs']);
@@ -215,18 +219,23 @@ if (! empty($this->allTvs)) {
       if (in_array($fields['id'],$hidden)) {
           continue;
       }
+      /* use TV's name as caption if caption is empty */
       $caption = empty($fields['caption'])? $fields['name'] : $fields['caption'];
-      $formTpl .=  "\n" . '[[+np.error_'. $fields['name'] . ']]' . "\n";
-        $tvType = $tv->get('type');
-        $tvType = $tvType == 'option'? 'radio' : $tvType;
 
-        switch($tvType) {
+      /* create error placeholder for field */
+      $formTpl .=  "\n" . '[[+np.error_'. $fields['name'] . ']]' . "\n";
+
+      /* Build TV input code dynamically based on type */
+      $tvType = $tv->get('type');
+      $tvType = $tvType == 'option'? 'radio' : $tvType;
+
+
+      switch($tvType) {
             case 'text':
             case 'textbox':
             case 'email';
-                $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" />';
+                $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" />';
                 if ($this->existing && !$this->isPostBack) {
-                    //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
                     $this->modx->setPlaceholder($fields['name'],$tv->renderOutput($this->existing) );
                 }
 
@@ -247,9 +256,9 @@ if (! empty($this->allTvs)) {
                 }
                 $formTpl .= "\n" . '<label title="'. $fields['description'] . '">'. $caption  . '</label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $fields['name'] . ']]</textarea></div>';
                 break;
-               //<label for="content">[[%resource_content]]: </label><div class="[[+np.rt_content_1]]"><textarea class="[[+np.rt_content_2]]" name="content" id="content">[[+content]]</textarea></div>';
 
-// *********
+
+            /********* Options *********/
 
             case 'radio':
             case 'checkbox':
@@ -272,11 +281,9 @@ if (! empty($this->allTvs)) {
                 $i=0;
                 foreach ($options as $option) {
                     if ($this->existing  && ! $this->isPostBack)  {
-                        //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
+
                         if (is_array($options)) {
                             $val = explode('||',$tv->getValue($this->existing));
-                            // die('VAL: ' . print_r($val,true) . '<br />OPTIONS: ' . print_r($options,true));
-
                         } else {
                             $val = $tv->renderOutput($this->existing);
                         }
@@ -284,6 +291,7 @@ if (! empty($this->allTvs)) {
                     } else {
                         $val = $_POST[$fields['name']];
                     }
+                    /* it field is empty, get the default value */
                     if(empty($val)) {
                         $defaults = explode('||',$fields['default_text']);
                         $option = strtok($option,'=');
@@ -348,7 +356,7 @@ return $formTpl;
 }
 
 public function saveResource() {
-    //die('<pre>' . print_r($_POST,true));
+
     if (! $this->existing) {
         $this->resource = $this->modx->newObject('modResource');
     }
@@ -356,11 +364,6 @@ public function saveResource() {
     $newFields = $_POST;
     $fields = array_replace($oldFields, $newFields);
 
-    if(get_magic_quotes_gpc()){
-
-        // $_POST = array_map($this->strip_slashes_deep, $_POST);
-
-    }
     $user = $this->modx->user;
     $userid = $this->modx->user->get('id');
     if( (!$userid) && $allowAnyPost) $user = '(anonymous)';
@@ -368,7 +371,7 @@ public function saveResource() {
     // check if user has rights -- Fix: Move this to snippet.
 
     if(!$this->props['allowAnyPost'] && !$this->modx->user->isMember($this->props['postgrp'])) {
-        $this->errors[] = $this->modx->lexicon('unauthorized'); // 'You are not allowed to publish articles';
+        $this->errors[] = $this->modx->lexicon('np_unauthorized'); // 'You are not allowed to publish articles';
         return;
 
     }
@@ -389,7 +392,7 @@ public function saveResource() {
             $alias = trim($alias, '-');
             $alias = 'article-'. mysql_escape_string($alias);
         }
-
+    /* set editedon and editedby for existing docs */
     } else {
         $fields['editedon'] = time();
         $fields['editedby'] = $userid;
@@ -397,16 +400,14 @@ public function saveResource() {
 
         $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
 
-        // format content
+
         $content = $this->modx->stripTags($_POST['content'],$allowedTags);
-        // $content = str_replace('[[+user]]',$user,$content);
-        // $content = str_replace('[[+createdon]]',strftime('%d-%b-%Y %H:%M',$createdon),$content);
+
         foreach($fields as $n=>$v) {
             if(!empty($badwords)) $v = preg_replace($badwords,'[Filtered]',$v); // remove badwords
             if (! is_array($v) ){
                 $v = $this->modx->stripTags(htmlspecialchars($v));
             }
-            // $v = str_replace("\n",'<br />',$v);
             $content = str_replace('[+'.$n.'+]',$v,$content);
         }
 
@@ -491,7 +492,7 @@ public function saveResource() {
             return;
         }
         if ( ! $this->resource->save() ){
-            $this->errors[] = $this->modx->lexicon('np.resource_save_failed');
+            $this->errors[] = $this->modx->lexicon('np_resource_save_failed');
             return;
         };
         $resourceId = $this->resource->get('id');
@@ -507,19 +508,17 @@ public function saveResource() {
                 $this->makeFolder($parentObj);
             }
         }
-                // Make sure we have the ID.
-        // $resource = $modx->getObject('modResource',array('pagetitle'=>$flds['pagetitle']));
+
         $postid = isset($postid) ? $postid: $this->resource->get('id');
 
 
         /* Save TVs */
         if (! empty ($this->allTvs)) {
-            //$this->message .=  '<br />' . 'Saving ' . count($this->allTvs);
             $resourceId = $this->resource->get('id');
-            //$this->message .=  '<br />' . 'Resource ID: '.$resourceId;
+
             foreach($this->allTvs as $tv) {
                 $fields = $tv->toArray();
-                //$this->message .= '<br />TV: ' . $tv->get('name') . '<br />' . print_r($_POST[$fields['name']],true);
+
                 switch ($fields['type']) {
                     case 'text':
                     case 'textbox':
@@ -528,7 +527,7 @@ public function saveResource() {
                     case 'option':
                     case 'listbox':
                     case 'richtext':
-                        //echo '<br />Value: ' . $value;
+
                         $value = $_POST[$fields['name']];
                         $lvalue = strtok($value,'=');
                         $rvalue = strtok('=');
@@ -550,7 +549,7 @@ public function saveResource() {
                             $tv->setValue($resourceId,$value);
                             $tv->save();
                         }
-                        // echo '<br />Checkboxes: ' . $value;
+
 
                         break;
 
@@ -568,7 +567,7 @@ public function forward($postId) {
         if (empty($postId)) {
             $postId = $this->existing? $this->existing : $this->resource->get('id');
         }
-    /* clear caches on parameter or new resource */
+    /* clear cache on parameter or new resource */
        if ($this->props['clearcache'] || (! $this->existing) ) {
            $cacheManager = $this->modx->getCacheManager();
            $cacheManager->clearCache(array (
@@ -586,50 +585,67 @@ public function forward($postId) {
 
         /* redirect to post id */
 
-        // $goToUrl = $this->modx->makeUrl('270');
-
          if (empty($goToUrl)) {
             die('Unable to Forward<br />POST ID: ' . $postid . '<br />URL: ' . $goToUrl);
          }
 
         $this->modx->sendRedirect($goToUrl);
 }
+
+/* allows strip slashes on an array
+ * not used, but may have to be called if magic_quotes_gpc causes trouble
+ * */
 protected function stripslashes_deep($value) {
     $value = is_array($value) ?
                 array_map('stripslashes_deep', $value) :
                 stripslashes($value);
     return $value;
 }
-
+/* return any errors set in the class */
 public function getErrors() {
     return $this->errors;
 }
 /* returns the template ID */
 protected function getTemplate() {
-    // get template
-if (isset($this->props['template'])) {
-    if(is_numeric($this->props['template']) ) {
-        /* make sure it exists */
-        if ( ! $this->modx->getObject('modTemplate',$this->props['template']) ) {
-            $msg = str_replace('[[+id]]', $this->props['template'], $this->modx->lexicon('np_no_template_id') );
-            $this->errors[] = $msg;
-        }
-    } else {
-        $t = $this->modx->getObject('modTemplate',array('templatename'=>$this->props['template']));
-        if (! $t) {
-            $msg = str_replace('[[+name]]', $this->props['template'], $this->modx->lexicon('np_no_template_name') );
-            $this->errors[] = $msg;
-        }
-        $template = $t? $t->get('id') : $this->modx->getOption('default_template');
-
+    if ($this->existing) {
+        return $this->resource->get('template');
     }
-} else {
     $template = $this->modx->getOption('default_template');
-}
 
-return $template;
+    if ($this->props['template'] == 'parent') {
+        if (empty($this->props['folder'])) {
+            $this->errors[] = $this->modx->lexicon('np_folder_not_sent');
+        }
+        $parentObj = $this->modx->getObject('modResource',$this->props['folder']);
+        if ($parentObj) {
+            $template = $parentObj->get('template');
+            unset($parentObj);
+        }
 
+    } else if (! empty($this->props->template)) {
+
+
+        if(is_numeric($this->props['template']) ) { /* user sent a number */
+            /* make sure it exists */
+            if ( ! $this->modx->getObject('modTemplate',$this->props['template']) ) {
+                $msg = str_replace('[[+id]]', $this->props['template'], $this->modx->lexicon('np_no_template_id') );
+                $this->errors[] = $msg;
+            }
+        } else { /* user sent a template name */
+            $t = $this->modx->getObject('modTemplate',array('templatename'=>$this->props['template']));
+            if (! $t) {
+                $msg = str_replace('[[+name]]', $this->props['template'], $this->modx->lexicon('np_no_template_name') );
+                $this->errors[] = $msg;
+            }
+            $template = $t? $t->get('id') : $this->modx->getOption('default_template');
+            unset($t);
+
+        }
+    }
+
+    return $template;
 }
+/* set error if required field is empty */
 public function validate($errorTpl) {
     $success = true;
     $fields = explode(',',$this->props['required']);
@@ -638,7 +654,7 @@ public function validate($errorTpl) {
         foreach($fields as $field) {
             if (empty($_POST[$field]) ) {
                 $success = false;
-                $msg = $this->modx->lexicon('np.error_required');
+                $msg = $this->modx->lexicon('np_error_required');
                 $msg = str_replace('[[+name]]',$field,$msg);
                 // if (empty($errorTpl)) die('No error Tpl');
                 $msg = str_replace('[[+np.error]]',$msg,$errorTpl);
@@ -656,9 +672,9 @@ protected function makeFolder(&$parentObj) {
         $parentObj->save();
     }
 }
-/* set a new object's resource groups */
+/* set a new object's resource groups -- only called for new resources */
 protected function setGroups($parentObj, $resourceId) {
-
+    /* use the parent's groups if &groups is set to `parent` */
     if ($this->props['groups'] == 'parent') {
 
         /* put the new doc in the same resource groups as the parent */
@@ -675,7 +691,7 @@ protected function setGroups($parentObj, $resourceId) {
                 $intersect->addOne($resourceGroupObj);
                 $intersect->save();
 
-                // echo '<br />Document Group: ' . $docGroupNum . ' . . . ' . 'Document: ' . $docNum;
+
             }
         } /* end if (! empty($resourceGroups)) */
 
@@ -693,7 +709,7 @@ protected function setGroups($parentObj, $resourceId) {
                     $intersect->save();
 
                 } else {
-                    $msg = str_replace('[[+name]]',$rGroup,$this->modx->lexicon('np.no_resource_group') );
+                    $msg = str_replace('[[+name]]',$rGroup,$this->modx->lexicon('np_no_resource_group') );
                     $this->errors[] = $msg;
                 }
             } /* end foreach($rGroups) */
@@ -707,6 +723,7 @@ protected function setGroups($parentObj, $resourceId) {
 
 } /* end class */
 
+/* array_replace function for pre PHP 5.3 */
 if (!function_exists('array_replace'))
 {
   function array_replace( array &$array, array &$array1 )
