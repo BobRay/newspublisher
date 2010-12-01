@@ -184,10 +184,7 @@ if(empty($errorTpl)) {
 
 // ************************
 $message = '';
-$npPath = MODX_ASSETS_PATH . 'components/newspublisher/';
-
-require_once($npPath . 'classes/newspublisher.class.php');
-
+require_once $modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/').'classes/newspublisher.class.php';
 $np = new Newspublisher($modx, $scriptProperties);
 
 $existing = false;
