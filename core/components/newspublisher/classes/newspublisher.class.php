@@ -27,6 +27,10 @@ class Newspublisher {
     public function __construct(&$modx, &$props) {
         $this->modx =& $modx;
         $this->props =& $props;
+
+        $corePath = $this->modx->getOption('np.core_path',null,MODX_CORE_PATH.'components/newspublisher/');
+        $assetsPath = $this->modx->getOption('np.assets_path',null,MODX_ASSETS_PATH.'components/newspublisher/');
+        $assetsUrl = $this->modx->getOption('np.assets_url',null,MODX_ASSETS_URL.'components/newspublisher/');
     }
 
     public function setPostBack($setting) {
