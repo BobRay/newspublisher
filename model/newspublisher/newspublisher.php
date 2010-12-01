@@ -99,7 +99,7 @@ if (! empty($permissions)) {
         return 'Do not have necessary permissions';
     }
 }
-define('NEWSPUBLISHER_URL', 'core/components/newspublisher/');
+define('NEWSPUBLISHER_URL', 'assets/components/newspublisher/');
 
 $language = isset($language) ? $language . ':' : '';
 $modx->lexicon->load($language.'newspublisher:default');
@@ -184,7 +184,7 @@ if(empty($errorTpl)) {
 
 // ************************
 $message = '';
-$npPath = MODX_CORE_PATH . 'components/newspublisher/';
+$npPath = MODX_ASSETS_PATH . 'components/newspublisher/';
 
 require_once($npPath . 'classes/newspublisher.class.php');
 
