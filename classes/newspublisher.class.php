@@ -366,15 +366,11 @@ public function saveResource() {
 
     $user = $this->modx->user;
     $userid = $this->modx->user->get('id');
-    if( (!$userid) && $allowAnyPost) $user = '(anonymous)';
-
-    // check if user has rights -- Fix: Move this to snippet.
-
-    if(!$this->props['allowAnyPost'] && !$this->modx->user->isMember($this->props['postgrp'])) {
-        $this->errors[] = $this->modx->lexicon('np_unauthorized'); // 'You are not allowed to publish articles';
-        return '';
-
+    if( (!$userid) && $allowAnyPost) {
+        $user = '(anonymous)';
     }
+
+
     if (! $this->existing) {
 
         $fields['createdon'] = time();

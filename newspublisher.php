@@ -15,6 +15,7 @@ remove table css
 image TVs
 date tvs
 Check permissions?
+Fix/add &allowAnyPost
 */
 
 /*
@@ -41,8 +42,10 @@ Check permissions?
     &hidetvs     - comma-separated list of TV IDs to hide
     &postid      - document id to load on success. Defaults to the page created or edited
     &cancelid    - document id to load on cancel. Defaults to http_referer.
-    &canpost     - comma delimitted user groups that can use the form.
+    &canpost     - comma delimited user groups that can use the form.
                    Leave blank for public posting
+    &allGroups   - If set to 1, user must be a member of all groups
+    &permissions - Comma-separated list of permissions. If set, user must have all permissions.
     &badwords    - comma delimited list of words not allowed in post
     &template    - name of template to use for news post; set to 'parent' to use parent's template;
                    for 'parent', &folder must be set; defaults to system default template
@@ -68,10 +71,33 @@ Check permissions?
 
 */
 
-/* This has to change !!! */
-// die ('Username: ' . $modx->user->get('username'));
-if ($modx->user->hasSessionContext('mgr') ){
-   // die('Logged In');
+
+
+/* make sure user is logged in */
+if (! $modx->user->hasSessionContext($modx->context->get('key'))) {
+    //return 'Not Logged In';
+}
+
+if (! empty($groups)) {
+    $allGroups =  (! empty($allGroups)) && ($allGroups == '1');
+    $neededGroups = explode(',',$groups);
+    if (! $modx->user->isMember($neededGroups,$allGroups) ){
+       // return 'Not in group';
+    }
+}
+
+if (! empty($permissions)) {
+    $neededPermissions = explode(',',$permissions);
+    $authorized = false;
+    foreach ($neededPermissions as $perm) {
+        if (! $modx->hasPermission($perm) ){
+            $authorized = false;
+            break;
+        }
+    }
+    if (! authorized) {
+        return 'Do not have necessary permissions';
+    }
 }
 define('NEWSPUBLISHER_URL', 'core/components/newspublisher/');
 
