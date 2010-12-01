@@ -75,14 +75,14 @@ Fix/add &allowAnyPost
 
 /* make sure user is logged in */
 if (! $modx->user->hasSessionContext($modx->context->get('key'))) {
-    //return 'Not Logged In';
+    return 'Not Logged In';
 }
 
 if (! empty($groups)) {
     $allGroups =  (! empty($allGroups)) && ($allGroups == '1');
     $neededGroups = explode(',',$groups);
     if (! $modx->user->isMember($neededGroups,$allGroups) ){
-       // return 'Not in group';
+       return 'Not in group';
     }
 }
 
