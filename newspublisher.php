@@ -75,7 +75,7 @@ Fix/add &allowAnyPost
 
 /* make sure user is logged in */
 if (! $modx->user->hasSessionContext($modx->context->get('key'))) {
-    return 'Not Logged In';
+    // return 'Not Logged In';
 }
 
 if (! empty($groups)) {
