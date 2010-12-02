@@ -1,11 +1,10 @@
 NewsPublisher Extra for MODx Revolution
 =======================================
 
-##Warning: This project is in pre-alpha at this point. Do not install
-the project on a public web site!##
+##Warning: This project is in pre-alpha at this point. Do not install the project on a public web site!##
 
 ###Original Author: Raymond Irving###
-###Author: Bob Ray [Bob's Guides] http:/bobsguides.com)###
+###Author: Bob Ray [Bob's Guides] http:/bobsguides.com ##
 
 Because NewsPublisher is in a pre-alpha state, the security checks
 are not fully implemented and it might be possible for someone to
