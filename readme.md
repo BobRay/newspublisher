@@ -3,7 +3,7 @@ NewsPublisher Extra for MODx Revolution
 
 ##Warning: This project is in pre-alpha at this point. Do not install the project on a public web site!##
 
-**Original Author:** Raymond Irving
+**Original Author:** Raymond Irving  
 **Revolution Author:** Bob Ray [Bob's Guides](http://bobsguides.com)
 
 
