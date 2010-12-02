@@ -1,9 +1,15 @@
-Warning: This project is in pre-alpha at this point. Do not install
-the project on a public web site!
+NewsPublisher Extra for MODx Revolution
+=======================================
+
+##Warning: This project is in pre-alpha at this point. Do not install
+the project on a public web site!##
+
+###Original Author: Raymond Irving###
+###Author: Bob Ray [Bob's Guides] http:/bobsguides.com)###
 
 Because NewsPublisher is in a pre-alpha state, the security checks
 are not fully implemented and it might be possible for someone to
-edit *any* document on your site via the web if NewsPublisher is
+edit **any** document on your site via the web if NewsPublisher is
 installed.
 
 In addition, files and directories will soon be moving around as the
