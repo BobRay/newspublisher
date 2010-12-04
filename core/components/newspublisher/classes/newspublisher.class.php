@@ -69,9 +69,16 @@ class Newspublisher {
     }
 /* Check for a resource to edit in $_POST  */
 
-    public function init($richText) {
-        $language = isset($this->props['language']) ? $this->props['language'] . ':' : '';
-        $this->modx->lexicon->load($language.'newspublisher:default');
+    public function init($context) {
+
+        switch ($context) {
+            case 'mgr': break;
+            case 'web':
+            default:
+                $language = isset($this->props['language']) ? $this->props['language'] . ':' : '';
+                $this->modx->lexicon->load($language.'newspublisher:default');
+                break;
+        }
 
         /* see if we're editing an existing doc */
         $this->existing = false;
@@ -139,7 +146,8 @@ class Newspublisher {
        //set listbox max size
        $this->listboxmax = isset($this->props['listboxmax'])? $this->props['listboxmax'] : 8;
 
-       if ($richText) {
+       /* do rich text stuff */
+       if ($this->props['richText']) {
             /* set rich text content field */
             $ph = isset($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
             $this->modx->setPlaceholder('np.rt_content_1', $ph );

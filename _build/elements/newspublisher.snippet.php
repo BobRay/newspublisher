@@ -126,7 +126,8 @@ if (! empty($permissions)) {
         $np->setError($modx->lexicion('np_no_permissions'));
     }
 }
-$np->init($scriptProperties['richtext']);
+$np->init($modx->context->get('key'));
+
 if (isset($cancelId)) {
     $cancelUrl = $modx->makeUrl($cancelId,'','','full');
 } else {
