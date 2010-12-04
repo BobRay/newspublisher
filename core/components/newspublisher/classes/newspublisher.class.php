@@ -489,13 +489,8 @@ public function saveResource() {
     }
 
 
-    $fields['title'] = mysql_escape_string($this->modx->stripTags($fields['pagetitle']));
-    $fields['longtitle'] = mysql_escape_string($this->modx->stripTags($fields['longtitle']));
-    $fields['menutitle'] = mysql_escape_string($this->modx->stripTags($fields['menutitle']));
-    $fields['description'] = mysql_escape_string($this->modx->stripTags($fields['description']));
-    $fields['introtext'] = mysql_escape_string($this->modx->stripTags($fields['introtext'],$allowedTags));
-
-
+    $fields['title'] = $fields['pagetitle'];
+    
     $H=isset($hours)? $hours : 0;
     $M=isset($minutes)? $minutes: 1;
     $S=isset($seconds)? $seconds: 0;
