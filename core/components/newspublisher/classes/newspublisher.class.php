@@ -70,6 +70,9 @@ class Newspublisher {
 /* Check for a resource to edit in $_POST  */
 
      public function init($richText, $existing=false) {
+        $language = isset($language) ? $language . ':' : '';
+        $modx->lexicon->load($language.'newspublisher:default');
+        
         $this->aliastitle = isset($this->props['aliastitle'])? true : false;
         $this->clearcache = isset($this->props['clearcache']) ? true: false;
 
@@ -458,58 +461,58 @@ public function saveResource() {
         $fields['editedby'] = $userid;
     }
 
-        $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
+    $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
 
 
-        $content = $this->modx->stripTags($_POST['content'],$allowedTags);
+    $content = $this->modx->stripTags($_POST['content'],$allowedTags);
 
-        foreach($fields as $n=>$v) {
-            if(!empty($this->badwords)) $v = preg_replace($this->badwords,'[Filtered]',$v); // remove badwords
-            if (! is_array($v) ){
-                $v = $this->modx->stripTags(htmlspecialchars($v));
-            }
-            $content = str_replace('[+'.$n.'+]',$v,$content);
+    foreach($fields as $n=>$v) {
+        if(!empty($this->badwords)) $v = preg_replace($this->badwords,'[Filtered]',$v); // remove badwords
+        if (! is_array($v) ){
+            $v = $this->modx->stripTags(htmlspecialchars($v));
         }
+        $content = str_replace('[+'.$n.'+]',$v,$content);
+    }
 
 
-        $fields['title'] = mysql_escape_string($this->modx->stripTags($fields['pagetitle']));
-        $fields['longtitle'] = mysql_escape_string($this->modx->stripTags($fields['longtitle']));
-        $fields['menutitle'] = mysql_escape_string($this->modx->stripTags($fields['menutitle']));
-        $fields['description'] = mysql_escape_string($this->modx->stripTags($fields['description']));
-        $fields['introtext'] = mysql_escape_string($this->modx->stripTags($fields['introtext'],$allowedTags));
+    $fields['title'] = mysql_escape_string($this->modx->stripTags($fields['pagetitle']));
+    $fields['longtitle'] = mysql_escape_string($this->modx->stripTags($fields['longtitle']));
+    $fields['menutitle'] = mysql_escape_string($this->modx->stripTags($fields['menutitle']));
+    $fields['description'] = mysql_escape_string($this->modx->stripTags($fields['description']));
+    $fields['introtext'] = mysql_escape_string($this->modx->stripTags($fields['introtext'],$allowedTags));
 
 
-        $H=isset($hours)? $hours : 0;
-        $M=isset($minutes)? $minutes: 1;
-        $S=isset($seconds)? $seconds: 0;
+    $H=isset($hours)? $hours : 0;
+    $M=isset($minutes)? $minutes: 1;
+    $S=isset($seconds)? $seconds: 0;
 
-        $published = 'notSet';
-        // check published date
-        if($fields['pub_date']=="") {
-            $fields['pub_date']="0";
+    $published = 'notSet';
+    // check published date
+    if($fields['pub_date']=="") {
+        $fields['pub_date']="0";
+    } else {
+        list($Y, $m, $d) = sscanf($fields['pub_date'], "%4d-%2d-%2d");
+        $fields['pub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
+
+        if($fields['pub_date'] <= time()) {
+            $fields['published'] = '1';
         } else {
-            list($Y, $m, $d) = sscanf($fields['pub_date'], "%4d-%2d-%2d");
-            $fields['pub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
-
-            if($fields['pub_date'] <= time()) {
-                $fields['published'] = '1';
-            } else {
-                $fields['published'] = '0';
-            }
-
+            $fields['published'] = '0';
         }
 
-        // check unpublished date
-        if($fields['unpub_date']=="") {
-            $fields['unpub_date']="0";
-        } else {
-            list($Y, $m, $d) = sscanf($fields['unpub_date'], "%4d-%2d-%2d");
-            $fields['unpub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
-            if($fields['unpub_date'] < time()) {
-                $fields['published'] = '0';
-            }
+    }
 
+    // check unpublished date
+    if($fields['unpub_date']=="") {
+        $fields['unpub_date']="0";
+    } else {
+        list($Y, $m, $d) = sscanf($fields['unpub_date'], "%4d-%2d-%2d");
+        $fields['unpub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
+        if($fields['unpub_date'] < time()) {
+            $fields['published'] = '0';
         }
+
+    }
 
 
         /* post news content, resource groups, and published status */

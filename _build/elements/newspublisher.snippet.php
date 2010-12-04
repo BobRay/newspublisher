@@ -88,9 +88,6 @@ Fix/add &allowAnyPost
 
 */
 
-$language = isset($language) ? $language . ':' : '';
-$modx->lexicon->load($language.'newspublisher:default');
-
 require_once $modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/').'classes/newspublisher.class.php';
 $np = new Newspublisher($modx, $scriptProperties);
 
