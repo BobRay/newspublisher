@@ -173,13 +173,6 @@ $ph = isset($rtsummary) ? 'modx-richtext':'introtext';
 $modx->setPlaceholder('np.rt_summary_2', $ph );
 
 unset($ph);
-/* set TV rich text fields */
-//$modx->setPlaceholder('np.tv_rt1','MODX_RichTextWidget');
-//$modx->setPlaceholder('np.tv_rt2','modx-richtext');
-
-
-
-
 
 //set listbox max size
 $scriptProperties['listboxmax'] = isset($listboxmax)? $listboxmax : 8;
@@ -274,7 +267,6 @@ if ($isPostBack) {
         }
         return($formTpl);
     } else {
-        // die('UNSETTING');
         $np->forward($scriptProperties['postId']);
     }
 

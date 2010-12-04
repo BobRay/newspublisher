@@ -77,7 +77,7 @@ class Newspublisher {
                unset($ph);
            } else {
                $msg = str_replace('[[+id]]',$existing, $this->modx->lexicon('np_no_resource'));
-               $this->errors[] = $msg;
+               $this->setError($msg);
 
            }
        }
@@ -212,7 +212,7 @@ public function displayTVs() {
     if (! empty ($this->props['orderTVs'])) {
         $ids = explode(',', $this->props['orderTVs']);
         if (count($ids) == 0) {
-            $this->errors[] = $this->modx->lexicon('np_no_tvs');
+            $this->setError($this->modx->lexicon('np_no_tvs'));
         }
      foreach($ids as $id) {
          foreach ($tvTemplates as $tvTemplate) {
@@ -517,7 +517,7 @@ public function saveResource() {
             return '';
         }
         if ( ! $this->resource->save() ){
-            $this->errors[] = $this->modx->lexicon('np_resource_save_failed');
+            $this->setError($this->modx->lexicon('np_resource_save_failed'));
             return '';
         };
         $resourceId = $this->resource->get('id');
@@ -630,6 +630,14 @@ protected function stripslashes_deep($value) {
 public function getErrors() {
     return $this->errors;
 }
+
+public function setError($msg) {
+    $this->errors[] = $msg;
+}
+/** Set class property */
+public function setProperty($prop,$value) {
+    $this->props[$prop] = $value;
+}
 /* returns the template ID */
 protected function getTemplate() {
     if ($this->existing) {
@@ -639,7 +647,7 @@ protected function getTemplate() {
 
     if ($this->props['template'] == 'parent') {
         if (empty($this->props['folder'])) {
-            $this->errors[] = $this->modx->lexicon('np_folder_not_sent');
+            $this->setError($this->modx->lexicon('np_folder_not_sent'));
         }
         $parentObj = $this->modx->getObject('modResource',$this->props['folder']);
         if ($parentObj) {
@@ -654,13 +662,13 @@ protected function getTemplate() {
             /* make sure it exists */
             if ( ! $this->modx->getObject('modTemplate',$this->props['template']) ) {
                 $msg = str_replace('[[+id]]', $this->props['template'], $this->modx->lexicon('np_no_template_id') );
-                $this->errors[] = $msg;
+                $this->SetError($msg);
             }
         } else { /* user sent a template name */
             $t = $this->modx->getObject('modTemplate',array('templatename'=>$this->props['template']));
             if (! $t) {
                 $msg = str_replace('[[+name]]', $this->props['template'], $this->modx->lexicon('np_no_template_name') );
-                $this->errors[] = $msg;
+                $this->setError($msg);
             }
             $template = $t? $t->get('id') : $this->modx->getOption('default_template');
             unset($t);
@@ -735,7 +743,7 @@ protected function setGroups($parentObj, $resourceId) {
 
                 } else {
                     $msg = str_replace('[[+name]]',$rGroup,$this->modx->lexicon('np_no_resource_group') );
-                    $this->errors[] = $msg;
+                    $this->setError($msg);
                 }
             } /* end foreach($rGroups) */
         } /* end if (count($rGroups)) */
@@ -743,6 +751,8 @@ protected function setGroups($parentObj, $resourceId) {
     } /* end use group list in parameter */
 
 } /* end setGroups function */
+
+/** Set class error */
 
 
 
