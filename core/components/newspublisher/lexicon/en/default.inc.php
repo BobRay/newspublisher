@@ -27,6 +27,7 @@
  */
 $_lang['np_not_in_group'] = 'You are not in any of the authorices user groups.';
 $_lang['np_not_logged_in'] = 'You must be logged in to post.';
+$_lang['np_no_permissions'] = 'You do not have the necessary permissions.';
 $_lang['np_no_error_tpl'] = 'Could not find &amp;errortpl: [[+tpl]]';
 $_lang['np_main_header'] = 'Create/Edit Resource';
 $_lang['np_error_presubmit'] = 'Sorry . . . There were one or more problems in producing the form:';

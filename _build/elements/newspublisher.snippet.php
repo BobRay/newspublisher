@@ -127,7 +127,7 @@ if (! empty($permissions)) {
         }
     }
     if (! authorized) {
-        return 'Do not have necessary permissions';
+        return $modx->lexicion('np_no_permissions');
     }
 }
 
