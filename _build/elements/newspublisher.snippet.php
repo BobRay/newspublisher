@@ -107,12 +107,6 @@ if ($existing) {
         $np->setError($modx->lexicon('np_not_logged_in'));
     }
 }
-// get header
-//$scriptProperties['header'] = isset($headertpl) ? "[[$".$headertpl."]]":'';
-
-// get footer
-//$scriptProperties['footer'] = isset($footertpl) ? "[[$".$footertpl."]]":'';
-
 
 /* if $canpost is empty, allow anonymous posting */
 if (! empty($canpost)) {
