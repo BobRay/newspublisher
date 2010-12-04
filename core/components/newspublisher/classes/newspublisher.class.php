@@ -50,6 +50,7 @@ class Newspublisher {
     protected $clearcache;
     protected $header;
     protected $footer;
+    protected $listboxmax;
 
 
 
@@ -122,7 +123,7 @@ class Newspublisher {
            $this->modx->regClientCSS($css);
        }
        //set listbox max size
-       $this->props['listboxmax'] = isset($this->props['listboxmax'])? $this->props['listboxmax'] : 8;
+       $this->listboxmax = isset($this->props['listboxmax'])? $this->props['listboxmax'] : 8;
 
        if ($richText) {
             /* set rich text content field */
@@ -138,7 +139,7 @@ class Newspublisher {
             $this->modx->setPlaceholder('np.rt_summary_2', $ph );
 
             unset($ph);
-           //$corePath=$this->modx->getOption('core_path').'components/tinymcefe/';
+           
            $tinyPath = $this->modx->getOption('core_path').'components/tinymce/';
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/ext-all.js');
@@ -337,7 +338,7 @@ if (! empty($this->allTvs)) {
                 if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
                     $multiple = ($tvType == 'listbox-multiple')? 'multiple="multiple" ': '';
                     $count = count($options);
-                    $max = $this->props['listboxmax'];
+                    $max = $this->listboxmax;
                     $size = ($count <= $max)? $count : $max;
                     $formTpl .= "\n" . '<select ' . 'name="'. $fields['name'] . $arrayPostfix . '" ' .  $multiple . 'size="' . $size . '">' . "\n";
                 }
