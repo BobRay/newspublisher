@@ -53,9 +53,9 @@ class Newspublisher {
         $this->modx =& $modx;
         $this->props =& $props;
         /* NP paths; Set the properties in NP only for development */
-        $corePath = $this->modx->getOption('np.core_path',null,MODX_CORE_PATH.'components/newspublisher/');
-        $assetsPath = $this->modx->getOption('np.assets_path',null,MODX_ASSETS_PATH.'components/newspublisher/');
-        $assetsUrl = $this->modx->getOption('np.assets_url',null,MODX_ASSETS_URL.'components/newspublisher/');
+        $this->corePath = $this->modx->getOption('np.core_path',null,MODX_CORE_PATH.'components/newspublisher/');
+        $this->assetsPath = $this->modx->getOption('np.assets_path',null,MODX_ASSETS_PATH.'components/newspublisher/');
+        $this->assetsUrl = $this->modx->getOption('np.assets_url',null,MODX_ASSETS_URL.'components/newspublisher/');
     }
 
     public function setPostBack($setting) {
@@ -83,8 +83,8 @@ class Newspublisher {
        }
        $this->modx->lexicon->load('core:resource');
        $this->template = $this->getTemplate();
-       $this->modx->regClientCSS(NEWSPUBLISHER_URL . 'css/datepicker.css');
-       $this->modx->regClientStartupScript(NEWSPUBLISHER_URL . 'js/datepicker.js');
+       $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
+       $this->modx->regClientStartupScript($this->assetsUrl . 'datepicker/js/datepicker.js');
        $this->header = $this->modx->getChunk($this->props['headerTpl']);
        $this->footer = $this->modx->getChunk($this->props['footerTpl']);
 
