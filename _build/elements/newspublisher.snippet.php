@@ -95,9 +95,9 @@ if (! $modx->user->hasSessionContext($modx->context->get('key'))) {
     // return 'Not Logged In';
 }
 
-if (! empty($groups)) {
+if (! empty($canpost)) {
     $allGroups =  (! empty($allGroups)) && ($allGroups == '1');
-    $neededGroups = explode(',',$groups);
+    $neededGroups = explode(',',$canpost);
     if (! $modx->user->isMember($neededGroups,$allGroups) ){
        return 'Not in group';
     }
