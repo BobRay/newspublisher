@@ -86,7 +86,22 @@ class Newspublisher {
             $this->existing = is_numeric($_POST['np_doc_id'])? $_POST['np_doc_id'] : false;
         }
         /* need to forward this from $_POST so we know it's an existing doc */
+
         if($this->existing) {
+            $this->resource = $this->modx->getObject('modResource', $this->existing);
+            if ($this->resource) {
+               $ph = $this->resource->toArray();
+               $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
+               $ph['unpub_date'] = $ph['unpub_date']? substr($ph['unpub_date'],0,10) : '';
+
+               $this->modx->toPlaceholders($ph);
+               unset($ph);
+            } else {
+               $msg = str_replace('[[+id]]',$existing, $this->modx->lexicon('np_no_resource'));
+               $this->setError($msg);
+
+            }
+
             $stuff = '<input type="hidden" name="np_existing" value="true">' . "\n" .
             '<input type="hidden" name="np_doc_id" value="' . $this->resource->get('id') . '">';
             $this->modx->setPlaceholder('np_post_stuff',$stuff);
@@ -105,23 +120,7 @@ class Newspublisher {
         // get menu status
         $this->hidemenu = isset($this->props['showinmenu']) && $this->props['showinmenu']=='1' ? '0' : '1';
 
-       if ($existing) {
-           // die('Existing: ' . $existing);
-           $this->existing=$existing;
-           $this->resource = $this->modx->getObject('modResource',$existing);
-           if ($this->resource) {
-               $ph = $this->resource->toArray();
-               $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
-               $ph['unpub_date'] = $ph['unpub_date']? substr($ph['unpub_date'],0,10) : '';
-
-               $this->modx->toPlaceholders($ph);
-               unset($ph);
-           } else {
-               $msg = str_replace('[[+id]]',$existing, $this->modx->lexicon('np_no_resource'));
-               $this->setError($msg);
-
-           }
-       }
+      
        $this->modx->lexicon->load('core:resource');
        $this->template = $this->getTemplate();
        $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
@@ -147,7 +146,8 @@ class Newspublisher {
        $this->listboxmax = isset($this->props['listboxmax'])? $this->props['listboxmax'] : 8;
 
        /* do rich text stuff */
-       if ($this->props['richText']) {
+       if ($this->props['richtext']) {
+           
             /* set rich text content field */
             $ph = isset($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
             $this->modx->setPlaceholder('np.rt_content_1', $ph );
