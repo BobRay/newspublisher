@@ -45,6 +45,11 @@ class Newspublisher {
     protected $corePath; // path to NewsPublisher Core
     protected $assetsPath; // path to NewsPublisher assets dir
     protected $assetsUrl; // URL to NewsPublisher assets dir
+    protected $hidemenu; // hide docs from menu
+    protected $aliastitle; // use alias as title
+    protected $clearcache;
+    protected $header;
+    protected $footer;
 
 
 
@@ -64,6 +69,20 @@ class Newspublisher {
 /* Check for a resource to edit in $_POST  */
 
      public function init($richText, $existing=false) {
+        $this->aliastitle = isset($this->props['aliastitle'])? true : false;
+        $this->clearcache = isset($this->props['clearcache']) ? true: false;
+
+        /* get folder id where we should store articles
+           else store under current document */
+        $this->folder = isset($this->props['folder']) ? intval($this->props['folder']):$modx->resource->get('id');
+        if(isset($this->props['badwords'])) {
+            $this->badwords = str_replace(' ','', $this->props['badwords']);
+            $this->badwords = "/".str_replace(',','|', $this->badwords)."/i";
+        }
+        // get menu status
+        $this->hidemenu = isset($this->props['showinmenu']) && $this->props['showinmenu']=='1' ? '0' : '1';
+
+
        if ($existing) {
            // die('Existing: ' . $existing);
            $this->existing=$existing;
@@ -85,8 +104,8 @@ class Newspublisher {
        $this->template = $this->getTemplate();
        $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
        $this->modx->regClientStartupScript($this->assetsUrl . 'datepicker/js/datepicker.js');
-       $this->header = $this->modx->getChunk($this->props['headerTpl']);
-       $this->footer = $this->modx->getChunk($this->props['footerTpl']);
+       $this->header = isset($this->props['headertpl']) ? $this->modx->getChunk($this->props['headertpl']) : '';
+       $this->footer = isset($this->props['footertpl']) ? $this->modx->getChunk($this->props['footertpl']):'';
 
        /* inject NP CSS file */
        /* empty but sent parameter means use no CSS file at all */
@@ -102,8 +121,23 @@ class Newspublisher {
        if ($css !== false) {
            $this->modx->regClientCSS($css);
        }
+       //set listbox max size
+       $this->props['listboxmax'] = isset($this->props['listboxmax'])? $this->props['listboxmax'] : 8;
 
        if ($richText) {
+            /* set rich text content field */
+            $ph = isset($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
+            $this->modx->setPlaceholder('np.rt_content_1', $ph );
+            $ph = isset($this->props['rtcontent']) ? 'modx-richtext':'content';
+            $this->modx->setPlaceholder('np.rt_content_2', $ph );
+
+            /* set rich text summary field */
+            $ph = isset($this->props['rtsummary']) ? 'MODX_RichTextWidget':'introtext';
+            $this->modx->setPlaceholder('np.rt_summary_1', $ph );
+            $ph = isset($this->props['rtsummary']) ? 'modx-richtext':'introtext';
+            $this->modx->setPlaceholder('np.rt_summary_2', $ph );
+
+            unset($ph);
            //$corePath=$this->modx->getOption('core_path').'components/tinymcefe/';
            $tinyPath = $this->modx->getOption('core_path').'components/tinymce/';
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
@@ -184,7 +218,7 @@ public function displayForm() {
     </form>
 </div>';
 
-/* need to forward this from $_POST so we know it's and existing dos */
+/* need to forward this from $_POST so we know it's an existing doc */
     if($this->existing) {
         $stuff = '<input type="hidden" name="np_existing" value="true">' . "\n" .
         '<input type="hidden" name="np_doc_id" value="' . $this->resource->get('id') . '">';
@@ -405,7 +439,7 @@ public function saveResource() {
         $fields['createdon'] = time();
 
    // set alias name of document used to store articles
-        if(!$aliastitle) {
+        if(!$this->aliastitle) {
             $alias = 'article-' . time();
         } else {
             $alias = $this->modx->stripTags($_POST['pagetitle']);
@@ -429,7 +463,7 @@ public function saveResource() {
         $content = $this->modx->stripTags($_POST['content'],$allowedTags);
 
         foreach($fields as $n=>$v) {
-            if(!empty($badwords)) $v = preg_replace($badwords,'[Filtered]',$v); // remove badwords
+            if(!empty($this->badwords)) $v = preg_replace($this->badwords,'[Filtered]',$v); // remove badwords
             if (! is_array($v) ){
                 $v = $this->modx->stripTags(htmlspecialchars($v));
             }
@@ -483,10 +517,10 @@ public function saveResource() {
             $fields['editedon'] = '0';
             $fields['editedby'] = '0';
             $fields['deleted'] = '0';
-            $fields['hidemenu'] = $this->props['hidemenu'];
+            $fields['hidemenu'] = $this->hidemenu;
             $fields['template'] = $this->template;
             $fields['content']  = $this->header . $content . $this->footer;
-            $fields['parent'] = isset($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');;
+            $fields['parent'] = $this->folder;
         }
 
         $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
@@ -593,7 +627,7 @@ public function forward($postId) {
             $postId = $this->existing? $this->existing : $this->resource->get('id');
         }
     /* clear cache on parameter or new resource */
-       if ($this->props['clearcache'] || (! $this->existing) ) {
+       if ($this->clearcache || (! $this->existing) ) {
            $cacheManager = $this->modx->getCacheManager();
            $cacheManager->clearCache(array (
                 "{$resource->context_key}/",
@@ -751,10 +785,6 @@ protected function setGroups($parentObj, $resourceId) {
     } /* end use group list in parameter */
 
 } /* end setGroups function */
-
-/** Set class error */
-
-
 
 } /* end class */
 

@@ -88,11 +88,14 @@ Fix/add &allowAnyPost
 
 */
 
-/* see if we're editing an existing doc */
-
 $language = isset($language) ? $language . ':' : '';
 $modx->lexicon->load($language.'newspublisher:default');
 
+require_once $modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/').'classes/newspublisher.class.php';
+$np = new Newspublisher($modx, $scriptProperties);
+
+
+/* see if we're editing an existing doc */
 $existing = false;
 if (isset($_POST['np_existing']) && $_POST['np_existing'] == 'true' ) {
     $existing = is_numeric($_POST['np_doc_id'])? $_POST['np_doc_id'] : false;
@@ -101,16 +104,22 @@ if (isset($_POST['np_existing']) && $_POST['np_existing'] == 'true' ) {
 /* make sure user is logged in for existing doc */
 if ($existing) {
     if (! $modx->user->hasSessionContext($modx->context->get('key'))) {
-        return $modx->lexicion('np_not_logged_in');
+        $np->setError($modx->lexicon('np_not_logged_in'));
     }
 }
+// get header
+//$scriptProperties['header'] = isset($headertpl) ? "[[$".$headertpl."]]":'';
+
+// get footer
+//$scriptProperties['footer'] = isset($footertpl) ? "[[$".$footertpl."]]":'';
+
 
 /* if $canpost is empty, allow anonymous posting */
 if (! empty($canpost)) {
     $allGroups =  (! empty($allGroups)) && ($allGroups == '1');
     $neededGroups = explode(',',$canpost);
     if (! $modx->user->isMember($neededGroups,$allGroups) ){
-       return $modx->lexicon('np_not_in_group');
+       $np->setError($modx->lexicon('np_not_in_group'));
     }
 } else {
     $scriptProperties['allowAnyPost'] = true;
@@ -127,71 +136,19 @@ if (! empty($permissions)) {
         }
     }
     if (! authorized) {
-        return $modx->lexicion('np_no_permissions');
+        $np->setError($modx->lexicion('np_no_permissions'));
     }
 }
-
-
-
+$np->init($scriptProperties['richtext'], $existing);
 if (isset($cancelId)) {
     $cancelUrl = $modx->makeUrl($cancelId,'','','full');
 } else {
     $cancelUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $modx->resource->get('id');
 }
-
 $modx->setPlaceholder('np.cancel_url',$cancelUrl);
-
-
 
 $errorHeaderPresubmit = $modx->lexicon('np_error_presubmit');
 $errorHeader = isset($errorHeader) ? $errorHeader : $modx->lexicon('np_error_submit');
-
-// get clear cache
-$clearcache     = isset($clearcache) ? 1:0;
-
-// get alias title
-$aliastitle     = isset($aliastitle) ? 1:0;
-
-// get rich text
-
-$richtext = isset($richtext) ? $richtext : 1;
-
-// get folder id where we should store articles
-// else store under current document
-$folder = isset($folder) ? intval($folder):$modx->resource->get('id');
-
-/* set rich text content field */
-$ph = isset($rtcontent) ? 'MODX_RichTextWidget':'content';
-$modx->setPlaceholder('np.rt_content_1', $ph );
-$ph = isset($rtcontent) ? 'modx-richtext':'content';
-$modx->setPlaceholder('np.rt_content_2', $ph );
-
-/* set rich text summary field */
-$ph = isset($rtsummary) ? 'MODX_RichTextWidget':'introtext';
-$modx->setPlaceholder('np.rt_summary_1', $ph );
-$ph = isset($rtsummary) ? 'modx-richtext':'introtext';
-$modx->setPlaceholder('np.rt_summary_2', $ph );
-
-unset($ph);
-
-//set listbox max size
-$scriptProperties['listboxmax'] = isset($listboxmax)? $listboxmax : 8;
-
-// get header
-$scriptProperties['header'] = isset($headertpl) ? "[[$".$headertpl."]]":'';
-
-// get footer
-$scriptProperties['footer'] = isset($footertpl) ? "[[$".$footertpl."]]":'';
-
-// get badwords
-if(isset($badwords)) {
-    $badwords = str_replace(' ','', $badwords);
-    $badwords = "/".str_replace(',','|', $badwords)."/i";
-}
-
-// get menu status
-$scriptProperties['hidemenu'] = isset($showinmenu) && $showinmenu=='1' ? '0' : '1';
-
 
 // get errorTpl
 
@@ -202,13 +159,6 @@ if(empty($errorTpl)) {
    return $msg;
 }
 
-// ************************
-$message = '';
-require_once $modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/').'classes/newspublisher.class.php';
-$np = new Newspublisher($modx, $scriptProperties);
-
-
-$np->init($scriptProperties['richtext'], $existing);
 
 $formTpl .= $np->displayForm();
 
@@ -216,6 +166,7 @@ $formTpl .= $np->displayForm();
 $errors = $np->getErrors();
 
 if (! empty($errors) ) {
+   
     $modx->setPlaceholder('np.error_header',$errorHeaderPresubmit);
     foreach($errors as $error) {
         // $errorMessage .= '<p class = "error">' . $error . '</p>';
@@ -272,13 +223,10 @@ if ($isPostBack) {
 
 
 } else {
-    if(!$allowAnyPost && !$modx->user->isMember($postgrp)) {
-                $formTpl = '';
-    } else {
-        foreach($_POST as $n=>$v) {
+    foreach($_POST as $n=>$v) {
             $formTpl = str_replace('[[+'.$n.']]',$v,$formTpl);
-        }
     }
+    
             // return form
     return $formTpl;
 }
