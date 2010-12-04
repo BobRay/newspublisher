@@ -92,11 +92,11 @@ class Newspublisher {
        /* empty but sent parameter means use no CSS file at all */
 
        if ( ! isset($this->props['cssfile'])) { /* nothing sent - use default */
-           $css = NEWSPUBLISHER_URL . 'css/newspublisher.css';
+           $css = $this->assetsUrl . 'css/newspublisher.css';
        } else if (empty($this->props['cssfile']) ) { /* empty param -- no css file */
            $css = false;
        } else {  /* set but not empty -- use it */
-           $css = MODX_CORE_URL . 'components/newspublisher/css/' . $this->props['cssfile'];
+           $css = $this->assetsUrl . 'components/newspublisher/css/' . $this->props['cssfile'];
        }
 
        if ($css !== false) {
