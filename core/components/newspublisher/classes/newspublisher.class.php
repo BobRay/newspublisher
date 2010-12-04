@@ -69,10 +69,22 @@ class Newspublisher {
     }
 /* Check for a resource to edit in $_POST  */
 
-     public function init($richText, $existing=false) {
+    public function init($richText) {
         $language = isset($this->props['language']) ? $this->props['language'] . ':' : '';
         $this->modx->lexicon->load($language.'newspublisher:default');
-        
+
+        /* see if we're editing an existing doc */
+        $this->existing = false;
+        if (isset($_POST['np_existing']) && $_POST['np_existing'] == 'true' ) {
+            $this->existing = is_numeric($_POST['np_doc_id'])? $_POST['np_doc_id'] : false;
+        }
+        /* need to forward this from $_POST so we know it's an existing doc */
+        if($this->existing) {
+            $stuff = '<input type="hidden" name="np_existing" value="true">' . "\n" .
+            '<input type="hidden" name="np_doc_id" value="' . $this->resource->get('id') . '">';
+            $this->modx->setPlaceholder('np_post_stuff',$stuff);
+        }
+
         $this->aliastitle = isset($this->props['aliastitle'])? true : false;
         $this->clearcache = isset($this->props['clearcache']) ? true: false;
 
@@ -85,7 +97,6 @@ class Newspublisher {
         }
         // get menu status
         $this->hidemenu = isset($this->props['showinmenu']) && $this->props['showinmenu']=='1' ? '0' : '1';
-
 
        if ($existing) {
            // die('Existing: ' . $existing);
@@ -222,12 +233,7 @@ public function displayForm() {
     </form>
 </div>';
 
-/* need to forward this from $_POST so we know it's an existing doc */
-    if($this->existing) {
-        $stuff = '<input type="hidden" name="np_existing" value="true">' . "\n" .
-        '<input type="hidden" name="np_doc_id" value="' . $this->resource->get('id') . '">';
-        $this->modx->setPlaceholder('np_post_stuff',$stuff);
-    }
+
 
     return $formTpl;
 

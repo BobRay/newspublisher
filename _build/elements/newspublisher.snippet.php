@@ -92,11 +92,7 @@ require_once $modx->getOption('np.core_path',null,$modx->getOption('core_path').
 $np = new Newspublisher($modx, $scriptProperties);
 
 
-/* see if we're editing an existing doc */
-$existing = false;
-if (isset($_POST['np_existing']) && $_POST['np_existing'] == 'true' ) {
-    $existing = is_numeric($_POST['np_doc_id'])? $_POST['np_doc_id'] : false;
-}
+
 
 /* make sure user is logged in for existing doc */
 if ($existing) {
@@ -130,7 +126,7 @@ if (! empty($permissions)) {
         $np->setError($modx->lexicion('np_no_permissions'));
     }
 }
-$np->init($scriptProperties['richtext'], $existing);
+$np->init($scriptProperties['richtext']);
 if (isset($cancelId)) {
     $cancelUrl = $modx->makeUrl($cancelId,'','','full');
 } else {
