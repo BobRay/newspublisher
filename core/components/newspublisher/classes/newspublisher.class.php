@@ -42,6 +42,9 @@ class Newspublisher {
     protected $resource;
     protected $existing; // editing an existing resource
     protected $isPostBack;
+    protected $corePath; // path to NewsPublisher Core
+    protected $assetsPath; // path to NewsPublisher assets dir
+    protected $assetsUrl; // URL to NewsPublisher assets dir
 
 
 
@@ -49,6 +52,10 @@ class Newspublisher {
     public function __construct(&$modx, &$props) {
         $this->modx =& $modx;
         $this->props =& $props;
+        /* NP paths; Set the properties in NP only for development */
+        $corePath = $this->modx->getOption('np.core_path',null,MODX_CORE_PATH.'components/newspublisher/');
+        $assetsPath = $this->modx->getOption('np.assets_path',null,MODX_ASSETS_PATH.'components/newspublisher/');
+        $assetsUrl = $this->modx->getOption('np.assets_url',null,MODX_ASSETS_URL.'components/newspublisher/');
     }
 
     public function setPostBack($setting) {
