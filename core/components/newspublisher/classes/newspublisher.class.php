@@ -70,8 +70,8 @@ class Newspublisher {
 /* Check for a resource to edit in $_POST  */
 
      public function init($richText, $existing=false) {
-        $language = isset($language) ? $language . ':' : '';
-        $modx->lexicon->load($language.'newspublisher:default');
+        $language = isset($this->props['language']) ? $this->props['language'] . ':' : '';
+        $this->modx->lexicon->load($language.'newspublisher:default');
         
         $this->aliastitle = isset($this->props['aliastitle'])? true : false;
         $this->clearcache = isset($this->props['clearcache']) ? true: false;
