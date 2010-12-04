@@ -28,7 +28,6 @@
 /* To Do:
 placeholder prefixes
 phpdoc stuff
-remove table css
 image TVs
 date tvs
 Check permissions?
@@ -85,24 +84,39 @@ Fix/add &allowAnyPost
     &errortpl    -  (optional) name of Tpl chunk for formatting field errors
     &groups      - resource groups to put new document in (no effect with existing docs).
                    set to 'parent' to use parent's groups.
+    &language    - language to use
 
 */
 
+/* see if we're editing an existing doc */
 
+$language = isset($language) ? $language . ':' : '';
+$modx->lexicon->load($language.'newspublisher:default');
 
-/* make sure user is logged in */
-if (! $modx->user->hasSessionContext($modx->context->get('key'))) {
-    // return 'Not Logged In';
+$existing = false;
+if (isset($_POST['np_existing']) && $_POST['np_existing'] == 'true' ) {
+    $existing = is_numeric($_POST['np_doc_id'])? $_POST['np_doc_id'] : false;
 }
 
+/* make sure user is logged in for existing doc */
+if ($existing) {
+    if (! $modx->user->hasSessionContext($modx->context->get('key'))) {
+        return $modx->lexicion('np_not_logged_in');
+    }
+}
+
+/* if $canpost is empty, allow anonymous posting */
 if (! empty($canpost)) {
     $allGroups =  (! empty($allGroups)) && ($allGroups == '1');
     $neededGroups = explode(',',$canpost);
     if (! $modx->user->isMember($neededGroups,$allGroups) ){
-       return 'Not in group';
+       return $modx->lexicon('np_not_in_group');
     }
+} else {
+    $scriptProperties['allowAnyPost'] = true;
 }
 
+/* check for required permissions */
 if (! empty($permissions)) {
     $neededPermissions = explode(',',$permissions);
     $authorized = false;
@@ -116,10 +130,8 @@ if (! empty($permissions)) {
         return 'Do not have necessary permissions';
     }
 }
-define('NEWSPUBLISHER_URL', 'assets/components/newspublisher/');
 
-$language = isset($language) ? $language . ':' : '';
-$modx->lexicon->load($language.'newspublisher:default');
+
 
 if (isset($cancelId)) {
     $cancelUrl = $modx->makeUrl($cancelId,'','','full');
@@ -129,9 +141,7 @@ if (isset($cancelId)) {
 
 $modx->setPlaceholder('np.cancel_url',$cancelUrl);
 
-$postgrp = isset($canpost) ? explode(",",$canpost):array();
-$allowAnyPost = count($postgrp)==0 ? true : false;
-$scriptProperties['allowAnyPost'] = $allowAnyPost;
+
 
 $errorHeaderPresubmit = $modx->lexicon('np_error_presubmit');
 $errorHeader = isset($errorHeader) ? $errorHeader : $modx->lexicon('np_error_submit');
@@ -204,15 +214,7 @@ $message = '';
 require_once $modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/').'classes/newspublisher.class.php';
 $np = new Newspublisher($modx, $scriptProperties);
 
-$existing = false;
 
-//die('np_existing: ' . $_POST['np_existing'] . '<br />Doc ID: ' . $_POST['np_doc_id']);
-
-if (isset($_POST['np_existing']) && $_POST['np_existing'] == 'true' ) {
-    $existing = is_numeric($_POST['np_doc_id'])? $_POST['np_doc_id'] : false;
-
-    //die('np_existing: ' . $_POST['np_existing'] . '<br />Doc ID: ' . $_POST['np_doc_id']);
-}
 $np->init($scriptProperties['richtext'], $existing);
 
 $formTpl .= $np->displayForm();

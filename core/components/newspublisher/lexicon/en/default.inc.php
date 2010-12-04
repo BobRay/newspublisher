@@ -23,8 +23,10 @@
  * Default Lexicon Topic
  *
  * @package newspublisher
- * @subpackge lexicon
+ * @subpackage lexicon
  */
+$_lang['np_not_in_group'] = 'You are not in any of the authorices user groups.';
+$_lang['np_not_logged_in'] = 'You must be logged in to post.';
 $_lang['np_no_error_tpl'] = 'Could not find &amp;errortpl: [[+tpl]]';
 $_lang['np_main_header'] = 'Create/Edit Resource';
 $_lang['np_error_presubmit'] = 'Sorry . . . There were one or more problems in producing the form:';
@@ -39,5 +41,6 @@ $_lang['np_folder_not_sent'] = 'You set &amp;template to parent but did not incl
 $_lang['np_resource_save_failed'] = 'An error occured when saving the resource.';
 $_lang['np_to_template_id'] = 'There is no template with this number: [[+id]].';
 $_lang['np_to_template_name'] = 'There is no template with this name: [[+name]].';
+
 
 
