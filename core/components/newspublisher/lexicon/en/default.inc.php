@@ -33,6 +33,7 @@ $_lang['np_main_header'] = 'Create/Edit Resource';
 $_lang['np_error_presubmit'] = 'Sorry . . . There were one or more problems in producing the form:';
 $_lang['np_error_submit'] = 'Sorry . . . There were one or more problems with your submission:';
 $_lang['np_error_required'] = 'The [[+name]] field is required.';
+$_lang['np_missing_field'] = 'Missing field: [[+name]].';
 $_lang['np_no_resource_group'] = 'Could not find [[+name]] resource group.';
 $_lang['np_no_resource'] = 'Failed to get resource: [[+id]].';
 $_lang['np_no_template_name'] = 'Failed to get template: [[+name]].';

@@ -6,7 +6,7 @@ div.newspublisher {
 div.newspublisher label {
     width: 10em;
     text-align: left;
-    margin: 15px 5px 3px 0px;
+    margin: 12px 5px 3px 0px;
     padding:0;
     display: block;
     font-weight: bold;
@@ -50,10 +50,16 @@ span.errormessage {
     color:red;
     font-weight: bold;
     display:block;
-    margin:30px 0px 5px 0px;
+    margin:5px 0px 5px 0px;
     padding:0;
 }
-
+span.fielderrormessage {
+    color:red;
+    font-weight: bold;
+    display:block;
+    margin:20px 0px 0px 0px;
+    padding:0;
+}
 div.newspublisher input.submit {
     display:inline;
     margin: 30px;
@@ -76,7 +82,7 @@ div.newspublisher input.radio {
 div.newspublisher fieldset {
     display: block;
     padding:5px 5px 10px 10px;
-    margin:20px 0px 0px 0px;
+    margin:10px 0px 0px 10px;
 }
 fieldset p {
   margin:0;

@@ -227,6 +227,7 @@ public function displayForm() {
         <h2>[[%np_main_header]]</h2>
         [[!+np.error_header:ifnotempty=`<h3>[[!+np.error_header]]</h3>`]]
         [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
+        [[!+np.errors_submit:ifnotempty=`[[!+np.errors_submit]]`]]
         [[!+np.errors:ifnotempty=`[[!+np.errors]]`]]
         <form action="[[~[[*id]]]]" method="post">
 
@@ -748,16 +749,23 @@ public function validate($errorTpl) {
         foreach($fields as $field) {
             if (empty($_POST[$field]) ) {
                 $success = false;
+                /* set ph for field error msg */
                 $msg = $this->modx->lexicon('np_error_required');
                 $msg = str_replace('[[+name]]',$field,$msg);
-                // if (empty($errorTpl)) die('No error Tpl');
                 $msg = str_replace('[[+np.error]]',$msg,$errorTpl);
                 $ph =  'np.error_' . $field;
                 $this->modx->setPlaceholder($ph,$msg);
+
+                /* set error for header */
+                $msg = $this->modx->lexicon('np_missing_field');
+                $msg = str_replace('[[+name]]',$field,$msg);
+                $this->setError($msg);
+
             }
         }
     }
-   return $success;
+    
+    return $success;
 }
 /* make the parent into a folder if it's not already */
 protected function makeFolder(&$parentObj) {

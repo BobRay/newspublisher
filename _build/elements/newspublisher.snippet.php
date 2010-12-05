@@ -138,7 +138,7 @@ if (isset($cancelId)) {
 $modx->setPlaceholder('np.cancel_url',$cancelUrl);
 
 $errorHeaderPresubmit = $modx->lexicon('np_error_presubmit');
-$errorHeader = isset($errorHeader) ? $errorHeader : $modx->lexicon('np_error_submit');
+$errorHeaderSubmit = $modx->lexicon('np_error_submit');
 
 // get errorTpl
 
@@ -148,6 +148,16 @@ if(empty($errorTpl)) {
     $msg = str_replace('[[+tpl]]',$scriptProperties['errortpl'], $this->modx->lexicon('np_no_error_tpl'));
    return $msg;
 }
+
+// get errorTpl
+
+$fieldErrorTpl = isset($fielderrortpl)? $modx->getChunk($fielderrortpl): '<span class = "fielderrormessage">[[+np.error]]</span>';
+
+if(empty($fieldErrorTpl)) {
+    $msg = str_replace('[[+tpl]]',$scriptProperties['errortpl'], $this->modx->lexicon('np_no_error_tpl'));
+   return $msg;
+}
+
 
 
 $formTpl .= $np->displayForm();
@@ -174,13 +184,27 @@ if (empty($scriptProperties['hidealltvs'])) {
 
 if ($isPostBack) {
 
-    // die('<pre>' . print_r($_POST,true));
-    $errors = $_POST['np.errors'];
-    /* handle pre-save errors */
-    $success = $np->validate($errorTpl);
+    $errors = $np->getErrors();
+    if (! empty($errors)) {
+        $modx->setPlaceholder('np.error_header',$errorHeaderSubmit);
+        foreach($errors as $error) {
+            $errorMessage .= str_replace('[[+np.error]]',$error,$errorTpl);
+        }
+        $modx->setPlaceholder('np.errors_submit',$errorMessage);
+        return($formTpl);
 
-    if (! $success) {
-       return $formTpl;
+    }
+   
+    /* handle pre-save errors (field errors set in validate() ) */
+    $np->validate($fieldErrorTpl);
+    $errors = $np->getErrors();
+    if (! empty($errors) ) {
+        foreach($errors as $error) {
+            $errorMessage .= str_replace('[[+np.error]]',$error,$errorTpl);
+        }
+        $modx->setPlaceholder('np.errors_submit',$errorMessage);
+        $modx->setPlaceholder('np.error_header',$errorHeaderSubmit);
+        return $formTpl;
     }
 
     $np->saveResource();
@@ -189,12 +213,12 @@ if ($isPostBack) {
     $errors = $np->getErrors();
 
     if (! empty($errors) ) {
-        $modx->setPlaceholder('np.error_header',$errorHeader);
+        $modx->setPlaceholder('np.error_header',$errorHeaderSubmit);
         foreach($errors as $error) {
             $errorMessage .= str_replace('[[+np.error]]',$error,$errorTpl);
         }
 
-        $modx->setPlaceholder('np.errors' , $errorMessage);
+        $modx->setPlaceholder('np.errors_submit' , $errorMessage);
         
         return($formTpl);
     } else {
