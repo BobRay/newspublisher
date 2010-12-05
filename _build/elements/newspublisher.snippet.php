@@ -85,6 +85,7 @@ Fix/add &allowAnyPost
     &groups      - resource groups to put new document in (no effect with existing docs).
                    set to 'parent' to use parent's groups.
     &language    - language to use
+    &prefix      - prefix to use for placeholders
 
 */
 
@@ -92,7 +93,8 @@ require_once $modx->getOption('np.core_path',null,$modx->getOption('core_path').
 $np = new Newspublisher($modx, $scriptProperties);
 
 
-
+$np_prefix = $modx->getOption('prefix',$scriptProperties,'np');
+$scriptProperties['prefix'] = $np_prefix;
 
 /* make sure user is logged in for existing doc */
 if ($existing) {
@@ -183,9 +185,9 @@ if ($isPostBack) {
     $success = $np->validate($errorTpl);
 
     if (! $success) {
-       foreach($_POST as $n=>$v) {
-            $formTpl = str_replace('[[+'.$n.']]',$v,$formTpl);
-        }
+       //foreach($_POST as $n=>$v) {
+       //     $formTpl = str_replace('[[+'.$np_prefix . '.' . $n.']]',$v,$formTpl);
+       // }
         return $formTpl;
     }
 
@@ -201,9 +203,9 @@ if ($isPostBack) {
         }
 
         $modx->setPlaceholder('np.errors' , $errorMessage);
-        foreach($_POST as $n=>$v) {
-            $formTpl = str_replace('[[+'.$n.']]',$v,$formTpl);
-        }
+        //foreach($_POST as $n=>$v) {
+        //    $formTpl = str_replace('[[+'. $np_prefix . '.' . $n.']]',$v,$formTpl);
+        //}
         return($formTpl);
     } else {
         $np->forward($scriptProperties['postId']);
@@ -211,9 +213,10 @@ if ($isPostBack) {
 
 
 } else {
-    foreach($_POST as $n=>$v) {
-            $formTpl = str_replace('[[+'.$n.']]',$v,$formTpl);
-    }
+   // foreach($_POST as $n=>$v) {
+   //         $formTpl = str_replace('[[+'. $np_prefix . '.' . $n. ']]',$v,$formTpl);
+   // }
+   // $modx->toPlaceholders($_POST,$np_prefix);
     
             // return form
     return $formTpl;

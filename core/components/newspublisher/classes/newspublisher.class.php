@@ -51,6 +51,7 @@ class Newspublisher {
     protected $header;
     protected $footer;
     protected $listboxmax;
+    protected $prefix; // prefix for placeholders
 
 
 
@@ -79,32 +80,42 @@ class Newspublisher {
                 $this->modx->lexicon->load($language.'newspublisher:default');
                 break;
         }
-
+        $this->prefix = $this->props['prefix'];
         /* see if we're editing an existing doc */
         $this->existing = false;
         if (isset($_POST['np_existing']) && $_POST['np_existing'] == 'true' ) {
             $this->existing = is_numeric($_POST['np_doc_id'])? $_POST['np_doc_id'] : false;
         }
-        /* need to forward this from $_POST so we know it's an existing doc */
+        /* see if it's a repost */
+        $this->setPostback( isset($_POST['hidSubmit']) && $_POST['hidSubmit'] == 'true');
 
         if($this->existing) {
             $this->resource = $this->modx->getObject('modResource', $this->existing);
             if ($this->resource) {
-               $ph = $this->resource->toArray();
-               $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
-               $ph['unpub_date'] = $ph['unpub_date']? substr($ph['unpub_date'],0,10) : '';
+                if ($this->isPostBack) {
+                    $this->modx->toPlaceholders($_POST,$this->prefix);
 
-               $this->modx->toPlaceholders($ph);
-               unset($ph);
+                } else {
+                    $ph = $this->resource->toArray();
+                    $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
+                    $ph['unpub_date'] = $ph['unpub_date']? substr($ph['unpub_date'],0,10) : '';
+
+                    $this->modx->toPlaceholders($ph,$this->prefix);
+                    unset($ph);
+                }
             } else {
                $msg = str_replace('[[+id]]',$existing, $this->modx->lexicon('np_no_resource'));
                $this->setError($msg);
 
             }
-
+            /* need to forward this from $_POST so we know it's an existing doc */
             $stuff = '<input type="hidden" name="np_existing" value="true">' . "\n" .
             '<input type="hidden" name="np_doc_id" value="' . $this->resource->get('id') . '">';
-            $this->modx->setPlaceholder('np_post_stuff',$stuff);
+            $this->modx->toPlaceholder('post_stuff',$stuff,$this->prefix);
+        } else {
+            if ($this->isPostBack) {
+                $this->modx->toPlaceholders($_POST,$this->prefix);
+            }
         }
 
         $this->aliastitle = isset($this->props['aliastitle'])? true : false;
@@ -218,25 +229,25 @@ public function displayForm() {
 
             <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
             [[+np.error_pagetitle]]
-            <label for="pagetitle" title="[[%resource_pagetitle_help]]">[[%resource_pagetitle]]: </label><input name="pagetitle"  id="pagetitle" type="text"  value="[[+pagetitle]]" maxlength="60" />
+            <label for="pagetitle" title="[[%resource_pagetitle_help]]">[[%resource_pagetitle]]: </label><input name="pagetitle"  id="pagetitle" type="text"  value="[[+np.pagetitle]]" maxlength="60" />
             [[+np.error_longtitle]]
-            <label for="longtitle" title="[[%resource_longtitle_help]]">[[%resource_longtitle]]: </label><input name="longtitle" id="longtitle" type="text"  value="[[+longtitle]]" maxlength="100" />
+            <label for="longtitle" title="[[%resource_longtitle_help]]">[[%resource_longtitle]]: </label><input name="longtitle" id="longtitle" type="text"  value="[[+np.longtitle]]" maxlength="100" />
             [[+np.error_description]]
-            <label for="description" title="[[%resource_description_help]]">[[%resource_description]]: </label><input name="description" id="description" type="text"  value="[[+description]]" maxlength="100" />
+            <label for="description" title="[[%resource_description_help]]">[[%resource_description]]: </label><input name="description" id="description" type="text"  value="[[+np.description]]" maxlength="100" />
             [[+np.error_menutitle]]
-            <label for="menutitle" title="[[%resource_menutitle_help]]">[[%resource_menutitle]]: </label><input name="menutitle" id="menutitle" type="text"  value="[[+menutitle]]" maxlength="60" />
+            <label for="menutitle" title="[[%resource_menutitle_help]]">[[%resource_menutitle]]: </label><input name="menutitle" id="menutitle" type="text"  value="[[+np.menutitle]]" maxlength="60" />
             [[+np.error_pub_date]]
             <div class="datepicker">
-                <span class="npdate"><label for="pub_date" title="[[%resource_publishdate_help]]">[[%resource_publishdate]]: </label><input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="pub_date" name="pub_date" maxlength="10" readonly="readonly" value="[[+pub_date]]" /></span>
+                <span class="npdate"><label for="pub_date" title="[[%resource_publishdate_help]]">[[%resource_publishdate]]: </label><input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="pub_date" name="pub_date" maxlength="10" readonly="readonly" value="[[+np.pub_date]]" /></span>
                 [[+np.error_unpub_date]]
-                <span class="npdate"><label for="unpub_date" title="[[%resource_unpublishdate_help]]">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="unpub_date" name="unpub_date" maxlength="10" readonly="readonly" value="[[+unpub_date]]" /><span class="npdate">
+                <span class="npdate"><label for="unpub_date" title="[[%resource_unpublishdate_help]]">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="unpub_date" name="unpub_date" maxlength="10" readonly="readonly" value="[[+np.unpub_date]]" /><span class="npdate">
             </div>
             [[+np.error_introtext]]
-            <label for="introtext" title="[[%resource_summary_help]]">[[%resource_summary]]: </label><div class="[[+np.rt_summary_1]]"><textarea class="[[+np.rt_summary_2]]" name="introtext" id="introtext">[[+introtext]]</textarea></div>
+            <label for="introtext" title="[[%resource_summary_help]]">[[%resource_summary]]: </label><div class="[[+np.rt_summary_1]]"><textarea class="[[+np.rt_summary_2]]" name="introtext" id="introtext">[[+np.introtext]]</textarea></div>
             [[+np.error_content]]
-            <label for="content">[[%resource_content]]: </label><div class="[[+np.rt_content_1]]"><textarea class="[[+np.rt_content_2]]" name="content" id="content">[[+content]]</textarea></div>
+            <label for="content">[[%resource_content]]: </label><div class="[[+np.rt_content_1]]"><textarea class="[[+np.rt_content_2]]" name="content" id="content">[[+np.content]]</textarea></div>
             [[+np.allTVs]]
-            [[+np_post_stuff]]
+            [[+np.post_stuff]]
         <span class = "buttons"><input class="submit" type="submit" name="Submit" value="Submit" /><input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = \'[[+np.cancel_url]]\' " /></span>
     </form>
 </div>';
@@ -315,9 +326,9 @@ if (! empty($this->allTvs)) {
             case 'text':
             case 'textbox':
             case 'email';
-                $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' . $fields['name'] . ']]" />';
+                $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
                 if ($this->existing && !$this->isPostBack) {
-                    $this->modx->setPlaceholder($fields['name'],$tv->renderOutput($this->existing) );
+                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
                 }
 
                 break;
@@ -326,16 +337,16 @@ if (! empty($this->allTvs)) {
             case 'textareamini':
                 if ($this->existing  && ! $this->isPostBack) {
                     //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
-                    $this->modx->setPlaceholder($fields['name'],$tv->renderOutput($this->existing) );
+                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
                 }
-                $formTpl .= "\n" . '<label title="' . $fields['description'] . '">'. $caption  . '</label><textarea name="' . $fields['name'] . '"'. $fields['description'] . ' id="' . $fields['name'] . '">' . '[[+' . $fields['name'] . ']]</textarea>';
+                $formTpl .= "\n" . '<label title="' . $fields['description'] . '">'. $caption  . '</label><textarea name="' . $fields['name'] . '"'. $fields['description'] . ' id="' . $fields['name'] . '">' . '[[+'. $this->prefix . '.' . $fields['name'] . ']]</textarea>';
                 break;
             case 'richtext':
                 if ($this->existing && !$this->isPostBack) {
                     //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
-                    $this->modx->setPlaceholder($fields['name'],$tv->renderOutput($this->existing) );
+                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
                 }
-                $formTpl .= "\n" . '<label title="'. $fields['description'] . '">'. $caption  . '</label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $fields['name'] . ']]</textarea></div>';
+                $formTpl .= "\n" . '<label title="'. $fields['description'] . '">'. $caption  . '</label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $this->prefix . '.' . $fields['name'] . ']]</textarea></div>';
                 break;
 
 
