@@ -159,23 +159,18 @@ if (! empty($errors) ) {
    
     $modx->setPlaceholder('np.error_header',$errorHeaderPresubmit);
     foreach($errors as $error) {
-        // $errorMessage .= '<p class = "error">' . $error . '</p>';
         $errorMessage .= str_replace('[[+np.error]]',$error,$errorTpl);
     }
     $modx->setPlaceholder('np.errors_presubmit',$errorMessage);
     return($formTpl);
  }
-
- $isPostBack = false;
- if (isset($_POST['hidSubmit'])) {
-    $isPostBack = $_POST['hidSubmit'] == 'true' ? true:false;
- }
-$np->setPostBack($isPostBack);
-
+ // get postback status
+ $isPostBack = $np->getPostBack();
+ 
 if (empty($scriptProperties['hidealltvs'])) {
     $formTpl = str_replace('[[+np.allTVs]]',$np->displayTVs(),$formTpl);
 }
-// get postback status
+
 
 if ($isPostBack) {
 
@@ -185,10 +180,7 @@ if ($isPostBack) {
     $success = $np->validate($errorTpl);
 
     if (! $success) {
-       //foreach($_POST as $n=>$v) {
-       //     $formTpl = str_replace('[[+'.$np_prefix . '.' . $n.']]',$v,$formTpl);
-       // }
-        return $formTpl;
+       return $formTpl;
     }
 
     $np->saveResource();
@@ -203,9 +195,7 @@ if ($isPostBack) {
         }
 
         $modx->setPlaceholder('np.errors' , $errorMessage);
-        //foreach($_POST as $n=>$v) {
-        //    $formTpl = str_replace('[[+'. $np_prefix . '.' . $n.']]',$v,$formTpl);
-        //}
+        
         return($formTpl);
     } else {
         $np->forward($scriptProperties['postId']);
@@ -213,12 +203,6 @@ if ($isPostBack) {
 
 
 } else {
-   // foreach($_POST as $n=>$v) {
-   //         $formTpl = str_replace('[[+'. $np_prefix . '.' . $n. ']]',$v,$formTpl);
-   // }
-   // $modx->toPlaceholders($_POST,$np_prefix);
-    
-            // return form
-    return $formTpl;
+   return $formTpl;
 }
 ?>

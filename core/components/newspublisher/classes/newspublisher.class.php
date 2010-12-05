@@ -68,6 +68,9 @@ class Newspublisher {
     public function setPostBack($setting) {
         $this->isPostBack = $setting;
     }
+    public function getPostBack() {
+        return $this->isPostBack;
+    }
 /* Check for a resource to edit in $_POST  */
 
     public function init($context) {
