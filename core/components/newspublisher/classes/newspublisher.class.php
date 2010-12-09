@@ -96,7 +96,12 @@ class Newspublisher {
             $this->resource = $this->modx->getObject('modResource', $this->existing);
             if ($this->resource) {
                 if ($this->isPostBack) {
-                    $this->modx->toPlaceholders($_POST,$this->prefix);
+                    /* str_replace to prevent showing of placeholders */
+                         $fs = array();
+                         foreach($_POST as $k=>$v) {
+  	                         $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93'),$v);
+                         }
+                    $this->modx->toPlaceholders($fs,$this->prefix);
 
                 } else {
                     $ph = $this->resource->toArray();
@@ -117,7 +122,12 @@ class Newspublisher {
             $this->modx->toPlaceholder('post_stuff',$stuff,$this->prefix);
         } else {
             if ($this->isPostBack) {
-                $this->modx->toPlaceholders($_POST,$this->prefix);
+                /* str_replace to prevent showing of placeholders */
+                 $fs = array();
+                 foreach($_POST as $k=>$v) {
+                     $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
+                 }
+                $this->modx->toPlaceholders($fs,$this->prefix);
             }
         }
 
