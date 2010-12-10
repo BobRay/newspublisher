@@ -43,6 +43,11 @@ $_lang['np_folder_not_sent'] = 'You set &amp;template to parent but did not incl
 $_lang['np_resource_save_failed'] = 'An error occured when saving the resource.';
 $_lang['np_to_template_id'] = 'There is no template with this number: [[+id]].';
 $_lang['np_to_template_name'] = 'There is no template with this name: [[+name]].';
+$_lang['np_date_hint'] = '(Y-M-D)';
+$_lang['np_date_format'] = 'format-y-m-d';
+
+
+
 
 
 

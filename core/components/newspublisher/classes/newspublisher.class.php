@@ -252,9 +252,9 @@ public function displayForm() {
             <label for="menutitle" title="[[%resource_menutitle_help]]">[[%resource_menutitle]]: </label><input name="menutitle" id="menutitle" type="text"  value="[[+np.menutitle]]" maxlength="60" />
             [[+np.error_pub_date]]
             <div class="datepicker">
-                <span class="npdate"><label for="pub_date" title="[[%resource_publishdate_help]]">[[%resource_publishdate]]: </label><input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="pub_date" name="pub_date" maxlength="10" readonly="readonly" value="[[+np.pub_date]]" /></span>
+                <span class="npdate"><label for="pub_date" title="[[%resource_publishdate_help]]">[[%resource_publishdate]] [[%np_date_hint]]: </label><input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="pub_date" name="pub_date" maxlength="10" readonly="readonly" value="[[+np.pub_date]]" /></span>
                 [[+np.error_unpub_date]]
-                <span class="npdate"><label for="unpub_date" title="[[%resource_unpublishdate_help]]">[[%resource_unpublishdate]]: </label><input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="unpub_date" name="unpub_date" maxlength="10" readonly="readonly" value="[[+np.unpub_date]]" /><span class="npdate">
+                <span class="npdate"><label for="unpub_date" title="[[%resource_unpublishdate_help]]">[[%resource_unpublishdate]] [[%np_date_hint]]: </label><input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="unpub_date" name="unpub_date" maxlength="10" readonly="readonly" value="[[+np.unpub_date]]" /><span class="npdate">
             </div>
             [[+np.error_introtext]]
             <label for="introtext" title="[[%resource_summary_help]]">[[%resource_summary]]: </label><div class="[[+np.rt_summary_1]]"><textarea class="[[+np.rt_summary_2]]" name="introtext" id="introtext">[[+np.introtext]]</textarea></div>
@@ -340,6 +340,7 @@ if (! empty($this->allTvs)) {
             case 'text':
             case 'textbox':
             case 'email';
+            case 'image';
                 $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
                 if ($this->existing && !$this->isPostBack) {
                     $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
@@ -624,6 +625,7 @@ public function saveResource() {
                     case 'option':
                     case 'listbox':
                     case 'richtext':
+                    case 'image':
 
                         $value = $_POST[$fields['name']];
                         $lvalue = strtok($value,'=');
