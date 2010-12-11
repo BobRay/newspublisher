@@ -633,28 +633,22 @@ public function saveResource() {
                         $value = $rvalue? $rvalue: $lvalue;
                         $value = mysql_escape_string($this->modx->stripTags($value,$allowedTags));
 
-                        if (!empty($value)) {
-                            $tv->setValue($resourceId,$value);
-                            $tv->save();
-                        }
                         break;
                     case 'checkbox':
                     case 'listbox-multiple':
                         $boxes = $_POST[$fields['name']];
                         $value = implode('||',$boxes);
                         $value = mysql_escape_string($this->modx->stripTags($value,$allowedTags));
-
-                        if (!empty($value)) {
-                            $tv->setValue($resourceId,$value);
-                            $tv->save();
-                        }
-
-
+                    
                         break;
 
                     default:
                         break;
                 } /* end switch(fieldType) */
+                if (!empty($value)) {
+                    $tv->setValue($resourceId,$value);
+                    $tv->save();
+                }
             } /* end foreach($allTvs) */
         } /* end if (!empty($allTVs)) -- Done saving TVs */
 
