@@ -45,6 +45,10 @@ $_lang['np_to_template_id'] = 'There is no template with this number: [[+id]].';
 $_lang['np_to_template_name'] = 'There is no template with this name: [[+name]].';
 $_lang['np_date_hint'] = '(Y-M-D)';
 $_lang['np_date_format'] = 'format-y-m-d';
+$_lang['np_view_permission_denied'] = 'You do not have permission to view this document';
+$_lang['np_create_permission_denied'] = 'You do not have permission to create a document';
+$_lang['np_save_permission_denied'] = 'You do not have permission to view this document';
+$_lang['np_no_edit_self'] = 'You cannot edit the newspublisher page.';
 
 
 

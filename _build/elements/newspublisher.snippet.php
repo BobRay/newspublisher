@@ -96,39 +96,47 @@ $np = new Newspublisher($modx, $scriptProperties);
 $np_prefix = $modx->getOption('prefix',$scriptProperties,'np');
 $scriptProperties['prefix'] = $np_prefix;
 
-/* make sure user is logged in for existing doc */
-if ($existing) {
-    if (! $modx->user->hasSessionContext($modx->context->get('key'))) {
-        $np->setError($modx->lexicon('np_not_logged_in'));
-    }
-}
-
-/* if $canpost is empty, allow anonymous posting */
-if (! empty($canpost)) {
-    $allGroups =  (! empty($allGroups)) && ($allGroups == '1');
-    $neededGroups = explode(',',$canpost);
-    if (! $modx->user->isMember($neededGroups,$allGroups) ){
-       $np->setError($modx->lexicon('np_not_in_group'));
-    }
-} else {
-    $scriptProperties['allowAnyPost'] = true;
-}
-
-/* check for required permissions */
-if (! empty($permissions)) {
-    $neededPermissions = explode(',',$permissions);
-    $authorized = false;
-    foreach ($neededPermissions as $perm) {
-        if (! $modx->hasPermission($perm) ){
-            $authorized = false;
-            break;
+if (false) {
+        /* if $canpost is empty, allow anonymous posting */
+        if (! empty($canpost)) {
+            $allGroups =  (! empty($allGroups)) && ($allGroups == '1');
+            $neededGroups = explode(',',$canpost);
+            if (! $modx->user->isMember($neededGroups,$allGroups) ){
+               $np->setError($modx->lexicon('np_not_in_group'));
+            }
+        } else {
+            $scriptProperties['allowAnyPost'] = true;
         }
-    }
-    if (! authorized) {
-        $np->setError($modx->lexicion('np_no_permissions'));
-    }
+
+        /* check for required permissions */
+        if (! empty($permissions)) {
+            $neededPermissions = explode(',',$permissions);
+            $authorized = false;
+            foreach ($neededPermissions as $perm) {
+                if (! $modx->hasPermission($perm) ){
+                    $authorized = false;
+                    break;
+                }
+            }
+            if (! authorized) {
+                $np->setError($modx->lexicon('np_no_permissions'));
+            }
+        }
 }
 $np->init($modx->context->get('key'));
+
+/* get error Tpl chunk */
+$errorTpl = isset($errortpl)? $modx->getChunk($errortpl): '<span class = "errormessage">[[+np.error]]</span>';
+
+if(empty($errorTpl)) { /* user sent it but it's not there */
+    $msg = str_replace('[[+tpl]]',$scriptProperties['errortpl'], $this->modx->lexicon('np_no_error_tpl'));
+   return $msg;
+}
+$errors = $np->getErrors();
+if (! empty($errors) ) { /* doesn't have permission */
+    $errorMessage .= str_replace('[[+np.error]]',$error,$errors[0]);
+    return($errorMessage);
+ }
 
 if (isset($cancelId)) {
     $cancelUrl = $modx->makeUrl($cancelId,'','','full');
@@ -139,17 +147,6 @@ $modx->setPlaceholder('np.cancel_url',$cancelUrl);
 
 $errorHeaderPresubmit = $modx->lexicon('np_error_presubmit');
 $errorHeaderSubmit = $modx->lexicon('np_error_submit');
-
-// get errorTpl
-
-$errorTpl = isset($errortpl)? $modx->getChunk($errortpl): '<span class = "errormessage">[[+np.error]]</span>';
-
-if(empty($errorTpl)) {
-    $msg = str_replace('[[+tpl]]',$scriptProperties['errortpl'], $this->modx->lexicon('np_no_error_tpl'));
-   return $msg;
-}
-
-// get errorTpl
 
 $fieldErrorTpl = isset($fielderrortpl)? $modx->getChunk($fielderrortpl): '<span class = "fielderrormessage">[[+np.error]]</span>';
 

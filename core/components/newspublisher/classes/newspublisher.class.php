@@ -89,10 +89,13 @@ class Newspublisher {
         if (isset($_POST['np_existing']) && $_POST['np_existing'] == 'true' ) {
             $this->existing = is_numeric($_POST['np_doc_id'])? $_POST['np_doc_id'] : false;
         }
+
+
         /* see if it's a repost */
         $this->setPostback( isset($_POST['hidSubmit']) && $_POST['hidSubmit'] == 'true');
 
         if($this->existing) {
+            
             $this->resource = $this->modx->getObject('modResource', $this->existing);
             if ($this->resource) {
                 if ($this->isPostBack) {
@@ -105,6 +108,10 @@ class Newspublisher {
 
                 } else {
                     $ph = $this->resource->toArray();
+                    foreach($ph as $k=>$v) {
+  	                         $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93'),$v);
+                     }
+                     $ph = $fs;
                     $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
                     $ph['unpub_date'] = $ph['unpub_date']? substr($ph['unpub_date'],0,10) : '';
 
@@ -114,12 +121,14 @@ class Newspublisher {
             } else {
                $msg = str_replace('[[+id]]',$existing, $this->modx->lexicon('np_no_resource'));
                $this->setError($msg);
+               return;
 
             }
             /* need to forward this from $_POST so we know it's an existing doc */
             $stuff = '<input type="hidden" name="np_existing" value="true">' . "\n" .
             '<input type="hidden" name="np_doc_id" value="' . $this->resource->get('id') . '">';
             $this->modx->toPlaceholder('post_stuff',$stuff,$this->prefix);
+            
         } else {
             if ($this->isPostBack) {
                 /* str_replace to prevent showing of placeholders */
@@ -130,7 +139,15 @@ class Newspublisher {
                 $this->modx->toPlaceholders($fs,$this->prefix);
             }
         }
-
+        if ($this->existing){
+            if (!$this->modx->hasPermission('view_document') || !$this->resource->checkPolicy('view') ) {
+                $this->setError($this->modx->lexicon('np_view_permission_denied'));
+            }
+        } else {
+            if (!$this->modx->hasPermission('new_document')) {
+                $this->setError($this->modx->lexicon('np_create_permission_denied'));
+            }
+        }
         $this->aliastitle = isset($this->props['aliastitle'])? true : false;
         $this->clearcache = isset($this->props['clearcache']) ? true: false;
 
@@ -473,11 +490,7 @@ public function saveResource() {
 
     $user = $this->modx->user;
     $userid = $this->modx->user->get('id');
-    if( (!$userid) && $allowAnyPost) {
-        $user = '(anonymous)';
-    }
-
-
+    
     if (! $this->existing) {
 
         $fields['createdon'] = time();
@@ -504,52 +517,57 @@ public function saveResource() {
     $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
 
 
-    $content = $this->modx->stripTags($_POST['content'],$allowedTags);
+    $content = $this->modx->stripTags($fields['content'],$allowedTags);
 
     foreach($fields as $n=>$v) {
         if(!empty($this->badwords)) $v = preg_replace($this->badwords,'[Filtered]',$v); // remove badwords
         if (! is_array($v) ){
             $v = $this->modx->stripTags(htmlspecialchars($v));
         }
-        $content = str_replace('[+'.$n.'+]',$v,$content);
+        $content = str_replace('[[+'.$n.']]',$v,$content);
     }
 
 
     $fields['title'] = $fields['pagetitle'];
     
-    $H=isset($hours)? $hours : 0;
-    $M=isset($minutes)? $minutes: 1;
-    $S=isset($seconds)? $seconds: 0;
-
     $published = 'notSet';
-    // check published date
-    if($fields['pub_date']=="") {
-        $fields['pub_date']="0";
-    } else {
-        list($Y, $m, $d) = sscanf($fields['pub_date'], "%4d-%2d-%2d");
-        $fields['pub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
 
-        if($fields['pub_date'] <= time()) {
-            $fields['published'] = '1';
+    /* set published status for raw save() */
+    if ($this->props['no_security']) {
+
+        $H=isset($hours)? $hours : 0;
+        $M=isset($minutes)? $minutes: 1;
+        $S=isset($seconds)? $seconds: 0;
+
+        $published = 'notSet';
+        // check published date
+        if($fields['pub_date']=="") {
+            $fields['pub_date']="0";
         } else {
-            $fields['published'] = '0';
+            list($Y, $m, $d) = sscanf($fields['pub_date'], "%4d-%2d-%2d");
+            $fields['pub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
+
+            if($fields['pub_date'] <= time()) {
+                $fields['published'] = '1';
+            } else {
+                $fields['published'] = '0';
+            }
+
+        }
+
+        // check unpublished date
+        if($fields['unpub_date']=="") {
+            $fields['unpub_date']="0";
+        } else {
+            list($Y, $m, $d) = sscanf($fields['unpub_date'], "%4d-%2d-%2d");
+            $fields['unpub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
+            if($fields['unpub_date'] < time()) {
+                $fields['published'] = '0';
+            }
+
         }
 
     }
-
-    // check unpublished date
-    if($fields['unpub_date']=="") {
-        $fields['unpub_date']="0";
-    } else {
-        list($Y, $m, $d) = sscanf($fields['unpub_date'], "%4d-%2d-%2d");
-        $fields['unpub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
-        if($fields['unpub_date'] < time()) {
-            $fields['published'] = '0';
-        }
-
-    }
-
-
         /* post news content, resource groups, and published status */
         if (! $this->existing) {
             $fields['alias'] = $alias;
@@ -558,7 +576,7 @@ public function saveResource() {
             $fields['deleted'] = '0';
             $fields['hidemenu'] = $this->hidemenu;
             $fields['template'] = $this->template;
-            $fields['content']  = $this->header . $content . $this->footer;
+            $fields['content']  = $this->header . $fields['content'] . $this->footer;
             $fields['parent'] = $this->folder;
         }
 
@@ -583,17 +601,51 @@ public function saveResource() {
             }
 
         }
-
+        /* can probably remove this */
         $this->resource->fromArray($fields);
         if ( ! empty( $this->errors)) {
             /* return without altering the DB */
             return '';
         }
-        if ( ! $this->resource->save() ){
-            $this->setError($this->modx->lexicon('np_resource_save_failed'));
-            return '';
-        };
-        $resourceId = $this->resource->get('id');
+        if($this->props['no_security'] == '1') {
+            if ( ! $this->resource->save() ){
+                $this->setError($this->modx->lexicon('np_resource_save_failed'));
+                return '';
+            }
+        } else {
+            /* update $_POST from $fields array */
+            $_POST = array_merge($_POST,$fields);
+
+            if ($this->existing) {
+               $response = $this->modx->runProcessor('resource/update',$fields);
+            } else {
+                //die('Content: ' . $fields['content']);
+                $response = $this->modx->runProcessor('resource/create',$fields);
+            }
+            if ($response->isError()) {
+               if ($response->hasFieldErrors()) {
+                   $fieldErrors = $response->getAllErrors();
+                   $errorMessage = implode("\n",$fieldErrors);
+               } else {
+                   $errorMessage = 'An error occurred: '.$response->getMessage();
+               }
+               $this->setError($errorMessage);
+               return '';
+
+            } else {
+                //$lastInsertId = $this->modx->lastInsertId();
+                //die('LastInsertId' . $lastInsertId);
+                $this->resource = $this->modx->getObject('modResource',array('pagetitle'=>$fields['pagetitle'],'alias'=>$fields['alias']));
+                //$this->resource = $this->modx->error->getobject();
+
+
+            }
+        }
+        if ($this->resource) {
+            $resourceId = $this->resource->get('id');
+        } else {
+            return 'Cant get Resource';
+        }
         /* if these are set, we need the parent object if it's a new resource */
         if (! $this->existing) {
             if (($this->props['groups'] || $this->props['makefolder'])) {
@@ -609,12 +661,15 @@ public function saveResource() {
 
         $postid = isset($postid) ? $postid: $this->resource->get('id');
 
-
+        /* Assume that if the user can save resource they can also
+         * save its TVs.
+         */
         /* Save TVs */
         if (! empty ($this->allTvs)) {
             $resourceId = $this->resource->get('id');
 
             foreach($this->allTvs as $tv) {
+                $value = '';
                 $fields = $tv->toArray();
 
                 switch ($fields['type']) {
@@ -678,10 +733,10 @@ public function forward($postId) {
 
         /* redirect to post id */
 
-         if (empty($goToUrl)) {
-            die('Unable to Forward<br />POST ID: ' . $postid . '<br />URL: ' . $goToUrl);
-         }
-
+        if (empty($goToUrl)) {
+           // die('Unable to Forward<br />POST ID: ' . $postId . '<br />URL: ' . $goToUrl);
+        }
+        $goToUrl = 'index.php?id=' . $postId;
         $this->modx->sendRedirect($goToUrl);
 }
 
