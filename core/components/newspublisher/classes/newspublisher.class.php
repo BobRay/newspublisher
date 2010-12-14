@@ -533,7 +533,7 @@ public function saveResource() {
     $published = 'notSet';
 
     /* set published status for raw save() */
-    if ($this->props['no_security']) {
+    if (false) {
 
         $H=isset($hours)? $hours : 0;
         $M=isset($minutes)? $minutes: 1;
@@ -607,44 +607,39 @@ public function saveResource() {
             /* return without altering the DB */
             return '';
         }
-        if($this->props['no_security'] == '1') {
-            if ( ! $this->resource->save() ){
-                $this->setError($this->modx->lexicon('np_resource_save_failed'));
-                return '';
-            }
+        
+        /* update $_POST from $fields array */
+        $_POST = array_merge($_POST,$fields);
+
+        if ($this->existing) {
+           $response = $this->modx->runProcessor('resource/update',$fields);
         } else {
-            /* update $_POST from $fields array */
-            $_POST = array_merge($_POST,$fields);
-
-            if ($this->existing) {
-               $response = $this->modx->runProcessor('resource/update',$fields);
-            } else {
-                //die('Content: ' . $fields['content']);
-                $response = $this->modx->runProcessor('resource/create',$fields);
-            }
-            if ($response->isError()) {
-               if ($response->hasFieldErrors()) {
-                   $fieldErrors = $response->getAllErrors();
-                   $errorMessage = implode("\n",$fieldErrors);
-               } else {
-                   $errorMessage = 'An error occurred: '.$response->getMessage();
-               }
-               $this->setError($errorMessage);
-               return '';
-
-            } else {
-               // $id = $resource->response['object']['id'];
-               $object = $response->getObject();
-               $this->resource = $this->modx->getObject('modResource',$object['id']);
-                //$id = $object['id'];
-                //$this->resource = $this->modx->getObject('modResource',array('pagetitle'=>$fields['pagetitle'],'alias'=>$fields['alias']));
-                
-                if (!is_object($this->resource)) {
-                    die('failed<br /><pre>' . print_r($response,true));
-                }
-
-            }
+            //die('Content: ' . $fields['content']);
+            $response = $this->modx->runProcessor('resource/create',$fields);
         }
+        if ($response->isError()) {
+           if ($response->hasFieldErrors()) {
+               $fieldErrors = $response->getAllErrors();
+               $errorMessage = implode("\n",$fieldErrors);
+           } else {
+               $errorMessage = 'An error occurred: '.$response->getMessage();
+           }
+           $this->setError($errorMessage);
+           return '';
+
+        } else {
+           // $id = $resource->response['object']['id'];
+           $object = $response->getObject();
+           $this->resource = $this->modx->getObject('modResource',$object['id']);
+            //$id = $object['id'];
+            //$this->resource = $this->modx->getObject('modResource',array('pagetitle'=>$fields['pagetitle'],'alias'=>$fields['alias']));
+
+            if (!is_object($this->resource)) {
+                die('failed<br /><pre>' . print_r($response,true));
+            }
+
+        }
+        
         if ($this->resource) {
             $resourceId = $this->resource->get('id');
         } else {
