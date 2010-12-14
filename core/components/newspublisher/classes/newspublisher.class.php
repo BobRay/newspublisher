@@ -634,11 +634,14 @@ public function saveResource() {
 
             } else {
                // $id = $resource->response['object']['id'];
-                //$object = $response->getObject();
+               $object = $response->getObject();
+               $this->resource = $this->modx->getObject('modResource',$object['id']);
                 //$id = $object['id'];
-                $this->resource = $this->modx->getObject('modResource',array('pagetitle'=>$fields['pagetitle'],'alias'=>$fields['alias']));
+                //$this->resource = $this->modx->getObject('modResource',array('pagetitle'=>$fields['pagetitle'],'alias'=>$fields['alias']));
                 
-
+                if (!is_object($this->resource)) {
+                    die('failed<br /><pre>' . print_r($response,true));
+                }
 
             }
         }
@@ -734,12 +737,11 @@ public function forward($postId) {
 
         /* redirect to post id */
 
-        if (empty($goToUrl)) {
-           // die('Unable to Forward<br />POST ID: ' . $postId . '<br />URL: ' . $goToUrl);
-        }
-        $controller = $modx->getOption('request_controller',null,'index.php');
-
+        /* The next two lines can probably be removed once makeUrl()
+         *  and sendRedirect() are updated */
+        $controller = $this->modx->getOption('request_controller',null,'index.php');
         $goToUrl = $controller . '?id=' . $postId;
+
         $this->modx->sendRedirect($goToUrl);
 }
 
