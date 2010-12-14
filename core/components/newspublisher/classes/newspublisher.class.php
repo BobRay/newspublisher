@@ -633,10 +633,11 @@ public function saveResource() {
                return '';
 
             } else {
-                //$lastInsertId = $this->modx->lastInsertId();
-                //die('LastInsertId' . $lastInsertId);
+               // $id = $resource->response['object']['id'];
+                //$object = $response->getObject();
+                //$id = $object['id'];
                 $this->resource = $this->modx->getObject('modResource',array('pagetitle'=>$fields['pagetitle'],'alias'=>$fields['alias']));
-                //$this->resource = $this->modx->error->getobject();
+                
 
 
             }
@@ -736,7 +737,9 @@ public function forward($postId) {
         if (empty($goToUrl)) {
            // die('Unable to Forward<br />POST ID: ' . $postId . '<br />URL: ' . $goToUrl);
         }
-        $goToUrl = 'index.php?id=' . $postId;
+        $controller = $modx->getOption('request_controller',null,'index.php');
+
+        $goToUrl = $controller . '?id=' . $postId;
         $this->modx->sendRedirect($goToUrl);
 }
 
