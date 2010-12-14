@@ -607,10 +607,21 @@ public function saveResource() {
             /* return without altering the DB */
             return '';
         }
+
+        /* Add TVs to $fields for procesor */
+        /* e.g. $fields[tv13] = $_POST['MyTv5'] */
+        /* processor handles all types */
+        foreach($this->allTvs as $tv) {
+            $fields['tv' . $tv->get('id')] = $_POST[$tv->get('name')];
+        }
+        
+
         
         /* update $_POST from $fields array */
+        /* can be removed if $_POST is removed from runProcessor code */
         $_POST = array_merge($_POST,$fields);
 
+        /* call the appropriate processor to save resource and TVs */
         if ($this->existing) {
            $response = $this->modx->runProcessor('resource/update',$fields);
         } else {
@@ -628,16 +639,9 @@ public function saveResource() {
            return '';
 
         } else {
-           // $id = $resource->response['object']['id'];
            $object = $response->getObject();
            $this->resource = $this->modx->getObject('modResource',$object['id']);
-            //$id = $object['id'];
-            //$this->resource = $this->modx->getObject('modResource',array('pagetitle'=>$fields['pagetitle'],'alias'=>$fields['alias']));
-
-            if (!is_object($this->resource)) {
-                die('failed<br /><pre>' . print_r($response,true));
-            }
-
+           //$id = $object['id'];
         }
         
         if ($this->resource) {
@@ -647,68 +651,14 @@ public function saveResource() {
         }
         /* if these are set, we need the parent object if it's a new resource */
         if (! $this->existing) {
-            if (($this->props['groups'] || $this->props['makefolder'])) {
+            if (($this->props['groups'])) {
                 $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
             }
             if ($parentObj && $this->props['groups'] ) {
                 $this->setGroups($parentObj, $resourceId);
             }
-            if ($parentObj && $this->props['makefolder']) {
-                $this->makeFolder($parentObj);
-            }
         }
-
-        $postid = isset($postid) ? $postid: $this->resource->get('id');
-
-        /* Assume that if the user can save resource they can also
-         * save its TVs.
-         */
-        /* Save TVs */
-        if (! empty ($this->allTvs)) {
-            $resourceId = $this->resource->get('id');
-
-            foreach($this->allTvs as $tv) {
-                $value = '';
-                $fields = $tv->toArray();
-
-                switch ($fields['type']) {
-                    case 'text':
-                    case 'textbox':
-                    case 'textarea':
-                    case 'textareamini';
-                    case 'option':
-                    case 'listbox':
-                    case 'richtext':
-                    case 'image':
-
-                        $value = $_POST[$fields['name']];
-                        $lvalue = strtok($value,'=');
-                        $rvalue = strtok('=');
-                        $value = $rvalue? $rvalue: $lvalue;
-                        $value = mysql_escape_string($this->modx->stripTags($value,$allowedTags));
-
-                        break;
-                    case 'checkbox':
-                    case 'listbox-multiple':
-                        $boxes = $_POST[$fields['name']];
-                        $value = implode('||',$boxes);
-                        $value = mysql_escape_string($this->modx->stripTags($value,$allowedTags));
-                    
-                        break;
-
-                    default:
-                        break;
-                } /* end switch(fieldType) */
-                if (!empty($value)) {
-                    $tv->setValue($resourceId,$value);
-                    $tv->save();
-                }
-            } /* end foreach($allTvs) */
-        } /* end if (!empty($allTVs)) -- Done saving TVs */
-
-
-
-}
+} /* end saveResource() */
 
 public function forward($postId) {
         if (empty($postId)) {
@@ -828,13 +778,7 @@ public function validate($errorTpl) {
     
     return $success;
 }
-/* make the parent into a folder if it's not already */
-protected function makeFolder(&$parentObj) {
-    if ($parentObj->get('isFolder') == '0') {
-        $parentObj->set('isfolder','1');
-        $parentObj->save();
-    }
-}
+
 /* set a new object's resource groups -- only called for new resources */
 protected function setGroups($parentObj, $resourceId) {
     /* use the parent's groups if &groups is set to `parent` */
