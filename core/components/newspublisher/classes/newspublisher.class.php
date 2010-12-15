@@ -510,6 +510,9 @@ public function saveResource() {
                 $alias = trim($alias, '-');
                 $alias = mysql_escape_string($alias);
             }
+            if($this->props['aliaslower']) {
+                    $alias=strtolower($alias);
+            }
             $fields['alias'] = $alias;
         }
     /* set editedon and editedby for existing docs */

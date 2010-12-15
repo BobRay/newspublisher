@@ -75,6 +75,7 @@ Fix/add &allowAnyPost
     &showinmenu  - sets the flag to (1|0) as to whether or not the new page
                    shows in the menu. defaults to 0
     &aliastitle  - set to 1 to use page title as alias suffix. Defaults to 0 - date created.
+    &aliaslower  - convert alias to lower case.
     &clearcache  - when set to 1 the system will automatically clear the site cache after publishing an article.
     &hour        - Hour, minute and second for published and unpublished dates; defaults to 12:01 am.
     &minute
