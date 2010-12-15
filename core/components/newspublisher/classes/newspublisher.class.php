@@ -495,18 +495,22 @@ public function saveResource() {
 
         $fields['createdon'] = time();
 
-   // set alias name of document used to store articles
-        if(!$this->aliastitle) {
-            $alias = 'article-' . time();
-        } else {
-            $alias = $this->modx->stripTags($_POST['pagetitle']);
-            $alias = strtolower($alias);
-            $alias = preg_replace('/&.+?;/', '', $alias); // kill entities
-            $alias = preg_replace('/[^\.%a-z0-9 _-]/', '', $alias);
-            $alias = preg_replace('/\s+/', '-', $alias);
-            $alias = preg_replace('|-+|', '-', $alias);
-            $alias = trim($alias, '-');
-            $alias = 'article-'. mysql_escape_string($alias);
+        /* set alias name of document used to store articles */
+
+        if (empty($fields['alias'])) { /* leave it alone if filled */
+            if(!$this->aliastitle) { /* default */
+                $alias = 'article-' . time();
+            } else { /* use pagetitle */
+                $alias = $this->modx->stripTags($_POST['pagetitle']);
+                $alias = strtolower($alias);
+                $alias = preg_replace('/&.+?;/', '', $alias); // kill entities
+                $alias = preg_replace('/[^\.%a-z0-9 _-]/', '', $alias);
+                $alias = preg_replace('/\s+/', '-', $alias);
+                $alias = preg_replace('|-+|', '-', $alias);
+                $alias = trim($alias, '-');
+                $alias = mysql_escape_string($alias);
+            }
+            $fields['alias'] = $alias;
         }
     /* set editedon and editedby for existing docs */
     } else {
@@ -568,19 +572,19 @@ public function saveResource() {
         }
 
     }
-        /* post news content, resource groups, and published status */
-        if (! $this->existing) {
-            $fields['alias'] = $alias;
-            $fields['editedon'] = '0';
-            $fields['editedby'] = '0';
-            $fields['deleted'] = '0';
-            $fields['hidemenu'] = $this->hidemenu;
-            $fields['template'] = $this->template;
-            $fields['content']  = $this->header . $fields['content'] . $this->footer;
-            $fields['parent'] = $this->folder;
-        }
+        
+    if (! $this->existing) {
 
-        $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
+        $fields['editedon'] = '0';
+        $fields['editedby'] = '0';
+        $fields['deleted'] = '0';
+        $fields['hidemenu'] = $this->hidemenu;
+        $fields['template'] = $this->template;
+        $fields['content']  = $this->header . $fields['content'] . $this->footer;
+        $fields['parent'] = $this->folder;
+    }
+
+    $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
 
 
         /* while we have the parent object -
