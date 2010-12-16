@@ -489,7 +489,7 @@ public function saveResource() {
     if (! $this->existing) {
         $this->resource = $this->modx->newObject('modResource');
     }
-    $oldFields = $this->resource->toArray();
+    
     if (! $this->modx->hasPermission('allow_modx_tags')) {
         $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
         foreach($_POST as $k=>$v)
@@ -497,20 +497,14 @@ public function saveResource() {
                 $_POST[$k] = $this->modx->stripTags($v,$allowedTags);
             }
     }
-
+    $oldFields = $this->resource->toArray();
     $newFields = $_POST;
-     $fields = array_replace($oldFields, $newFields);
+    $fields = array_replace($oldFields, $newFields);
     // die('<br />POST' . print_r($_POST,true) . '<br />FIELDS' . print_r($fields,true));
-
-
-   
-
     $user = $this->modx->user;
     $userid = $this->modx->user->get('id');
     
     if (! $this->existing) {
-
-        $fields['createdon'] = time();
 
         /* set alias name of document used to store articles */
 
@@ -540,9 +534,6 @@ public function saveResource() {
         $fields['createdby'] = $this->modx->user->get('id');
         $fields['content']  = $this->header . $fields['content'] . $this->footer;
     /* set editedon and editedby for existing docs */
-    } else {
-        $fields['editedon'] = time();
-        $fields['editedby'] = $userid;
     }
 
     
@@ -558,11 +549,10 @@ public function saveResource() {
     }
     */
 
-    $fields['title'] = $fields['pagetitle'];
-    
+      
     $published = 'notSet';
 
-    /* set published status for raw save() */
+    /* fix: remove this */
     if (false) {
 
         $H=isset($hours)? $hours : 0;
@@ -633,9 +623,10 @@ public function saveResource() {
     
 
     /* update $_POST from $fields array */
-    /* can be removed if $_POST is removed from runProcessor code */
+    /* fix: can be removed when $_POST is removed from runProcessor code */
     $_POST = array_merge($_POST,$fields);
         ///die('<pre>POST: ' . print_r($_POST,true));
+
     /* call the appropriate processor to save resource and TVs */
     if (! empty($this->allTvs)) {
         $fields['tvs'] = true;
@@ -645,7 +636,6 @@ public function saveResource() {
     }
     
     if ($this->existing) {
-
        $response = $this->modx->runProcessor('resource/update',$fields);
     } else {
         
@@ -728,13 +718,11 @@ public function getErrors() {
     return $this->errors;
 }
 
+/* add error to error array */
 public function setError($msg) {
     $this->errors[] = $msg;
 }
-/** Set class property */
-public function setProperty($prop,$value) {
-    $this->props[$prop] = $value;
-}
+
 /* returns the template ID */
 protected function getTemplate() {
     if ($this->existing) {
