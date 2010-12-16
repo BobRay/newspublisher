@@ -154,7 +154,7 @@ class Newspublisher {
         }
         $this->aliastitle = isset($this->props['aliastitle'])? true : false;
         $this->clearcache = isset($this->props['clearcache']) ? true: false;
-        $this->aliaslower = isset($this->props['aliaslower']) ? $this->props['aliaslower']: true;
+        
 
         /* get folder id where we should store articles
            else store under current document */
@@ -654,6 +654,9 @@ public function saveResource() {
        $object = $response->getObject();
        $this->resource = $this->modx->getObject('modResource',$object['id']);
        //$id = $object['id'];
+
+       /* clean post array */
+       $_POST = array();
     }
 
     if ($this->resource) {
