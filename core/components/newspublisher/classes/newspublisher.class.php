@@ -629,18 +629,25 @@ public function saveResource() {
     /* Add TVs to $fields for procesor */
     /* e.g. $fields[tv13] = $_POST['MyTv5'] */
     /* processor handles all types */
-    foreach($this->allTvs as $tv) {
-        $fields['tv' . $tv->get('id')] = $_POST[$tv->get('name')];
-    }
+    
 
     /* update $_POST from $fields array */
     /* can be removed if $_POST is removed from runProcessor code */
     $_POST = array_merge($_POST,$fields);
         ///die('<pre>POST: ' . print_r($_POST,true));
     /* call the appropriate processor to save resource and TVs */
+    if (! empty($this->allTvs)) {
+        $fields['tvs'] = true;
+        foreach($this->allTvs as $tv) {
+            $fields['tv' . $tv->get('id')] = $_POST[$tv->get('name')];
+        }
+    }
+    
     if ($this->existing) {
+
        $response = $this->modx->runProcessor('resource/update',$fields);
     } else {
+        
         //die('Content: ' . $fields['content']);
         $response = $this->modx->runProcessor('resource/create',$fields);
     }
