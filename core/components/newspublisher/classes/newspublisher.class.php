@@ -538,13 +538,14 @@ public function saveResource() {
         $fields['template'] = $this->template;
         $fields['parent'] = $this->folder;
         $fields['createdby'] = $this->modx->user->get('id');
+        $fields['content']  = $this->header . $fields['content'] . $this->footer;
     /* set editedon and editedby for existing docs */
     } else {
         $fields['editedon'] = time();
         $fields['editedby'] = $userid;
     }
 
-    $fields['content']  = $this->header . $fields['content'] . $this->footer;
+    
 
     /* fix this */
     /*
