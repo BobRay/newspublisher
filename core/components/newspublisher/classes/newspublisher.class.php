@@ -610,10 +610,7 @@ public function saveResource() {
     }
     /* can probably remove this */
     $this->resource->fromArray($fields);
-    if ( ! empty( $this->errors)) {
-        /* return without altering the DB */
-        return '';
-    }
+    
 
     /* Add TVs to $fields for procesor */
     /* e.g. $fields[tv13] = $_POST['MyTv5'] */
@@ -632,12 +629,23 @@ public function saveResource() {
             $fields['tv' . $tv->get('id')] = $_POST[$tv->get('name')];
         }
     }
-    
+    /* set groups for new doc if param is set */
+    if ( (!empty($this->props['groups']) && (! $this->existing)) ) {
+        $groupString = $this->setGroups($this->props['groups'], $parentObj);
+        if ($gps) {
+            $fields['resource_groups']= $groupString ;
+        }
+        unset($groupString);
+    }
+
+    /* one last error check before calling processor */
+    if ( ! empty( $this->errors)) {
+        /* return without altering the DB */
+        return '';
+    }
     if ($this->existing) {
        $response = $this->modx->runProcessor('resource/update',$fields);
     } else {
-        
-        //die('Content: ' . $fields['content']);
         $response = $this->modx->runProcessor('resource/create',$fields);
     }
     if ($response->isError()) {
@@ -652,27 +660,18 @@ public function saveResource() {
 
     } else {
        $object = $response->getObject();
-       $this->resource = $this->modx->getObject('modResource',$object['id']);
-       //$id = $object['id'];
+       // $this->resource = $this->modx->getObject('modResource',$object['id']);
+       $postId = $object['id'];
 
        /* clean post array */
        $_POST = array();
     }
 
-    if ($this->resource) {
-        $resourceId = $this->resource->get('id');
-    } else {
-        return 'Cant get Resource';
+    if ( ! $postId) {
+        $this->setError('np_post_save_no_resource');
     }
-    /* if these are set, we need the parent object if it's a new resource */
-    if (! $this->existing) {
-        if (($this->props['groups'])) {
-            $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
-        }
-        if ($parentObj && $this->props['groups'] ) {
-            $this->setGroups($parentObj, $resourceId);
-        }
-    }
+    return $postId;
+
 } /* end saveResource() */
 
 public function forward($postId) {
@@ -705,7 +704,62 @@ public function forward($postId) {
         $this->modx->sendRedirect($goToUrl);
 }
 
-/* allows strip slashes on an array
+/** creates a JSON string to send in the resource_groups field
+ * for resource/update or resource/create processors.
+ * 
+ * @param string $resourceGroups - a comma-separated list of
+ * resource groups names or IDs (or both mixed) to assign a 
+ * document to.
+ * 
+ * @return string (JSON encoded array)
+ */
+
+protected function setGroups($resourceGroups, $parentObj = null) {
+
+    $values = array();
+    if ($resourceGroups == 'parent') {
+        if (! $parentObj) {
+            $this->setError($modx->lexicon('np_no_parent_groups'));
+            return null; /* no parent, no groups */
+        }
+        $resourceGroups = $parentObj->getMany('ResourceGroupResources');
+
+        if (! empty($resourceGroups)) { /* skip if parent doesn't belong to any resource groups */
+            /* build $resourceGroups string from parent's groups */
+            $groupNumbers = array();
+            foreach ($resourceGroups as $resourceGroup) {
+                $groupNumbers[] = $resourceGroup->get('document_group');
+            }
+            $resourceGroups = implode(',',$groupNumbers);
+        } else {/* parent not in any groups */
+            return null;
+        }
+
+
+    }  /* end if 'parent' */
+
+    $groups = explode(',',$resourceGroups);
+    
+    foreach($groups as  $group) {
+        $group = trim($group);
+        if (is_numeric($group)) {
+            $groupObj = $this->modx->getObject('modResourceGroup',$group);
+        } else {
+            $groupObj = $this->modx->getObject('modResourceGroup',array('name'=>$group));
+        }
+        $values[] = array(
+            'id' => $groupObj->get('id'),
+            'name' => $groupObj->get('name'),
+            'access' => '1',
+            'menu' => '',
+        );
+    }
+    //die('<pre>' . print_r($values,true));
+    return $this->modx->toJSON($values);
+
+}
+
+/** allows strip slashes on an array
  * not used, but may have to be called if magic_quotes_gpc causes trouble
  * */
 protected function stripslashes_deep($value) {
@@ -793,7 +847,7 @@ public function validate($errorTpl) {
 }
 
 /* set a new object's resource groups -- only called for new resources */
-protected function setGroups($parentObj, $resourceId) {
+protected function setxxxxxGroups($parentObj, $resourceId) {
     /* use the parent's groups if &groups is set to `parent` */
     if ($this->props['groups'] == 'parent') {
 

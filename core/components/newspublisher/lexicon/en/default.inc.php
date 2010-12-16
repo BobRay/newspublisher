@@ -49,6 +49,10 @@ $_lang['np_view_permission_denied'] = 'You do not have permission to view this d
 $_lang['np_create_permission_denied'] = 'You do not have permission to create a document';
 $_lang['np_save_permission_denied'] = 'You do not have permission to view this document';
 $_lang['np_no_edit_self'] = 'You cannot edit the newspublisher page.';
+$_lang['np_no_parent_groups'] = '&groups set to parent but doc has no parent';
+$_lang['np_post_save_no_resource'] = 'Unable to get resource after save';
+
+
 
 
 

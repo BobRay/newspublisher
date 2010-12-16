@@ -216,7 +216,8 @@ if ($isPostBack) {
         return $formTpl;
     }
 
-    $np->saveResource();
+    $docId = $np->saveResource(); /* returns ID of edited doc */
+    $postId = $modx->getOption('postId',$scriptProperties,$docId);
 
     /* handle save errors */
     $errors = $np->getErrors();
@@ -231,7 +232,7 @@ if ($isPostBack) {
         
         return($formTpl);
     } else {
-        $np->forward($scriptProperties['postId']);
+        $np->forward($postId);
     }
 
 
