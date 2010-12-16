@@ -96,7 +96,19 @@ $np = new Newspublisher($modx, $scriptProperties);
 
 $np_prefix = $modx->getOption('prefix',$scriptProperties,'np');
 $scriptProperties['prefix'] = $np_prefix;
+/*
+<script type="text/javascript">
 
+function stopRKey(evt) {
+  var evt = (evt) ? evt : ((event) ? event : null);
+  var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+  if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
+}
+
+document.onkeypress = stopRKey;
+
+</script>
+*/
 if (false) {
         /* if $canpost is empty, allow anonymous posting */
         if (! empty($canpost)) {

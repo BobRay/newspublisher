@@ -94,22 +94,26 @@ class Newspublisher {
         /* see if it's a repost */
         $this->setPostback( isset($_POST['hidSubmit']) && $_POST['hidSubmit'] == 'true');
 
+        if ($this->isPostBack) {
+            //die('<pre>'. print_r($_POST,true));
+        }
+
         if($this->existing) {
             
             $this->resource = $this->modx->getObject('modResource', $this->existing);
             if ($this->resource) {
                 if ($this->isPostBack) {
                     /* str_replace to prevent showing of placeholders */
-                         $fs = array();
-                         foreach($_POST as $k=>$v) {
-  	                         $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93'),$v);
-                         }
+                     $fs = array();
+                     foreach($_POST as $k=>$v) {
+                         $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
+                     }
                     $this->modx->toPlaceholders($fs,$this->prefix);
 
                 } else {
                     $ph = $this->resource->toArray();
                     foreach($ph as $k=>$v) {
-  	                         $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93'),$v);
+  	                         $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
                      }
                      $ph = $fs;
                     $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
@@ -485,8 +489,20 @@ public function saveResource() {
         $this->resource = $this->modx->newObject('modResource');
     }
     $oldFields = $this->resource->toArray();
+    if (! $this->modx->hasPermission('allow_modx_tags')) {
+        $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
+        foreach($_POST as $k=>$v)
+            if (! is_array($v)) { /* leave checkboxes, etc. alone */
+                $_POST[$k] = $this->modx->stripTags($v,$allowedTags);
+            }
+    }
+
     $newFields = $_POST;
-    $fields = array_replace($oldFields, $newFields);
+     $fields = array_replace($oldFields, $newFields);
+    // die('<br />POST' . print_r($_POST,true) . '<br />FIELDS' . print_r($fields,true));
+
+
+   
 
     $user = $this->modx->user;
     $userid = $this->modx->user->get('id');
@@ -515,17 +531,23 @@ public function saveResource() {
             }
             $fields['alias'] = $alias;
         }
+        /* set fields for new object */
+        $fields['editedon'] = '0';
+        $fields['editedby'] = '0';
+        $fields['hidemenu'] = $this->hidemenu;
+        $fields['template'] = $this->template;
+        $fields['parent'] = $this->folder;
+        $fields['createdby'] = $this->modx->user->get('id');
     /* set editedon and editedby for existing docs */
     } else {
         $fields['editedon'] = time();
         $fields['editedby'] = $userid;
     }
 
-    $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
+    $fields['content']  = $this->header . $fields['content'] . $this->footer;
 
-
-    $content = $this->modx->stripTags($fields['content'],$allowedTags);
-
+    /* fix this */
+    /*
     foreach($fields as $n=>$v) {
         if(!empty($this->badwords)) $v = preg_replace($this->badwords,'[Filtered]',$v); // remove badwords
         if (! is_array($v) ){
@@ -533,7 +555,7 @@ public function saveResource() {
         }
         $content = str_replace('[[+'.$n.']]',$v,$content);
     }
-
+    */
 
     $fields['title'] = $fields['pagetitle'];
     
@@ -576,95 +598,82 @@ public function saveResource() {
 
     }
         
-    if (! $this->existing) {
-
-        $fields['editedon'] = '0';
-        $fields['editedby'] = '0';
-        $fields['deleted'] = '0';
-        $fields['hidemenu'] = $this->hidemenu;
-        $fields['template'] = $this->template;
-        $fields['content']  = $this->header . $fields['content'] . $this->footer;
-        $fields['parent'] = $this->folder;
-    }
-
     $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
 
 
-        /* while we have the parent object -
-           set published status if not set by pub dates above */
-        if ($published == 'notSet') {
+    /* while we have the parent object -
+       set published status if not set by pub dates above */
+    if ($published == 'notSet') {
 
-            $prop = $this->props['published'];
+        $prop = $this->props['published'];
 
-            if ( ($prop == 'parent') && $parentObj) { /* set from parent */
+        if ( ($prop == 'parent') && $parentObj) { /* set from parent */
 
-                $fields['published'] = $parentObj->get('published');
-            } else if ($prop === '1') {
-                $fields['published'] = '1';
-            } else if ($prop === '0') {
-                $fields['published'] = '0';
-            } else { /* use system default */
-                $fields['published'] = $this->modx->getOption('publish_default');
-            }
-
-        }
-        /* can probably remove this */
-        $this->resource->fromArray($fields);
-        if ( ! empty( $this->errors)) {
-            /* return without altering the DB */
-            return '';
+            $fields['published'] = $parentObj->get('published');
+        } else if ($prop === '1') {
+            $fields['published'] = '1';
+        } else if ($prop === '0') {
+            $fields['published'] = '0';
+        } else { /* use system default */
+            $fields['published'] = $this->modx->getOption('publish_default');
         }
 
-        /* Add TVs to $fields for procesor */
-        /* e.g. $fields[tv13] = $_POST['MyTv5'] */
-        /* processor handles all types */
-        foreach($this->allTvs as $tv) {
-            $fields['tv' . $tv->get('id')] = $_POST[$tv->get('name')];
-        }
-        
+    }
+    /* can probably remove this */
+    $this->resource->fromArray($fields);
+    if ( ! empty( $this->errors)) {
+        /* return without altering the DB */
+        return '';
+    }
 
-        
-        /* update $_POST from $fields array */
-        /* can be removed if $_POST is removed from runProcessor code */
-        $_POST = array_merge($_POST,$fields);
+    /* Add TVs to $fields for procesor */
+    /* e.g. $fields[tv13] = $_POST['MyTv5'] */
+    /* processor handles all types */
+    foreach($this->allTvs as $tv) {
+        $fields['tv' . $tv->get('id')] = $_POST[$tv->get('name')];
+    }
 
-        /* call the appropriate processor to save resource and TVs */
-        if ($this->existing) {
-           $response = $this->modx->runProcessor('resource/update',$fields);
-        } else {
-            //die('Content: ' . $fields['content']);
-            $response = $this->modx->runProcessor('resource/create',$fields);
-        }
-        if ($response->isError()) {
-           if ($response->hasFieldErrors()) {
-               $fieldErrors = $response->getAllErrors();
-               $errorMessage = implode("\n",$fieldErrors);
-           } else {
-               $errorMessage = 'An error occurred: '.$response->getMessage();
-           }
-           $this->setError($errorMessage);
-           return '';
+    /* update $_POST from $fields array */
+    /* can be removed if $_POST is removed from runProcessor code */
+    $_POST = array_merge($_POST,$fields);
+        ///die('<pre>POST: ' . print_r($_POST,true));
+    /* call the appropriate processor to save resource and TVs */
+    if ($this->existing) {
+       $response = $this->modx->runProcessor('resource/update',$fields);
+    } else {
+        //die('Content: ' . $fields['content']);
+        $response = $this->modx->runProcessor('resource/create',$fields);
+    }
+    if ($response->isError()) {
+       if ($response->hasFieldErrors()) {
+           $fieldErrors = $response->getAllErrors();
+           $errorMessage = implode("\n",$fieldErrors);
+       } else {
+           $errorMessage = 'An error occurred: '.$response->getMessage();
+       }
+       $this->setError($errorMessage);
+       return '';
 
-        } else {
-           $object = $response->getObject();
-           $this->resource = $this->modx->getObject('modResource',$object['id']);
-           //$id = $object['id'];
+    } else {
+       $object = $response->getObject();
+       $this->resource = $this->modx->getObject('modResource',$object['id']);
+       //$id = $object['id'];
+    }
+
+    if ($this->resource) {
+        $resourceId = $this->resource->get('id');
+    } else {
+        return 'Cant get Resource';
+    }
+    /* if these are set, we need the parent object if it's a new resource */
+    if (! $this->existing) {
+        if (($this->props['groups'])) {
+            $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
         }
-        
-        if ($this->resource) {
-            $resourceId = $this->resource->get('id');
-        } else {
-            return 'Cant get Resource';
+        if ($parentObj && $this->props['groups'] ) {
+            $this->setGroups($parentObj, $resourceId);
         }
-        /* if these are set, we need the parent object if it's a new resource */
-        if (! $this->existing) {
-            if (($this->props['groups'])) {
-                $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
-            }
-            if ($parentObj && $this->props['groups'] ) {
-                $this->setGroups($parentObj, $resourceId);
-            }
-        }
+    }
 } /* end saveResource() */
 
 public function forward($postId) {
