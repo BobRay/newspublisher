@@ -154,6 +154,7 @@ class Newspublisher {
         }
         $this->aliastitle = isset($this->props['aliastitle'])? true : false;
         $this->clearcache = isset($this->props['clearcache']) ? true: false;
+        $this->aliaslower = isset($this->props['aliaslower']) ? $this->props['aliaslower']: true;
 
         /* get folder id where we should store articles
            else store under current document */
@@ -518,7 +519,6 @@ public function saveResource() {
                 $alias = 'article-' . time();
             } else { /* use pagetitle */
                 $alias = $this->modx->stripTags($_POST['pagetitle']);
-                $alias = strtolower($alias);
                 $alias = preg_replace('/&.+?;/', '', $alias); // kill entities
                 $alias = preg_replace('/[^\.%a-z0-9 _-]/', '', $alias);
                 $alias = preg_replace('/\s+/', '-', $alias);
