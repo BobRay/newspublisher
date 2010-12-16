@@ -513,15 +513,13 @@ public function saveResource() {
                 $alias = 'article-' . time();
             } else { /* use pagetitle */
                 $alias = $this->modx->stripTags($_POST['pagetitle']);
+                $alias=strtolower($alias);
                 $alias = preg_replace('/&.+?;/', '', $alias); // kill entities
                 $alias = preg_replace('/[^\.%a-z0-9 _-]/', '', $alias);
                 $alias = preg_replace('/\s+/', '-', $alias);
                 $alias = preg_replace('|-+|', '-', $alias);
                 $alias = trim($alias, '-');
                 $alias = mysql_escape_string($alias);
-            }
-            if($this->props['aliaslower']) {
-                    $alias=strtolower($alias);
             }
             $fields['alias'] = $alias;
         }
