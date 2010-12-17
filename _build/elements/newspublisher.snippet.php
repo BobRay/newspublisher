@@ -49,7 +49,7 @@ Fix/add &allowAnyPost
   Parameters:
     &folder      - (optional) Folder id where new documents are stored; defaults to NewsPublisher folder.
     &show        - (optional) Comma separated list of fields/tvs to show.
-                     defaults to 'pagetitle,longtitle,menutitle,pub_date,unpub_date,introtext,content'.
+                     defaults to 'pagetitle,longtitle,description,menutitle,pub_date,unpub_date,introtext,content'.
     &required    - (optional) Comma-separated list of fields/tvs to reguire; defaults to 'pagetitle,content'.
     &published   - (optional) Set new resource as published or not
                       (will be overridden by publish and unpublish dates).
