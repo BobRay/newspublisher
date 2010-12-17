@@ -47,45 +47,35 @@ Fix/add &allowAnyPost
      NOTE: Bruno17's tinymcefe component must be installed for rich text fields
 
   Parameters:
-    &folder      - folder id where comments are stored
-    &published   - set new resource as published or not
-                   (will be overridden by publish and unpublish dates)
-                   set to `parent` to match parent's pub status
-                   defaults to publish_default system setting
-    &makefolder  - set to 1 to automatically convert the parent document to a folder.
-                   Defaults to 0
-    &hidealltvs  - set to 1 to hide all TVs
-    &hidetvs     - comma-separated list of TV IDs to hide
-    &postid      - document id to load on success. Defaults to the page created or edited
-    &cancelid    - document id to load on cancel. Defaults to http_referer.
-    &canpost     - comma delimited user groups that can use the form.
-                   Leave blank for public posting
-    &allGroups   - If set to 1, user must be a member of all groups
-    &permissions - Comma-separated list of permissions. If set, user must have all permissions.
-    &badwords    - comma delimited list of words not allowed in post
-    &template    - name of template to use for news post; set to 'parent' to use parent's template;
-                   for 'parent', &folder must be set; defaults to system default template
-
-    &headertpl   - header Tpl chunk (chunk name) to be inserted at the begining of the news content
-    &footertpl   - footer Tpl chunk (chunk name) to be inserted at the end of the news content
-    &formtpl     - form Tpl chunk (chunk name)
-    &richtext    - Initialize rich text editor; set this if there are any rich text fields
-    &rtcontent   - use rich text for the content form field
-    &rtsummary   - use rich text for the summary (introtext) form field
-    &showinmenu  - sets the flag to (1|0) as to whether or not the new page
-                   shows in the menu. defaults to 0
-    &aliastitle  - set to 1 to use page title as alias suffix. Defaults to 0 - date created.
-    &clearcache  - when set to 1 the system will automatically clear the site cache after publishing an article.
-    &hour        - Hour, minute and second for published and unpublished dates; defaults to 12:01 am.
-    &minute
-    &second
-    &listboxmax  - maximum length for listboxes. Default is 8 items.
-    &cssfile     - name of CSS file to use, or '' for no CSS file; defaults to newspublisher.css.
-    &errortpl    -  (optional) name of Tpl chunk for formatting field errors
-    &groups      - resource groups to put new document in (no effect with existing docs).
-                   set to 'parent' to use parent's groups.
-    &language    - language to use
-    &prefix      - prefix to use for placeholders
+    &folder      - (optional) Folder id where new documents are stored; defaults to NewsPublisher folder.
+    &show        - (optional) Comma separated list of fields/tvs to show.
+                     defaults to 'pagetitle,longtitle,menutitle,pub_date,unpub_date,introtext,content'.
+    &require     - (optional) Comma-separated list of fields/tvs to reguire; defaults to 'pagetitle,content'.
+    &published   - (optional) Set new resource as published or not
+                      (will be overridden by publish and unpublish dates).
+                       Set to `parent` to match parent's pub status;
+                       defaults to publish_default system setting.
+    &postid      - (optional) Document id to load on success; defaults to the page created or edited.
+    &cancelid    - (optional) Document id to load on cancel; defaults to http_referer.
+    &badwords    - (optional) Comma delimited list of words not allowed in new document.
+    &template    - (optional) Name of template to use for new document; set to 'parent' to use parent's template;
+                       for 'parent', &folder must be set; defaults to system default template.
+    &headertpl   - (optional) Header Tpl chunk (chunk name) to be inserted at the begining of a new document.
+    &footertpl   - (optional) Footer Tpl chunk (chunk name) to be inserted at the end of a new document.
+    &richtext    - (optional) Initialize rich text editor; set this if there are any rich text fields.
+    &rtcontent   - (optional) Use rich text for the content form field.
+    &rtsummary   - (optional) Use rich text for the summary (introtext) form field.
+    &showinmenu  - (optional) Sets the flag to (1|0) as to whether or not the new page
+                       shows in the menu; defaults to 0.
+    &aliastitle  - (optional) Set to 1 to use lowercase, hyphenated, page title as alias. Defaults to 0 - 'article-(date created)'.
+    &clearcache  - (optional) When set to 1, the system will automatically clear the site cache after publishing an article.
+    &listboxmax  - (optional) Maximum length for listboxes. Default is 8 items.
+    &cssfile     - (optional) Name of CSS file to use, or '' for no CSS file; defaults to newspublisher.css.
+    &errortpl    - (optional) Name of Tpl chunk for formatting field errors.
+    &groups      - (optional) Resource groups to put new document in (no effect with existing docs);
+                       set to 'parent' to use parent's groups.
+    &language    - (optional) Language to use.
+    &prefix      - (optional) Prefix to use for placeholders; defaults to 'np.'
 
 */
 
@@ -109,17 +99,7 @@ document.onkeypress = stopRKey;
 </script>
 */
 if (false) {
-        /* if $canpost is empty, allow anonymous posting */
-        if (! empty($canpost)) {
-            $allGroups =  (! empty($allGroups)) && ($allGroups == '1');
-            $neededGroups = explode(',',$canpost);
-            if (! $modx->user->isMember($neededGroups,$allGroups) ){
-               $np->setError($modx->lexicon('np_not_in_group'));
-            }
-        } else {
-            $scriptProperties['allowAnyPost'] = true;
-        }
-
+        
         /* check for required permissions */
         if (! empty($permissions)) {
             $neededPermissions = explode(',',$permissions);
