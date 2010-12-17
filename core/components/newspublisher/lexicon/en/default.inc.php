@@ -53,22 +53,3 @@ $_lang['np_save_permission_denied'] = 'You do not have permission to view this d
 $_lang['np_no_edit_self'] = 'You cannot edit the newspublisher page.';
 $_lang['np_no_parent_groups'] = '&groups set to parent but doc has no parent';
 $_lang['np_post_save_no_resource'] = 'Unable to get resource after save';
-
-/* npEditThisButton strings */
-$_lang['np_edit'] = 'Edit';
-$_lang['np_no_edit_document_permission'] = 'No edit_document permission';
-$_lang['np_no_context_save_document_permission'] = 'No context save_document permission';
-$_lang['np_no_resource_save_document_permission'] = 'No Resource save permission on this document';
-$_lang['np_no_edit_home_page'] = 'Can not edit home page';
-
-
-
-
-
-
-
-
-
-
-
-

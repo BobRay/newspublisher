@@ -65,16 +65,17 @@ Fix/add &allowAnyPost
     &richtext    - (optional) Initialize rich text editor; set this if there are any rich text fields.
     &rtcontent   - (optional) Use rich text for the content form field.
     &rtsummary   - (optional) Use rich text for the summary (introtext) form field.
-    &showinmenu  - (optional) Sets the flag to (1|0) as to whether or not the new page
-                       shows in the menu; defaults to 0.
-    &aliastitle  - (optional) Set to 1 to use lowercase, hyphenated, page title as alias. Defaults to 0 - 'article-(date created)'.
-    &clearcache  - (optional) When set to 1, the system will automatically clear the site cache after publishing an article.
+    &showinmenu  - (optional) Sets the flag (0/1) to as to whether or not the new page shows in the menu; defaults to 0.
+    &aliastitle  - (optional) Set to 1 to use lowercase, hyphenated, page title as alias. Defaults to 1.
+                       If 0,'article-(date created)' is used. Ignored if alias is filled in form.
+    &clearcache  - (optional) When set to 1, the system will automatically clear the site cache after saving a resource; default: 1.
     &listboxmax  - (optional) Maximum length for listboxes. Default is 8 items.
-    &cssfile     - (optional) Name of CSS file to use, or '' for no CSS file; defaults to newspublisher.css.
-    &errortpl    - (optional) Name of Tpl chunk for formatting field errors.
+    &cssfile     - (optional) Name of CSS file to use, or `` for no CSS file; defaults to newspublisher.css.
+                       File should be in assets/newspublisher/css/ directory
+    &errortpl    - (optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.
     &groups      - (optional) Resource groups to put new document in (no effect with existing docs);
                        set to 'parent' to use parent's groups.
-    &language    - (optional) Language to use.
+    &language    - (optional) Language to use in forms and error messages.
     &prefix      - (optional) Prefix to use for placeholders; defaults to 'np.'
 
 */

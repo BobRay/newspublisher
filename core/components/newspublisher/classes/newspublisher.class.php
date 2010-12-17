@@ -94,10 +94,6 @@ class Newspublisher {
         /* see if it's a repost */
         $this->setPostback( isset($_POST['hidSubmit']) && $_POST['hidSubmit'] == 'true');
 
-        if ($this->isPostBack) {
-            //die('<pre>'. print_r($_POST,true));
-        }
-
         if($this->existing) {
             
             $this->resource = $this->modx->getObject('modResource', $this->existing);
@@ -509,7 +505,7 @@ public function saveResource() {
         /* set alias name of document used to store articles */
 
         if (empty($fields['alias'])) { /* leave it alone if filled */
-            if(!$this->aliastitle) { /* default */
+            if(!$this->aliastitle) {
                 $alias = 'article-' . time();
             } else { /* use pagetitle */
                 $alias = $this->modx->stripTags($_POST['pagetitle']);

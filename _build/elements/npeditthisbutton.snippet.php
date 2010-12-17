@@ -15,7 +15,7 @@
 
 $language = $modx->getOption('language',$scriptProperties,null);
 $language = $language ? $language . ':' : '';
-$modx->lexicon->load($language.'newspublisher:default');
+$modx->lexicon->load($language.'newspublisher:button');
 
 /* Caption for edit button  */
 
