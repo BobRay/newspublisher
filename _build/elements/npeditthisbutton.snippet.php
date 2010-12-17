@@ -20,7 +20,7 @@ $modx->lexicon->load($language.'newspublisher:default');
 /* Caption for edit button  */
 
 $buttonCaption = $modx->lexicon('np_edit');
-$buttonCaption = empty($buttonCaption) ? 'Edit' : $value;
+$buttonCaption = empty($buttonCaption) ? 'np_edit' : $buttonCaption;
 
 /* value will be unchanged if there are no errors  */
 $value = $buttonCaption;
