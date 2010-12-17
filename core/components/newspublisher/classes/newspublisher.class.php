@@ -173,7 +173,7 @@ class Newspublisher {
        /* inject NP CSS file */
        /* empty but sent parameter means use no CSS file at all */
 
-       if ( ! isset($this->props['cssfile'])) { /* nothing sent - use default */
+       if ( empty($this->props['cssfile'])) { /* nothing sent - use default */
            $css = $this->assetsUrl . 'css/newspublisher.css';
        } else if (empty($this->props['cssfile']) ) { /* empty param -- no css file */
            $css = false;

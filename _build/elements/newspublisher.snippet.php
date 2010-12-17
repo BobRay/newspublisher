@@ -119,10 +119,10 @@ if (false) {
 $np->init($modx->context->get('key'));
 
 /* get error Tpl chunk */
-$errorTpl = isset($errortpl)? $modx->getChunk($errortpl): '<span class = "errormessage">[[+np.error]]</span>';
+$errorTpl = ! empty($errortpl)? $modx->getChunk($errortpl): '<span class = "errormessage">[[+np.error]]</span>';
 
 if(empty($errorTpl)) { /* user sent it but it's not there */
-    $msg = str_replace('[[+tpl]]',$scriptProperties['errortpl'], $this->modx->lexicon('np_no_error_tpl'));
+    $msg = str_replace('[[+tpl]]',$scriptProperties['errortpl'], $modx->lexicon('np_no_error_tpl'));
    return $msg;
 }
 $errors = $np->getErrors();
