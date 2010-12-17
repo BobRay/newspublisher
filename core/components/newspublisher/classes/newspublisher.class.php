@@ -79,7 +79,7 @@ class Newspublisher {
             case 'mgr': break;
             case 'web':
             default:
-                $language = isset($this->props['language']) ? $this->props['language'] . ':' : '';
+                $language = ! empty($this->props['language']) ? $this->props['language'] . ':' : '';
                 $this->modx->lexicon->load($language.'newspublisher:default');
                 break;
         }
@@ -148,32 +148,32 @@ class Newspublisher {
                 $this->setError($this->modx->lexicon('np_create_permission_denied'));
             }
         }
-        $this->aliastitle = isset($this->props['aliastitle'])? true : false;
-        $this->clearcache = isset($this->props['clearcache']) ? true: false;
+        $this->aliastitle = $this->props['aliastitle']? true : false;
+        $this->clearcache = $this->props['clearcache'] ? true: false;
         
 
         /* get folder id where we should store articles
            else store under current document */
-        $this->folder = isset($this->props['folder']) ? intval($this->props['folder']):$modx->resource->get('id');
-        if(isset($this->props['badwords'])) {
+        $this->folder = !empty($this->props['folder']) ? intval($this->props['folder']):$modx->resource->get('id');
+        if( !empty($this->props['badwords'])) {
             $this->badwords = str_replace(' ','', $this->props['badwords']);
             $this->badwords = "/".str_replace(',','|', $this->badwords)."/i";
         }
         // get menu status
-        $this->hidemenu = isset($this->props['showinmenu']) && $this->props['showinmenu']=='1' ? '0' : '1';
+        $this->hidemenu = $this->props['showinmenu']? '0' : '1';
 
       
        $this->modx->lexicon->load('core:resource');
        $this->template = $this->getTemplate();
        $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
        $this->modx->regClientStartupScript($this->assetsUrl . 'datepicker/js/datepicker.js');
-       $this->header = isset($this->props['headertpl']) ? $this->modx->getChunk($this->props['headertpl']) : '';
-       $this->footer = isset($this->props['footertpl']) ? $this->modx->getChunk($this->props['footertpl']):'';
+       $this->header = !empty($this->props['headertpl']) ? $this->modx->getChunk($this->props['headertpl']) : '';
+       $this->footer = !empty($this->props['footertpl']) ? $this->modx->getChunk($this->props['footertpl']):'';
 
        /* inject NP CSS file */
        /* empty but sent parameter means use no CSS file at all */
 
-       if ( empty($this->props['cssfile'])) { /* nothing sent - use default */
+       if (empty($this->props['cssfile'])) { /* nothing sent - use default */
            $css = $this->assetsUrl . 'css/newspublisher.css';
        } else if (empty($this->props['cssfile']) ) { /* empty param -- no css file */
            $css = false;
@@ -185,21 +185,21 @@ class Newspublisher {
            $this->modx->regClientCSS($css);
        }
        //set listbox max size
-       $this->listboxmax = isset($this->props['listboxmax'])? $this->props['listboxmax'] : 8;
+       $this->listboxmax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
 
        /* do rich text stuff */
        if ($this->props['richtext']) {
            
             /* set rich text content field */
-            $ph = isset($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
+            $ph = ! empty($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
             $this->modx->setPlaceholder('np.rt_content_1', $ph );
-            $ph = isset($this->props['rtcontent']) ? 'modx-richtext':'content';
+            $ph = ! empty($this->props['rtcontent']) ? 'modx-richtext':'content';
             $this->modx->setPlaceholder('np.rt_content_2', $ph );
 
             /* set rich text summary field */
-            $ph = isset($this->props['rtsummary']) ? 'MODX_RichTextWidget':'introtext';
+            $ph = ! empty($this->props['rtsummary']) ? 'MODX_RichTextWidget':'introtext';
             $this->modx->setPlaceholder('np.rt_summary_1', $ph );
-            $ph = isset($this->props['rtsummary']) ? 'modx-richtext':'introtext';
+            $ph = ! empty($this->props['rtsummary']) ? 'modx-richtext':'introtext';
             $this->modx->setPlaceholder('np.rt_summary_2', $ph );
 
             unset($ph);
@@ -248,7 +248,7 @@ public function displayForm() {
 
 
 // get form template
-    if(isset($formtpl)) $formTpl = $this->modx->getChunk($formtpl);
+    /* outertpl here */
 
     if(empty($formTpl)) $formTpl = '
         <div class="newspublisher">

@@ -30,7 +30,7 @@
 /* NewsPublisher Property Description strings */
 $_lang['np_folder_desc'] = '(optional) Folder id where new documents are stored; defaults to NewsPublisher folder.';
 $_lang['np_show_desc'] = '(optional) Comma separated list of fields/tvs to show.';
-$_lang['np_require_desc'] = '(optional) Comma separated list of fields/tvs to require.';
+$_lang['np_required_desc'] = '(optional) Comma separated list of fields/tvs to require.';
 $_lang['np_published_desc'] = "(optional) Set new resource as published or not (will be overridden by publish and unpublish dates). Set to `parent` to match parent's pub status; defaults to publish_default system setting.";
 $_lang['np_postid_desc'] = '(optional) Document id to load on success; defaults to the page created or edited.';
 $_lang['np_cancelid_desc'] = '(optional) Document id to load on cancel; defaults to http_referer.';
@@ -50,3 +50,7 @@ $_lang['np_errortpl_desc'] = '(optional) Name of Tpl chunk for formatting field 
 $_lang['np_groups_desc'] = "(optional) Resource groups to put new document in (no effect with existing docs); set to `parent` to use parent's groups.";
 $_lang['np_language_desc'] = '(optional) Language to use in forms and error messages.';
 $_lang['np_prefix_desc'] = "(optional) Prefix to use for placeholders; defaults to 'np.'";
+$_lang['np_fielderrortpl_desc'] = '(optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.';
+
+
+

@@ -50,7 +50,7 @@ Fix/add &allowAnyPost
     &folder      - (optional) Folder id where new documents are stored; defaults to NewsPublisher folder.
     &show        - (optional) Comma separated list of fields/tvs to show.
                      defaults to 'pagetitle,longtitle,menutitle,pub_date,unpub_date,introtext,content'.
-    &require     - (optional) Comma-separated list of fields/tvs to reguire; defaults to 'pagetitle,content'.
+    &required    - (optional) Comma-separated list of fields/tvs to reguire; defaults to 'pagetitle,content'.
     &published   - (optional) Set new resource as published or not
                       (will be overridden by publish and unpublish dates).
                        Set to `parent` to match parent's pub status;
@@ -72,11 +72,13 @@ Fix/add &allowAnyPost
     &listboxmax  - (optional) Maximum length for listboxes. Default is 8 items.
     &cssfile     - (optional) Name of CSS file to use, or `` for no CSS file; defaults to newspublisher.css.
                        File should be in assets/newspublisher/css/ directory
-    &errortpl    - (optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.
+    &errortpl    - (optional) Name of Tpl chunk for formatting errors. Must contain [[+np.error]] placeholder.
+    &fielderrortpl (optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.
     &groups      - (optional) Resource groups to put new document in (no effect with existing docs);
                        set to 'parent' to use parent's groups.
     &language    - (optional) Language to use in forms and error messages.
     &prefix      - (optional) Prefix to use for placeholders; defaults to 'np.'
+    &fielderrortpl - (optional)
 
 */
 
@@ -131,7 +133,7 @@ if (! empty($errors) ) { /* doesn't have permission */
     return($errorMessage);
  }
 
-if (isset($cancelId)) {
+if (! empty ($cancelId)) {
     $cancelUrl = $modx->makeUrl($cancelId,'','','full');
 } else {
     $cancelUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $modx->resource->get('id');
@@ -141,7 +143,7 @@ $modx->setPlaceholder('np.cancel_url',$cancelUrl);
 $errorHeaderPresubmit = $modx->lexicon('np_error_presubmit');
 $errorHeaderSubmit = $modx->lexicon('np_error_submit');
 
-$fieldErrorTpl = isset($fielderrortpl)? $modx->getChunk($fielderrortpl): '<span class = "fielderrormessage">[[+np.error]]</span>';
+$fieldErrorTpl = !empty($fielderrortpl)? $modx->getChunk($fielderrortpl): '<span class = "fielderrormessage">[[+np.error]]</span>';
 
 if(empty($fieldErrorTpl)) {
     $msg = str_replace('[[+tpl]]',$scriptProperties['errortpl'], $this->modx->lexicon('np_no_error_tpl'));
