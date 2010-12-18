@@ -40,7 +40,7 @@ Fix/add &allowAnyPost
 
   Changelog:
      Mar 05, 06 -- modx_ prefix removed [Mark]
-     Dec 13, 05 -- Now inherrits web/manager docgroups thanks to Jared Carlow
+     Dec 13, 05 -- Now inherits web/manager docgroups thanks to Jared Carlow
      Nov 06, 10 -- Revolution Conversion by Bob Ray
      Nov 15, 10 -- Added TVs to form
 
@@ -60,7 +60,7 @@ Fix/add &allowAnyPost
     &badwords    - (optional) Comma delimited list of words not allowed in new document.
     &template    - (optional) Name of template to use for new document; set to 'parent' to use parent's template;
                        for 'parent', &folder must be set; defaults to system default template.
-    &headertpl   - (optional) Header Tpl chunk (chunk name) to be inserted at the begining of a new document.
+    &headertpl   - (optional) Header Tpl chunk (chunk name) to be inserted at the beginning of a new document.
     &footertpl   - (optional) Footer Tpl chunk (chunk name) to be inserted at the end of a new document.
     &richtext    - (optional) Initialize rich text editor; set this if there are any rich text fields.
     &rtcontent   - (optional) Use rich text for the content form field.
@@ -82,6 +82,7 @@ Fix/add &allowAnyPost
 
 */
 
+/** @define "$modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/')" "VALUE" */
 require_once $modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/').'classes/newspublisher.class.php';
 $np = new Newspublisher($modx, $scriptProperties);
 
@@ -146,7 +147,7 @@ $errorHeaderSubmit = $modx->lexicon('np_error_submit');
 $fieldErrorTpl = !empty($fielderrortpl)? $modx->getChunk($fielderrortpl): '<span class = "fielderrormessage">[[+np.error]]</span>';
 
 if(empty($fieldErrorTpl)) {
-    $msg = str_replace('[[+tpl]]',$scriptProperties['errortpl'], $this->modx->lexicon('np_no_error_tpl'));
+    $msg = str_replace('[[+tpl]]',$scriptProperties['errortpl'], $modx->lexicon('np_no_error_tpl'));
    return $msg;
 }
 

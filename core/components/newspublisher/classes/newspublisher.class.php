@@ -52,6 +52,7 @@ class Newspublisher {
     protected $footer;
     protected $listboxmax;
     protected $prefix; // prefix for placeholders
+    protected $badwords; // words to remove
 
 
 
@@ -119,7 +120,7 @@ class Newspublisher {
                     unset($ph);
                 }
             } else {
-               $msg = str_replace('[[+id]]',$existing, $this->modx->lexicon('np_no_resource'));
+               $msg = str_replace('[[+id]]',$this->existing, $this->modx->lexicon('np_no_resource'));
                $this->setError($msg);
                return;
 
@@ -154,7 +155,7 @@ class Newspublisher {
 
         /* get folder id where we should store articles
            else store under current document */
-        $this->folder = !empty($this->props['folder']) ? intval($this->props['folder']):$modx->resource->get('id');
+        $this->folder = !empty($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');
         if( !empty($this->props['badwords'])) {
             $this->badwords = str_replace(' ','', $this->props['badwords']);
             $this->badwords = "/".str_replace(',','|', $this->badwords)."/i";
@@ -215,13 +216,13 @@ class Newspublisher {
            $plugin=$this->modx->getObject('modPlugin',array('name'=>$whichEditor));
            if ($whichEditor == 'TinyMCE' ) {
                //$tinyUrl = $this->modx->getOption('assets_url').'components/tinymcefe/';
-
+                $tinyUrl = $this->modx->getOption('assets_url').'components/tinymce/';
                /* OnRichTextEditorInit */
 
                $tinyproperties=$plugin->getProperties();
-                               require_once $tinyPath.'tinymce.class.php';
+               require_once $tinyPath.'tinymce.class.php';
                $tiny = new TinyMCE($this->modx,$tinyproperties,$tinyUrl);
-               if (isset($forfrontend) || $this->modx->isFrontend()) {
+               if (isset($this->props['forfrontend']) || $this->modx->isFrontend()) {
                    $def = $this->modx->getOption('cultureKey',null,$this->modx->getOption('manager_language',null,'en'));
                    $tinyproperties['language'] = $this->modx->getOption('fe_editor_lang',array(),$def);
                    $tinyproperties['frontend'] = true;
@@ -563,7 +564,7 @@ public function saveResource() {
 
     
 
-    /* fix this */
+    /* ToDo: fix this */
     /*
     foreach($fields as $n=>$v) {
         if(!empty($this->badwords)) $v = preg_replace($this->badwords,'[Filtered]',$v); // remove badwords
@@ -577,12 +578,12 @@ public function saveResource() {
       
     $published = 'notSet';
 
-    /* fix: remove this */
+    /* ToDo: remove this */
     if (false) {
 
-        $H=isset($hours)? $hours : 0;
-        $M=isset($minutes)? $minutes: 1;
-        $S=isset($seconds)? $seconds: 0;
+        $H=isset($this->props['hours'])? $this->props['hours'] : 0;
+        $M=isset($this->props['$minutes'])? $this->props['minutes']: 1;
+        $S=isset($this->props['seconds'])? $this->props['seconds']: 0;
 
         $published = 'notSet';
         // check published date
@@ -635,11 +636,11 @@ public function saveResource() {
         }
 
     }
-    /* can probably remove this */
+    /* ToDo: Can probably remove this */
     $this->resource->fromArray($fields);
     
 
-    /* Add TVs to $fields for procesor */
+    /* Add TVs to $fields for processor */
     /* e.g. $fields[tv13] = $_POST['MyTv5'] */
     /* processor handles all types */
     
@@ -659,7 +660,7 @@ public function saveResource() {
     /* set groups for new doc if param is set */
     if ( (!empty($this->props['groups']) && (! $this->existing)) ) {
         $groupString = $this->setGroups($this->props['groups'], $parentObj);
-        if ($gps) {
+        if ($groupString) {
             $fields['resource_groups']= $groupString ;
         }
         unset($groupString);
@@ -709,7 +710,7 @@ public function forward($postId) {
        if ($this->clearcache || (! $this->existing) ) {
            $cacheManager = $this->modx->getCacheManager();
            $cacheManager->clearCache(array (
-                "{$resource->context_key}/",
+                "{$this->resource->context_key}/",
             ),
             array(
                 'objects' => array('modResource', 'modContext', 'modTemplateVarResource'),
@@ -746,7 +747,7 @@ protected function setGroups($resourceGroups, $parentObj = null) {
     $values = array();
     if ($resourceGroups == 'parent') {
         if (! $parentObj) {
-            $this->setError($modx->lexicon('np_no_parent_groups'));
+            $this->setError($this->modx->lexicon('np_no_parent_groups'));
             return null; /* no parent, no groups */
         }
         $resourceGroups = $parentObj->getMany('ResourceGroupResources');
@@ -874,6 +875,7 @@ public function validate($errorTpl) {
 }
 
 /* set a new object's resource groups -- only called for new resources */
+/* todo: remove this  */
 protected function setxxxxxGroups($parentObj, $resourceId) {
     /* use the parent's groups if &groups is set to `parent` */
     if ($this->props['groups'] == 'parent') {
