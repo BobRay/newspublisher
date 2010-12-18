@@ -84,11 +84,14 @@ Fix/add &allowAnyPost
 
 /** @define "$modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/')" "VALUE" */
 require_once $modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/').'classes/newspublisher.class.php';
+
+$np_prefix = $modx->getOption('prefix',$scriptProperties,'np');
+$scriptProperties['prefix'] = empty($np_prefix)? 'np' : $scriptProperties['prefix'];
+
 $np = new Newspublisher($modx, $scriptProperties);
 
 
-$np_prefix = $modx->getOption('prefix',$scriptProperties,'np');
-$scriptProperties['prefix'] = $np_prefix;
+
 /*
 <script type="text/javascript">
 
