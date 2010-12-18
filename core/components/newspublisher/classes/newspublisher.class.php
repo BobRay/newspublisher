@@ -244,12 +244,40 @@ class Newspublisher {
 
    } /* end init */
 
-public function displayForm() {
+public function displayForm($show) {
 
+    $fields = explode(',',$show);
+    foreach ($fields as $field) {
+        $field = trim($field);
+    }
 
+    $outerTpl = isset ($this->props['outertpl'])? $this->props['outertpl'] : '<div class="newspublisher">
+        <h2>[[%np_main_header]]</h2>
+        [[!+np.error_header:ifnotempty=`<h3>[[!+np.error_header]]</h3>`]]
+        [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
+        [[!+np.errors_submit:ifnotempty=`[[!+np.errors_submit]]`]]
+        [[!+np.errors:ifnotempty=`[[!+np.errors]]`]]
+        <form action="[[~[[*id]]]]" method="post">
+            <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
+        [[+np.insert]]
+        <span class = "buttons">
+            <input class="submit" type="submit" name="Submit" value="Submit" />
+            <input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = \'[[+np.cancel_url]]\' " />
+        </span>
+    </form>
+</div>';
+    $textTpl = isset ($this->props['texttpl'])? $this->props['texttpl'] : '[[+np.error_[[+npx.fieldName]]]]
+            <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label><input name="[[+npx.fieldName]]"  id="[[+npx.fieldName]]" type="text"  value="[[+np.[[+npx.fieldName]]]]" maxlength="60" />';
 // get form template
     /* outertpl here */
 
+    foreach($fields as $field) {
+        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$textTpl);
+    }
+    $formTpl = str_replace('[[+np.insert]]',$inner,$outerTpl);
+    //die($formTpl);
+    //return $formTpl;
+    $formTpl = '';
     if(empty($formTpl)) $formTpl = '
         <div class="newspublisher">
         <h2>[[%np_main_header]]</h2>
@@ -280,7 +308,10 @@ public function displayForm() {
             <label for="content">[[%resource_content]]: </label><div class="[[+np.rt_content_1]]"><textarea class="[[+np.rt_content_2]]" name="content" id="content">[[+np.content]]</textarea></div>
             [[+np.allTVs]]
             [[+np.post_stuff]]
-        <span class = "buttons"><input class="submit" type="submit" name="Submit" value="Submit" /><input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = \'[[+np.cancel_url]]\' " /></span>
+        <span class = "buttons">
+            <input class="submit" type="submit" name="Submit" value="Submit" />
+            <input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = \'[[+np.cancel_url]]\' " />
+        </span>
     </form>
 </div>';
 

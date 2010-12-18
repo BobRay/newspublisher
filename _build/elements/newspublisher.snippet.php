@@ -152,7 +152,7 @@ if(empty($fieldErrorTpl)) {
 
 
 
-$formTpl .= $np->displayForm();
+$formTpl .= $np->displayForm($scriptProperties['show']);
 
 /* handle pre-submission errors */
 $errors = $np->getErrors();
