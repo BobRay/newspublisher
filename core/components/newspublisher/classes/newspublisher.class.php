@@ -249,32 +249,6 @@ class Newspublisher {
    } /* end init */
 
 public function displayForm($show) {
-    /* ToDo: anomalies
-    pub_date - resource_publishdate, resource_publishedate_help
-    unpub_date -  resource_unpublishdate, resource_unpublishedate_help
-    hidemenu - hide_from_menus, hide_from_menus_help
-    isfolder - resource_folder, resource_folder_help
-    resource_content_dispo - resource_contentdispo, resource_contentdispo_help
-    resource_class_key (missing), resource_class_key is there.
-    resource_context_key - missing both
-    resource_published_by_help is missing
-    resource_createdby_help is missing.
-    resource_createdon help is missing.
-    resource_editedby_help is missing.
-    resource_editedon_help is missing.
-    resource_deleted both missing
-    resource_deleteon both missing.
-    resource_deletedby both missing.
-    resourc_publishedby_help is missing
-    resource_class_key is missing (help is there)
-    resource_context_key both missing.
-    resource_type both missing
-    resource_contentType both missing
-
-    resource_id (both missing)
-    resource_content_help is missing.
-    resource_introtext (both are summary).
-    */
 
     $fields = explode(',',$show);
     foreach ($fields as $field) {
@@ -303,37 +277,43 @@ public function displayForm($show) {
             <label class="intfield" for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label><input name="[[+npx.fieldName]]" class="int" id="[[+npx.fieldName]]" type="text"  value="[[+np.[[+npx.fieldName]]]]" maxlength="3" />';
     $dateTpl = ! empty ($this->props['datetpl'])? $this->props['datetpl'] : '[[+np.error_[[+npx.fieldName]]]]<div class="datepicker"><span class="npdate"><label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]] [[%np_date_hint]]: </label><input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="[[+npx.fieldName]]" name="[[+npx.fieldName]]" maxlength="10" readonly="readonly" value="[[+np.[[+npx.fieldName]]]]" /></span></div>';
 
-    $boolTpl = ! empty ($this->props['booltpl'])? $this->props['texttpl'] : '[[+np.error_[[+npx.fieldName]]]]<div class="checkboxfield">
-            <label for="[[+npx.fieldName]]" class="checkboxfield" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label><input name="[[+npx.fieldName]]" class="checkboxfield" id="[[+npx.fieldName]]" type="checkbox"  value="[[+np.[[+npx.fieldName]]]]" /></div>';
+    //$boolTpl = ! empty ($this->props['booltpl'])? $this->props['booltpl'] : '[[+np.error_[[+npx.fieldName]]]]<div class="checkboxfield">
+            // <label for="[[+npx.fieldName]]" class="checkboxfield" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label><input name="[[+npx.fieldName]]" class="checkboxfield" id="[[+npx.fieldName]]" type="checkbox"  value="[[+np.[[+npx.fieldName]]]]" /></div>';
 
+    $boolTpl = ! empty ($this->props['booltpl'])? $this->props['booltpl'] : '<fieldset class="np-tv-checkbox" title="[[%resource_[[+npx.fieldName]]_help]]"><legend>[[%resource_[[+npx.fieldName]]]]</legend>
+    <span class="option"><input class="checkbox" type="checkbox" name="MyTv8[]" value="" checked="checked"  />[[+np.[[+npx.fieldName]]]]</span>
+</fieldset>';
 
     if (! $this->resource) {
         $this->setError($this->modx->lexicon('np_no_resource'));
         return $outerTpl;
     }
- $fields = array_keys($this->resource->toArray());
+    $resourceFields = array_keys($this->resource->toArray());
     foreach($fields as $field) {
-        //$val = $this->resource->get($field);
-        $val = $this->resource->_fieldMeta[$field][phptype];
-        switch($val) {
-            case 'string':
-                $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$textTpl);
-                break;
+        if (in_array($field,$resourceFields)) { /* regular resource field */
+            $val = $this->resource->_fieldMeta[$field][phptype];
+            switch($val) {
+                case 'string':
+                    $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$textTpl);
+                    break;
 
-            case 'boolean':
-                $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$boolTpl);;
-                break;
-            case 'integer':
-                $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$intTpl);
-                break;
-            case 'fulltext':
-                $inner .= '<br />' . $field . ' -- FULLTEXT' . $val . '<br />';
-                break;
-            case 'timestamp':
-                $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$dateTpl);
-                break;
-            default:
-                $inner .= '<br />' . $field . ' -- OTHER' . $val . '<br />';
+                case 'boolean':
+                    $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$boolTpl);;
+                    break;
+                case 'integer':
+                    $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$intTpl);
+                    break;
+                case 'fulltext':
+                    $inner .= '<br />' . $field . ' -- FULLTEXT' . $val . '<br />';
+                    break;
+                case 'timestamp':
+                    $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$dateTpl);
+                    break;
+                default:
+                    $inner .= '<br />' . $field . ' -- OTHER' . $val . '<br />';
+            }
+        } else {
+            /* see if it's a TV */
         }
     }
     $formTpl = str_replace('[[+np.insert]]',$inner,$outerTpl);

@@ -82,7 +82,7 @@ div.newspublisher input.radio {
 div.newspublisher fieldset {
     display: block;
     padding:5px 5px 10px 10px;
-    margin:10px 0px 0px 10px;
+    margin:10px 0px 0px 0px;
 }
 fieldset p {
   margin:0;
