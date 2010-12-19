@@ -314,6 +314,10 @@ public function displayForm($show) {
             }
         } else {
             /* see if it's a TV */
+            $retVal = $this->displayTv($field);
+            if ($retVal) {
+                $inner .= "\n" . $retVal;
+            }
         }
     }
     $formTpl = str_replace('[[+np.insert]]',$inner,$outerTpl);
@@ -363,8 +367,189 @@ public function displayForm($show) {
     return $formTpl;
 
 } /* end displayForm */
+public function displayTv($tvNameOrId) {
+    /* Display TVs */
+    /* ToDo: move next line to init */
+    //$this->allTvs = array();
 
-public function displayTVs() {
+    /* ToDo: Move next section out of here so it only executes once */
+    /* get the array of TVs for this template */
+    $c = $this->modx->newQuery('modTemplateVarTemplate');
+    $where = array('templateid'=>$this->template);
+    $c->where($where);
+    $tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',$c);
+
+    if (! empty($tvTemplates)) {
+
+        if (is_numeric($tvNameOrId)) {
+           $tvObj = $this->modx->getObject('modTemplateVar',$tvNameOrId);
+        } else {
+           $tvObj = $this->modx->getObject('modTemplateVar',array('name' => $tvNameOrId));
+        }
+        if (empty($tvObj)) {
+            $msg = str_replace('[[+tv]]',$tvNameOrId,$this->modx->lexicon('np_no_tv'));
+            $this->setError($msg);
+            return null;
+        } else {
+            $this->allTvs[] = $tvObj;
+        }
+    } else {
+        $this->setError($this->modx->lexicon('np_no_tvs'));
+        return null;
+    }
+
+/* we have a TV to show */
+/* Build TV template dynamically based on type */
+
+    $formTpl = '';
+    $hidden = explode(',',$this->props['hidetvs']);
+
+    $tv = $tvObj;
+
+      $fields = $tv->toArray();
+
+      /* skip hidden TVs */
+      if (in_array($fields['id'],$hidden)) {
+         return null;
+      }
+      /* use TV's name as caption if caption is empty */
+      $caption = empty($fields['caption'])? $fields['name'] : $fields['caption'];
+
+      /* create error placeholder for field */
+      $formTpl .=  "\n" . '[[+np.error_'. $fields['name'] . ']]' . "\n";
+
+      /* Build TV input code dynamically based on type */
+      $tvType = $tv->get('type');
+      $tvType = $tvType == 'option'? 'radio' : $tvType;
+
+
+      switch($tvType) {
+            case 'text':
+            case 'textbox':
+            case 'email';
+            case 'image';
+                $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
+                if ($this->existing && !$this->isPostBack) {
+                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
+                }
+
+                break;
+
+            case 'textarea':
+            case 'textareamini':
+                if ($this->existing  && ! $this->isPostBack) {
+                    //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
+                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
+                }
+                $formTpl .= "\n" . '<label title="' . $fields['description'] . '">'. $caption  . '</label><textarea name="' . $fields['name'] . '"'. $fields['description'] . ' id="' . $fields['name'] . '">' . '[[+'. $this->prefix . '.' . $fields['name'] . ']]</textarea>';
+                break;
+            case 'richtext':
+                if ($this->existing && !$this->isPostBack) {
+                    //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
+                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
+                }
+                $formTpl .= "\n" . '<label title="'. $fields['description'] . '">'. $caption  . '</label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $this->prefix . '.' . $fields['name'] . ']]</textarea></div>';
+                break;
+
+
+            /********* Options *********/
+
+            case 'radio':
+            case 'checkbox':
+            case 'listbox':
+            case 'listbox-multiple':
+                $iType = 'input';
+                $iType = ($tvType == 'listbox' || $tvType == 'listbox-multiple')? 'option' : $iType;
+                $arrayPostfix = ($tvType == 'checkbox' || $tvType=='listbox-multiple')? '[]' : '';
+                $options = explode('||',$fields['elements']);
+
+                $formTpl .= "\n" . '<fieldset class="np-tv-' . $tvType . '"' . ' title="' . $fields['description'] . '"><legend>'. $caption  . '</legend>';
+
+                if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
+                    $multiple = ($tvType == 'listbox-multiple')? 'multiple="multiple" ': '';
+                    $count = count($options);
+                    $max = $this->listboxmax;
+                    $size = ($count <= $max)? $count : $max;
+                    $formTpl .= "\n" . '<select ' . 'name="'. $fields['name'] . $arrayPostfix . '" ' .  $multiple . 'size="' . $size . '">' . "\n";
+                }
+                $i=0;
+                foreach ($options as $option) {
+                    if ($this->existing  && ! $this->isPostBack)  {
+
+                        if (is_array($options)) {
+                            $val = explode('||',$tv->getValue($this->existing));
+                        } else {
+                            $val = $tv->renderOutput($this->existing);
+                        }
+
+                    } else {
+                        $val = $_POST[$fields['name']];
+                    }
+                    /* if field is empty, get the default value */
+                    if(empty($val)) {
+                        $defaults = explode('||',$fields['default_text']);
+                        $option = strtok($option,'=');
+                        $rvalue = strtok('=');
+                        $rvalue = $rvalue? $rvalue : $option;
+                    } else {
+                        $rvalue = $option;
+                    }
+                    if ($tvType == 'listbox' || $tvType =='listbox-multiple') {
+                        $formTpl .= "\n    " . '<' . $iType . ' value="' . $rvalue . '"';
+                    } else {
+                        $formTpl .= "\n    " . '<span class="option"><' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
+                    }
+                    if (empty($val)) {
+                        if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
+                            if ($tvType == 'radio' || $tvType == 'checkbox') {
+                                $formTpl .= ' checked="checked" ';
+                            } else {
+                                $formTpl .= ' selected="selected" ';
+                            }
+                        }
+                    } else {  /* field value is not empty */
+                        if (is_array($val) ) {
+                            if(in_array($option,$val)) {
+                                if ($tvType == 'radio' || $tvType == 'checkbox') {
+                                    $formTpl .= ' checked="checked" ';
+                                } else {
+                                    $formTpl .= ' selected="selected" ';
+                                }
+                            }
+                        } else {
+                            if ($option == $val) {
+                                if ($tvType == 'radio' || $tvType == 'checkbox') {
+                                    $formTpl .= ' checked="checked" ';
+                                } else {
+                                    $formTpl .= ' selected="selected" ';
+                                }
+                            }
+                        }
+                    }
+                    $formTpl .= ' />' . $option;
+                    if ($tvType != 'listbox' && $tvType != 'listbox-multiple') {
+                        $formTpl .= '</span>';
+                    }
+
+                }
+                if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
+                    $formTpl .= "\n" . '</select>';
+                }
+                $formTpl .= "\n" . '</fieldset>';
+                break;
+
+            default:
+                break;
+
+        }  /* end switch */
+
+
+
+
+return $formTpl;
+}
+
+public function displayxxxTVs() {
     /* Display TVs */
 
     $this->allTvs = array();

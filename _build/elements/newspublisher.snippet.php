@@ -172,10 +172,11 @@ if (! empty($errors) ) {
  }
  // get postback status
  $isPostBack = $np->getPostBack();
- 
-if (empty($scriptProperties['hidealltvs'])) {
+
+ /* ToDo: remove this */
+/* if (empty($scriptProperties['hidealltvs'])) {
     $formTpl = str_replace('[[+np.allTVs]]',$np->displayTVs(),$formTpl);
-}
+} */
 
 
 if ($isPostBack) {
