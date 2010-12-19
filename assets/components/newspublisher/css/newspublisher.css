@@ -1,3 +1,10 @@
+*
+{
+    padding: 0px;
+    margin: 0px;
+}
+
+
 div.newspublisher {
     margin-left:10em;
     font-family: arial, sans-serif;
@@ -10,6 +17,32 @@ div.newspublisher label {
     padding:0;
     display: block;
     font-weight: bold;
+}
+
+div.newspublisher label.int {
+    clear:left;
+    display:inline;
+}
+
+div.newspublisher label.checkboxfield {
+    clear:left;
+    float:left;
+    width: 8em;
+    height:15px;
+    margin: 0;
+    padding-right: 10px;
+    vertical-align:bottom;
+}
+
+div.newspublisher div.checkboxfield {
+    clear:left;
+    display:block;
+    float:left;
+    position: relative;
+    margin: 12px 5px 10px 0px;
+    width: 12em;
+    height:20px;
+    
 }
 
 div.newspublisher textarea {
@@ -34,12 +67,12 @@ div.newspublisher span.option {
 }
 div.newspublisher legend {
    font-weight: bold;
-   padding:0px 6px 0px 6px;
+   padding:0 6px 0 6px;
 }
 div.newspublisher input {
     font-family: arial, sans-serif;
     width:20em;
-    display:inline;
+    display:block;
 }
 div.newspublisher p.error {
     font-weight: bold;
@@ -50,14 +83,14 @@ span.errormessage {
     color:red;
     font-weight: bold;
     display:block;
-    margin:5px 0px 5px 0px;
+    margin:5px 0 5px 0;
     padding:0;
 }
 span.fielderrormessage {
     color:red;
     font-weight: bold;
     display:block;
-    margin:20px 0px 0px 0px;
+    margin:20px 0 0 0;
     padding:0;
 }
 div.newspublisher input.submit {
@@ -72,17 +105,27 @@ div.newspublisher input.cancel {
     padding:0;
     width:8em;
 }
+div.newspublisher input.int {
+    display:inline;
+    width:2em;
+}
 div.newspublisher input.checkbox {
     width:2em;
 }
-div.newspublisher input.radio {
-    width:2em;
+div.newspublisher input.checkboxfield {
+    width:15px;
+    position:absolute;
+    float:left;
+    line-height:18px;
+    margin:5px 1px 0px 100px;
+    padding:0;
+    vertical-align:bottom;
 }
 
 div.newspublisher fieldset {
     display: block;
     padding:5px 5px 10px 10px;
-    margin:10px 0px 0px 10px;
+    margin:10px 0 0 10px;
 }
 fieldset p {
   margin:0;
