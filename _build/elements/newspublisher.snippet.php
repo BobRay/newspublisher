@@ -62,13 +62,15 @@ Fix/add &allowAnyPost
                        for 'parent', &folder must be set; defaults to system default template.
     &headertpl   - (optional) Header Tpl chunk (chunk name) to be inserted at the beginning of a new document.
     &footertpl   - (optional) Footer Tpl chunk (chunk name) to be inserted at the end of a new document.
-    &richtext    - (optional) Initialize rich text editor; set this if there are any rich text fields.
+    &richtext    - (optional) Sets the flag to as to whether or Rich Text Editor is used when editing the page
+                       content in the Manager; defaults to richtext_default System Setting for new resources.
     &rtcontent   - (optional) Use rich text for the content form field.
     &rtsummary   - (optional) Use rich text for the summary (introtext) form field.
-    &showinmenu  - (optional) Sets the flag (0/1) to as to whether or not the new page shows in the menu; defaults to 0.
+    &hidemenu  - (optional) Sets the flag (0/1) to as to whether or not the new page shows in the menu; defaults to 1.
+
     &aliastitle  - (optional) Set to 1 to use lowercase, hyphenated, page title as alias. Defaults to 1.
                        If 0,'article-(date created)' is used. Ignored if alias is filled in form.
-    &clearcache  - (optional) When set to 1, the system will automatically clear the site cache after saving a resource; default: 1.
+    &clearcache  - (optional) When set to 1, cache will be cleared after saving the resource; default: 1.
     &listboxmax  - (optional) Maximum length for listboxes. Default is 8 items.
     &cssfile     - (optional) Name of CSS file to use, or `` for no CSS file; defaults to newspublisher.css.
                        File should be in assets/newspublisher/css/ directory
@@ -79,6 +81,7 @@ Fix/add &allowAnyPost
     &language    - (optional) Language to use in forms and error messages.
     &prefix      - (optional) Prefix to use for placeholders; defaults to 'np.'
     &fielderrortpl - (optional)
+    &initrte     - '(optional) Initialize rich text editor; set this if there are any rich text fields; defaults to 0';
 
 */
 
@@ -90,21 +93,6 @@ $scriptProperties['prefix'] = empty($np_prefix)? 'np' : $scriptProperties['prefi
 
 $np = new Newspublisher($modx, $scriptProperties);
 
-
-
-/*
-<script type="text/javascript">
-
-function stopRKey(evt) {
-  var evt = (evt) ? evt : ((event) ? event : null);
-  var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
-  if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
-}
-
-document.onkeypress = stopRKey;
-
-</script>
-*/
 if (false) {
         
         /* check for required permissions */

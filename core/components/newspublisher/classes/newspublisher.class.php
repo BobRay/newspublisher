@@ -40,7 +40,7 @@ class Newspublisher {
     protected $template;
     protected $errors;
     protected $resource;
-    protected $existing; // editing an existing resource
+    protected $existing; // editing an existing resource (ID of resource)
     protected $isPostBack;
     protected $corePath; // path to NewsPublisher Core
     protected $assetsPath; // path to NewsPublisher assets dir
@@ -53,6 +53,8 @@ class Newspublisher {
     protected $listboxmax;
     protected $prefix; // prefix for placeholders
     protected $badwords; // words to remove
+    protected $cacheable;
+
 
 
 
@@ -96,7 +98,7 @@ class Newspublisher {
         $this->setPostback( isset($_POST['hidSubmit']) && $_POST['hidSubmit'] == 'true');
 
         if($this->existing) {
-            
+
             $this->resource = $this->modx->getObject('modResource', $this->existing);
             if ($this->resource) {
                 if ($this->isPostBack) {
@@ -110,7 +112,7 @@ class Newspublisher {
                 } else {
                     $ph = $this->resource->toArray();
                     foreach($ph as $k=>$v) {
-  	                         $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
+                             $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
                      }
                      $ph = $fs;
                     $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
@@ -129,7 +131,7 @@ class Newspublisher {
             $stuff = '<input type="hidden" name="np_existing" value="true" />' . "\n" .
             '<input type="hidden" name="np_doc_id" value="' . $this->resource->get('id') . '">';
             $this->modx->toPlaceholder('post_stuff',$stuff,$this->prefix);
-            
+
         } else {
             if ($this->isPostBack) {
                 /* str_replace to prevent showing of placeholders */
@@ -137,7 +139,7 @@ class Newspublisher {
                  foreach($_POST as $k=>$v) {
                      $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
                  }
-                $this->modx->toPlaceholders($fs,$this->prefix);
+                 $this->modx->toPlaceholders($fs,$this->prefix);
             }
         }
         if ($this->existing){
@@ -150,11 +152,13 @@ class Newspublisher {
                 $this->setError($this->modx->lexicon('np_create_permission_denied'));
             } else {
                 $this->resource = $this->modx->newObject('modResource');
+                $this->resource->set('cacheable',$this->props['cacheable']? true : $this->modx->getOption('cache_default',null,true));
             }
         }
         $this->aliastitle = $this->props['aliastitle']? true : false;
         $this->clearcache = $this->props['clearcache'] ? true: false;
-        
+        $this->listboxmax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
+
 
         /* get folder id where we should store articles
            else store under current document */
@@ -164,9 +168,9 @@ class Newspublisher {
             $this->badwords = "/".str_replace(',','|', $this->badwords)."/i";
         }
         // get menu status
-        $this->hidemenu = $this->props['showinmenu']? '0' : '1';
+        $this->hidemenu = $this->props['hidemenu']? '1' : '0';
 
-      
+
        $this->modx->lexicon->load('core:resource');
        $this->template = $this->getTemplate();
        $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
@@ -188,12 +192,11 @@ class Newspublisher {
        if ($css !== false) {
            $this->modx->regClientCSS($css);
        }
-       //set listbox max size
-       $this->listboxmax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
+
 
        /* do rich text stuff */
-       if ($this->props['richtext']) {
-           
+       if ($this->props['initrte']) {
+
             /* set rich text content field */
             $ph = ! empty($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
             $this->modx->setPlaceholder('np.rt_content_1', $ph );
@@ -207,7 +210,7 @@ class Newspublisher {
             $this->modx->setPlaceholder('np.rt_summary_2', $ph );
 
             unset($ph);
-           
+
            $tinyPath = $this->modx->getOption('core_path').'components/tinymce/';
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/ext-all.js');
@@ -281,24 +284,42 @@ public function displayForm($show) {
             // <label for="[[+npx.fieldName]]" class="checkboxfield" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label><input name="[[+npx.fieldName]]" class="checkboxfield" id="[[+npx.fieldName]]" type="checkbox"  value="[[+np.[[+npx.fieldName]]]]" /></div>';
 
     $boolTpl = ! empty ($this->props['booltpl'])? $this->props['booltpl'] : '<fieldset class="np-tv-checkbox" title="[[%resource_[[+npx.fieldName]]_help]]"><legend>[[%resource_[[+npx.fieldName]]]]</legend>
-    <span class="option"><input class="checkbox" type="checkbox" name="MyTv8[]" value="" checked="checked"  />[[+np.[[+npx.fieldName]]]]</span>
+    <span class="option"><input class="checkbox" type="checkbox" name="[[+npx.fieldName]]" value="[[+np.[[+npx.fieldName]]]]" [[+checked]] />[[+np.[[+npx.fieldName]]]]</span>
 </fieldset>';
 
     if (! $this->resource) {
         $this->setError($this->modx->lexicon('np_no_resource'));
         return $outerTpl;
     }
+
+    /* get the resource field names */
     $resourceFields = array_keys($this->resource->toArray());
+
+    /* get the array of TVs for this template in case we need them */
+    $c = $this->modx->newQuery('modTemplateVarTemplate');
+    $where = array('templateid'=>$this->template);
+    $c->where($where);
+    $tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',$c);
+
     foreach($fields as $field) {
         if (in_array($field,$resourceFields)) { /* regular resource field */
             $val = $this->resource->_fieldMeta[$field][phptype];
+            if ($field == 'hidemenu') {  /* correct schema error */
+                $val = 'boolean';
+            }
             switch($val) {
                 case 'string':
                     $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$textTpl);
                     break;
 
                 case 'boolean':
-                    $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$boolTpl);;
+                    $t = $boolTpl;
+                    if ($this->props[$field]) {
+                        $t = str_replace('[[+checked]]','checked="checked"',$t);
+                    } else {
+                        $t = str_replace('[[+checked]]','',$t);
+                    }
+                    $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$t);;
                     break;
                 case 'integer':
                     $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$intTpl);
@@ -314,14 +335,14 @@ public function displayForm($show) {
             }
         } else {
             /* see if it's a TV */
-            $retVal = $this->displayTv($field);
+            $retVal = $this->displayTv($field, $tvTemplates);
             if ($retVal) {
                 $inner .= "\n" . $retVal;
             }
         }
     }
     $formTpl = str_replace('[[+np.insert]]',$inner,$outerTpl);
-    
+
     return $formTpl;
     $formTpl = '';
     if(empty($formTpl)) $formTpl = '
@@ -367,17 +388,10 @@ public function displayForm($show) {
     return $formTpl;
 
 } /* end displayForm */
-public function displayTv($tvNameOrId) {
+public function displayTv($tvNameOrId,$tvTemplates) {
     /* Display TVs */
     /* ToDo: move next line to init */
     //$this->allTvs = array();
-
-    /* ToDo: Move next section out of here so it only executes once */
-    /* get the array of TVs for this template */
-    $c = $this->modx->newQuery('modTemplateVarTemplate');
-    $where = array('templateid'=>$this->template);
-    $c->where($where);
-    $tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',$c);
 
     if (! empty($tvTemplates)) {
 
@@ -744,7 +758,7 @@ public function saveResource() {
     //if (! $this->existing) {
     //    $this->resource = $this->modx->newObject('modResource');
     //}
-    
+
     if (! $this->modx->hasPermission('allow_modx_tags')) {
         $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
         foreach($_POST as $k=>$v)
@@ -758,7 +772,7 @@ public function saveResource() {
     // die('<br />POST' . print_r($_POST,true) . '<br />FIELDS' . print_r($fields,true));
     $user = $this->modx->user;
     $userid = $this->modx->user->get('id');
-    
+
     if (! $this->existing) {
 
         /* set alias name of document used to store articles */
@@ -789,7 +803,7 @@ public function saveResource() {
     /* set editedon and editedby for existing docs */
     }
 
-    
+
 
     /* ToDo: fix this */
     /*
@@ -802,7 +816,7 @@ public function saveResource() {
     }
     */
 
-      
+
     $published = 'notSet';
 
     /* ToDo: remove this */
@@ -841,7 +855,7 @@ public function saveResource() {
         }
 
     }
-        
+
     $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
 
 
@@ -865,12 +879,12 @@ public function saveResource() {
     }
     /* ToDo: Can probably remove this */
     $this->resource->fromArray($fields);
-    
+
 
     /* Add TVs to $fields for processor */
     /* e.g. $fields[tv13] = $_POST['MyTv5'] */
     /* processor handles all types */
-    
+
 
     /* update $_POST from $fields array */
     /* fix: can be removed when $_POST is removed from runProcessor code */
@@ -994,7 +1008,7 @@ protected function setGroups($resourceGroups, $parentObj = null) {
     }  /* end if 'parent' */
 
     $groups = explode(',',$resourceGroups);
-    
+
     foreach($groups as  $group) {
         $group = trim($group);
         if (is_numeric($group)) {
@@ -1097,7 +1111,7 @@ public function validate($errorTpl) {
             }
         }
     }
-    
+
     return $success;
 }
 
