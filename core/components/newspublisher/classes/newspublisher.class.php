@@ -315,7 +315,7 @@ public function displayForm($show) {
                 case 'boolean':
                     $t = $boolTpl;
                     if ($this->props[$field]) {
-                        $t = str_replace('[[+checked]]','checked="checked"',$t);
+                        $t = str_replace('[[+checked]]','checked="checked" ',$t);
                     } else {
                         $t = str_replace('[[+checked]]','',$t);
                     }
@@ -455,7 +455,13 @@ public function displayTv($tvNameOrId,$tvTemplates) {
                     //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
                     $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
                 }
-                $formTpl .= "\n" . '<label title="' . $fields['description'] . '">'. $caption  . '</label><textarea name="' . $fields['name'] . '"'. $fields['description'] . ' id="' . $fields['name'] . '">' . '[[+'. $this->prefix . '.' . $fields['name'] . ']]</textarea>';
+      if ($this->existing  && ! $this->isPostBack) {
+                    //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
+                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
+                }
+                $rows = $tvType=='textarea'? 5 : 10;
+                $cols = 60;
+                $formTpl .= "\n" . '<label title="' . $fields['description'] . '">'. $caption  . '</label><textarea rows="'. $rows . '" cols="' . $cols . '"' . 'name="' . $fields['name'] . '"'. $fields['description'] . ' id="' . $fields['name'] . '">' . '[[+'. $this->prefix . '.' . $fields['name'] . ']]</textarea>';
                 break;
             case 'richtext':
                 if ($this->existing && !$this->isPostBack) {
@@ -480,7 +486,7 @@ public function displayTv($tvNameOrId,$tvTemplates) {
                 $formTpl .= "\n" . '<fieldset class="np-tv-' . $tvType . '"' . ' title="' . $fields['description'] . '"><legend>'. $caption  . '</legend>';
 
                 if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
-                    $multiple = ($tvType == 'listbox-multiple')? 'multiple="multiple" ': '';
+                    $multiple = ($tvType == 'listbox-multiple')? ' multiple="multple" ': '';
                     $count = count($options);
                     $max = $this->listboxmax;
                     $size = ($count <= $max)? $count : $max;
@@ -516,7 +522,7 @@ public function displayTv($tvNameOrId,$tvTemplates) {
                     if (empty($val)) {
                         if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
                             if ($tvType == 'radio' || $tvType == 'checkbox') {
-                                $formTpl .= ' checked="checked" ';
+                                $formTpl .= ' checked ="checked" ';
                             } else {
                                 $formTpl .= ' selected="selected" ';
                             }
@@ -540,7 +546,11 @@ public function displayTv($tvNameOrId,$tvTemplates) {
                             }
                         }
                     }
+                    if ($iType == 'input') {
                     $formTpl .= ' />' . $option;
+                    } else {
+                        $formTpl .= '>' . $option . '</' . $iType . '>';
+                    }
                     if ($tvType != 'listbox' && $tvType != 'listbox-multiple') {
                         $formTpl .= '</span>';
                     }
@@ -645,7 +655,9 @@ if (! empty($this->allTvs)) {
                     //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
                     $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
                 }
-                $formTpl .= "\n" . '<label title="' . $fields['description'] . '">'. $caption  . '</label><textarea name="' . $fields['name'] . '"'. $fields['description'] . ' id="' . $fields['name'] . '">' . '[[+'. $this->prefix . '.' . $fields['name'] . ']]</textarea>';
+                $rows = $tvType=='textarea'? 5 : 10;
+                $cols = 60;
+                $formTpl .= "\n" . '<label title="' . $fields['description'] . '">'. $caption  . '</label><textarea rows="'. $rows . '" cols="' . $cols . '"' . 'name="' . $fields['name'] . '"'. $fields['description'] . ' id="' . $fields['name'] . '">' . '[[+'. $this->prefix . '.' . $fields['name'] . ']]</textarea>';
                 break;
             case 'richtext':
                 if ($this->existing && !$this->isPostBack) {
