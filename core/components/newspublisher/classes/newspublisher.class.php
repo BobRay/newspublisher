@@ -36,24 +36,28 @@ class Newspublisher {
     protected $props;  //scriptProperties array
     protected $allTvs;  // array of TVs.
     protected $message;
-    protected $folder;
-    protected $template;
     protected $errors;
     protected $resource;
+    protected $parentId;
+    protected $parentObj;
     protected $existing; // editing an existing resource (ID of resource)
     protected $isPostBack;
     protected $corePath; // path to NewsPublisher Core
     protected $assetsPath; // path to NewsPublisher assets dir
     protected $assetsUrl; // URL to NewsPublisher assets dir
-    protected $hidemenu; // hide docs from menu
-    protected $aliastitle; // use alias as title
+    protected $aliasTitle; // use alias as title
     protected $clearcache;
     protected $header;
     protected $footer;
     protected $listboxmax;
     protected $prefix; // prefix for placeholders
     protected $badwords; // words to remove
+    protected $published;
+    protected $hideMenu;
+    protected $alias;
     protected $cacheable;
+    protected $searchable;
+    protected $template;
 
 
 
@@ -62,7 +66,7 @@ class Newspublisher {
     public function __construct(&$modx, &$props) {
         $this->modx =& $modx;
         $this->props =& $props;
-        /* NP paths; Set the properties in NP only for development */
+        /* NP paths; Set the np. System Settings only for development */
         $this->corePath = $this->modx->getOption('np.core_path',null,MODX_CORE_PATH.'components/newspublisher/');
         $this->assetsPath = $this->modx->getOption('np.assets_path',null,MODX_ASSETS_PATH.'components/newspublisher/');
         $this->assetsUrl = $this->modx->getOption('np.assets_url',null,MODX_ASSETS_URL.'components/newspublisher/');
@@ -101,6 +105,10 @@ class Newspublisher {
 
             $this->resource = $this->modx->getObject('modResource', $this->existing);
             if ($this->resource) {
+
+                if (!$this->modx->hasPermission('view_document') || !$this->resource->checkPolicy('view') ) {
+                    $this->setError($this->modx->lexicon('np_view_permission_denied'));
+                }
                 if ($this->isPostBack) {
                     /* str_replace to prevent showing of placeholders */
                      $fs = array();
@@ -122,8 +130,7 @@ class Newspublisher {
                     unset($ph);
                 }
             } else {
-               $msg = str_replace('[[+id]]',$this->existing, $this->modx->lexicon('np_no_resource'));
-               $this->setError($msg);
+               $this->setError($this->modx->lexicon('np_no_resource') . $this->existing);
                return;
 
             }
@@ -133,50 +140,50 @@ class Newspublisher {
             $this->modx->toPlaceholder('post_stuff',$stuff,$this->prefix);
 
         } else {
-            if ($this->isPostBack) {
-                /* str_replace to prevent showing of placeholders */
-                 $fs = array();
-                 foreach($_POST as $k=>$v) {
-                     $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
-                 }
-                 $this->modx->toPlaceholders($fs,$this->prefix);
-            }
-        }
-        if ($this->existing){
-            if (!$this->modx->hasPermission('view_document') || !$this->resource->checkPolicy('view') ) {
-                $this->setError($this->modx->lexicon('np_view_permission_denied'));
-            }
-        } else {
-
+            /* new document */
             if (!$this->modx->hasPermission('new_document')) {
                 $this->setError($this->modx->lexicon('np_create_permission_denied'));
-            } else {
-                $this->resource = $this->modx->newObject('modResource');
-                $this->resource->set('cacheable',$this->props['cacheable']? true : $this->modx->getOption('cache_default',null,true));
             }
+            $this->resource = $this->modx->newObject('modResource');
+            /* get folder id where we should store articles
+             else store under current document */
+             $this->parentId = !empty($this->props['parent']) ? intval($this->props['parent']):$this->modx->resource->get('id');
+
+            /* str_replace to prevent showing of placeholders */
+             $fs = array();
+             foreach($_POST as $k=>$v) {
+                 $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
+             }
+             $this->modx->toPlaceholders($fs,$this->prefix);
+
+
+             $this->aliasTitle = $this->props['aliastitle']? true : false;
+             /* ToDo: add synchcache in processor fields */
+             $this->clearcache = $this->props['clearcache'] ? true: false;
+             $this->listboxmax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
+
+             $this->hideMenu = $this->props['hidemenu']? '1' : '0';
+             $this->cacheable = $this->setDefault('cacheable',$this->parentId);
+             $this->searchable = $this->setDefault('searchable',$this->parentId);
+             $this->published = $this->setDefault('published',$this->parentId);
+             if (! empty($this->props['groups'])) {
+                $this->groups = $this->setDefault('groups',$this->parentId);
+             }
+             $this->header = !empty($this->props['headertpl']) ? $this->modx->getChunk($this->props['headertpl']) : '';
+             $this->footer = !empty($this->props['footertpl']) ? $this->modx->getChunk($this->props['footertpl']):'';
+
+
+
         }
-        $this->aliastitle = $this->props['aliastitle']? true : false;
-        $this->clearcache = $this->props['clearcache'] ? true: false;
-        $this->listboxmax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
-
-
-        /* get folder id where we should store articles
-           else store under current document */
-        $this->folder = !empty($this->props['folder']) ? intval($this->props['folder']):$this->modx->resource->get('id');
-        if( !empty($this->props['badwords'])) {
-            $this->badwords = str_replace(' ','', $this->props['badwords']);
-            $this->badwords = "/".str_replace(',','|', $this->badwords)."/i";
-        }
-        // get menu status
-        $this->hidemenu = $this->props['hidemenu']? '1' : '0';
-
+         if( !empty($this->props['badwords'])) {
+             $this->badwords = str_replace(' ','', $this->props['badwords']);
+             $this->badwords = "/".str_replace(',','|', $this->badwords)."/i";
+         }
 
        $this->modx->lexicon->load('core:resource');
        $this->template = $this->getTemplate();
        $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
        $this->modx->regClientStartupScript($this->assetsUrl . 'datepicker/js/datepicker.js');
-       $this->header = !empty($this->props['headertpl']) ? $this->modx->getChunk($this->props['headertpl']) : '';
-       $this->footer = !empty($this->props['footertpl']) ? $this->modx->getChunk($this->props['footertpl']):'';
 
        /* inject NP CSS file */
        /* empty but sent parameter means use no CSS file at all */
@@ -251,6 +258,78 @@ class Newspublisher {
 
    } /* end init */
 
+public function setDefault($field,$parentId) {
+
+    $retVal = null;
+    $prop = $this->props[$field];
+    if ($prop == 'Parent' || $prop == 'parent') {
+        /* get parent if we don't already have it */
+        if (! $this->parentObj) {
+            $this->parentObj = $this->modx->getObject('modResource',$this->parentId);
+        }
+        if (! $this->parentObj) {
+            $this->setError('&amp;' .$this->modx->lexicon('np_no_parent'));
+            return $retVal;
+        }
+    }
+    $prop = (string) $prop; // convert booleans
+    $prop == 'Yes'? '1': $prop;
+    $prop = $prop == 'No'? '0' :$prop;
+
+    if ($prop != 'System Default') {
+        if ($prop === '1' || $prop === '0') {
+            $retVal = $prop;
+
+        } else if ($prop == 'parent' || $prop === 'Parent') {
+            if ($field == 'groups') {
+                $groupString = $this->setGroups($prop, $this->parentObj);
+                $retVal = $groupString;
+                unset($groupString);
+            } else {
+                    $retVal = $this->parentObj->get($field);
+            }
+        }
+    } else { /* not 1, 0, or parent; use system default except for groups */
+        switch($field) {
+
+            case 'groups':
+                /* ToDo: Sanity Check groups here */
+                $retVal = $prop;
+                break;
+
+                break;
+            case 'published':
+                $option = 'publish_default';
+                break;
+
+            case 'hidemenu':
+                $option = 'hidemenu_default';
+                break;
+
+            case 'cacheable':
+                $option = 'cache_default';
+                break;
+
+            case 'searchable':
+                $option = 'search_default';
+                break;
+
+            default:
+                $this->setError($this->modx->lexicon('np_unknown_field'));
+                return;
+        }
+        $retVal = $this->modx->getOption($option);
+        if ($retVal === null) {
+            $this->setError($this->modx->lexicon('np_no_system_setting') . $option);
+        }
+
+    }
+    if ($retVal === null) {
+        $this->setError($this->modx->lexicon('np_illegal_value') . $field);
+    }
+    return $retVal;
+}
+
 public function displayForm($show) {
 
     $fields = explode(',',$show);
@@ -271,6 +350,7 @@ public function displayForm($show) {
             <input class="submit" type="submit" name="Submit" value="Submit" />
             <input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = \'[[+np.cancel_url]]\' " />
         </span>
+        [[+np.post_stuff]]
     </form>
 </div>';
 
@@ -401,8 +481,7 @@ public function displayTv($tvNameOrId,$tvTemplates) {
            $tvObj = $this->modx->getObject('modTemplateVar',array('name' => $tvNameOrId));
         }
         if (empty($tvObj)) {
-            $msg = str_replace('[[+tv]]',$tvNameOrId,$this->modx->lexicon('np_no_tv'));
-            $this->setError($msg);
+            $this->setError($this->modx->lexicon('np_no_tv') . $tvNameOrId);
             return null;
         } else {
             $this->allTvs[] = $tvObj;
@@ -573,6 +652,7 @@ public function displayTv($tvNameOrId,$tvTemplates) {
 return $formTpl;
 }
 
+    /* ToDo: Remove this */
 public function displayxxxTVs() {
     /* Display TVs */
 
@@ -781,16 +861,14 @@ public function saveResource() {
     $oldFields = $this->resource->toArray();
     $newFields = $_POST;
     $fields = array_replace($oldFields, $newFields);
-    // die('<br />POST' . print_r($_POST,true) . '<br />FIELDS' . print_r($fields,true));
-    $user = $this->modx->user;
-    $userid = $this->modx->user->get('id');
+
 
     if (! $this->existing) {
 
+        /* ToDo: Move this to init()? */
         /* set alias name of document used to store articles */
-
         if (empty($fields['alias'])) { /* leave it alone if filled */
-            if(!$this->aliastitle) {
+            if(!$this->aliasTitle) {
                 $alias = 'article-' . time();
             } else { /* use pagetitle */
                 $alias = $this->modx->stripTags($_POST['pagetitle']);
@@ -800,19 +878,23 @@ public function saveResource() {
                 $alias = preg_replace('/\s+/', '-', $alias);
                 $alias = preg_replace('|-+|', '-', $alias);
                 $alias = trim($alias, '-');
-                $alias = mysql_escape_string($alias);
+                $alias = mysql_real_escape_string($alias);
             }
             $fields['alias'] = $alias;
         }
         /* set fields for new object */
+        /* set editedon and editedby for existing docs */
         $fields['editedon'] = '0';
         $fields['editedby'] = '0';
-        $fields['hidemenu'] = $this->hidemenu;
-        $fields['template'] = $this->template;
-        $fields['parent'] = $this->folder;
+        /* these *might* be in the $_POST array. Set them if not */
+        $fields['hidemenu'] = isset($newFields['hidemenu'])? $newFields['hidemenu']: $this->hidemenu;
+        $fields['template'] = isset ($newFields['template']) ? $newFields['template'] : $this->template;
+        $fields['parent'] = isset ($newFields['parent']) ? $$newFields['parent'] :$this->parentId;
+        $fields['searchable'] = isset ($newFields['searchable']) ? $newFields['searchable'] :$this->searchable;
+        $fields['cacheable'] = isset ($newFields['cacheable']) ? $newFields['cacheable'] :$this->cacheable;
         $fields['createdby'] = $this->modx->user->get('id');
         $fields['content']  = $this->header . $fields['content'] . $this->footer;
-    /* set editedon and editedby for existing docs */
+
     }
 
 
@@ -890,7 +972,7 @@ public function saveResource() {
 
     }
     /* ToDo: Can probably remove this */
-    $this->resource->fromArray($fields);
+    // $this->resource->fromArray($fields);
 
 
     /* Add TVs to $fields for processor */
@@ -911,13 +993,9 @@ public function saveResource() {
         }
     }
     /* set groups for new doc if param is set */
-    if ( (!empty($this->props['groups']) && (! $this->existing)) ) {
-        $groupString = $this->setGroups($this->props['groups'], $parentObj);
-        if ($groupString) {
-            $fields['resource_groups']= $groupString ;
+    if ( (!empty($this->groups) && (! $this->existing)) ) {
+            $fields['resource_groups']= $this->groups;
         }
-        unset($groupString);
-    }
 
     /* one last error check before calling processor */
     if ( ! empty( $this->errors)) {
@@ -999,10 +1077,7 @@ protected function setGroups($resourceGroups, $parentObj = null) {
 
     $values = array();
     if ($resourceGroups == 'parent') {
-        if (! $parentObj) {
-            $this->setError($this->modx->lexicon('np_no_parent_groups'));
-            return null; /* no parent, no groups */
-        }
+
         $resourceGroups = $parentObj->getMany('ResourceGroupResources');
 
         if (! empty($resourceGroups)) { /* skip if parent doesn't belong to any resource groups */
@@ -1013,6 +1088,7 @@ protected function setGroups($resourceGroups, $parentObj = null) {
             }
             $resourceGroups = implode(',',$groupNumbers);
         } else {/* parent not in any groups */
+            $this->setError($this->modx->lexicon('np_no_parent_groups'));
             return null;
         }
 
@@ -1067,13 +1143,16 @@ protected function getTemplate() {
     $template = $this->modx->getOption('default_template');
 
     if ($this->props['template'] == 'parent') {
-        if (empty($this->props['folder'])) {
-            $this->setError($this->modx->lexicon('np_folder_not_sent'));
+        if (empty($this->parentId)) {
+            $this->setError($this->modx->lexicon('np_parent_not_sent'));
         }
-        $parentObj = $this->modx->getObject('modResource',$this->props['folder']);
+        if (empty($this->parentObj)) {
+            $parentObj = $this->modx->getObject('modResource',$this->parentId);
+        }
         if ($parentObj) {
             $template = $parentObj->get('template');
-            unset($parentObj);
+        } else {
+            $this->setError($this->modx->lexicon('np_parent_not_found') . $this->parentId);
         }
 
     } else if (! empty($this->props->template)) {
@@ -1082,14 +1161,12 @@ protected function getTemplate() {
         if(is_numeric($this->props['template']) ) { /* user sent a number */
             /* make sure it exists */
             if ( ! $this->modx->getObject('modTemplate',$this->props['template']) ) {
-                $msg = str_replace('[[+id]]', $this->props['template'], $this->modx->lexicon('np_no_template_id') );
-                $this->SetError($msg);
+                $this->SetError($this->modx->lexicon('np_no_template_id') . $this->props['template']);
             }
         } else { /* user sent a template name */
             $t = $this->modx->getObject('modTemplate',array('templatename'=>$this->props['template']));
             if (! $t) {
-                $msg = str_replace('[[+name]]', $this->props['template'], $this->modx->lexicon('np_no_template_name') );
-                $this->setError($msg);
+                $this->setError($this->modx->lexicon('np_no_template_name') . $this->props['template']);
             }
             $template = $t? $t->get('id') : $this->modx->getOption('default_template');
             unset($t);

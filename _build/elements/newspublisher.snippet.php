@@ -47,7 +47,7 @@ Fix/add &allowAnyPost
      NOTE: Bruno17's tinymcefe component must be installed for rich text fields
 
   Parameters:
-    &folder      - (optional) Folder id where new documents are stored; defaults to NewsPublisher folder.
+    &parent      - (optional) Folder id where new documents are stored; defaults to NewsPublisher folder.
     &show        - (optional) Comma separated list of fields/tvs to show.
                      defaults to 'pagetitle,longtitle,description,menutitle,pub_date,unpub_date,introtext,content'.
     &required    - (optional) Comma-separated list of fields/tvs to reguire; defaults to 'pagetitle,content'.
@@ -59,7 +59,7 @@ Fix/add &allowAnyPost
     &cancelid    - (optional) Document id to load on cancel; defaults to http_referer.
     &badwords    - (optional) Comma delimited list of words not allowed in new document.
     &template    - (optional) Name of template to use for new document; set to 'parent' to use parent's template;
-                       for 'parent', &folder must be set; defaults to system default template.
+                       for 'parent', &parent must be set; defaults to system default template.
     &headertpl   - (optional) Header Tpl chunk (chunk name) to be inserted at the beginning of a new document.
     &footertpl   - (optional) Footer Tpl chunk (chunk name) to be inserted at the end of a new document.
     &richtext    - (optional) Sets the flag to as to whether or Rich Text Editor is used when editing the page
@@ -116,8 +116,7 @@ $np->init($modx->context->get('key'));
 $errorTpl = ! empty($errortpl)? $modx->getChunk($errortpl): '<span class = "errormessage">[[+np.error]]</span>';
 
 if(empty($errorTpl)) { /* user sent it but it's not there */
-    $msg = str_replace('[[+tpl]]',$scriptProperties['errortpl'], $modx->lexicon('np_no_error_tpl'));
-   return $msg;
+   return $modx->lexicon('np_no_error_tpl') . $scriptProperties['errortpl'];
 }
 $errors = $np->getErrors();
 if (! empty($errors) ) { /* doesn't have permission */
@@ -138,8 +137,7 @@ $errorHeaderSubmit = $modx->lexicon('np_error_submit');
 $fieldErrorTpl = !empty($fielderrortpl)? $modx->getChunk($fielderrortpl): '<span class = "fielderrormessage">[[+np.error]]</span>';
 
 if(empty($fieldErrorTpl)) {
-    $msg = str_replace('[[+tpl]]',$scriptProperties['errortpl'], $modx->lexicon('np_no_error_tpl'));
-   return $msg;
+   return $modx->lexicon('np_no_error_tpl') . $scriptProperties['errortpl'] ;
 }
 
 

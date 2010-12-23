@@ -27,33 +27,38 @@
  */
 
 /* newspublisher strings */
-$_lang['np_not_in_group'] = 'You are not in any of the authorices user groups.';
+$_lang['np_not_in_group'] = 'You are not in any of the authorized user groups.';
 $_lang['np_not_logged_in'] = 'You must be logged in to post.';
 $_lang['np_no_permissions'] = 'You do not have the necessary permissions.';
-$_lang['np_no_error_tpl'] = 'Could not find &amp;errortpl: [[+tpl]]';
+$_lang['np_no_error_tpl'] = 'Could not find &amp;errortpl: ';
 $_lang['np_main_header'] = 'Create/Edit Resource';
 $_lang['np_error_presubmit'] = 'Sorry . . . There were one or more problems in producing the form:';
 $_lang['np_error_submit'] = 'Sorry . . . There were one or more problems with your submission:';
 $_lang['np_error_required'] = 'The [[+name]] field is required.';
 $_lang['np_missing_field'] = 'Missing field: [[+name]].';
 $_lang['np_no_resource_group'] = 'Could not find [[+name]] resource group.';
-$_lang['np_no_resource'] = 'Failed to get resource: [[+id]].';
+$_lang['np_no_resource'] = 'Failed to get resource: ';
 $_lang['np_no_template_name'] = 'Failed to get template: [[+name]].';
 $_lang['np_no_tvs'] = 'You wanted to display TVs, but this template has none.';
-$_lang['np_no_tv'] = "You wanted to display TV: [[+tv]], but this template doesn't have it.";
+$_lang['np_no_tv'] = "You wanted to display a TV, but this template doesn't have it: ";
 $_lang['np_unauthorized'] = 'You are not allowed to publish articles.';
-$_lang['np_folder_not_sent'] = 'You set &amp;template to parent but did not include the folder parameter.';
-$_lang['np_resource_save_failed'] = 'An error occured when saving the resource.';
-$_lang['np_to_template_id'] = 'There is no template with this number: [[+id]].';
-$_lang['np_to_template_name'] = 'There is no template with this name: [[+name]].';
+$_lang['np_parent_not_sent'] = 'You set &amp;template to parent but did not include the parent parameter.';
+$_lang['np_parent_not_found'] = 'You set &amp;template to parent but the parent object was not found: .';
+$_lang['np_resource_save_failed'] = 'An error occurred when saving the resource.';
+$_lang['np_to_template_id'] = 'There is no template with this number: ';
+$_lang['np_to_template_name'] = 'There is no template with this name: ';
 $_lang['np_date_hint'] = '(Y-M-D)';
 $_lang['np_date_format'] = 'format-y-m-d';
 $_lang['np_view_permission_denied'] = 'You do not have permission to view this document';
 $_lang['np_create_permission_denied'] = 'You do not have permission to create a document';
 $_lang['np_save_permission_denied'] = 'You do not have permission to view this document';
 $_lang['np_no_edit_self'] = 'You cannot edit the newspublisher page.';
-$_lang['np_no_parent_groups'] = '&groups set to parent but doc has no parent';
+$_lang['np_no_parent_groups'] = '&amp;groups set to parent but parent is not in any groups';
+$_lang['np_no_parent'] = 'Property is set to parent but doc has no parent: ';
 $_lang['np_post_save_no_resource'] = 'Unable to get resource after save';
+$_lang['np_illegal_value'] = 'Illegal value for &amp;';
+$_lang['np_unknown_field'] = 'Unknown field in setDefault()';
+$_lang['np_no_system_setting'] = 'Field is set to System Default but System Setting is not set: ';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Publish Date';
@@ -99,25 +104,3 @@ $_lang['resource_privateweb'] =  'Private Web';
 $_lang['resource_privateweb_help'] =  'Deprecated.';
 $_lang['resource_privatemgr'] =  'Private Manager';
 $_lang['resource_privatemgr_help'] =  'Deprecated.';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

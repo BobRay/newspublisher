@@ -28,7 +28,7 @@
 /* ToDo: Add the new ones to default properties, comments in snippets and write code to set them */
 
 /* NewsPublisher Property Description strings */
-$_lang['np_folder_desc'] = '(optional) Folder id where new documents are stored; defaults to NewsPublisher folder.';
+$_lang['np_parentid_desc'] = '(optional) Folder id where new documents are stored; defaults to NewsPublisher folder.';
 $_lang['np_show_desc'] = '(optional) Comma separated list of fields/tvs to show.';
 $_lang['np_required_desc'] = '(optional) Comma separated list of fields/tvs to require.';
 $_lang['np_published_desc'] = "(optional) Set new resource as published or not (will be overridden by publish and unpublish dates). Set to `parent` to match parent's pub status; defaults to publish_default system setting.";
