@@ -389,7 +389,8 @@ public function displayForm($show) {
     $where = array('templateid'=>$this->template);
     $c->where($where);
     $tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',$c);
-
+    /*ToDo: Handle richtext content and summary */
+    /*ToDo: Handle pub_date and un_pub date minutes:hours:seconds */
     foreach($fields as $field) {
         if (in_array($field,$resourceFields)) { /* regular resource field */
             $val = $this->resource->_fieldMeta[$field][phptype];
@@ -525,7 +526,7 @@ public function displayTv($tvNameOrId,$tvTemplates) {
       $tvType = $tvType == 'option'? 'radio' : $tvType;
 
 
-      switch($tvType) {
+      switch ($tvType) {
             case 'text':
             case 'textbox':
             case 'email';
@@ -605,6 +606,9 @@ public function displayTv($tvNameOrId,$tvTemplates) {
                     if ($tvType == 'listbox' || $tvType =='listbox-multiple') {
                         $formTpl .= "\n    " . '<' . $iType . ' value="' . $rvalue . '"';
                     } else {
+                        if ($tvType == 'checkbox') {
+                            $formTpl .= "\n    " . '<input type="hidden" name="' . $fields['name'] . '" value = "" />';
+                        }
                         $formTpl .= "\n    " . '<span class="option"><' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
                     }
                     if (empty($val)) {
@@ -649,7 +653,7 @@ public function displayTv($tvNameOrId,$tvTemplates) {
                 }
                 $formTpl .= "\n" . '</fieldset>';
                 break;
-
+            /* ToDo: Add Date and other TV types */
             default:
                 break;
 
@@ -859,7 +863,7 @@ public function saveResource() {
     //if (! $this->existing) {
     //    $this->resource = $this->modx->newObject('modResource');
     //}
-
+    /* ToDo: Add permission test to init to disallow editing of docs that already have tags (remove this?) */
     if (! $this->modx->hasPermission('allow_modx_tags')) {
         $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
         foreach($_POST as $k=>$v)
@@ -918,16 +922,12 @@ public function saveResource() {
         $content = str_replace('[[+'.$n.']]',$v,$content);
     }
     */
-
-
-    /* ToDo: remove this ?? may need to convert pub dates to timestamp */
-    if (false) {
-
+/* ToDo: remove this -- handled in processor, processor wants a string and sets published appropriately */
+if (false) {
         $H=isset($this->props['hours'])? $this->props['hours'] : 0;
         $M=isset($this->props['$minutes'])? $this->props['minutes']: 1;
         $S=isset($this->props['seconds'])? $this->props['seconds']: 0;
 
-        $published = 'notSet';
         // check published date
         if($fields['pub_date']=="") {
             $fields['pub_date']="0";
@@ -955,16 +955,13 @@ public function saveResource() {
 
         }
 
-    }
-
+}
     $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
 
     /* ToDo: Remove this */
     if (false) {
     /* while we have the parent object -
        set published status if not set by pub dates above */
-    if ($published == 'notSet') {
-
         $prop = $this->props['published'];
 
         if ( ($prop == 'parent') && $parentObj) { /* set from parent */
@@ -978,7 +975,7 @@ public function saveResource() {
             $fields['published'] = $this->modx->getOption('publish_default');
         }
 
-    }
+
     }
     /* ToDo: Can probably remove this */
     // $this->resource->fromArray($fields);
