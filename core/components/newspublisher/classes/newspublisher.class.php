@@ -158,14 +158,22 @@ class Newspublisher {
 
 
              $this->aliasTitle = $this->props['aliastitle']? true : false;
-             /* ToDo: add synchcache in processor fields */
-             $this->clearcache = $this->props['clearcache'] ? true: false;
              $this->listboxmax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
+             $this->clearcache = isset($_POST['clearcache'])? $_POST['clearcache'] : $this->props['clearcache'] ? true: false;
+             /* ToDo: add synchcache in processor fields */
+             $this->hideMenu = isset($_POST['hidemenu'])? $_POST['hidemenu'] : $this->setDefault('hidemenu',$this->parentId);
+             $this->resource->set('hidemenu', $this->hideMenu);
 
-             $this->hideMenu = $this->props['hidemenu']? '1' : '0';
-             $this->cacheable = $this->setDefault('cacheable',$this->parentId);
-             $this->searchable = $this->setDefault('searchable',$this->parentId);
-             $this->published = $this->setDefault('published',$this->parentId);
+             $this->cacheable = isset($_POST['cacheable'])? $_POST['cacheable'] : $this->setDefault('cacheable',$this->parentId);
+             $this->resource->set('cacheable', $this->cacheable);
+
+             $this->searchable = isset($_POST['searchable'])? $_POST['searchable'] : $this->setDefault('searchable',$this->parentId);
+             $this->resource->set('searchable', $this->searchable);
+
+             $this->published = isset($_POST['published'])? $_POST['published'] : $this->setDefault('published',$this->parentId);
+             $this->resource->set('published', $this->published);
+
+             /*ToDo: Check groups */
              if (! empty($this->props['groups'])) {
                 $this->groups = $this->setDefault('groups',$this->parentId);
              }
@@ -364,7 +372,8 @@ public function displayForm($show) {
             // <label for="[[+npx.fieldName]]" class="checkboxfield" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label><input name="[[+npx.fieldName]]" class="checkboxfield" id="[[+npx.fieldName]]" type="checkbox"  value="[[+np.[[+npx.fieldName]]]]" /></div>';
 
     $boolTpl = ! empty ($this->props['booltpl'])? $this->props['booltpl'] : '<fieldset class="np-tv-checkbox" title="[[%resource_[[+npx.fieldName]]_help]]"><legend>[[%resource_[[+npx.fieldName]]]]</legend>
-    <span class="option"><input class="checkbox" type="checkbox" name="[[+npx.fieldName]]" value="[[+np.[[+npx.fieldName]]]]" [[+checked]] />[[+np.[[+npx.fieldName]]]]</span>
+    <input type="hidden" name = "[[+npx.fieldName]]" value = "" />
+    <span class="option"><input class="checkbox" type="checkbox" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]" value="1" [[+checked]]/></span>
 </fieldset>';
 
     if (! $this->resource) {
@@ -394,8 +403,8 @@ public function displayForm($show) {
 
                 case 'boolean':
                     $t = $boolTpl;
-                    if ($this->props[$field]) {
-                        $t = str_replace('[[+checked]]','checked="checked" ',$t);
+                    if ($this->resource->get($field)) {
+                        $t = str_replace('[[+checked]]','checked="checked"',$t);
                     } else {
                         $t = str_replace('[[+checked]]','',$t);
                     }
@@ -878,7 +887,7 @@ public function saveResource() {
                 $alias = preg_replace('/\s+/', '-', $alias);
                 $alias = preg_replace('|-+|', '-', $alias);
                 $alias = trim($alias, '-');
-                $alias = mysql_real_escape_string($alias);
+                //$alias = mysql_real_escape_string($alias);
             }
             $fields['alias'] = $alias;
         }
@@ -911,9 +920,7 @@ public function saveResource() {
     */
 
 
-    $published = 'notSet';
-
-    /* ToDo: remove this */
+    /* ToDo: remove this ?? may need to convert pub dates to timestamp */
     if (false) {
 
         $H=isset($this->props['hours'])? $this->props['hours'] : 0;
@@ -952,7 +959,8 @@ public function saveResource() {
 
     $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
 
-
+    /* ToDo: Remove this */
+    if (false) {
     /* while we have the parent object -
        set published status if not set by pub dates above */
     if ($published == 'notSet') {
@@ -971,6 +979,7 @@ public function saveResource() {
         }
 
     }
+    }
     /* ToDo: Can probably remove this */
     // $this->resource->fromArray($fields);
 
@@ -979,11 +988,6 @@ public function saveResource() {
     /* e.g. $fields[tv13] = $_POST['MyTv5'] */
     /* processor handles all types */
 
-
-    /* update $_POST from $fields array */
-    /* fix: can be removed when $_POST is removed from runProcessor code */
-    $_POST = array_merge($_POST,$fields);
-        ///die('<pre>POST: ' . print_r($_POST,true));
 
     /* call the appropriate processor to save resource and TVs */
     if (! empty($this->allTvs)) {

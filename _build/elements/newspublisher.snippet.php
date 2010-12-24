@@ -93,23 +93,6 @@ $scriptProperties['prefix'] = empty($np_prefix)? 'np' : $scriptProperties['prefi
 
 $np = new Newspublisher($modx, $scriptProperties);
 
-if (false) {
-        
-        /* check for required permissions */
-        if (! empty($permissions)) {
-            $neededPermissions = explode(',',$permissions);
-            $authorized = false;
-            foreach ($neededPermissions as $perm) {
-                if (! $modx->hasPermission($perm) ){
-                    $authorized = false;
-                    break;
-                }
-            }
-            if (! authorized) {
-                $np->setError($modx->lexicon('np_no_permissions'));
-            }
-        }
-}
 $np->init($modx->context->get('key'));
 
 /* get error Tpl chunk */
@@ -159,13 +142,7 @@ if (! empty($errors) ) {
  // get postback status
  $isPostBack = $np->getPostBack();
 
- /* ToDo: remove this */
-/* if (empty($scriptProperties['hidealltvs'])) {
-    $formTpl = str_replace('[[+np.allTVs]]',$np->displayTVs(),$formTpl);
-} */
-
-
-if ($isPostBack) {
+ if ($isPostBack) {
 
     $errors = $np->getErrors();
     if (! empty($errors)) {
