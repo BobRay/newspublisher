@@ -136,7 +136,7 @@ class Newspublisher {
             }
             /* need to forward this from $_POST so we know it's an existing doc */
             $stuff = '<input type="hidden" name="np_existing" value="true" />' . "\n" .
-            '<input type="hidden" name="np_doc_id" value="' . $this->resource->get('id') . '">';
+            '<input type="hidden" name="np_doc_id" value="' . $this->resource->get('id') . '" />';
             $this->modx->toPlaceholder('post_stuff',$stuff,$this->prefix);
 
         } else {
@@ -190,8 +190,10 @@ class Newspublisher {
 
        $this->modx->lexicon->load('core:resource');
        $this->template = $this->getTemplate();
-       $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
-       $this->modx->regClientStartupScript($this->assetsUrl . 'datepicker/js/datepicker.js');
+       if($this->props['initdatepicker']) {
+            $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
+            $this->modx->regClientStartupScript($this->assetsUrl . 'datepicker/js/datepicker.js');
+       }
 
        /* inject NP CSS file */
        /* empty but sent parameter means use no CSS file at all */
@@ -208,23 +210,35 @@ class Newspublisher {
            $this->modx->regClientCSS($css);
        }
 
+       $ph = empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
+       $this->modx->setPlaceholder('np.content_rows',$ph);
+
+       $ph = empty($this->props['contentcols'])? $this->props['contentcols'] : '60';
+       $this->modx->setPlaceholder('np.content_cols',$ph);
+
+       $ph = empty($this->props['summaryrows'])? $this->props['summaryrows'] : '10';
+       $this->modx->setPlaceholder('np.summary_rows',$ph);
+
+       $ph = empty($this->props['summarycols'])? $this->props['summarycols'] : '60';
+       $this->modx->setPlaceholder('np.summary_cols',$ph);
 
        /* do rich text stuff */
+        $ph = ! empty($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
+        $this->modx->setPlaceholder('np.rt_content_1', $ph );
+        $ph = ! empty($this->props['rtcontent']) ? 'modx-richtext':'content';
+        $this->modx->setPlaceholder('np.rt_content_2', $ph );
+
+        /* set rich text summary field */
+        $ph = ! empty($this->props['rtsummary']) ? 'MODX_RichTextWidget':'introtext';
+        $this->modx->setPlaceholder('np.rt_summary_1', $ph );
+        $ph = ! empty($this->props['rtsummary']) ? 'modx-richtext':'introtext';
+        $this->modx->setPlaceholder('np.rt_summary_2', $ph );
+
+        unset($ph);
        if ($this->props['initrte']) {
 
             /* set rich text content field */
-            $ph = ! empty($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
-            $this->modx->setPlaceholder('np.rt_content_1', $ph );
-            $ph = ! empty($this->props['rtcontent']) ? 'modx-richtext':'content';
-            $this->modx->setPlaceholder('np.rt_content_2', $ph );
 
-            /* set rich text summary field */
-            $ph = ! empty($this->props['rtsummary']) ? 'MODX_RichTextWidget':'introtext';
-            $this->modx->setPlaceholder('np.rt_summary_1', $ph );
-            $ph = ! empty($this->props['rtsummary']) ? 'modx-richtext':'introtext';
-            $this->modx->setPlaceholder('np.rt_summary_2', $ph );
-
-            unset($ph);
 
            $tinyPath = $this->modx->getOption('core_path').'components/tinymce/';
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
@@ -264,7 +278,7 @@ class Newspublisher {
 
        } /* end if ($richtext) */
 
-   } /* end init */
+    } /* end init */
 
 public function setDefault($field,$parentId) {
 
@@ -363,7 +377,7 @@ public function displayForm($show) {
 </div>';
 
     $textTpl = ! empty ($this->props['texttpl'])? $this->props['texttpl'] : '[[+np.error_[[+npx.fieldName]]]]
-            <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label><input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+np.[[+npx.fieldName]]]]" maxlength="60" />';
+            <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help:notags]]">[[%resource_[[+npx.fieldName]]]]: </label><input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+np.[[+npx.fieldName]]]]" maxlength="60" />';
     $intTpl = ! empty ($this->props['inttpl'])? $this->props['inttpl'] : '[[+np.error_[[+npx.fieldName]]]]
             <label class="intfield" for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label><input name="[[+npx.fieldName]]" class="int" id="[[+npx.fieldName]]" type="text"  value="[[+np.[[+npx.fieldName]]]]" maxlength="3" />';
     $dateTpl = ! empty ($this->props['datetpl'])? $this->props['datetpl'] : '[[+np.error_[[+npx.fieldName]]]]<div class="datepicker"><span class="npdate"><label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]] [[%np_date_hint]]: </label><input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="[[+npx.fieldName]]" name="[[+npx.fieldName]]" maxlength="10" readonly="readonly" value="[[+np.[[+npx.fieldName]]]]" /></span></div>';
@@ -397,31 +411,48 @@ public function displayForm($show) {
             if ($field == 'hidemenu') {  /* correct schema error */
                 $val = 'boolean';
             }
-            switch($val) {
-                case 'string':
-                    $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$textTpl);
-                    break;
+            /* do introtext and content fields */
+            if ($field == 'content') {
+                $inner .= "\n" . '[[+np.error_content]]
+                <label for="content">[[%resource_content]]: </label>
+                <div class="[[+np.rt_content_1]]">
+                    <textarea rows="[[+np.content_rows]]" cols="[[+np.content_cols]]" class="[[+np.rt_content_2]]" name="content" id="content">[[+np.content]]</textarea>
+                </div>';
 
-                case 'boolean':
-                    $t = $boolTpl;
-                    if ($this->resource->get($field)) {
-                        $t = str_replace('[[+checked]]','checked="checked"',$t);
-                    } else {
-                        $t = str_replace('[[+checked]]','',$t);
-                    }
-                    $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$t);;
-                    break;
-                case 'integer':
-                    $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$intTpl);
-                    break;
-                case 'fulltext':
-                    $inner .= '<br />' . $field . ' -- FULLTEXT' . $val . '<br />';
-                    break;
-                case 'timestamp':
-                    $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$dateTpl);
-                    break;
-                default:
-                    $inner .= '<br />' . $field . ' -- OTHER' . $val . '<br />';
+            } else if ($field == 'introtext') {
+                $inner .= "\n" . '[[+np.error_introtext]]
+                <label for="introtext" title="[[%resource_summary_help]]">[[%resource_summary]]: </label>
+                <div class="[[+np.rt_summary_1]]">
+                    <textarea  rows="[[+np.summary_rows]]" cols="[[+np.summary_cols]]" class="[[+np.rt_summary_2]]" name="introtext" id="introtext">[[+np.introtext]]</textarea>
+                </div>';
+
+            } else {
+                switch($val) {
+                    case 'string':
+                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$textTpl);
+                        break;
+
+                    case 'boolean':
+                        $t = $boolTpl;
+                        if ($this->resource->get($field)) {
+                            $t = str_replace('[[+checked]]','checked="checked"',$t);
+                        } else {
+                            $t = str_replace('[[+checked]]','',$t);
+                        }
+                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$t);;
+                        break;
+                    case 'integer':
+                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$intTpl);
+                        break;
+                    case 'fulltext':
+                        $inner .= '<br />' . $field . ' -- FULLTEXT' . $val . '<br />';
+                        break;
+                    case 'timestamp':
+                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$dateTpl);
+                        break;
+                    default:
+                        $inner .= '<br />' . $field . ' -- OTHER' . $val . '<br />';
+                }
             }
         } else {
             /* see if it's a TV */
@@ -557,7 +588,10 @@ public function displayTv($tvNameOrId,$tvTemplates) {
                     //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
                     $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
                 }
-                $formTpl .= "\n" . '<label title="'. $fields['description'] . '">'. $caption  . '</label><div class="MODX_RichTextWidget"><textarea class="modx-richtext" name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $this->prefix . '.' . $fields['name'] . ']]</textarea></div>';
+                $formTpl .= "\n" . '<label title="'. $fields['description'] . '">'. $caption  . '</label>
+                <div class="MODX_RichTextWidget">
+                    <textarea rows="8" cols="60" class="modx-richtext" name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $this->prefix . '.' . $fields['name'] . ']]</textarea>
+                </div>';
                 break;
 
 
