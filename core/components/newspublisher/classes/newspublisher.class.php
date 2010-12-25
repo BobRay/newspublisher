@@ -210,26 +210,28 @@ class Newspublisher {
            $this->modx->regClientCSS($css);
        }
 
-       $ph = empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
-       $this->modx->setPlaceholder('np.content_rows',$ph);
+       $ph = ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
+       $this->modx->setPlaceholder('np.contentrows',$ph);
 
-       $ph = empty($this->props['contentcols'])? $this->props['contentcols'] : '60';
-       $this->modx->setPlaceholder('np.content_cols',$ph);
+       $ph = ! empty($this->props['contentcols'])? $this->props['contentcols'] : '60';
+       $this->modx->setPlaceholder('np.contentcols',$ph);
 
-       $ph = empty($this->props['summaryrows'])? $this->props['summaryrows'] : '10';
-       $this->modx->setPlaceholder('np.summary_rows',$ph);
+       $ph = ! empty($this->props['summaryrows'])? $this->props['summaryrows'] : '10';
+       $this->modx->setPlaceholder('np.summaryrows',$ph);
 
-       $ph = empty($this->props['summarycols'])? $this->props['summarycols'] : '60';
-       $this->modx->setPlaceholder('np.summary_cols',$ph);
+       $ph = ! empty($this->props['summarycols'])? $this->props['summarycols'] : '60';
+       $this->modx->setPlaceholder('np.summarycols',$ph);
 
        /* do rich text stuff */
-        $ph = ! empty($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
+        //$ph = ! empty($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
+        $ph = ! empty($this->props['rtcontent']) ? 'modx-richtext':'content';
         $this->modx->setPlaceholder('np.rt_content_1', $ph );
         $ph = ! empty($this->props['rtcontent']) ? 'modx-richtext':'content';
         $this->modx->setPlaceholder('np.rt_content_2', $ph );
 
         /* set rich text summary field */
-        $ph = ! empty($this->props['rtsummary']) ? 'MODX_RichTextWidget':'introtext';
+        //$ph = ! empty($this->props['rtsummary']) ? 'MODX_RichTextWidget':'introtext';
+        $ph = ! empty($this->props['rtsummary']) ? 'modx-richtext':'introtext';
         $this->modx->setPlaceholder('np.rt_summary_1', $ph );
         $ph = ! empty($this->props['rtsummary']) ? 'modx-richtext':'introtext';
         $this->modx->setPlaceholder('np.rt_summary_2', $ph );
@@ -403,7 +405,6 @@ public function displayForm($show) {
     $where = array('templateid'=>$this->template);
     $c->where($where);
     $tvTemplates = $this->modx->getCollection('modTemplateVarTemplate',$c);
-    /*ToDo: Handle richtext content and summary */
     /*ToDo: Handle pub_date and un_pub date minutes:hours:seconds */
     foreach($fields as $field) {
         if (in_array($field,$resourceFields)) { /* regular resource field */
@@ -416,14 +417,14 @@ public function displayForm($show) {
                 $inner .= "\n" . '[[+np.error_content]]
                 <label for="content">[[%resource_content]]: </label>
                 <div class="[[+np.rt_content_1]]">
-                    <textarea rows="[[+np.content_rows]]" cols="[[+np.content_cols]]" class="[[+np.rt_content_2]]" name="content" id="content">[[+np.content]]</textarea>
+                    <textarea rows="[[+np.contentrows]]" cols="[[+np.contentcols]]" class="[[+np.rt_content_2]]" name="content" id="content">[[+np.content]]</textarea>
                 </div>';
 
             } else if ($field == 'introtext') {
                 $inner .= "\n" . '[[+np.error_introtext]]
                 <label for="introtext" title="[[%resource_summary_help]]">[[%resource_summary]]: </label>
                 <div class="[[+np.rt_summary_1]]">
-                    <textarea  rows="[[+np.summary_rows]]" cols="[[+np.summary_cols]]" class="[[+np.rt_summary_2]]" name="introtext" id="introtext">[[+np.introtext]]</textarea>
+                    <textarea  rows="[[+np.summaryrows]]" cols="[[+np.summarycols]]" class="[[+np.rt_summary_2]]" name="introtext" id="introtext">[[+np.introtext]]</textarea>
                 </div>';
 
             } else {
