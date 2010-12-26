@@ -58,11 +58,8 @@ class Newspublisher {
     protected $cacheable;
     protected $searchable;
     protected $template;
-    protected $outerTpl;
-    protected $dateTpl;
-    protected $intTpl;
-    protected $textTpl;
-    protected $boolTpl;
+    protected $tpls; // array of tpls
+
 
 
 
@@ -358,7 +355,8 @@ public function setDefault($field,$parentId) {
     return $retVal;
 }
 public function getTpls() {
-        $this->outerTpl = !empty ($this->props['outertpl'])? $this->props['outertpl'] : '<div class="newspublisher">
+        $this->tpls = array();
+        $this->tpls['outerTpl'] = !empty ($this->props['outertpl'])? $this->modx->getChunk($this->props['outertpl']) : '<div class="newspublisher">
         <h2>[[%np_main_header]]</h2>
         [[!+np.error_header:ifnotempty=`<h3>[[!+np.error_header]]</h3>`]]
         [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
@@ -375,16 +373,37 @@ public function getTpls() {
     </form>
 </div>';
 
-    $this->textTpl = ! empty ($this->props['texttpl'])? $this->props['texttpl'] : '[[+np.error_[[+npx.fieldName]]]]
-            <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help:notags]]">[[%resource_[[+npx.fieldName]]]]: </label><input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+np.[[+npx.fieldName]]]]" maxlength="60" />';
-    $this->intTpl = ! empty ($this->props['inttpl'])? $this->props['inttpl'] : '[[+np.error_[[+npx.fieldName]]]]
-            <label class="intfield" for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label><input name="[[+npx.fieldName]]" class="int" id="[[+npx.fieldName]]" type="text"  value="[[+np.[[+npx.fieldName]]]]" maxlength="3" />';
-    $this->dateTpl = ! empty ($this->props['datetpl'])? $this->props['datetpl'] : '[[+np.error_[[+npx.fieldName]]]]<div class="datepicker"><span class="npdate"><label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]] [[%np_date_hint]]: </label><input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="[[+npx.fieldName]]" name="[[+npx.fieldName]]" maxlength="10" readonly="readonly" value="[[+np.[[+npx.fieldName]]]]" /></span></div>';
 
-    $this->boolTpl = ! empty ($this->props['booltpl'])? $this->props['booltpl'] : '<fieldset class="np-tv-checkbox" title="[[%resource_[[+npx.fieldName]]_help]]"><legend>[[%resource_[[+npx.fieldName]]]]</legend>
+    $this->tpls['textTpl'] = ! empty ($this->props['texttpl'])? $this->modx->getChunk($this->props['texttpl']) : '[[+np.error_[[+npx.fieldName]]]]
+            <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help:notags]]">[[%resource_[[+npx.fieldName]]]]: </label>
+            <input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+np.[[+npx.fieldName]]]]" maxlength="60" />';
+
+
+    $this->tpls['intTpl'] = ! empty ($this->props['inttpl'])? $this->modx->getChunk($this->props['inttpl']) : '[[+np.error_[[+npx.fieldName]]]]
+            <label class="intfield" for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label>
+            <input name="[[+npx.fieldName]]" class="int" id="[[+npx.fieldName]]" type="text"  value="[[+np.[[+npx.fieldName]]]]" maxlength="3" />';
+
+    $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : '[[+np.error_[[+npx.fieldName]]]]
+    <div class="datepicker">
+      <span class="npdate">
+        <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]] [[%np_date_hint]]: </label>
+        <input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="[[+npx.fieldName]]" name="[[+npx.fieldName]]" maxlength="10" readonly="readonly" value="[[+np.[[+npx.fieldName]]]]" />
+      </span>
+    </div>';
+
+    $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : '<fieldset class="np-tv-checkbox" title="[[%resource_[[+npx.fieldName]]_help]]"><legend>[[%resource_[[+npx.fieldName]]]]</legend>
     <input type="hidden" name = "[[+npx.fieldName]]" value = "" />
     <span class="option"><input class="checkbox" type="checkbox" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]" value="1" [[+checked]]/></span>
-</fieldset>';
+ </fieldset>';
+
+    $success = true;
+    foreach($this->tpls as $tpl=>$val) {
+        if (empty($val)) {
+            $this->modx->setError('np_no_tpl' . $tpl);
+            $success = false;
+        }
+    }
+    return $success;
 }
 
 public function displayForm($show) {
@@ -396,7 +415,7 @@ public function displayForm($show) {
 
     if (! $this->resource) {
         $this->setError($this->modx->lexicon('np_no_resource'));
-        return $this->outerTpl;
+        return $this->tpls['outerTpl'];
     }
 
     /* get the resource field names */
@@ -432,11 +451,11 @@ public function displayForm($show) {
             } else {
                 switch($val) {
                     case 'string':
-                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->textTpl);
+                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->tpls['textTpl']);
                         break;
 
                     case 'boolean':
-                        $t = $this->boolTpl;
+                        $t = $this->tpls['boolTpl'];
                         if ($this->resource->get($field)) {
                             $t = str_replace('[[+checked]]','checked="checked"',$t);
                         } else {
@@ -445,13 +464,13 @@ public function displayForm($show) {
                         $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$t);;
                         break;
                     case 'integer':
-                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->intTpl);
+                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->tpls['intTpl']);
                         break;
                     case 'fulltext':
                         $inner .= '<br />' . $field . ' -- FULLTEXT' . $val . '<br />';
                         break;
                     case 'timestamp':
-                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->dateTpl);
+                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->tpls['dateTpl']);
                         break;
                     default:
                         $inner .= '<br />' . $field . ' -- OTHER' . $val . '<br />';
@@ -465,7 +484,7 @@ public function displayForm($show) {
             }
         }
     }
-    $formTpl = str_replace('[[+np.insert]]',$inner,$this->outerTpl);
+    $formTpl = str_replace('[[+np.insert]]',$inner,$this->tpls['outerTpl']);
 
     return $formTpl;
     $formTpl = '';
@@ -562,7 +581,7 @@ public function displayTv($tvNameOrId,$tvTemplates) {
 
       switch ($tvType) {
             case 'date':
-              $formTpl .= "\n" . str_replace('[[+npx.fieldName]]',$fields['name'],$this->dateTpl);
+              $formTpl .= "\n" . str_replace('[[+npx.fieldName]]',$fields['name'],$this->tpls['dateTpl']);
             case 'text':
             case 'textbox':
             case 'email';

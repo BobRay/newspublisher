@@ -59,6 +59,7 @@ $_lang['np_post_save_no_resource'] = 'Unable to get resource after save';
 $_lang['np_illegal_value'] = 'Illegal value for &amp;';
 $_lang['np_unknown_field'] = 'Unknown field in setDefault()';
 $_lang['np_no_system_setting'] = 'Field is set to System Default but System Setting is not set: ';
+$_lang['np_no_tpl'] = 'Could not find Tpl chunk: ';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Publish Date';
