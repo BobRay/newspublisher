@@ -581,7 +581,12 @@ public function displayTv($tvNameOrId,$tvTemplates) {
 
       switch ($tvType) {
             case 'date':
-              $formTpl .= "\n" . str_replace('[[+npx.fieldName]]',$fields['name'],$this->tpls['dateTpl']);
+                $tpl = $this->tpls['dateTpl'];
+                $tpl = str_replace('[[%resource_[[+npx.fieldName]]_help]]',$fields['description'],$tpl);
+                $tpl = str_replace('[[%resource_[[+npx.fieldName]]]]',$caption,$tpl);
+                $formTpl .= "\n" . str_replace('[[+npx.fieldName]]',$fields['name'],$tpl);
+                unset($tpl);
+                break;
             case 'text':
             case 'textbox':
             case 'email';
