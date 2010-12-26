@@ -399,7 +399,7 @@ public function getTpls() {
     $success = true;
     foreach($this->tpls as $tpl=>$val) {
         if (empty($val)) {
-            $this->modx->setError('np_no_tpl' . $tpl);
+            $this->setError($this->modx->lexicon('np_no_tpl') . $tpl);
             $success = false;
         }
     }
