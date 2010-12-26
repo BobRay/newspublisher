@@ -547,7 +547,25 @@ public function displayTv($tvNameOrId,$tvTemplates) {
             $this->setError($this->modx->lexicon('np_no_tv') . $tvNameOrId);
             return null;
         } else {
-            $this->allTvs[] = $tvObj;
+            $tvid = $tvObj->get('id');
+            $tmpl = $this->template;
+            $found = false;
+            foreach ($tvTemplates as $tvt) {
+
+                $tvt_tmplvarid = $tvt->get('tmplvarid');
+                $tvt_tmpl = $tvt->get('templateid');
+                if  ($tvt_tmplvarid == $tvid) {
+                    if ($tvt_tmpl == $tmpl) {
+                        $found = true;
+                    }
+                }
+            }
+            if (! $found) {
+                $this->setError($this->modx->lexicon('np_not_our_tv') . $tvNameOrId);
+                return null;
+            } else {
+                $this->allTvs[] = $tvObj;
+            }
         }
     } else {
         $this->setError($this->modx->lexicon('np_no_tvs'));
@@ -1129,11 +1147,11 @@ public function forward($postId) {
 
 /** creates a JSON string to send in the resource_groups field
  * for resource/update or resource/create processors.
- * 
+ *
  * @param string $resourceGroups - a comma-separated list of
- * resource groups names or IDs (or both mixed) to assign a 
+ * resource groups names or IDs (or both mixed) to assign a
  * document to.
- * 
+ *
  * @return string (JSON encoded array)
  */
 
