@@ -548,20 +548,14 @@ public function displayTv($tvNameOrId,$tvTemplates) {
             return null;
         } else {
             $tvid = $tvObj->get('id');
-            $tmpl = $this->template;
             $found = false;
             foreach ($tvTemplates as $tvt) {
-
-                $tvt_tmplvarid = $tvt->get('tmplvarid');
-                $tvt_tmpl = $tvt->get('templateid');
-                if  ($tvt_tmplvarid == $tvid) {
-                    if ($tvt_tmpl == $tmpl) {
+                if  ( $tvt->get('tmplvarid') == $tvid && $tvt->get('templateid') == $this->template) {
                         $found = true;
-                    }
                 }
             }
             if (! $found) {
-                $this->setError($this->modx->lexicon('np_not_our_tv') . $tvNameOrId);
+                $this->setError($this->modx->lexicon('np_not_our_tv') . ' Template: ' . $this->template . '  ----    TV: ' . $tvNameOrId);
                 return null;
             } else {
                 $this->allTvs[] = $tvObj;

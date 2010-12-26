@@ -60,7 +60,7 @@ $_lang['np_illegal_value'] = 'Illegal value for &amp;';
 $_lang['np_unknown_field'] = 'Unknown field in setDefault()';
 $_lang['np_no_system_setting'] = 'Field is set to System Default but System Setting is not set: ';
 $_lang['np_no_tpl'] = 'Could not find Tpl chunk: ';
-$_lang['np_not_our_tv'] = 'This requested TV is not attached to this template: ';
+$_lang['np_not_our_tv'] = 'You want to display a TV that is not attached to this template.   ';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Publish Date';
