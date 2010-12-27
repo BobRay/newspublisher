@@ -592,7 +592,8 @@ public function displayTv($tvNameOrId) {
             case 'image';
                 $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
                 if ($this->existing && !$this->isPostBack) {
-                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
+                    //$this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
+                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
                 }
 
                 break;
@@ -601,11 +602,11 @@ public function displayTv($tvNameOrId) {
             case 'textareamini':
                 if ($this->existing  && ! $this->isPostBack) {
                     //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
-                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
+                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
                 }
       if ($this->existing  && ! $this->isPostBack) {
                     //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
-                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
+                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
                 }
                 $rows = $tvType=='textarea'? 5 : 10;
                 $cols = 60;
@@ -614,7 +615,7 @@ public function displayTv($tvNameOrId) {
             case 'richtext':
                 if ($this->existing && !$this->isPostBack) {
                     //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
-                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
+                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
                 }
                 $formTpl .= "\n" . '<label title="'. $fields['description'] . '">'. $caption  . '</label>
                 <div class="modx-richtext">
@@ -717,6 +718,10 @@ public function displayTv($tvNameOrId) {
                 break;
             /* ToDo: Add Date and other TV types */
             default:
+                $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
+                if ($this->existing && !$this->isPostBack) {
+                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
+                }
                 break;
 
         }  /* end switch */
