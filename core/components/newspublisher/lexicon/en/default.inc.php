@@ -61,6 +61,8 @@ $_lang['np_no_system_setting'] = 'Field is set to System Default but System Sett
 $_lang['np_no_tpl'] = 'Could not find Tpl chunk: ';
 $_lang['np_not_our_tv'] = 'You want to display a TV that is not attached to this template.   ';
 $_lang['np_no_permission'] = ' (you may not have permission for the document or group referred to)';
+$_lang['np_no_evals'] = 'Cannot edit TVs with @EVAL bindings in the front end: ';
+$_lang['np_no_evals_input'] = 'Cannot use @EVAL bindings in the front end.';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Publish Date';

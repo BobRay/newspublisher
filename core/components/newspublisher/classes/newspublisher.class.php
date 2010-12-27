@@ -176,7 +176,6 @@ class Newspublisher {
              $this->published = isset($_POST['published'])? $_POST['published'] : $this->setDefault('published',$this->parentId);
              $this->resource->set('published', $this->published);
 
-             /*ToDo: Check groups */
              if (! empty($this->props['groups'])) {
                 $this->groups = $this->setDefault('groups',$this->parentId);
              }
@@ -530,27 +529,26 @@ public function displayForm($show) {
 } /* end displayForm */
 public function displayTv($tvNameOrId) {
 
-    /* ToDo: move next line to init */
 
-        if (is_numeric($tvNameOrId)) {
-           $tvObj = $this->modx->getObject('modTemplateVar',$tvNameOrId);
-        } else {
-           $tvObj = $this->modx->getObject('modTemplateVar',array('name' => $tvNameOrId));
-        }
-        if (empty($tvObj)) {
-            $this->setError($this->modx->lexicon('np_no_tv') . $tvNameOrId);
+    if (is_numeric($tvNameOrId)) {
+       $tvObj = $this->modx->getObject('modTemplateVar',$tvNameOrId);
+    } else {
+       $tvObj = $this->modx->getObject('modTemplateVar',array('name' => $tvNameOrId));
+    }
+    if (empty($tvObj)) {
+        $this->setError($this->modx->lexicon('np_no_tv') . $tvNameOrId);
+        return null;
+    } else {
+        /* make sure requested TV is attached to this template*/
+        $tvId = $tvObj->get('id');
+        $found = $this->modx->getCount('modTemplateVarTemplate', array('templateid' => $this->template, 'tmplvarid' => $tvId));
+        if (! $found) {
+            $this->setError($this->modx->lexicon('np_not_our_tv') . ' Template: ' . $this->template . '  ----    TV: ' . $tvNameOrId);
             return null;
         } else {
-            /* make sure requested TV is attached to this template */
-            $tvId = $tvObj->get('id');
-            $found = $this->modx->getCount('modTemplateVarTemplate', array('templateid' => $this->template, 'tmplvarid' => $tvId));
-            if (! $found) {
-                $this->setError($this->modx->lexicon('np_not_our_tv') . ' Template: ' . $this->template . '  ----    TV: ' . $tvNameOrId);
-                return null;
-            } else {
-                $this->allTvs[] = $tvObj;
-            }
+            $this->allTvs[] = $tvObj;
         }
+    }
 
 
 /* we have a TV to show */
@@ -561,12 +559,16 @@ public function displayTv($tvNameOrId) {
 
     $tv = $tvObj;
 
-      $fields = $tv->toArray();
 
-      /* skip hidden TVs */
-      if (in_array($fields['id'],$hidden)) {
-         return null;
-      }
+    $fields = $tv->toArray();
+
+    /* skip hidden TVs */
+    if (in_array($fields['id'],$hidden)) {
+        return null;
+    }
+    //if ($this->existing  && ! $this->isPostBack) {
+    //    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
+    //}
       /* use TV's name as caption if caption is empty */
       $caption = empty($fields['caption'])? $fields['name'] : $fields['caption'];
 
@@ -604,10 +606,7 @@ public function displayTv($tvNameOrId) {
                     //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
                     $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
                 }
-      if ($this->existing  && ! $this->isPostBack) {
-                    //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
-                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
-                }
+
                 $rows = $tvType=='textarea'? 5 : 10;
                 $cols = 60;
                 $formTpl .= "\n" . '<label title="' . $fields['description'] . '">'. $caption  . '</label><textarea rows="'. $rows . '" cols="' . $cols . '"' . 'name="' . $fields['name'] . '"'. $fields['description'] . ' id="' . $fields['name'] . '">' . '[[+'. $this->prefix . '.' . $fields['name'] . ']]</textarea>';
@@ -716,7 +715,7 @@ public function displayTv($tvNameOrId) {
                 }
                 $formTpl .= "\n" . '</fieldset>';
                 break;
-            /* ToDo: Add Date and other TV types */
+
             default:
                 $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
                 if ($this->existing && !$this->isPostBack) {
@@ -725,9 +724,6 @@ public function displayTv($tvNameOrId) {
                 break;
 
         }  /* end switch */
-
-
-
 
 return $formTpl;
 }
@@ -804,62 +800,9 @@ public function saveResource() {
         $content = str_replace('[[+'.$n.']]',$v,$content);
     }
     */
-/* ToDo: remove this -- handled in processor, processor wants a string and sets published appropriately */
-if (false) {
-        $H=isset($this->props['hours'])? $this->props['hours'] : 0;
-        $M=isset($this->props['$minutes'])? $this->props['minutes']: 1;
-        $S=isset($this->props['seconds'])? $this->props['seconds']: 0;
-
-        // check published date
-        if($fields['pub_date']=="") {
-            $fields['pub_date']="0";
-        } else {
-            list($Y, $m, $d) = sscanf($fields['pub_date'], "%4d-%2d-%2d");
-            $fields['pub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
-
-            if($fields['pub_date'] <= time()) {
-                $fields['published'] = '1';
-            } else {
-                $fields['published'] = '0';
-            }
-
-        }
-
-        // check unpublished date
-        if($fields['unpub_date']=="") {
-            $fields['unpub_date']="0";
-        } else {
-            list($Y, $m, $d) = sscanf($fields['unpub_date'], "%4d-%2d-%2d");
-            $fields['unpub_date'] = strtotime("$m/$d/$Y $H:$M:$S");
-            if($fields['unpub_date'] < time()) {
-                $fields['published'] = '0';
-            }
-
-        }
-
-}
-    $parentObj = $this->modx->getObject('modResource',$fields['parent'] ); // parent of new page
-
-    /* ToDo: Remove this */
-    if (false) {
-    /* while we have the parent object -
-       set published status if not set by pub dates above */
-        $prop = $this->props['published'];
-
-        if ( ($prop == 'parent') && $parentObj) { /* set from parent */
-
-            $fields['published'] = $parentObj->get('published');
-        } else if ($prop === '1') {
-            $fields['published'] = '1';
-        } else if ($prop === '0') {
-            $fields['published'] = '0';
-        } else { /* use system default */
-            $fields['published'] = $this->modx->getOption('publish_default');
-        }
 
 
-    }
-        /* Add TVs to $fields for processor */
+    /* Add TVs to $fields for processor */
     /* e.g. $fields[tv13] = $_POST['MyTv5'] */
     /* processor handles all types */
 
@@ -1078,6 +1021,21 @@ public function validate($errorTpl) {
             }
         }
     }
+
+    $fields = explode(',',$this->props['show']);
+    foreach ($fields as $field) {
+        $field = trim($field);
+    }
+
+        foreach($fields as $field) {
+            if (stristr($_POST[$field],'@EVAL')) {
+                     $this->setError($this->modx->lexicon('np_no_evals_input'));
+                     $_POST[$field] = '';
+                     $this->modx->toPlaceholder($field,'',$this->prefix);
+                     $success = false;
+             }
+
+        }
 
     return $success;
 }
