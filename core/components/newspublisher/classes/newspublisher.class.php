@@ -122,9 +122,11 @@ class Newspublisher {
                     $ph = $this->resource->toArray();
                     foreach($ph as $k=>$v) {
                              $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
-                     }
-                     $ph = $fs;
+                    }
+                    $ph = $fs;
+                    $ph['pub_date_time'] = $ph['pub_date']? substr($ph['pub_date'],11,5) : '';
                     $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
+                    $ph['unpub_date_time'] = $ph['unpub_date']? substr($ph['unpub_date'],11,5) : '';
                     $ph['unpub_date'] = $ph['unpub_date']? substr($ph['unpub_date'],0,10) : '';
 
                     $this->modx->toPlaceholders($ph,$this->prefix);
@@ -385,8 +387,9 @@ public function getTpls() {
     $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : '[[+np.error_[[+npx.fieldName]]]]
     <div class="datepicker">
       <span class="npdate">
-        <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]] [[%np_date_hint]]: </label>
+        <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: [[%np_date_hint]] </label>
         <input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="[[+npx.fieldName]]" name="[[+npx.fieldName]]" maxlength="10" readonly="readonly" value="[[+np.[[+npx.fieldName]]]]" />
+        <input type="text" class="[[+npx.fieldName]]_time" name="[[+npx.fieldName]]_time" id="[[+npx.fieldName]]_time" value="[[+np.[[+npx.fieldName]]_time]]" />
       </span>
     </div>';
 
@@ -740,6 +743,14 @@ public function saveResource() {
     $oldFields = $this->resource->toArray();
     $newFields = $_POST;
     $fields = array_replace($oldFields, $newFields);
+
+    if ($fields['pub_date'] && $fields['pub_date_time']) {
+        $fields['pub_date'] = $fields['pub_date'] . ' ' . $fields['pub_date_time'];
+    }
+
+    if ($fields['unpub_date'] && $fields['unpub_date_time']) {
+        $fields['unpub_date'] = $fields['unpub_date'] . ' ' . $fields['unpub_date_time'];
+    }
 
 
     if (! $this->existing) {
