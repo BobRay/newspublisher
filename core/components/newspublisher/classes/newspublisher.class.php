@@ -1040,53 +1040,6 @@ public function validate($errorTpl) {
     return $success;
 }
 
-/* set a new object's resource groups -- only called for new resources */
-/* todo: remove this  */
-protected function setxxxxxGroups($parentObj, $resourceId) {
-    /* use the parent's groups if &groups is set to `parent` */
-    if ($this->props['groups'] == 'parent') {
-
-        /* put the new doc in the same resource groups as the parent */
-        $resourceGroups = $parentObj->getMany('ResourceGroupResources');
-
-        if (! empty($resourceGroups)) { /* skip if parent doesn't belong to any resource groups */
-            foreach ($resourceGroups as $resourceGroup) {
-                $docGroupNum = $resourceGroup->get('document_group');
-                $docNum = $resourceGroup->get('document');
-
-                $resourceGroupObj = $this->modx->getObject('modResourceGroup', $docGroupNum);
-                $intersect = $this->modx->newObject('modResourceGroupResource');
-                $intersect->addOne($this->resource);
-                $intersect->addOne($resourceGroupObj);
-                $intersect->save();
-
-
-            }
-        } /* end if (! empty($resourceGroups)) */
-
-
-    } else {  /* use group list in parameter */
-        /* get group names */
-        $rGroups = explode(',', $this->props['groups']);
-        if (count($rGroups)) {
-            foreach($rGroups as $rGroup) {
-                $resourceGroupObj = $this->modx->getObject('modResourceGroup',array('name'=>$rGroup));
-                if ($resourceGroupObj) {
-                    $intersect = $this->modx->newObject('modResourceGroupResource');
-                    $intersect->addOne($this->resource);
-                    $intersect->addOne($resourceGroupObj);
-                    $intersect->save();
-
-                } else {
-                    $msg = str_replace('[[+name]]',$rGroup,$this->modx->lexicon('np_no_resource_group') );
-                    $this->setError($msg);
-                }
-            } /* end foreach($rGroups) */
-        } /* end if (count($rGroups)) */
-
-    } /* end use group list in parameter */
-
-} /* end setGroups function */
 
 } /* end class */
 
