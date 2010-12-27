@@ -566,18 +566,32 @@ public function displayTv($tvNameOrId) {
     if (in_array($fields['id'],$hidden)) {
         return null;
     }
-    //if ($this->existing  && ! $this->isPostBack) {
-    //    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
-    //}
-      /* use TV's name as caption if caption is empty */
-      $caption = empty($fields['caption'])? $fields['name'] : $fields['caption'];
 
-      /* create error placeholder for field */
-      $formTpl .=  "\n" . '[[+np.error_'. $fields['name'] . ']]' . "\n";
+    /* use TV's name as caption if caption is empty */
+    $caption = empty($fields['caption'])? $fields['name'] : $fields['caption'];
 
-      /* Build TV input code dynamically based on type */
-      $tvType = $tv->get('type');
-      $tvType = $tvType == 'option'? 'radio' : $tvType;
+    /* create error placeholder for field */
+    $formTpl .=  "\n" . '[[+np.error_'. $fields['name'] . ']]' . "\n";
+
+    /* Build TV input code dynamically based on type */
+    $tvType = $tv->get('type');
+    $tvType = $tvType == 'option'? 'radio' : $tvType;
+    if (! $this->isPostBack ) {
+        $ph = '';
+        if ($this->existing) {
+            //$this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
+            $ph = $tv->getValue($this->existing);
+        }
+        /* empty value gets default_text for both new and existing docs */
+        if (empty($ph)) {
+            $ph = $tv->get('default_text');
+        }
+        if (stristr($ph,'@EVAL')) {
+            $this->setError($this->modx->lexicon('np_no_evals'). $tv->get('name'));
+        } else {
+            $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'], $ph );
+        }
+    }
 
 
       switch ($tvType) {
@@ -595,7 +609,7 @@ public function displayTv($tvNameOrId) {
                 $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
                 if ($this->existing && !$this->isPostBack) {
                     //$this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->renderOutput($this->existing) );
-                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
+                   // $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
                 }
 
                 break;
@@ -604,7 +618,7 @@ public function displayTv($tvNameOrId) {
             case 'textareamini':
                 if ($this->existing  && ! $this->isPostBack) {
                     //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
-                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
+                   // $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
                 }
 
                 $rows = $tvType=='textarea'? 5 : 10;
@@ -614,7 +628,7 @@ public function displayTv($tvNameOrId) {
             case 'richtext':
                 if ($this->existing && !$this->isPostBack) {
                     //die('<br />FIELD: ' . $fields['name'] . '<br />VALUE: ' . $tv->renderOutput($this->existing) . '<br />Existing: ' . $this->existing  . '<br />');
-                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
+                    //$this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
                 }
                 $formTpl .= "\n" . '<label title="'. $fields['description'] . '">'. $caption  . '</label>
                 <div class="modx-richtext">
@@ -719,7 +733,7 @@ public function displayTv($tvNameOrId) {
             default:
                 $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
                 if ($this->existing && !$this->isPostBack) {
-                    $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
+                    //$this->modx->setPlaceholder($this->prefix . '.' . $fields['name'],$tv->getValue($this->existing) );
                 }
                 break;
 
