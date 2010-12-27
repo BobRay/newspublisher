@@ -313,16 +313,13 @@ public function setDefault($field,$parentId) {
             } else {
                     $retVal = $this->parentObj->get($field);
             }
+        } else if ($field == 'groups') {
+                /* ToDo: Sanity Check groups here (or in setGroups() ) */
+                $retVal = $this->setGroups($prop);
         }
     } else { /* not 1, 0, or parent; use system default except for groups */
         switch($field) {
 
-            case 'groups':
-                /* ToDo: Sanity Check groups here */
-                $retVal = $prop;
-                break;
-
-                break;
             case 'published':
                 $option = 'publish_default';
                 break;
@@ -343,14 +340,16 @@ public function setDefault($field,$parentId) {
                 $this->setError($this->modx->lexicon('np_unknown_field'));
                 return;
         }
-        $retVal = $this->modx->getOption($option);
+        if ($option != 'groups') {
+            $retVal = $this->modx->getOption($option);
+        }
         if ($retVal === null) {
             $this->setError($this->modx->lexicon('np_no_system_setting') . $option);
         }
 
     }
     if ($retVal === null) {
-        $this->setError($this->modx->lexicon('np_illegal_value') . $field);
+        $this->setError($this->modx->lexicon('np_illegal_value') . $field . ': ' . $prop . $this->modx->lexicon('np_no_permission') );
     }
     return $retVal;
 }
@@ -951,8 +950,8 @@ protected function setGroups($resourceGroups, $parentObj = null) {
             }
             $resourceGroups = implode(',',$groupNumbers);
         } else {/* parent not in any groups */
-            $this->setError($this->modx->lexicon('np_no_parent_groups'));
-            return null;
+            //$this->setError($this->modx->lexicon('np_no_parent_groups'));
+            return '';
         }
 
 
@@ -1010,10 +1009,10 @@ protected function getTemplate() {
             $this->setError($this->modx->lexicon('np_parent_not_sent'));
         }
         if (empty($this->parentObj)) {
-            $parentObj = $this->modx->getObject('modResource',$this->parentId);
+            $this->parentObj = $this->modx->getObject('modResource',$this->parentId);
         }
-        if ($parentObj) {
-            $template = $parentObj->get('template');
+        if ($this->parentObj) {
+            $template = $this->parentObj->get('template');
         } else {
             $this->setError($this->modx->lexicon('np_parent_not_found') . $this->parentId);
         }

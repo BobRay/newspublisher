@@ -43,7 +43,7 @@ $_lang['np_no_tvs'] = 'You wanted to display TVs, but this template has none.';
 $_lang['np_no_tv'] = "You wanted to display a TV, but this template doesn't have it: ";
 $_lang['np_unauthorized'] = 'You are not allowed to publish articles.';
 $_lang['np_parent_not_sent'] = 'You set &amp;template to parent but did not include the parent parameter.';
-$_lang['np_parent_not_found'] = 'You set &amp;template to parent but the parent object was not found: .';
+$_lang['np_parent_not_found'] = 'You set a property to `parent` but the parent object was not found: .';
 $_lang['np_resource_save_failed'] = 'An error occurred when saving the resource.';
 $_lang['np_to_template_id'] = 'There is no template with this number: ';
 $_lang['np_to_template_name'] = 'There is no template with this name: ';
@@ -53,7 +53,6 @@ $_lang['np_view_permission_denied'] = 'You do not have permission to view this d
 $_lang['np_create_permission_denied'] = 'You do not have permission to create a document';
 $_lang['np_save_permission_denied'] = 'You do not have permission to view this document';
 $_lang['np_no_edit_self'] = 'You cannot edit the newspublisher page.';
-$_lang['np_no_parent_groups'] = '&amp;groups set to parent but parent is not in any groups';
 $_lang['np_no_parent'] = 'Property is set to parent but doc has no parent: ';
 $_lang['np_post_save_no_resource'] = 'Unable to get resource after save';
 $_lang['np_illegal_value'] = 'Illegal value for &amp;';
@@ -61,6 +60,7 @@ $_lang['np_unknown_field'] = 'Unknown field in setDefault()';
 $_lang['np_no_system_setting'] = 'Field is set to System Default but System Setting is not set: ';
 $_lang['np_no_tpl'] = 'Could not find Tpl chunk: ';
 $_lang['np_not_our_tv'] = 'You want to display a TV that is not attached to this template.   ';
+$_lang['np_no_permission'] = ' (you may not have permission for the document or group referred to)';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Publish Date';
