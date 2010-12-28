@@ -57,16 +57,22 @@ Fix/add &allowAnyPost
                        defaults to publish_default system setting.
     &postid      - (optional) Document id to load on success; defaults to the page created or edited.
     &cancelid    - (optional) Document id to load on cancel; defaults to http_referer.
+    $cancelbutton- (optional) If set, form has a cancel button; defaults to `0`
     &badwords    - (optional) Comma delimited list of words not allowed in new document.
     &template    - (optional) Name of template to use for new document; set to 'parent' to use parent's template;
                        for 'parent', &parent must be set; defaults to system default template.
     &headertpl   - (optional) Header Tpl chunk (chunk name) to be inserted at the beginning of a new document.
     &footertpl   - (optional) Footer Tpl chunk (chunk name) to be inserted at the end of a new document.
     &richtext    - (optional) Sets the flag to as to whether or Rich Text Editor is used when editing the page
-                       content in the Manager; defaults to richtext_default System Setting for new resources.
+                       content in the Manager; defaults to richtext_default System Setting for new resources;
+                       set to `Parent` to use parent's setting.
     &rtcontent   - (optional) Use rich text for the content form field.
     &rtsummary   - (optional) Use rich text for the summary (introtext) form field.
-    &hidemenu  - (optional) Sets the flag (0/1) to as to whether or not the new page shows in the menu; defaults to 1.
+    &hidemenu    - (optional) Sets the flag (0/1) for whether or not the new page shows in the menu; defaults to 1.
+    &searchable  - (optional) Search add-on components can use this to determine whether to include the resource in searches;
+                       default is search_default System Setting; set to `Parent` to use parent's setting.
+    &cacheable   - (optional) Sets the flag (0/1) for whether or not the new page is marked as cacheable;
+                       default is cache_default System Setting; set to `Parent` to use parent's setting.
 
     &aliastitle  - (optional) Set to 1 to use lowercase, hyphenated, page title as alias. Defaults to 1.
                        If 0,'article-(date created)' is used. Ignored if alias is filled in form.
@@ -79,7 +85,7 @@ Fix/add &allowAnyPost
     &groups      - (optional) Resource groups to put new document in (no effect with existing docs);
                        set to 'parent' to use parent's groups.
     &language    - (optional) Language to use in forms and error messages.
-    &prefix      - (optional) Prefix to use for placeholders; defaults to 'np.'
+    &prefix      - (optional) Prefix to use for placeholders; defaults to 'np'
     &fielderrortpl - (optional)
     &initrte     - '(optional) Initialize rich text editor; set this if there are any rich text fields; defaults to 0';
 
@@ -88,22 +94,25 @@ Fix/add &allowAnyPost
 /** @define "$modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/')" "VALUE" */
 require_once $modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/').'classes/newspublisher.class.php';
 
-$np_prefix = $modx->getOption('prefix',$scriptProperties,'np');
-$scriptProperties['prefix'] = empty($np_prefix)? 'np' : $scriptProperties['prefix'];
+
+$scriptProperties['prefix'] = empty($scriptProperties['prefix'])? 'np' : $scriptProperties['prefix'];
+$np_prefix = $scriptProperties['prefix'];
 
 $np = new Newspublisher($modx, $scriptProperties);
 
 $np->init($modx->context->get('key'));
 
 /* get error Tpl chunk */
-$errorTpl = ! empty($errortpl)? $modx->getChunk($errortpl): '<span class = "errormessage">[[+np.error]]</span>';
+$errorTpl = ! empty($errortpl)? $modx->getChunk($errortpl): '<span class = "errormessage">[[+' . $np_prefix . '.error]]</span>';
 
 if(empty($errorTpl)) { /* user sent it but it's not there */
    return $modx->lexicon('np_no_error_tpl') . $scriptProperties['errortpl'];
 }
 $errors = $np->getErrors();
 if (! empty($errors) ) { /* doesn't have permission */
-    $errorMessage .= str_replace('[[+np.error]]',$error,$errors[0]);
+    foreach ($errors as $error) {
+        $errorMessage .= str_replace('[[+' . $np_prefix . '.error]]', $error, $errorTpl);
+    }
     return($errorMessage);
  }
 
@@ -112,12 +121,12 @@ if (! empty ($cancelId)) {
 } else {
     $cancelUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $modx->resource->get('id');
 }
-$modx->setPlaceholder('np.cancel_url',$cancelUrl);
+$modx->toPlaceholder('cancel_url',$cancelUrl,$np_prefix);
 
 $errorHeaderPresubmit = $modx->lexicon('np_error_presubmit');
 $errorHeaderSubmit = $modx->lexicon('np_error_submit');
 
-$fieldErrorTpl = !empty($fielderrortpl)? $modx->getChunk($fielderrortpl): '<span class = "fielderrormessage">[[+np.error]]</span>';
+$fieldErrorTpl = !empty($fielderrortpl)? $modx->getChunk($fielderrortpl): '<span class = "fielderrormessage">[[+'. $np_prefix . '.error]]</span>';
 
 if(empty($fieldErrorTpl)) {
    return $modx->lexicon('np_no_error_tpl') . $scriptProperties['errortpl'] ;
@@ -127,17 +136,17 @@ if(empty($fieldErrorTpl)) {
 $np->getTpls();
 $formTpl .= $np->displayForm($scriptProperties['show']);
 
-
+//die ('<pre>' . print_r($formTpl,true));
 /* handle pre-submission errors */
 $errors = $np->getErrors();
 
 if (! empty($errors) ) {
    
-    $modx->setPlaceholder('np.error_header',$errorHeaderPresubmit);
+    $modx->toPlaceholder('error_header',$errorHeaderPresubmit, $np_prefix);
     foreach($errors as $error) {
-        $errorMessage .= str_replace('[[+np.error]]',$error,$errorTpl);
+        $errorMessage .= str_replace("[[+{$np_prefix} . '.error]]",$error,$errorTpl);
     }
-    $modx->setPlaceholder('np.errors_presubmit',$errorMessage);
+    $modx->toPlaceholder('errors_presubmit',$errorMessage, $np_prefix);
     return($formTpl);
  }
  // get postback status
@@ -147,11 +156,11 @@ if (! empty($errors) ) {
 
     $errors = $np->getErrors();
     if (! empty($errors)) {
-        $modx->setPlaceholder('np.error_header',$errorHeaderSubmit);
+        $modx->toPlaceholder('error_header',$errorHeaderSubmit, $np_prefix);
         foreach($errors as $error) {
-            $errorMessage .= str_replace('[[+np.error]]',$error,$errorTpl);
+            $errorMessage .= str_replace("[[+{$np_prefix} . '.error]]",$error,$errorTpl);
         }
-        $modx->setPlaceholder('np.errors_submit',$errorMessage);
+        $modx->toPlaceholder('errors_submit',$errorMessage, $np_prefix);
         return($formTpl);
 
     }
@@ -161,10 +170,10 @@ if (! empty($errors) ) {
     $errors = $np->getErrors();
     if (! empty($errors) ) {
         foreach($errors as $error) {
-            $errorMessage .= str_replace('[[+np.error]]',$error,$errorTpl);
+            $errorMessage .= str_replace("[[+{$np_prefix}.error]]",$error,$errorTpl);
         }
-        $modx->setPlaceholder('np.errors_submit',$errorMessage);
-        $modx->setPlaceholder('np.error_header',$errorHeaderSubmit);
+        $modx->toPlaceholder('errors_submit',$errorMessage, $np_prefix);
+        $modx->toPlaceholder('error_header',$errorHeaderSubmit, $np_prefix);
         return $formTpl;
     }
 
@@ -175,12 +184,12 @@ if (! empty($errors) ) {
     $errors = $np->getErrors();
 
     if (! empty($errors) ) {
-        $modx->setPlaceholder('np.error_header',$errorHeaderSubmit);
+        $modx->toPlaceholder('error_header',$errorHeaderSubmit, $np_prefix);
         foreach($errors as $error) {
-            $errorMessage .= str_replace('[[+np.error]]',$error,$errorTpl);
+            $errorMessage .= str_replace("[[+{$np_prefix}.error]]",$error,$errorTpl);
         }
 
-        $modx->setPlaceholder('np.errors_submit' , $errorMessage);
+        $modx->toPlaceholder('errors_submit' , $errorMessage, $np_prefix);
         
         return($formTpl);
     } else {

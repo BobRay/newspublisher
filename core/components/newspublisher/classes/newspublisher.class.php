@@ -59,6 +59,7 @@ class Newspublisher {
     protected $searchable;
     protected $template;
     protected $tpls; // array of tpls
+    protected $richtext; // sets richtext checkbox for new docs
 
 
 
@@ -124,10 +125,10 @@ class Newspublisher {
                              $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
                     }
                     $ph = $fs;
-                    $ph['pub_date_time'] = $ph['pub_date']? substr($ph['pub_date'],11,5) : '';
-                    $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
-                    $ph['unpub_date_time'] = $ph['unpub_date']? substr($ph['unpub_date'],11,5) : '';
-                    $ph['unpub_date'] = $ph['unpub_date']? substr($ph['unpub_date'],0,10) : '';
+                    $ph[$this->prefix .'.pub_date_time'] = $ph[$this->prefix. '.pub_date']? substr($ph[$this->prefix . '.pub_date'],11,5) : '';
+                    $ph[$this->prefix . '. pub_date'] = $ph[$this->prefix . '. pub_date']? substr($ph[$this->prefix . '. pub_date'],0,10) : '';
+                    $ph[$this->prefix . '. unpub_date_time'] = $ph[$this->prefix . '. unpub_date']? substr($ph[$this->prefix . '. unpub_date'],11,5) : '';
+                    $ph[$this->prefix . '. unpub_date'] = $ph[$this->prefix . '. unpub_date']? substr($ph[$this->prefix . '. unpub_date'],0,10) : '';
 
                     $this->modx->toPlaceholders($ph,$this->prefix);
                     unset($ph);
@@ -163,7 +164,7 @@ class Newspublisher {
              $this->aliasTitle = $this->props['aliastitle']? true : false;
              $this->listboxmax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
              $this->clearcache = isset($_POST['clearcache'])? $_POST['clearcache'] : $this->props['clearcache'] ? true: false;
-             /* ToDo: add synchcache in processor fields */
+             
              $this->hideMenu = isset($_POST['hidemenu'])? $_POST['hidemenu'] : $this->setDefault('hidemenu',$this->parentId);
              $this->resource->set('hidemenu', $this->hideMenu);
 
@@ -175,6 +176,9 @@ class Newspublisher {
 
              $this->published = isset($_POST['published'])? $_POST['published'] : $this->setDefault('published',$this->parentId);
              $this->resource->set('published', $this->published);
+             
+             $this->richtext = isset($_POST['richtext'])? $_POST['richtext'] : $this->setDefault('richtext',$this->parentId);
+             $this->resource->set('richtext', $this->richtext);
 
              if (! empty($this->props['groups'])) {
                 $this->groups = $this->setDefault('groups',$this->parentId);
@@ -213,30 +217,30 @@ class Newspublisher {
        }
 
        $ph = ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
-       $this->modx->setPlaceholder('np.contentrows',$ph);
+       $this->modx->toPlaceholder('contentrows',$ph,$this->prefix);
 
        $ph = ! empty($this->props['contentcols'])? $this->props['contentcols'] : '60';
-       $this->modx->setPlaceholder('np.contentcols',$ph);
+       $this->modx->toPlaceholder('contentcols',$ph, $this->prefix);
 
        $ph = ! empty($this->props['summaryrows'])? $this->props['summaryrows'] : '10';
-       $this->modx->setPlaceholder('np.summaryrows',$ph);
+       $this->modx->toPlaceholder('summaryrows',$ph, $this->prefix);
 
        $ph = ! empty($this->props['summarycols'])? $this->props['summarycols'] : '60';
-       $this->modx->setPlaceholder('np.summarycols',$ph);
+       $this->modx->toPlaceholder('summarycols',$ph, $this->prefix);
 
        /* do rich text stuff */
         //$ph = ! empty($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
         $ph = ! empty($this->props['rtcontent']) ? 'modx-richtext':'content';
-        $this->modx->setPlaceholder('np.rt_content_1', $ph );
+        $this->modx->toPlaceholder('rt_content_1', $ph, $this->prefix );
         $ph = ! empty($this->props['rtcontent']) ? 'modx-richtext':'content';
-        $this->modx->setPlaceholder('np.rt_content_2', $ph );
+        $this->modx->toPlaceholder('rt_content_2', $ph, $this->prefix );
 
         /* set rich text summary field */
         //$ph = ! empty($this->props['rtsummary']) ? 'MODX_RichTextWidget':'introtext';
         $ph = ! empty($this->props['rtsummary']) ? 'modx-richtext':'introtext';
-        $this->modx->setPlaceholder('np.rt_summary_1', $ph );
+        $this->modx->toPlaceholder('rt_summary_1', $ph, $this->prefix );
         $ph = ! empty($this->props['rtsummary']) ? 'modx-richtext':'introtext';
-        $this->modx->setPlaceholder('np.rt_summary_2', $ph );
+        $this->modx->toPlaceholder('rt_summary_2', $ph, $this->prefix );
 
         unset($ph);
        if ($this->props['initrte']) {
@@ -358,37 +362,37 @@ public function getTpls() {
         $this->tpls = array();
         $this->tpls['outerTpl'] = !empty ($this->props['outertpl'])? $this->modx->getChunk($this->props['outertpl']) : '<div class="newspublisher">
         <h2>[[%np_main_header]]</h2>
-        [[!+np.error_header:ifnotempty=`<h3>[[!+np.error_header]]</h3>`]]
-        [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
-        [[!+np.errors_submit:ifnotempty=`[[!+np.errors_submit]]`]]
-        [[!+np.errors:ifnotempty=`[[!+np.errors]]`]]
+        [[!+[[+prefix]].error_header:ifnotempty=`<h3>[[!+[[+prefix]].error_header]]</h3>`]]
+        [[!+[[+prefix]].errors_presubmit:ifnotempty=`[[!+[[+prefix]].errors_presubmit]]`]]
+        [[!+[[+prefix]].errors_submit:ifnotempty=`[[!+[[+prefix]].errors_submit]]`]]
+        [[!+[[+prefix]].errors:ifnotempty=`[[!+[[+prefix]].errors]]`]]
         <form action="[[~[[*id]]]]" method="post">
             <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
-        [[+np.insert]]
+        [[+npx.insert]]
         <span class = "buttons">
             <input class="submit" type="submit" name="Submit" value="Submit" />
-            <input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = \'[[+np.cancel_url]]\' " />
+            <input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = \'[[+[[+prefix]].cancel_url]]\' " />
         </span>
-        [[+np.post_stuff]]
+        [[+[[+prefix]].post_stuff]]
     </form>
 </div>';
 
 
-    $this->tpls['textTpl'] = ! empty ($this->props['texttpl'])? $this->modx->getChunk($this->props['texttpl']) : '[[+np.error_[[+npx.fieldName]]]]
+    $this->tpls['textTpl'] = ! empty ($this->props['texttpl'])? $this->modx->getChunk($this->props['texttpl']) : '[[+[[+prefix]].error_[[+npx.fieldName]]]]
             <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help:notags]]">[[%resource_[[+npx.fieldName]]]]: </label>
-            <input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+np.[[+npx.fieldName]]]]" maxlength="60" />';
+            <input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="60" />';
 
 
-    $this->tpls['intTpl'] = ! empty ($this->props['inttpl'])? $this->modx->getChunk($this->props['inttpl']) : '[[+np.error_[[+npx.fieldName]]]]
+    $this->tpls['intTpl'] = ! empty ($this->props['inttpl'])? $this->modx->getChunk($this->props['inttpl']) : '[[+[[+prefix]].error_[[+npx.fieldName]]]]
             <label class="intfield" for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label>
-            <input name="[[+npx.fieldName]]" class="int" id="[[+npx.fieldName]]" type="text"  value="[[+np.[[+npx.fieldName]]]]" maxlength="3" />';
+            <input name="[[+npx.fieldName]]" class="int" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="3" />';
 
-    $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : '[[+np.error_[[+npx.fieldName]]]]
+    $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <div class="datepicker">
       <span class="npdate">
         <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: [[%np_date_hint]] </label>
-        <input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="[[+npx.fieldName]]" name="[[+npx.fieldName]]" maxlength="10" readonly="readonly" value="[[+np.[[+npx.fieldName]]]]" />
-        <input type="text" class="[[+npx.fieldName]]_time" name="[[+npx.fieldName]]_time" id="[[+npx.fieldName]]_time" value="[[+np.[[+npx.fieldName]]_time]]" />
+        <input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="[[+npx.fieldName]]" name="[[+npx.fieldName]]" maxlength="10" readonly="readonly" value="[[+[[+prefix]].[[+npx.fieldName]]]]" />
+        <input type="text" class="[[+npx.fieldName]]_time" name="[[+npx.fieldName]]_time" id="[[+npx.fieldName]]_time" value="[[+[[+prefix]].[[+npx.fieldName]]_time]]" />
       </span>
     </div>';
 
@@ -396,7 +400,7 @@ public function getTpls() {
     <input type="hidden" name = "[[+npx.fieldName]]" value = "" />
     <span class="option"><input class="checkbox" type="checkbox" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]" value="1" [[+checked]]/></span>
  </fieldset>';
-
+  //$this->tpls = str_replace('[[+prefix]]',$this->prefix,$this->tpls);
     $success = true;
     foreach($this->tpls as $tpl=>$val) {
         if (empty($val)) {
@@ -404,6 +408,7 @@ public function getTpls() {
             $success = false;
         }
     }
+    
     return $success;
 }
 
@@ -422,7 +427,6 @@ public function displayForm($show) {
     /* get the resource field names */
     $resourceFields = array_keys($this->resource->toArray());
 
-    /*ToDo: Handle pub_date and un_pub date minutes:hours:seconds */
     foreach($fields as $field) {
         if (in_array($field,$resourceFields)) { /* regular resource field */
             $val = $this->resource->_fieldMeta[$field][phptype];
@@ -431,17 +435,17 @@ public function displayForm($show) {
             }
             /* do introtext and content fields */
             if ($field == 'content') {
-                $inner .= "\n" . '[[+np.error_content]]
+                $inner .= "\n" . '[[+[[+prefix]].error_content]]
                 <label for="content">[[%resource_content]]: </label>
-                <div class="[[+np.rt_content_1]]">
-                    <textarea rows="[[+np.contentrows]]" cols="[[+np.contentcols]]" class="[[+np.rt_content_2]]" name="content" id="content">[[+np.content]]</textarea>
+                <div class="[[+[[+prefix]].rt_content_1]]">
+                    <textarea rows="[[+[[+prefix]].contentrows]]" cols="[[+[[+prefix]].contentcols]]" class="[[+[[+prefix]].rt_content_2]]" name="content" id="content">[[+[[+prefix]].content]]</textarea>
                 </div>';
 
             } else if ($field == 'introtext') {
-                $inner .= "\n" . '[[+np.error_introtext]]
+                $inner .= "\n" . '[[+[[+prefix]].error_introtext]]
                 <label for="introtext" title="[[%resource_summary_help]]">[[%resource_summary]]: </label>
-                <div class="[[+np.rt_summary_1]]">
-                    <textarea  rows="[[+np.summaryrows]]" cols="[[+np.summarycols]]" class="[[+np.rt_summary_2]]" name="introtext" id="introtext">[[+np.introtext]]</textarea>
+                <div class="[[+[[+prefix]].rt_summary_1]]">
+                    <textarea  rows="[[+[[+prefix]].summaryrows]]" cols="[[+[[+prefix]].summarycols]]" class="[[+[[+prefix]].rt_summary_2]]" name="introtext" id="introtext">[[+[[+prefix]].introtext]]</textarea>
                 </div>';
 
             } else {
@@ -480,8 +484,10 @@ public function displayForm($show) {
             }
         }
     }
-    $formTpl = str_replace('[[+np.insert]]',$inner,$this->tpls['outerTpl']);
-
+    $inner = str_replace('[[+prefix]]',$this->prefix,$inner);
+    $formTpl = str_replace('[[+npx.insert]]',$inner,$this->tpls['outerTpl']);
+    $formTpl = str_replace('[[+prefix]]',$this->prefix,$formTpl);
+    //die ('<pre' . print_r($formTpl,true));
     return $formTpl;
 
 } /* end displayForm */
@@ -529,7 +535,7 @@ public function displayTv($tvNameOrId) {
     $caption = empty($fields['caption'])? $fields['name'] : $fields['caption'];
 
     /* create error placeholder for field */
-    $formTpl .=  "\n" . '[[+np.error_'. $fields['name'] . ']]' . "\n";
+    $formTpl .=  "\n" . "[[+{$this->prefix}.error_". $fields['name'] . ']]' . "\n";
 
     /* Build TV input code dynamically based on type */
     $tvType = $tv->get('type');
@@ -548,7 +554,7 @@ public function displayTv($tvNameOrId) {
         if (stristr($ph,'@EVAL')) {
             $this->setError($this->modx->lexicon('np_no_evals'). $tv->get('name'));
         } else {
-            $this->modx->setPlaceholder($this->prefix . '.' . $fields['name'], $ph );
+            $this->modx->toPlaceholder($fields['name'], $ph, $this->prefix );
         }
     }
 
@@ -729,9 +735,11 @@ public function saveResource() {
             $fields['alias'] = $alias;
         }
         /* set fields for new object */
+
         /* set editedon and editedby for existing docs */
         $fields['editedon'] = '0';
         $fields['editedby'] = '0';
+
         /* these *might* be in the $_POST array. Set them if not */
         $fields['hidemenu'] = isset($newFields['hidemenu'])? $newFields['hidemenu']: $this->hidemenu;
         $fields['template'] = isset ($newFields['template']) ? $newFields['template'] : $this->template;
@@ -777,6 +785,9 @@ public function saveResource() {
         /* return without altering the DB */
         return '';
     }
+    if ($this->props['clearcache']) {
+        $fields['syncsite'] = true;
+    }
     /* call the appropriate processor to save resource and TVs */
     if ($this->existing) {
        $response = $this->modx->runProcessor('resource/update',$fields);
@@ -795,7 +806,7 @@ public function saveResource() {
 
     } else {
        $object = $response->getObject();
-       // $this->resource = $this->modx->getObject('modResource',$object['id']);
+
        $postId = $object['id'];
 
        /* clean post array */
@@ -813,8 +824,8 @@ public function forward($postId) {
         if (empty($postId)) {
             $postId = $this->existing? $this->existing : $this->resource->get('id');
         }
-    /* clear cache on parameter or new resource */
-       if ($this->clearcache || (! $this->existing) ) {
+    /* clear cache on new resource */
+       if (! $this->existing) {
            $cacheManager = $this->modx->getCacheManager();
            $cacheManager->clearCache(array (
                 "{$this->resource->context_key}/",
@@ -964,9 +975,9 @@ public function validate($errorTpl) {
                 /* set ph for field error msg */
                 $msg = $this->modx->lexicon('np_error_required');
                 $msg = str_replace('[[+name]]',$field,$msg);
-                $msg = str_replace('[[+np.error]]',$msg,$errorTpl);
-                $ph =  'np.error_' . $field;
-                $this->modx->setPlaceholder($ph,$msg);
+                $msg = str_replace("[[+{$this->prefix}.error]]",$msg,$errorTpl);
+                $ph =  'error_' . $field;
+                $this->modx->toPlaceholder($ph,$msg, $this->prefix);
 
                 /* set error for header */
                 $msg = $this->modx->lexicon('np_missing_field');
