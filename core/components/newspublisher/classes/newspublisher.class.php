@@ -125,10 +125,10 @@ class Newspublisher {
                              $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
                     }
                     $ph = $fs;
-                    $ph[$this->prefix .'.pub_date_time'] = $ph[$this->prefix. '.pub_date']? substr($ph[$this->prefix . '.pub_date'],11,5) : '';
-                    $ph[$this->prefix . '. pub_date'] = $ph[$this->prefix . '. pub_date']? substr($ph[$this->prefix . '. pub_date'],0,10) : '';
-                    $ph[$this->prefix . '. unpub_date_time'] = $ph[$this->prefix . '. unpub_date']? substr($ph[$this->prefix . '. unpub_date'],11,5) : '';
-                    $ph[$this->prefix . '. unpub_date'] = $ph[$this->prefix . '. unpub_date']? substr($ph[$this->prefix . '. unpub_date'],0,10) : '';
+                    $ph['pub_date_time'] = $ph['pub_date']? substr($ph['pub_date'],11,5) : '';
+                    $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
+                    $ph['unpub_date_time'] = $ph['unpub_date']? substr($ph['unpub_date'],11,5) : '';
+                    $ph['unpub_date'] = $ph['unpub_date']? substr($ph['unpub_date'],0,10) : '';
 
                     $this->modx->toPlaceholders($ph,$this->prefix);
                     unset($ph);
