@@ -1,0 +1,6 @@
+Changelog for NewsPublisher
+
+NewsPublisher 1.0
+-----------------
+
+- Added changelog
