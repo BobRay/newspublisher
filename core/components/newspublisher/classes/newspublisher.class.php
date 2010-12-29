@@ -28,7 +28,7 @@
  *
  * Refactored for OOP and Revolution by Bob Ray, 11/2010
  * The Newspublisher class contains all functions relating to NewsPublsher's
- * functionality and any supporting functions they need.
+ * operation and any required supporting.
  */
 
 class Newspublisher {
@@ -61,6 +61,12 @@ class Newspublisher {
     protected $tpls; // array of tpls
     protected $richtext; // sets richtext checkbox for new docs
 
+/** NewsPubliser constructor
+ * 
+ * @access public
+ * @param (reference object) $modx - modx object
+ * @param (reference array) $props - scriptProperties array.
+ */
 
     public function __construct(&$modx, &$props) {
         $this->modx =& $modx;
@@ -72,6 +78,8 @@ class Newspublisher {
     }
 
 /** Sets Postback status
+ *
+ *  @access public
  *  @param $setting (bool) desired setting */
     public function setPostBack($setting) {
         $this->isPostBack = $setting;
@@ -80,6 +88,7 @@ class Newspublisher {
  /** gets Postback status. Used by snippet to determine
   * postback status.
   *
+  * @access public
   * @return (bool) true if set, false if not
   */
 
@@ -89,7 +98,11 @@ class Newspublisher {
 
 /** Initialize variables and placeholders.
  *  Uses $_POST on postback.
- *  Checks for an existing resource to edit in $_POST
+ *  Checks for an existing resource to edit in $_POST.
+ *  Sets errors on failure.
+ *
+ *  @access public
+ *  @param (string) $context - current context key
  */
 
     public function init($context) {
@@ -295,6 +308,8 @@ class Newspublisher {
 /** Sets default values for published, hidemenu, searchable,
  * cacheable, and groups (if sent).
  *
+ * @access protected
+ *
  * @param (string) $field - name of resource field
  * @param (int) $parentId - ID of parent resource
  *
@@ -302,7 +317,7 @@ class Newspublisher {
  * groups, and null on failure
  */
 
-public function setDefault($field,$parentId) {
+protected function setDefault($field,$parentId) {
 
     $retVal = null;
     $prop = $this->props[$field];
@@ -377,6 +392,8 @@ public function setDefault($field,$parentId) {
  *  Attempts to get chunks of names are send as parameters,
  *  used defaults if not.
  *
+ *  @access public
+ *
  *  @return (bool) true on success, false if a non-empty tpl property
  *  is send and it fails to find the named chunk.
  */
@@ -437,6 +454,8 @@ public function getTpls() {
 
 /** Creates the HTML for the displayed form by concatenating
  * the necessary Tpls and calling displayTv() for any TVs.
+ *
+ * @access public
  * @param (string) $show - comma-separated list of fields and TVs
  * (name or ID) to include in the form
  *
@@ -537,12 +556,13 @@ public function displayForm($show) {
 
 /** displays an individual TV
  *
+ * @access protected
  * @param $tvNameOrId (string) name or ID of TV to process.
  *
  * @return (string) returns the HTML code for the TV.
  */
 
-public function displayTv($tvNameOrId) {
+protected function displayTv($tvNameOrId) {
 
 
     if (is_numeric($tvNameOrId)) {
@@ -749,11 +769,13 @@ return $formTpl;
 }
 /** Splits time string into date and time and sets
  * placeholders for each of them
+ *
+ * @access protected
  * @param $ph - (string) placeholder to set
  * @param $timeString - (string) time string
  *  */
 
-public function splitDate($ph,$timeString) {
+protected function splitDate($ph,$timeString) {
     $s = substr($timeString,11,5);
     $s = $s? $s : '';
     $this->modx->toPlaceholder($ph . '_time' , $s, $this->prefix);
@@ -765,6 +787,7 @@ public function splitDate($ph,$timeString) {
 
 /** Saves the resource to the database.
  *
+ * @access public
  * @return - (int) returns the ID of the created or edited resource.
  * Used by snippet to forward the user.
  *
@@ -902,7 +925,9 @@ public function saveResource() {
 } /* end saveResource() */
 
 /** Forward user to another page (default is edited page)
- *      @param (int) $postId - ID of page to forward to
+ *
+ *  @access public
+ *  @param (int) $postId - ID of page to forward to
  *  */
 
 public function forward($postId) {
@@ -938,6 +963,7 @@ public function forward($postId) {
 /** creates a JSON string to send in the resource_groups field
  * for resource/update or resource/create processors.
  *
+ * @access protected
  * @param string $resourceGroups - a comma-separated list of
  * resource groups names or IDs (or both mixed) to assign a
  * document to.

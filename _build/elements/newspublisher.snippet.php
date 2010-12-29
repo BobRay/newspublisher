@@ -23,7 +23,10 @@
  
  *
  * The NewsPublisher snippet presents a form in the front end for
- * creating resources. Rich text editing is available for text fields.
+ * creating resources. Rich text editing is available for text fields and TVs.
+ *
+ * Can be used to edit existing documents in conjunction with the
+ * NpEditThisButton snippet.
  * /
 /* To Do:
 placeholder prefixes
@@ -41,16 +44,16 @@ Fix/add &allowAnyPost
   Changelog:
      Mar 05, 06 -- modx_ prefix removed [Mark]
      Dec 13, 05 -- Now inherits web/manager docgroups thanks to Jared Carlow
-     Nov 06, 10 -- Revolution Conversion by Bob Ray
+     Nov 06, 10 -- Revolution Conversion and complete OOP refactoring by Bob Ray
      Nov 15, 10 -- Added TVs to form
 
-     NOTE: Bruno17's tinymcefe component must be installed for rich text fields
+     NOTE: You may need the latest version of TinyMCE for rich text editing.
 
   Parameters:
     &parent      - (optional) Folder id where new documents are stored; defaults to NewsPublisher folder.
-    &show        - (optional) Comma separated list of fields/tvs to show.
+    &show        - (optional) Comma separated list of fields/tvs to show (shown in order).
                      defaults to 'pagetitle,longtitle,description,menutitle,pub_date,unpub_date,introtext,content'.
-    &required    - (optional) Comma-separated list of fields/tvs to reguire; defaults to 'pagetitle,content'.
+    &required    - (optional) Comma-separated list of fields/tvs to require; defaults to 'pagetitle,content'.
     &published   - (optional) Set new resource as published or not
                       (will be overridden by publish and unpublish dates).
                        Set to `parent` to match parent's pub status;
