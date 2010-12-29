@@ -62,9 +62,6 @@ class Newspublisher {
     protected $richtext; // sets richtext checkbox for new docs
 
 
-
-
-
     public function __construct(&$modx, &$props) {
         $this->modx =& $modx;
         $this->props =& $props;
@@ -74,13 +71,26 @@ class Newspublisher {
         $this->assetsUrl = $this->modx->getOption('np.assets_url',null,MODX_ASSETS_URL.'components/newspublisher/');
     }
 
+/** Sets Postback status
+ *  @param $setting (bool) desired setting */
     public function setPostBack($setting) {
         $this->isPostBack = $setting;
     }
+
+ /** gets Postback status. Used by snippet to determine
+  * postback status.
+  *
+  * @return (bool) true if set, false if not
+  */
+
     public function getPostBack() {
         return $this->isPostBack;
     }
-/* Check for a resource to edit in $_POST  */
+
+/** Initialize variables and placeholders.
+ *  Uses $_POST on postback.
+ *  Checks for an existing resource to edit in $_POST
+ */
 
     public function init($context) {
 
@@ -119,17 +129,13 @@ class Newspublisher {
                      }
                     $this->modx->toPlaceholders($fs,$this->prefix);
 
+
                 } else {
                     $ph = $this->resource->toArray();
                     foreach($ph as $k=>$v) {
                              $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
                     }
                     $ph = $fs;
-                    $ph['pub_date_time'] = $ph['pub_date']? substr($ph['pub_date'],11,5) : '';
-                    $ph['pub_date'] = $ph['pub_date']? substr($ph['pub_date'],0,10) : '';
-                    $ph['unpub_date_time'] = $ph['unpub_date']? substr($ph['unpub_date'],11,5) : '';
-                    $ph['unpub_date'] = $ph['unpub_date']? substr($ph['unpub_date'],0,10) : '';
-
                     $this->modx->toPlaceholders($ph,$this->prefix);
                     unset($ph);
                 }
@@ -244,10 +250,8 @@ class Newspublisher {
 
         unset($ph);
        if ($this->props['initrte']) {
-
-            /* set rich text content field */
-
-
+            /* sets rich text content placeholders and includes necessary
+             js files */
            $tinyPath = $this->modx->getOption('core_path').'components/tinymce/';
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/ext-all.js');
@@ -287,6 +291,16 @@ class Newspublisher {
        } /* end if ($richtext) */
 
     } /* end init */
+
+/** Sets default values for published, hidemenu, searchable,
+ * cacheable, and groups (if sent).
+ *
+ * @param (string) $field - name of resource field
+ * @param (int) $parentId - ID of parent resource
+ *
+ * @return (mixed) returns boolean option, JSON string for
+ * groups, and null on failure
+ */
 
 public function setDefault($field,$parentId) {
 
@@ -358,6 +372,15 @@ public function setDefault($field,$parentId) {
     }
     return $retVal;
 }
+
+/** Sets the array of Tpl strings use to create the form.
+ *  Attempts to get chunks of names are send as parameters,
+ *  used defaults if not.
+ *
+ *  @return (bool) true on success, false if a non-empty tpl property
+ *  is send and it fails to find the named chunk.
+ */
+
 public function getTpls() {
         $this->tpls = array();
         $this->tpls['outerTpl'] = !empty ($this->props['outertpl'])? $this->modx->getChunk($this->props['outertpl']) : '<div class="newspublisher">
@@ -412,6 +435,13 @@ public function getTpls() {
     return $success;
 }
 
+/** Creates the HTML for the displayed form by concatenating
+ * the necessary Tpls and calling displayTv() for any TVs.
+ * @param (string) $show - comma-separated list of fields and TVs
+ * (name or ID) to include in the form
+ *
+ * @return (string) returns the finished form
+ */
 public function displayForm($show) {
 
     $fields = explode(',',$show);
@@ -456,12 +486,20 @@ public function displayForm($show) {
 
                     case 'boolean':
                         $t = $this->tpls['boolTpl'];
-                        if ($this->resource->get($field)) {
+
+                        if ($this->isPostBack) {
+                            $checked = $_POST[$field];
+                        } else {
+                            $checked = $this->resource->get($field);
+                        }
+
+                        if ($checked) {
                             $t = str_replace('[[+checked]]','checked="checked"',$t);
                         } else {
                             $t = str_replace('[[+checked]]','',$t);
                         }
-                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$t);;
+                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$t);
+
                         break;
                     case 'integer':
                         $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->tpls['intTpl']);
@@ -471,9 +509,13 @@ public function displayForm($show) {
                         break;
                     case 'timestamp':
                         $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->tpls['dateTpl']);
+                        if (! $this->isPostBack) {
+                            $this->splitDate($field,$this->resource->get($field));
+                        }
                         break;
                     default:
                         $inner .= '<br />' . $field . ' -- OTHER' . $val . '<br />';
+                        break;
                 }
             }
         } else {
@@ -489,8 +531,17 @@ public function displayForm($show) {
     $formTpl = str_replace('[[+prefix]]',$this->prefix,$formTpl);
     //die ('<pre' . print_r($formTpl,true));
     return $formTpl;
-
 } /* end displayForm */
+
+
+
+/** displays an individual TV
+ *
+ * @param $tvNameOrId (string) name or ID of TV to process.
+ *
+ * @return (string) returns the HTML code for the TV.
+ */
+
 public function displayTv($tvNameOrId) {
 
 
@@ -566,6 +617,11 @@ public function displayTv($tvNameOrId) {
             $tpl = str_replace('[[%resource_[[+npx.fieldName]]]]',$caption,$tpl);
             $formTpl .= "\n" . str_replace('[[+npx.fieldName]]',$fields['name'],$tpl);
             unset($tpl);
+
+            if (! $this->isPostBack) {
+                $this->splitDate($fields['name'], $tv->renderOutput());
+            }
+
             break;
         case 'text':
         case 'textbox':
@@ -691,6 +747,28 @@ public function displayTv($tvNameOrId) {
 
 return $formTpl;
 }
+/** Splits time string into date and time and sets
+ * placeholders for each of them
+ * @param $ph - (string) placeholder to set
+ * @param $timeString - (string) time string
+ *  */
+
+public function splitDate($ph,$timeString) {
+    $s = substr($timeString,11,5);
+    $s = $s? $s : '';
+    $this->modx->toPlaceholder($ph . '_time' , $s, $this->prefix);
+    $s = substr($timeString,0,10);
+    $s = $s? $s : '';
+    $this->modx->toPlaceholder($ph, $s, $this->prefix);
+
+}
+
+/** Saves the resource to the database.
+ *
+ * @return - (int) returns the ID of the created or edited resource.
+ * Used by snippet to forward the user.
+ *
+ */
 
 public function saveResource() {
 
@@ -706,14 +784,12 @@ public function saveResource() {
     $newFields = $_POST;
     $fields = array_replace($oldFields, $newFields);
 
-    if ($fields['pub_date'] && $fields['pub_date_time']) {
-        $fields['pub_date'] = $fields['pub_date'] . ' ' . $fields['pub_date_time'];
+    /* correct timestamp $tv fields */
+    foreach ($newFields as $field => $val) {
+        if ($this->resource->_fieldMeta[$field][phptype] == 'timestamp') {
+            $fields[$field] = $val . ' ' . $fields[$field . '_time'];
+        }
     }
-
-    if ($fields['unpub_date'] && $fields['unpub_date_time']) {
-        $fields['unpub_date'] = $fields['unpub_date'] . ' ' . $fields['unpub_date_time'];
-    }
-
 
     if (! $this->existing) {
 
@@ -772,7 +848,12 @@ public function saveResource() {
     if (! empty($this->allTvs)) {
         $fields['tvs'] = true;
         foreach($this->allTvs as $tv) {
-            $fields['tv' . $tv->get('id')] = $_POST[$tv->get('name')];
+            $name = $tv->get('name');
+            if ($tv->get('type') == 'date') {
+                $fields['tv' . $tv->get('id')] = $_POST[$name] . ' ' . $_POST[$name . '_time'];
+            } else {
+                $fields['tv' . $tv->get('id')] = $_POST[$name];
+            }
         }
     }
     /* set groups for new doc if param is set */
@@ -820,6 +901,10 @@ public function saveResource() {
 
 } /* end saveResource() */
 
+/** Forward user to another page (default is edited page)
+ *      @param (int) $postId - ID of page to forward to
+ *  */
+
 public function forward($postId) {
         if (empty($postId)) {
             $postId = $this->existing? $this->existing : $this->resource->get('id');
@@ -857,7 +942,7 @@ public function forward($postId) {
  * resource groups names or IDs (or both mixed) to assign a
  * document to.
  *
- * @return string (JSON encoded array)
+ * @return (string) (JSON encoded array)
  */
 
 protected function setGroups($resourceGroups, $parentObj = null) {
@@ -912,17 +997,23 @@ protected function stripslashes_deep($value) {
                 stripslashes($value);
     return $value;
 }
-/* return any errors set in the class */
+/** return any errors set in the class
+ * @return (array) array of error strings
+ */
 public function getErrors() {
     return $this->errors;
 }
 
-/* add error to error array */
+/** add error to error array
+ * @param (string) $msg - error message
+ */
 public function setError($msg) {
     $this->errors[] = $msg;
 }
 
-/* returns the template ID */
+/** Gets template ID of resource
+ * @return (int) returns the template ID
+ */
 protected function getTemplate() {
     if ($this->existing) {
         return $this->resource->get('template');
@@ -963,7 +1054,12 @@ protected function getTemplate() {
 
     return $template;
 }
-/* set error if required field is empty */
+
+/** Checks form fields before saving.
+ *  Sets an error for the header and another for each
+ *  missing required field.
+ * */
+
 public function validate($errorTpl) {
     $success = true;
     $fields = explode(',',$this->props['required']);
