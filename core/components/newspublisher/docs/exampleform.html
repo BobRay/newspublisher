@@ -1,10 +1,12 @@
 <!-- This is *not* a form template, it is a sample of what the rendered form might look like -->
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
 <head>
-    <title></title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <title>MyPage</title>
 </head>
 <body>
 <div class="newspublisher">
@@ -19,7 +21,7 @@
 
     <div class="datepicker">
         <label for="createdon" title="The date the resource was originally created.">Created On:</label>
-        <div class = "np_date_hints"<span class = "np_date_hint"> (Y-M-D)</span><span class ="np_time_hint">(Time - any format)</span></div>
+        <div class = "np_date_hints"><span class = "np_date_hint"> (Y-M-D)</span><span class ="np_time_hint">(Time - any format)</span></div>
 
         <input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="createdon" name="createdon" maxlength="10" readonly="readonly" value="" />
         <input type="text" class="createdon_time" name="createdon_time" id="createdon_time" value="" />
@@ -27,7 +29,7 @@
 
     <div class="datepicker">
         <label for="publishedon" title="The date the resource was published.">Published On:</label>
-        <div class = "np_date_hints"<span class = "np_date_hint"> (Y-M-D)</span><span class ="np_time_hint">(Time - any format)</span></div>
+        <div class = "np_date_hints"><span class = "np_date_hint"> (Y-M-D)</span><span class ="np_time_hint">(Time - any format)</span></div>
 
         <input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="publishedon" name="publishedon" maxlength="10" readonly="readonly" value="" />
         <input type="text" class="publishedon_time" name="publishedon_time" id="publishedon_time" value="" />
@@ -35,7 +37,7 @@
 
     <div class="datepicker">
         <label for="editedon" title="The date the resource was most recently edited.">Edited On:</label>
-        <div class = "np_date_hints"<span class = "np_date_hint"> (Y-M-D)</span><span class ="np_time_hint">(Time - any format)</span></div>
+        <div class = "np_date_hints"><span class = "np_date_hint"> (Y-M-D)</span><span class ="np_time_hint">(Time - any format)</span></div>
 
         <input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="editedon" name="editedon" maxlength="10" readonly="readonly" value="" />
         <input type="text" class="editedon_time" name="editedon_time" id="editedon_time" value="" />
@@ -60,7 +62,7 @@
     <div class="datepicker">
 
         <label for="pub_date" title=" (optional) set date to automatically publish resource. Click on the calendar icon to select a date.">Publish Date:</label>
-        <div class = "np_date_hints"<span class = "np_date_hint"> (Y-M-D)</span><span class ="np_time_hint">(Time - any format)</span></div>
+        <div class = "np_date_hints"><span class = "np_date_hint"> (Y-M-D)</span><span class ="np_time_hint">(Time - any format)</span></div>
         <input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="pub_date" name="pub_date" maxlength="10" readonly="readonly" value="" />
         <input type="text" class="pub_date_time" name="pub_date_time" id="pub_date_time" value="" />
     </div>
@@ -68,7 +70,7 @@
     <div class="datepicker">
 
         <label for="unpub_date" title=" (optional) set date to automatically unpublish the resource. Click on the calendar icon to select a date.">Unpublish Date:</label>
-        <div class = "np_date_hints"<span class = "np_date_hint"> (Y-M-D)</span><span class ="np_time_hint">(Time - any format)</span></div>
+        <div class = "np_date_hints"><span class = "np_date_hint"> (Y-M-D)</span><span class ="np_time_hint">(Time - any format)</span></div>
         <input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="unpub_date" name="unpub_date" maxlength="10" readonly="readonly" value="" />
         <input type="text" class="unpub_date_time" name="unpub_date_time" id="unpub_date_time" value="" />
     </div>
@@ -119,7 +121,7 @@
 
     <div class="datepicker">
         <label for="MyTv6" title="MyTv6 Description">MyTv6:</label>
-        <div class = "np_date_hints"<span class = "np_date_hint"> (Y-M-D)</span><span class ="np_time_hint">(Time - any format)</span></div>
+        <div class = "np_date_hints"><span class = "np_date_hint"> (Y-M-D)</span><span class ="np_time_hint">(Time - any format)</span></div>
         <input type="text" class="w4em format-y-m-d divider-dash no-transparency" id="MyTv6" name="MyTv6" maxlength="10" readonly="readonly" value="12/21/2002" />
         <input type="text" class="MyTv6_time" name="MyTv6_time" id="MyTv6_time" value="02:30" />
     </div>
@@ -160,7 +162,7 @@
 
 
 
-<label title="MyTv7 Description">MyTv7</label><textarea rows="10" cols="60"name="MyTv7"MyTv7 Description id="MyTv7"></textarea>
+<label for="MyTv7" title="MyTv7 Description">MyTv7</label><textarea rows="10" cols="60" name="MyTv7" id="MyTv7"></textarea>
 
 
 <fieldset class="np-tv-checkbox" title=""><legend>MyTv8</legend>
@@ -181,16 +183,11 @@
         <span class = "buttons">
             <input class="submit" type="submit" name="Submit" value="Submit" />
 
-            <input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = 'http://localhost/gitclone/manager/index.php?a=30&amp;id=456' " />
+            <input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = 'http://localhost/gitclone/manager/?a=13&amp;id=8' " />
         </span>
 
     </form>
 </div>
-<form action="newspublisher/" method="post" style="position:fixed;bottom:20%;right:20%">
-<input type = "hidden" name="np_existing" value="true" />
-<input type = "hidden" name="np_doc_id" value="8"/>
-<input type="submit" class = "np_edit_this_button" name="submit" value="In noShow list"/>
-</form>
 
 </body>
 </html>

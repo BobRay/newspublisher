@@ -122,7 +122,7 @@ class Newspublisher {
             $this->existing = is_numeric($_POST['np_doc_id'])? $_POST['np_doc_id'] : false;
         }
 
-
+        $this->listboxmax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
         /* see if it's a repost */
         $this->setPostback( isset($_POST['hidSubmit']) && $_POST['hidSubmit'] == 'true');
 
@@ -181,7 +181,6 @@ class Newspublisher {
 
 
              $this->aliasTitle = $this->props['aliastitle']? true : false;
-             $this->listboxmax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
              $this->clearcache = isset($_POST['clearcache'])? $_POST['clearcache'] : $this->props['clearcache'] ? true: false;
              
              $this->hideMenu = isset($_POST['hidemenu'])? $_POST['hidemenu'] : $this->setDefault('hidemenu',$this->parentId);
@@ -286,6 +285,7 @@ class Newspublisher {
                    $def = $this->modx->getOption('cultureKey',null,$this->modx->getOption('manager_language',null,'en'));
                    $tinyproperties['language'] = $this->modx->getOption('fe_editor_lang',array(),$def);
                    $tinyproperties['frontend'] = true;
+                   $tinyproperties['selector'] = 'modx-richtext';
                                        //$tinyproperties['selector'] = 'modx-richtext';//alternativ to 'frontend = true' you can use a selector for texareas
                    unset($def);
                }
@@ -430,7 +430,7 @@ public function getTpls() {
     $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <div class="datepicker">
         <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]:</label>
-        <div class = "np_date_hints"<span class = "np_date_hint"> [[%np_date_hint]]</span><span class ="np_time_hint">[[%np_time_hint]]</span></div>
+        <div class = "np_date_hints"><span class = "np_date_hint"> [[%np_date_hint]]</span><span class ="np_time_hint">[[%np_time_hint]]</span></div>
         <input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="[[+npx.fieldName]]" name="[[+npx.fieldName]]" maxlength="10" readonly="readonly" value="[[+[[+prefix]].[[+npx.fieldName]]]]" />
         <input type="text" class="[[+npx.fieldName]]_time" name="[[+npx.fieldName]]_time" id="[[+npx.fieldName]]_time" value="[[+[[+prefix]].[[+npx.fieldName]]_time]]" />
     </div>';
@@ -439,7 +439,7 @@ public function getTpls() {
     <input type="hidden" name = "[[+npx.fieldName]]" value = "" />
     <span class="option"><input class="checkbox" type="checkbox" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]" value="1" [[+checked]]/></span>
  </fieldset>';
-  //$this->tpls = str_replace('[[+prefix]]',$this->prefix,$this->tpls);
+
     $success = true;
     foreach($this->tpls as $tpl=>$val) {
         if (empty($val)) {
@@ -655,7 +655,7 @@ protected function displayTv($tvNameOrId) {
 
             $rows = $tvType=='textarea'? 5 : 10;
             $cols = 60;
-            $formTpl .= "\n" . '<label title="' . $fields['description'] . '">'. $caption  . '</label><textarea rows="'. $rows . '" cols="' . $cols . '"' . 'name="' . $fields['name'] . '"'. $fields['description'] . ' id="' . $fields['name'] . '">' . '[[+'. $this->prefix . '.' . $fields['name'] . ']]</textarea>';
+            $formTpl .= "\n" . '<label for="' . $fields['name'] . '"' . ' title="' . $fields['description'] . '">'. $caption  . '</label><textarea rows="'. $rows . '" cols="' . $cols . '"' . ' name="' . $fields['name'] . '"'.  ' id="' . $fields['name'] . '">' . '[[+'. $this->prefix . '.' . $fields['name'] . ']]</textarea>';
             break;
         case 'richtext':
             $formTpl .= "\n" . '<label title="'. $fields['description'] . '">'. $caption  . '</label>
