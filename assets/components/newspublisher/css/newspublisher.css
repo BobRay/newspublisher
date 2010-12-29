@@ -11,6 +11,18 @@ div.newspublisher label {
     display: block;
     font-weight: bold;
 }
+div.np_date_hints {
+    margin:0;
+    padding:0;
+}
+span.np_date_hint {
+    margin: 1px 0px 3px 0px !important;
+    padding: 0px;
+}
+span.np_time_hint {
+    margin: 1px 120px 3px 110px !important;
+    padding: 0px;
+}
 
 div.newspublisher textarea {
     font-family: arial, sans-serif;
@@ -21,8 +33,8 @@ div.newspublisher textarea {
 div.newspublisher span.buttons {
     display:block;
 }
-/* you can size a partcular textarea or textarea (mini) TV
-   by using its name like this:
+/* you can size a particular textarea or textarea (mini) TV
+   by using its name (id) like this:
 div.newspublisher textarea#MyTv6 {
     width:10em;
     height:5em;

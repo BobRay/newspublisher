@@ -45,8 +45,8 @@ $hidden = explode(',',$noShow);
 if (in_array($modx->resource->get('id'),$hidden)) {
    $value = 'In noShow list';
 }
-$bottom = empty($bottom)? '30%' : $bottom;
-$right = empty($right)? '30%' : $right;
+$bottom = empty($bottom)? '20%' : $bottom;
+$right = empty($right)? '20%' : $right;
 $output = '<form action="[[~8]]" method="post" style="position:fixed;bottom:'.$bottom .  ';right:' . $right . '">';
 $output .= "\n" . '<input type = "hidden" name="np_existing" value="true" />';
 $output .= "\n" . '<input type = "hidden" name="np_doc_id" value="' . $modx->resource->get('id') . '"/>';
