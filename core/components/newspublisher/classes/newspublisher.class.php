@@ -688,10 +688,10 @@ protected function _displayTv($tvNameOrId) {
             }
             $i=0;
             if ($tvType == 'checkbox') {
-                        $formTpl .= "\n    " . '<input type="hidden" name="' . $fields['name'] . '[]" value = "" />';
-                    }
-            foreach ($options as $option) {
-                if ($this->existing  && ! $this->isPostBack)  {
+                $formTpl .= "\n    " . '<input type="hidden" name="' . $fields['name'] . '[]" value = "" />';
+            }
+            /* get TVs current value from DB or $_POST */
+            if ($this->existing  && ! $this->isPostBack)  {
 
                     if (is_array($options)) {
                         $val = explode('||',$tv->getValue($this->existing));
@@ -702,6 +702,8 @@ protected function _displayTv($tvNameOrId) {
                 } else {
                     $val = $_POST[$fields['name']];
                 }
+            foreach ($options as $option) {
+
                 /* if field is empty, get the default value */
                 if(empty($val) && !isset($_POST[$fields['name']])) {
                     $defaults = explode('||',$fields['default_text']);
@@ -716,6 +718,7 @@ protected function _displayTv($tvNameOrId) {
                 } else {
                     $formTpl .= "\n    " . '<span class="option"><' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
                 }
+                /* empty and not in $_POST -- use default */
                 if (empty($val)  && !isset($_POST[$fields['name']])) {
                     if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
                         if ($tvType == 'radio' || $tvType == 'checkbox') {
