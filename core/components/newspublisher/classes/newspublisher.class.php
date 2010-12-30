@@ -27,8 +27,8 @@
  * and rich text template variables.
  *
  * Refactored for OOP and Revolution by Bob Ray, 11/2010
- * The Newspublisher class contains all functions relating to NewsPublsher's
- * operation and any required supporting.
+ * The Newspublisher class contains all functions relating to NewsPublisher's
+ * operation.
  */
 
 class Newspublisher {
@@ -699,12 +699,13 @@ protected function _displayTv($tvNameOrId) {
                         $val = $tv->renderOutput($this->existing);
                     }
 
-                } else {
-                    $val = $_POST[$fields['name']];
-                }
+            } else {
+                $val = $_POST[$fields['name']];
+            }
             foreach ($options as $option) {
 
-                /* if field is empty, get the default value */
+                /* if field is empty and not in $_POST, get the default value,
+                   else, use the  */
                 if(empty($val) && !isset($_POST[$fields['name']])) {
                     $defaults = explode('||',$fields['default_text']);
                     $option = strtok($option,'=');
