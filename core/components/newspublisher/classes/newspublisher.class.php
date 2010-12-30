@@ -122,7 +122,6 @@ class Newspublisher {
             $this->existing = is_numeric($_POST['np_doc_id'])? $_POST['np_doc_id'] : false;
         }
 
-        $this->listboxmax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
         /* see if it's a repost */
         $this->setPostback( isset($_POST['hidSubmit']) && $_POST['hidSubmit'] == 'true');
 
@@ -183,23 +182,23 @@ class Newspublisher {
              $this->aliasTitle = $this->props['aliastitle']? true : false;
              $this->clearcache = isset($_POST['clearcache'])? $_POST['clearcache'] : $this->props['clearcache'] ? true: false;
              
-             $this->hideMenu = isset($_POST['hidemenu'])? $_POST['hidemenu'] : $this->setDefault('hidemenu',$this->parentId);
+             $this->hideMenu = isset($_POST['hidemenu'])? $_POST['hidemenu'] : $this->_setDefault('hidemenu',$this->parentId);
              $this->resource->set('hidemenu', $this->hideMenu);
 
-             $this->cacheable = isset($_POST['cacheable'])? $_POST['cacheable'] : $this->setDefault('cacheable',$this->parentId);
+             $this->cacheable = isset($_POST['cacheable'])? $_POST['cacheable'] : $this->_setDefault('cacheable',$this->parentId);
              $this->resource->set('cacheable', $this->cacheable);
 
-             $this->searchable = isset($_POST['searchable'])? $_POST['searchable'] : $this->setDefault('searchable',$this->parentId);
+             $this->searchable = isset($_POST['searchable'])? $_POST['searchable'] : $this->_setDefault('searchable',$this->parentId);
              $this->resource->set('searchable', $this->searchable);
 
-             $this->published = isset($_POST['published'])? $_POST['published'] : $this->setDefault('published',$this->parentId);
+             $this->published = isset($_POST['published'])? $_POST['published'] : $this->_setDefault('published',$this->parentId);
              $this->resource->set('published', $this->published);
              
-             $this->richtext = isset($_POST['richtext'])? $_POST['richtext'] : $this->setDefault('richtext',$this->parentId);
+             $this->richtext = isset($_POST['richtext'])? $_POST['richtext'] : $this->_setDefault('richtext',$this->parentId);
              $this->resource->set('richtext', $this->richtext);
 
              if (! empty($this->props['groups'])) {
-                $this->groups = $this->setDefault('groups',$this->parentId);
+                $this->groups = $this->_setDefault('groups',$this->parentId);
              }
              $this->header = !empty($this->props['headertpl']) ? $this->modx->getChunk($this->props['headertpl']) : '';
              $this->footer = !empty($this->props['footertpl']) ? $this->modx->getChunk($this->props['footertpl']):'';
@@ -213,7 +212,7 @@ class Newspublisher {
          }
 
        $this->modx->lexicon->load('core:resource');
-       $this->template = $this->getTemplate();
+       $this->template = $this->_getTemplate();
        if($this->props['initdatepicker']) {
             $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
             $this->modx->regClientStartupScript($this->assetsUrl . 'datepicker/js/datepicker.js');
@@ -233,6 +232,8 @@ class Newspublisher {
        if ($css !== false) {
            $this->modx->regClientCSS($css);
        }
+
+       $this->listboxmax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
 
        $ph = ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
        $this->modx->toPlaceholder('contentrows',$ph,$this->prefix);
@@ -285,7 +286,7 @@ class Newspublisher {
                    $def = $this->modx->getOption('cultureKey',null,$this->modx->getOption('manager_language',null,'en'));
                    $tinyproperties['language'] = $this->modx->getOption('fe_editor_lang',array(),$def);
                    $tinyproperties['frontend'] = true;
-                   $tinyproperties['selector'] = 'modx-richtext';
+                   // $tinyproperties['selector'] = 'modx-richtext';
                                        //$tinyproperties['selector'] = 'modx-richtext';//alternativ to 'frontend = true' you can use a selector for texareas
                    unset($def);
                }
@@ -317,7 +318,7 @@ class Newspublisher {
  * groups, and null on failure
  */
 
-protected function setDefault($field,$parentId) {
+protected function _setDefault($field,$parentId) {
 
     $retVal = null;
     $prop = $this->props[$field];
@@ -341,15 +342,15 @@ protected function setDefault($field,$parentId) {
 
         } else if ($prop == 'parent' || $prop === 'Parent') {
             if ($field == 'groups') {
-                $groupString = $this->setGroups($prop, $this->parentObj);
+                $groupString = $this->_setGroups($prop, $this->parentObj);
                 $retVal = $groupString;
                 unset($groupString);
             } else {
                     $retVal = $this->parentObj->get($field);
             }
         } else if ($field == 'groups') {
-                /* ToDo: Sanity Check groups here (or in setGroups() ) */
-                $retVal = $this->setGroups($prop);
+                /* ToDo: Sanity Check groups here (or in _setGroups() ) */
+                $retVal = $this->_setGroups($prop);
         }
     } else { /* not 1, 0, or parent; use system default except for groups */
         switch($field) {
@@ -452,7 +453,7 @@ public function getTpls() {
 }
 
 /** Creates the HTML for the displayed form by concatenating
- * the necessary Tpls and calling displayTv() for any TVs.
+ * the necessary Tpls and calling _displayTv() for any TVs.
  *
  * @access public
  * @param (string) $show - comma-separated list of fields and TVs
@@ -528,7 +529,7 @@ public function displayForm($show) {
                     case 'timestamp':
                         $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->tpls['dateTpl']);
                         if (! $this->isPostBack) {
-                            $this->splitDate($field,$this->resource->get($field));
+                            $this->_splitDate($field,$this->resource->get($field));
                         }
                         break;
                     default:
@@ -538,7 +539,7 @@ public function displayForm($show) {
             }
         } else {
             /* see if it's a TV */
-            $retVal = $this->displayTv($field);
+            $retVal = $this->_displayTv($field);
             if ($retVal) {
                 $inner .= "\n" . $retVal;
             }
@@ -561,7 +562,7 @@ public function displayForm($show) {
  * @return (string) returns the HTML code for the TV.
  */
 
-protected function displayTv($tvNameOrId) {
+protected function _displayTv($tvNameOrId) {
 
 
     if (is_numeric($tvNameOrId)) {
@@ -638,7 +639,7 @@ protected function displayTv($tvNameOrId) {
             unset($tpl);
 
             if (! $this->isPostBack) {
-                $this->splitDate($fields['name'], $tv->renderOutput());
+                $this->_splitDate($fields['name'], $tv->renderOutput());
             }
 
             break;
@@ -774,7 +775,7 @@ return $formTpl;
  * @param $timeString - (string) time string
  *  */
 
-protected function splitDate($ph,$timeString) {
+protected function _splitDate($ph,$timeString) {
     $s = substr($timeString,11,5);
     $s = $s? $s : '';
     $this->modx->toPlaceholder($ph . '_time' , $s, $this->prefix);
@@ -970,7 +971,7 @@ public function forward($postId) {
  * @return (string) (JSON encoded array)
  */
 
-protected function setGroups($resourceGroups, $parentObj = null) {
+protected function _setGroups($resourceGroups, $parentObj = null) {
 
     $values = array();
     if ($resourceGroups == 'parent') {
@@ -1016,9 +1017,9 @@ protected function setGroups($resourceGroups, $parentObj = null) {
 /** allows strip slashes on an array
  * not used, but may have to be called if magic_quotes_gpc causes trouble
  * */
-protected function stripslashes_deep($value) {
+protected function _stripslashes_deep($value) {
     $value = is_array($value) ?
-                array_map('stripslashes_deep', $value) :
+                array_map('_stripslashes_deep', $value) :
                 stripslashes($value);
     return $value;
 }
@@ -1039,7 +1040,7 @@ public function setError($msg) {
 /** Gets template ID of resource
  * @return (int) returns the template ID
  */
-protected function getTemplate() {
+protected function _getTemplate() {
     if ($this->existing) {
         return $this->resource->get('template');
     }
