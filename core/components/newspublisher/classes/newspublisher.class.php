@@ -61,7 +61,7 @@ class Newspublisher {
     protected $tpls; // array of tpls
     protected $richtext; // sets richtext checkbox for new docs
 
-/** NewsPubliser constructor
+/** NewsPublisher constructor
  * 
  * @access public
  * @param (reference object) $modx - modx object
