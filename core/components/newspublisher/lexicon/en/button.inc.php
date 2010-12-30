@@ -33,3 +33,5 @@ $_lang['np_no_edit_document_permission'] = 'No edit_document permission';
 $_lang['np_no_context_save_document_permission'] = 'No context save_document permission';
 $_lang['np_no_resource_save_document_permission'] = 'No Resource save permission on this document';
 $_lang['np_no_edit_home_page'] = 'Can not edit home page';
+$_lang['np_no_np_id'] = 'Could not set the np_id default property. Set it manually to the ID of the Newspublisher page.';
+$_lang['np_id_desc'] = 'Set this to the ID of the NewsPublisher page';
