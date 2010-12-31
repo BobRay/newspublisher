@@ -64,7 +64,7 @@ $value = $buttonCaption;
 
 $npId = $modx->getOption('np_id',$scriptProperties,'');
 if (empty($npId)){
-    $npObj = $modx->getObject('modSnippet',array('name'=>'NewsPublisher'));
+    $npObj = $modx->getObject('modResource',array('pagetitle'=>'NewsPublisher'));
     $success = true;
     if ($npObj) {
         $npId = $npObj->get('id');
@@ -98,7 +98,7 @@ if (empty($npId)){
         $debug = true;
     }
 }
-$modx->setPlaceholder('np_id',$np_id);
+$modx->setPlaceholder('np_id',$npId);
 
 if (! $modx->hasPermission('edit_document')) {
     $value = $modx->lexicon('np_no_edit_document_permission');
@@ -117,12 +117,12 @@ if ( $id == $modx->getOption('site_start') ) {
 }
 
 $hidden = explode(',',$noShow);
-$hidden[] = $np_id;
+$hidden[] = $npId;
 if (in_array($modx->resource->get('id'),$hidden)) {
    $value = 'In noShow list';
 }
 
-$output = '<form action="[[+np_id]]" method="post" style="position:fixed;bottom:'.$bottom .  ';right:' . $right . '">';
+$output = '<form action="[[~[[+np_id]]]]" method="post" style="position:fixed;bottom:'.$bottom .  ';right:' . $right . '">';
 $output .= "\n" . '<input type = "hidden" name="np_existing" value="true" />';
 $output .= "\n" . '<input type = "hidden" name="np_doc_id" value="' . $modx->resource->get('id') . '"/>';
 $output .= "\n" . '<input type="submit" class = "np_edit_this_button" name="submit" value="' . $value . '"/>';
