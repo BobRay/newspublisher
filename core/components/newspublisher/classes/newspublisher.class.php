@@ -648,18 +648,23 @@ protected function _displayTv($tvNameOrId) {
         case 'textbox':
         case 'email';
         case 'image';
+            /* ToDo: replace with $this->tpls[] */
+            /* ToDo: image browser (someday) */
             $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
 
             break;
 
         case 'textarea':
         case 'textareamini':
-
+            /* ToDo: Make these parameters */
             $rows = $tvType=='textarea'? 5 : 10;
             $cols = 60;
+
+            /* ToDo: replace with $this->tpls[] */
             $formTpl .= "\n" . '<label for="' . $fields['name'] . '"' . ' title="' . $fields['description'] . '">'. $caption  . '</label><textarea rows="'. $rows . '" cols="' . $cols . '"' . ' name="' . $fields['name'] . '"'.  ' id="' . $fields['name'] . '">' . '[[+'. $this->prefix . '.' . $fields['name'] . ']]</textarea>';
             break;
         case 'richtext':
+            /* ToDo: replace with $this->tpls[] */
             $formTpl .= "\n" . '<label title="'. $fields['description'] . '">'. $caption  . '</label>
             <div class="modx-richtext">
                 <textarea rows="8" cols="60" class="modx-richtext" name="' . $fields['name'] . '" id="' . $fields['name'] . '">' . '[[+' . $this->prefix . '.' . $fields['name'] . ']]</textarea>
@@ -674,7 +679,8 @@ protected function _displayTv($tvNameOrId) {
         case 'listbox':
         case 'listbox-multiple':
             $replace = array();
-            
+
+            /* ToDo: move these to Tpl section */
             $this->tpls['optionOuterTpl'] = "\n".  '<fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
         [[+npx.hidden]]
                 [[+npx.options]]
@@ -697,10 +703,8 @@ protected function _displayTv($tvNameOrId) {
                 $count = count($options);
                 $max = $this->listboxmax;
                 $replace['[[+npx.size]]'] = ($count <= $max)? $count : $max;
-                //$formTpl .= "\n" . '<select ' . 'name="'. $fields['name'] . $arrayPostfix . '" ' .  $multiple . 'size="' . $size . '">' . "\n";
             } else {
                 $formTpl = $this->tpls['optionOuterTpl'];
-
             }
 
             $replace['[[+npx.hidden]]'] = ($tvType == 'checkbox') ? '<input type="hidden" name = "' . $fields['name'] . '[]" value="" />' : '';
@@ -717,16 +721,17 @@ protected function _displayTv($tvNameOrId) {
 
             /* get TVs current value from DB or $_POST */
             if ($this->existing  && ! $this->isPostBack)  {
-                    if (is_array($options)) {
-                        $val = explode('||',$tv->getValue($this->existing));
-                    } else {
-                        $val = $tv->renderOutput($this->existing);
-                    }
-
+                if (is_array($options)) {
+                    $val = explode('||',$tv->getValue($this->existing));
+                } else {
+                    $val = $tv->renderOutput($this->existing);
+                }
             } else {
                 $val = $_POST[$fields['name']];
             }
             $inner = '';
+
+            /* loop through options and set selections */
             foreach ($options as $option) {
 
                 /* if field is empty and not in $_POST, get the default value,
@@ -742,8 +747,6 @@ protected function _displayTv($tvNameOrId) {
                 if ($tvType == 'listbox' || $tvType =='listbox-multiple') {
                     $optionTpl = $this->tpls['listOptionTpl'];
                     $replace['[[+npx.value]]'] = $rvalue;
-                    //$formTpl .= "\n    " . '<' . $iType . ' value="' . $rvalue . '"';
-
                 } else {
                     $optionTpl = $this->tpls['optionTpl'];
                     $replace['[[+npx.class]]'] = $tvType;
@@ -779,6 +782,7 @@ protected function _displayTv($tvNameOrId) {
             break;
 
             default:
+                /* ToDo: replace with $this->tpls[] */
                 $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
                 break;
 
@@ -843,7 +847,7 @@ public function saveResource() {
         }
     }
 
-    if (! $this->existing) {
+    if (! $this->existing) { /* new document */
 
         /* ToDo: Move this to init()? */
         /* set alias name of document used to store articles */
