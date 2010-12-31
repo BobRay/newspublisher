@@ -61,6 +61,7 @@ class Newspublisher {
     protected $tpls; // array of tpls
     protected $richtext; // sets richtext checkbox for new docs
 
+
 /** NewsPublisher constructor
  * 
  * @access public
@@ -672,27 +673,57 @@ protected function _displayTv($tvNameOrId) {
         case 'checkbox':
         case 'listbox':
         case 'listbox-multiple':
-            $iType = 'input';
-            $iType = ($tvType == 'listbox' || $tvType == 'listbox-multiple')? 'option' : $iType;
-            $arrayPostfix = ($tvType == 'checkbox' || $tvType=='listbox-multiple')? '[]' : '';
-            $options = explode('||',$fields['elements']);
+            $replace = array();
+            
+            $this->tpls['optionOuterTpl'] = "\n".  '<fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
+        [[+npx.hidden]]
+                [[+npx.options]]
+            </fieldset>';
+            $this->tpls['listOuterTpl'] = "\n".  '<fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
+                <select name="[[+npx.name]]" size="[[+npx.size]]" [[+npx.multiple]]>
+                    [[+npx.options]]
+                </select>
+            </fieldset>';
+            $this->tpls['optionTpl'] = "\n". '    <span class="option"><input class="[[+npx.class]]" type="[[+npx.type]]" name="[[+npx.name]]" value="[[+npx.value]]" [[+npx.selected]] [[+npx.multiple]] />[[+npx.text]]</span>';
+            $this->tpls['listOptionTpl'] = "\n". '    <option value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
 
-            $formTpl .= "\n" . '<fieldset class="np-tv-' . $tvType . '"' . ' title="' . $fields['description'] . '"><legend>'. $caption  . '</legend>';
+            $options = explode('||',$fields['elements']);
+            $postfix = ($tvType == 'checkbox' || $tvType=='listbox-multiple')? '[]' : '';
+            $replace['[[+npx.name]]'] = $fields['name'] . $postfix;
 
             if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
-                $multiple = ($tvType == 'listbox-multiple')? ' multiple="multiple" ': '';
+                $formTpl = $this->tpls['listOuterTpl'];
+                $replace['[[+npx.multiple]]'] = ($tvType == 'listbox-multiple')? ' multiple="multiple" ': '';
                 $count = count($options);
                 $max = $this->listboxmax;
-                $size = ($count <= $max)? $count : $max;
-                $formTpl .= "\n" . '<select ' . 'name="'. $fields['name'] . $arrayPostfix . '" ' .  $multiple . 'size="' . $size . '">' . "\n";
+                $replace['[[+npx.size]]'] = ($count <= $max)? $count : $max;
+                //$formTpl .= "\n" . '<select ' . 'name="'. $fields['name'] . $arrayPostfix . '" ' .  $multiple . 'size="' . $size . '">' . "\n";
+            } else {
+                $formTpl = $this->tpls['optionOuterTpl'];
+
             }
-            $i=0;
-            if ($tvType == 'checkbox') {
-                $formTpl .= "\n    " . '<input type="hidden" name="' . $fields['name'] . '[]" value = "" />';
-            }
+
+
+            $replace['[[+npx.hidden]]'] = ($tvType == 'checkbox') ? '<input type="hidden" name = "' . $fields['name'] . '[]" value="" />' : '';
+            $replace['[[+npx.class]]'] = 'np-tv-' . $tvType;
+            $replace['[[+npx.title]]'] = $fields['description'];
+            $replace['[[+npx.legend]]'] = $caption;
+
+            /* Do outer TPl replacements */
+            $formTpl = $this->strReplaceAssoc($replace,$formTpl);
+
+            /* new replace array for options */
+            $replace = array();
+            $replace['[[+npx.name]]'] = $fields['name'] . $postfix;
+
+
+            // $formTpl .= "\n" . '<fieldset class="np-tv-' . $tvType . '"' . ' title="' . $fields['description'] . '"><legend>'. $caption  . '</legend>';
+
+            //if ($tvType == 'checkbox') {
+            //    $formTpl .= "\n    " . '<input type="hidden" name="' . $fields['name'] . '[]" value = "" />';
+            //}
             /* get TVs current value from DB or $_POST */
             if ($this->existing  && ! $this->isPostBack)  {
-
                     if (is_array($options)) {
                         $val = explode('||',$tv->getValue($this->existing));
                     } else {
@@ -702,6 +733,7 @@ protected function _displayTv($tvNameOrId) {
             } else {
                 $val = $_POST[$fields['name']];
             }
+            $inner = '';
             foreach ($options as $option) {
 
                 /* if field is empty and not in $_POST, get the default value,
@@ -715,52 +747,72 @@ protected function _displayTv($tvNameOrId) {
                     $rvalue = $option;
                 }
                 if ($tvType == 'listbox' || $tvType =='listbox-multiple') {
-                    $formTpl .= "\n    " . '<' . $iType . ' value="' . $rvalue . '"';
+                    $optionTpl = $this->tpls['listOptionTpl'];
+                    $replace['[[+npx.value]]'] = $rvalue;
+                    //$formTpl .= "\n    " . '<' . $iType . ' value="' . $rvalue . '"';
+
                 } else {
-                    $formTpl .= "\n    " . '<span class="option"><' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
+                    $optionTpl = $this->tpls['optionTpl'];
+                    $replace['[[+npx.class]]'] = $tvType;
+                    $replace['[[+npx.type]]'] = $tvType;
+                    $replace['[[+npx.name]]'] = $fields['name'].$postfix;
+                    $replace['[[+npx.value]]'] = $rvalue;
+                    //$formTpl .= "\n    " . '<span class="option"><' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
                 }
                 /* empty and not in $_POST -- use default */
                 if (empty($val)  && !isset($_POST[$fields['name']])) {
                     if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
                         if ($tvType == 'radio' || $tvType == 'checkbox') {
-                            $formTpl .= ' checked ="checked" ';
+                            $replace['[[+npx.selected]]'] = ' checked ="checked" ';
+                            //$formTpl .= ' checked ="checked" ';
                         } else {
-                            $formTpl .= ' selected="selected" ';
+                            $replace['[[+npx.selected]]'] = ' selected="selected" ';
+                            //$formTpl .= ' selected="selected" ';
                         }
                     }
                 } else {  /* field value is not empty */
                     if (is_array($val) ) {
                         if(in_array($option,$val)) {
                             if ($tvType == 'radio' || $tvType == 'checkbox') {
-                                $formTpl .= ' checked="checked" ';
+                                $replace['[[+npx.selected]]'] = ' checked ="checked" ';
+                                //$formTpl .= ' checked="checked" ';
                             } else {
-                                $formTpl .= ' selected="selected" ';
+                                //$formTpl .= ' selected="selected" ';
+                                $replace['[[+npx.selected]]'] = ' checked ="checked" ';
                             }
                         }
                     } else {
                         if ($option == $val) {
                             if ($tvType == 'radio' || $tvType == 'checkbox') {
-                                $formTpl .= ' checked="checked" ';
+                                $replace['[[+npx.selected]]'] = ' checked ="checked" ';
+                                //$formTpl .= ' checked="checked" ';
                             } else {
-                                $formTpl .= ' selected="selected" ';
+                                //$formTpl .= ' selected="selected" ';
+                                $replace['[[+npx.selected]]'] = ' checked ="checked" ';
                             }
                         }
                     }
-                }
-                if ($iType == 'input') {
-                $formTpl .= ' />' . $option;
-                } else {
-                    $formTpl .= '>' . $option . '</' . $iType . '>';
-                }
-                if ($tvType != 'listbox' && $tvType != 'listbox-multiple') {
-                    $formTpl .= '</span>';
-                }
 
-            }
-            if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
-                $formTpl .= "\n" . '</select>';
-            }
-            $formTpl .= "\n" . '</fieldset>';
+                }
+                $replace['[[+npx.text]]'] = $option;
+                $optionTpl = $this->strReplaceAssoc($replace,$optionTpl);
+                $inner .= $optionTpl;
+                //if ($iType == 'input') {
+                //$formTpl .= ' />' . $option;
+                //} else {
+//                    $formTpl .= '>' . $option . '</' . $iType . '>';
+  //              }
+                //if ($tvType != 'listbox' && $tvType != 'listbox-multiple') {
+                //    $formTpl .= '</span>';
+                //}
+
+            } /* end of option loop */
+            //$inner .= $optionTpl;
+            $formTpl = str_replace('[[+npx.options]]',$inner, $formTpl);
+            //if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
+            //    $formTpl .= "\n" . '</select>';
+            //}
+            //$formTpl .= "\n" . '</fieldset>';
             break;
 
             default:
@@ -770,6 +822,16 @@ protected function _displayTv($tvNameOrId) {
         }  /* end switch */
 
 return $formTpl;
+}
+
+/** Uses an associative array for string replacement
+ *
+ * @param $replace - (array) associative array of keys and values
+ * @param $subject - (string) string to do replacements in
+ * @return (string) - modified subject */
+
+public function strReplaceAssoc(array $replace, $subject) {
+   return str_replace(array_keys($replace), array_values($replace), $subject);
 }
 /** Splits time string into date and time and sets
  * placeholders for each of them
