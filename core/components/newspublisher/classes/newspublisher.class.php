@@ -688,7 +688,7 @@ protected function _displayTv($tvNameOrId) {
             $this->tpls['listOptionTpl'] = "\n". '    <option value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
 
             $options = explode('||',$fields['elements']);
-            $postfix = ( ($tvType == 'checkbox') || ($tvType=='listbox-multiple') )? '[]' : '';
+            $postfix = ($tvType == 'checkbox' || $tvType=='listbox-multiple')? '[]' : '';
             $replace['[[+npx.name]]'] = $fields['name'] . $postfix;
 
             if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
@@ -703,7 +703,6 @@ protected function _displayTv($tvNameOrId) {
 
             }
 
-
             $replace['[[+npx.hidden]]'] = ($tvType == 'checkbox') ? '<input type="hidden" name = "' . $fields['name'] . '[]" value="" />' : '';
             $replace['[[+npx.class]]'] = 'np-tv-' . $tvType;
             $replace['[[+npx.title]]'] = $fields['description'];
@@ -716,12 +715,6 @@ protected function _displayTv($tvNameOrId) {
             $replace = array();
             $replace['[[+npx.name]]'] = $fields['name'] . $postfix;
 
-
-            // $formTpl .= "\n" . '<fieldset class="np-tv-' . $tvType . '"' . ' title="' . $fields['description'] . '"><legend>'. $caption  . '</legend>';
-
-            //if ($tvType == 'checkbox') {
-            //    $formTpl .= "\n    " . '<input type="hidden" name="' . $fields['name'] . '[]" value = "" />';
-            //}
             /* get TVs current value from DB or $_POST */
             if ($this->existing  && ! $this->isPostBack)  {
                     if (is_array($options)) {
@@ -757,68 +750,32 @@ protected function _displayTv($tvNameOrId) {
                     $replace['[[+npx.type]]'] = $tvType;
                     $replace['[[+npx.name]]'] = $fields['name'].$postfix;
                     $replace['[[+npx.value]]'] = $rvalue;
-                    //$formTpl .= "\n    " . '<span class="option"><' . $iType . ' class="' . $tvType . '"' . ' type="' . $tvType . '" name="' . $fields['name'] . $arrayPostfix . '" value="' . $rvalue . '"';
                 }
+
+                /* Set string to use for selected options */
+                $selected = ($tvType == 'radio' || $tvType == 'checkbox')? 'checked="checked"' : 'selected="selected"';
+                
+                $replace['[[+npx.selected]]'] = ''; /* default to not set */
+
                 /* empty and not in $_POST -- use default */
                 if (empty($val)  && !isset($_POST[$fields['name']])) {
                     if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
-                        if ($tvType == 'radio' || $tvType == 'checkbox') {
-                            $replace['[[+npx.selected]]'] = ' checked ="checked" ';
-                            //$formTpl .= ' checked ="checked" ';
-                        } else {
-                            $replace['[[+npx.selected]]'] = ' selected="selected" ';
-                            //$formTpl .= ' selected="selected" ';
-                        }
-                    } else {
-                                $replace['[[+npx.selected]]'] = '';
-                    }
-                } else {  /* field value is not empty */
-                    if (is_array($val) ) {
-                        if(in_array($option,$val)) {
-                            if ($tvType == 'radio' || $tvType == 'checkbox') {
-                                $replace['[[+npx.selected]]'] = ' checked ="checked" ';
-                                //$formTpl .= ' checked="checked" ';
-                            } else {
-                                //$formTpl .= ' selected="selected" ';
-                                $replace['[[+npx.selected]]'] = ' selected ="selected" ';
-                            }
-                        } else {
-                            $replace['[[+npx.selected]]'] = '';
-                        }
-                    } else {
-                        if ($option == $val) {
-                            if ($tvType == 'radio' || $tvType == 'checkbox') {
-                                $replace['[[+npx.selected]]'] = ' checked ="checked" ';
-                                //$formTpl .= ' checked="checked" ';
-                            } else {
-                                //$formTpl .= ' selected="selected" ';
-                                $replace['[[+npx.selected]]'] = ' selected ="selected" ';
-                            }
-                        } else {
-                                $replace['[[+npx.selected]]'] = '';
-                        }
+                        $replace['[[+npx.selected]]'] = $selected;
                     }
 
+                /*  field value is not empty */
+                } else if ((is_array($val) && in_array($option,$val)) || ($option == $val)) {
+
+                            $replace['[[+npx.selected]]'] = $selected;
                 }
+
                 $replace['[[+npx.text]]'] = $option;
                 $optionTpl = $this->strReplaceAssoc($replace,$optionTpl);
                 $inner .= $optionTpl;
-                //if ($iType == 'input') {
-                //$formTpl .= ' />' . $option;
-                //} else {
-//                    $formTpl .= '>' . $option . '</' . $iType . '>';
-  //              }
-                //if ($tvType != 'listbox' && $tvType != 'listbox-multiple') {
-                //    $formTpl .= '</span>';
-                //}
 
             } /* end of option loop */
-            //$inner .= $optionTpl;
+
             $formTpl = str_replace('[[+npx.options]]',$inner, $formTpl);
-            //if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
-            //    $formTpl .= "\n" . '</select>';
-            //}
-            //$formTpl .= "\n" . '</fieldset>';
             break;
 
             default:
