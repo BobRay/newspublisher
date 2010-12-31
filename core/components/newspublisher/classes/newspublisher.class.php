@@ -688,7 +688,7 @@ protected function _displayTv($tvNameOrId) {
             $this->tpls['listOptionTpl'] = "\n". '    <option value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
 
             $options = explode('||',$fields['elements']);
-            $postfix = ($tvType == 'checkbox' || $tvType=='listbox-multiple')? '[]' : '';
+            $postfix = ( ($tvType == 'checkbox') || ($tvType=='listbox-multiple') )? '[]' : '';
             $replace['[[+npx.name]]'] = $fields['name'] . $postfix;
 
             if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
@@ -769,6 +769,8 @@ protected function _displayTv($tvNameOrId) {
                             $replace['[[+npx.selected]]'] = ' selected="selected" ';
                             //$formTpl .= ' selected="selected" ';
                         }
+                    } else {
+                                $replace['[[+npx.selected]]'] = '';
                     }
                 } else {  /* field value is not empty */
                     if (is_array($val) ) {
@@ -778,8 +780,10 @@ protected function _displayTv($tvNameOrId) {
                                 //$formTpl .= ' checked="checked" ';
                             } else {
                                 //$formTpl .= ' selected="selected" ';
-                                $replace['[[+npx.selected]]'] = ' checked ="checked" ';
+                                $replace['[[+npx.selected]]'] = ' selected ="selected" ';
                             }
+                        } else {
+                            $replace['[[+npx.selected]]'] = '';
                         }
                     } else {
                         if ($option == $val) {
@@ -788,8 +792,10 @@ protected function _displayTv($tvNameOrId) {
                                 //$formTpl .= ' checked="checked" ';
                             } else {
                                 //$formTpl .= ' selected="selected" ';
-                                $replace['[[+npx.selected]]'] = ' checked ="checked" ';
+                                $replace['[[+npx.selected]]'] = ' selected ="selected" ';
                             }
+                        } else {
+                                $replace['[[+npx.selected]]'] = '';
                         }
                     }
 
