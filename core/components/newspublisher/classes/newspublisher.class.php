@@ -402,6 +402,8 @@ protected function _setDefault($field,$parentId) {
 
 public function getTpls() {
         $this->tpls = array();
+
+        /* this is the outer Tpl for the whole page */
         $this->tpls['outerTpl'] = !empty ($this->props['outertpl'])? $this->modx->getChunk($this->props['outertpl']) : '<div class="newspublisher">
         <h2>[[%np_main_header]]</h2>
         [[!+[[+prefix]].error_header:ifnotempty=`<h3>[[!+[[+prefix]].error_header]]</h3>`]]
@@ -419,7 +421,7 @@ public function getTpls() {
     </form>
 </div>';
 
-
+    /* The next four Tpls are used for standard resource fields */
     $this->tpls['textTpl'] = ! empty ($this->props['texttpl'])? $this->modx->getChunk($this->props['texttpl']) : '[[+[[+prefix]].error_[[+npx.fieldName]]]]
             <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help:notags]]">[[%resource_[[+npx.fieldName]]]]: </label>
             <input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="60" />';
@@ -440,8 +442,24 @@ public function getTpls() {
     $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : '<fieldset class="np-tv-checkbox" title="[[%resource_[[+npx.fieldName]]_help]]"><legend>[[%resource_[[+npx.fieldName]]]]</legend>
     <input type="hidden" name = "[[+npx.fieldName]]" value = "" />
     <span class="option"><input class="checkbox" type="checkbox" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]" value="1" [[+checked]]/></span>
- </fieldset>';
+</fieldset>';
 
+    /* These are the tpls used for TVs of various types */
+
+    $this->tpls['optionOuterTpl'] = ! empty ($this->props['optionOuterTpl'])? $this->modx->getChunk($this->props['optionOuterTpl']) : "\n".  '<fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
+        [[+npx.hidden]]
+                [[+npx.options]]
+            </fieldset>';
+            $this->tpls['listOuterTpl'] = ! empty ($this->props['listOuterTpl'])? $this->modx->getChunk($this->props['listOuterTpl']) : "\n".  '<fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
+                <select name="[[+npx.name]]" size="[[+npx.size]]" [[+npx.multiple]]>
+                    [[+npx.options]]
+                </select>
+            </fieldset>';
+            $this->tpls['optionTpl'] = ! empty ($this->props['optionTpl'])? $this->modx->getChunk($this->props['optionTpl']) : "\n". '    <span class="option"><input class="[[+npx.class]]" type="[[+npx.type]]" name="[[+npx.name]]" value="[[+npx.value]]" [[+npx.selected]] [[+npx.multiple]] />[[+npx.text]]</span>';
+            $this->tpls['listOptionTpl'] = ! empty ($this->props['listOptionTpl'])? $this->modx->getChunk($this->props['listOptionTpl']) : "\n". '    <option value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
+
+
+    /* make sure we have all of them */
     $success = true;
     foreach($this->tpls as $tpl=>$val) {
         if (empty($val)) {
@@ -685,19 +703,6 @@ protected function _displayTv($tvNameOrId) {
         case 'listbox':
         case 'listbox-multiple':
             $replace = array();
-
-            /* ToDo: move these to Tpl section */
-            $this->tpls['optionOuterTpl'] = "\n".  '<fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
-        [[+npx.hidden]]
-                [[+npx.options]]
-            </fieldset>';
-            $this->tpls['listOuterTpl'] = "\n".  '<fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
-                <select name="[[+npx.name]]" size="[[+npx.size]]" [[+npx.multiple]]>
-                    [[+npx.options]]
-                </select>
-            </fieldset>';
-            $this->tpls['optionTpl'] = "\n". '    <span class="option"><input class="[[+npx.class]]" type="[[+npx.type]]" name="[[+npx.name]]" value="[[+npx.value]]" [[+npx.selected]] [[+npx.multiple]] />[[+npx.text]]</span>';
-            $this->tpls['listOptionTpl'] = "\n". '    <option value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
 
             $options = explode('||',$fields['elements']);
             $postfix = ($tvType == 'checkbox' || $tvType=='listbox-multiple')? '[]' : '';
