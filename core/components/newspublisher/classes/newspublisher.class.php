@@ -501,12 +501,13 @@ public function displayForm($show) {
             } else {
                 switch($val) {
                     case 'string':
+                        /* ToDo: $replace[] here */
                         $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->tpls['textTpl']);
                         break;
 
                     case 'boolean':
                         $t = $this->tpls['boolTpl'];
-
+                        /* ToDo: Simplify this with $replace[] */
                         if ($this->isPostBack) {
                             $checked = $_POST[$field];
                         } else {
@@ -522,22 +523,27 @@ public function displayForm($show) {
 
                         break;
                     case 'integer':
+                        /* ToDo: $replace[] here */
                         $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->tpls['intTpl']);
                         break;
                     case 'fulltext':
+                        /* ToDo: $replace[] and generic template here */
                         $inner .= '<br />' . $field . ' -- FULLTEXT' . $val . '<br />';
                         break;
                     case 'timestamp':
+                        /* ToDo: $replace[] here */
                         $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->tpls['dateTpl']);
                         if (! $this->isPostBack) {
                             $this->_splitDate($field,$this->resource->get($field));
                         }
                         break;
                     default:
+                        /* ToDo: Generic template here */
                         $inner .= '<br />' . $field . ' -- OTHER' . $val . '<br />';
                         break;
                 }
             }
+            /* ToDo: $strReplaceArray() here */
         } else {
             /* see if it's a TV */
             $retVal = $this->_displayTv($field);
@@ -852,6 +858,7 @@ public function saveResource() {
         /* ToDo: Move this to init()? */
         /* set alias name of document used to store articles */
         if (empty($fields['alias'])) { /* leave it alone if filled */
+            /* ToDo: Add aliasprefix property */
             if(!$this->aliasTitle) {
                 $alias = 'article-' . time();
             } else { /* use pagetitle */
