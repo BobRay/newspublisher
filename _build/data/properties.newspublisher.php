@@ -2,7 +2,7 @@
 
 
 /**
- Properties for newspublisher
+ * Properties for newspublisher
  *
  * @package newspublisher
  * @subpackage build

@@ -1,7 +1,8 @@
 <?php
 
- /**
- * Properties for NpEditThisButton
+
+/**
+ * Properties for npeditthisbutton
  *
  * @package newspublisher
  * @subpackage build
