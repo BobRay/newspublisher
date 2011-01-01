@@ -26,10 +26,7 @@
  * editing resources. Clicking on the button launches NewsPublisher
  * for the current page.
  *
- * @param $show (required) - Comma-separated list (no spaces) of Document
- *      fields/TVs to show in the form. All form fields are lowercase
- *      strings. TVs can be identified by name (case-sensitive) or number.
- *      Fields can be displayed in any order.
+ * @param $npId (int) - ID of newspublisher page (set automatically on first run).
  * @param $noShow - Comma-separated list of IDs of documents
  *      on which the button should not be displayed. Defaults to
  *      home page, and NewsPublisher page.
@@ -37,7 +34,8 @@
  *      button. Can be in any legal CSS format. Defaults to `20%`.
  * @param $right (optional) - distance from right of window to place
  *      button. Can be in any legal CSS format. Defaults to `20%`.
- * @param $buttonCaption (optional) - Caption for edit button.
+ * @param $buttonCaption (optional -- not actually a parameter) -
+ *      Caption for edit button.
  *      Defaults to np_edit language string or "Edit" if empty.
  * @param $language (optional) - Language to use for error messages.
  * @param $debug (optional) - Displays the button on all pages with
@@ -53,11 +51,11 @@ $language = $language ? $language . ':' : '';
 $modx->lexicon->load($language.'newspublisher:button');
 
 /* Caption for edit button  */
-
+$debug = $modx->getOption('debug',$scriptProperties,false);
 $buttonCaption = $modx->lexicon('np_edit');
 $buttonCaption = empty($buttonCaption) ? 'np_edit' : $buttonCaption;
-$bottom = empty($bottom)? '20%' : $bottom;
-$right = empty($right)? '20%' : $right;
+$bottom = empty($scriptProperties['bottom']) ? '20%' : $bottom;
+$right = empty($scriptProperties['right'])? '20%' : $right;
 
 /* value will be unchanged if there are no errors  */
 $value = $buttonCaption;
@@ -115,7 +113,10 @@ $id = $modx->resource->get('id');
 if ( $id == $modx->getOption('site_start') ) {
     $value = $modx->lexicon('np_no_edit_home_page');
 }
-
+$noShow = $modx->getOption('noShow',$scriptProperties,'');
+if (empty($noShow)) {
+    $noShow = $npId . ',' . $modx->getOption('site_start');
+}
 $hidden = explode(',',$noShow);
 $hidden[] = $npId;
 if (in_array($modx->resource->get('id'),$hidden)) {
