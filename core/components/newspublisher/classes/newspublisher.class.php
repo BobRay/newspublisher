@@ -49,7 +49,8 @@ class Newspublisher {
     protected $clearcache;
     protected $header;
     protected $footer;
-    protected $listboxmax;
+    protected $listboxMax;
+    protected $multipleListboxMax;
     protected $prefix; // prefix for placeholders
     protected $badwords; // words to remove
     protected $published;
@@ -235,7 +236,9 @@ class Newspublisher {
            $this->modx->regClientCSS($css);
        }
 
-       $this->listboxmax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
+       $this->listboxMax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
+       $this->MultipleListboxMax = $this->props['multiplelistboxmax']? $this->props['multiplelistboxmax'] : 8;
+
 
        $ph = ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
        $this->modx->toPlaceholder('contentrows',$ph,$this->prefix);
@@ -447,17 +450,17 @@ public function getTpls() {
 
     /* These are the tpls used for TVs of various types */
 
-    $this->tpls['optionOuterTpl'] = ! empty ($this->props['optionOuterTpl'])? $this->modx->getChunk($this->props['optionOuterTpl']) : "\n".  '<fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
+    $this->tpls['optionOuterTpl'] = ! empty ($this->props['optionoutertpl'])? $this->modx->getChunk($this->props['optionoutertpl']) : "\n".  '<fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
         [[+npx.hidden]]
                 [[+npx.options]]
             </fieldset>';
-            $this->tpls['listOuterTpl'] = ! empty ($this->props['listOuterTpl'])? $this->modx->getChunk($this->props['listOuterTpl']) : "\n".  '<fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
+            $this->tpls['listOuterTpl'] = ! empty ($this->props['listoutertpl'])? $this->modx->getChunk($this->props['listoutertpl']) : "\n".  '<fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
                 <select name="[[+npx.name]]" size="[[+npx.size]]" [[+npx.multiple]]>
                     [[+npx.options]]
                 </select>
             </fieldset>';
-            $this->tpls['optionTpl'] = ! empty ($this->props['optionTpl'])? $this->modx->getChunk($this->props['optionTpl']) : "\n". '    <span class="option"><input class="[[+npx.class]]" type="[[+npx.type]]" name="[[+npx.name]]" value="[[+npx.value]]" [[+npx.selected]] [[+npx.multiple]] />[[+npx.text]]</span>';
-            $this->tpls['listOptionTpl'] = ! empty ($this->props['listOptionTpl'])? $this->modx->getChunk($this->props['listOptionTpl']) : "\n". '    <option value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
+            $this->tpls['optionTpl'] = ! empty ($this->props['optiontpl'])? $this->modx->getChunk($this->props['optiontpl']) : "\n". '    <span class="option"><input class="[[+npx.class]]" type="[[+npx.type]]" name="[[+npx.name]]" value="[[+npx.value]]" [[+npx.selected]] [[+npx.multiple]] />[[+npx.text]]</span>';
+            $this->tpls['listOptionTpl'] = ! empty ($this->props['listoptiontpl'])? $this->modx->getChunk($this->props['listoptiontpl']) : "\n". '    <option value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
 
 
     /* make sure we have all of them */
@@ -713,7 +716,7 @@ protected function _displayTv($tvNameOrId) {
                 $formTpl = $this->tpls['listOuterTpl'];
                 $replace['[[+npx.multiple]]'] = ($tvType == 'listbox-multiple')? ' multiple="multiple" ': '';
                 $count = count($options);
-                $max = $this->listboxmax;
+                $max = ($tvType == 'listbox')? $this->listboxMax : $this->multipleListboxMax;
                 $replace['[[+npx.size]]'] = ($count <= $max)? $count : $max;
             } else {
                 $formTpl = $this->tpls['optionOuterTpl'];

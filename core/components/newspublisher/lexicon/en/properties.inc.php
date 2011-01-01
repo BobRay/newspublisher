@@ -25,7 +25,6 @@
  * @package newspublisher
  * @subpackage lexicon
  */
-/* ToDo: Add the new ones to default properties, comments in snippets and write code to set them */
 
 /* NewsPublisher Property Description strings */
 $_lang['np_aliastitle_desc'] = "(optional) Set to Yes to use lowercase, hyphenated, page title as alias. Defaults to Yes - If set to No, 'article-(date created)' is used.  Ignored if alias is filled in form.";
@@ -44,6 +43,7 @@ $_lang['np_hidemenu_desc'] = "(optional) Sets the flag to as to whether or not t
 $_lang['np_initrte_desc'] = '(optional) Initialize rich text editor; set this if there are any rich text fields; defaults to No';
 $_lang['np_language_desc'] = '(optional) Language to use in forms and error messages.';
 $_lang['np_listboxmax_desc'] = '(optional) Maximum length for listboxes. Default is 8 items.';
+$_lang['np_multiplelistboxmax_desc'] = '(optional) Maximum length for multi-select listboxes. Default is 20 items.';
 $_lang['np_parentid_desc'] = '(optional) Folder id where new documents are stored; defaults to NewsPublisher folder.';
 $_lang['np_postid_desc'] = '(optional) Document id to load on success; defaults to the page created or edited.';
 $_lang['np_prefix_desc'] = "(optional) Prefix to use for placeholders; defaults to 'np.'";
@@ -55,14 +55,19 @@ $_lang['np_rtsummary_desc'] = '(optional) Use rich text for the summary (introte
 $_lang['np_searchable_desc'] = "(optional) Sets the flag to as to whether or not the new page is included in site searches; defaults to search_default System Setting for new resources; set to `Parent` to us parent's setting.";
 $_lang['np_show_desc'] = '(optional) Comma separated list of fields/tvs to show.';
 $_lang['np_template_desc'] = "(optional) Name of template to use for new document; set to `parent` to use parent's template; for `parent`, &folder must be set; defaults to the default_template System Setting.";
+$_lang['np_contentrows_desc'] = '(optional) Number of rows for the content field.';
+$_lang['np_contentcols_desc'] = '(optional) Number of columns for the content field.';
+$_lang['np_summaryrows_desc'] = '(optional) Number of rows for the summary field.';
+$_lang['np_summarycols_desc'] = '(optional) Number of columns for the summary field.';
+$_lang['np_outertpl_desc'] = '(optional) Tpl used as a shell for the whole page.';
+$_lang['np_texttpl_desc'] = '(optional) Tpl used for text resource fields.';
+$_lang['np_inttpl_desc'] = '(optional) Tpl used for integer resource fields.';
+$_lang['np_datetpl_desc'] = '(optional) Tpl used for date resource fields and date TVs';
+$_lang['np_booltpl_desc'] = '(optional) Tpl used for Yes/No resource fields (e.g., published, searchable, etc.).';
+ $_lang['np_optionoutertpl_desc'] = '(optional) Tpl used for as a shell for checkbox, list, and radio option TVs.';
+$_lang['np_optiontpl_desc'] = '(optional) Tpl used for each option of checkbox and radio option TVs.';
+$_lang['np_listoptiontpl_desc'] = '(optional) Tpl used for each option of listbox TVs.';
 
-
-/* ToDo:
- * contentrows
- * contentcols
- * summaryrows
- * summarycols
- */
 
 
 

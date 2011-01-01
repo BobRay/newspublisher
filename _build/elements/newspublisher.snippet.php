@@ -66,6 +66,18 @@ Fix/add &allowAnyPost
                        for 'parent', &parent must be set; defaults to system default template.
     &headertpl   - (optional) Header Tpl chunk (chunk name) to be inserted at the beginning of a new document.
     &footertpl   - (optional) Footer Tpl chunk (chunk name) to be inserted at the end of a new document.
+    &contentrows - (optional) Number of rows for the content field
+    &contentcols   (optional) Number of columns for the content field
+    &summaryrows - (optional) Number of rows for the summary field
+    &summarycols   (optional) Number of columns for the summary field    
+    &outertpl    - (optional) Tpl used as a shell for the whole page
+    &texttpl     - (optional) Tpl used for text resource fields
+    &inttpl      - (optional) Tpl used for integer resource fields.
+    &datetpl     - (optional) Tpl used for date resource fields and date TVs
+    &booltpl     - (optional) Tpl used for Yes/No resource fields (e.g., published, searchable, etc.).
+    &optionoutertpl - (optional) Tpl used for as a shell for checkbox, list, and radio option TVs.
+    &optiontpl   - (optional) Tpl used for each option of checkbox and radio option TVs.
+    &listoptiontpl - (optional) Tpl used for each option of listbox TVs.
     &richtext    - (optional) Sets the flag to as to whether or Rich Text Editor is used when editing the page
                        content in the Manager; defaults to richtext_default System Setting for new resources;
                        set to `Parent` to use parent's setting.
