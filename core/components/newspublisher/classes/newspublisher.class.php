@@ -376,8 +376,12 @@ protected function _setDefault($field,$parentId) {
                 $option = 'search_default';
                 break;
 
+            case 'richtext':
+                $option = 'richtext_default';
+                break;
+
             default:
-                $this->setError($this->modx->lexicon('np_unknown_field'));
+                $this->setError($this->modx->lexicon('np_unknown_field') . $field);
                 return;
         }
         if ($option != 'groups') {
@@ -858,7 +862,12 @@ public function saveResource() {
     /* correct timestamp $tv fields */
     foreach ($newFields as $field => $val) {
         if ($this->resource->_fieldMeta[$field]['phptype'] == 'timestamp') {
-            $fields[$field] = $val . ' ' . $fields[$field . '_time'];
+            if (empty($fields[$field])) {
+                unset($fields[$field]);
+            } else {
+                $fields[$field] = $val . ' ' . $fields[$field . '_time'];
+            }
+
         }
     }
 
@@ -898,9 +907,7 @@ public function saveResource() {
         $fields['content']  = $this->header . $fields['content'] . $this->footer;
 
     }
-
-
-
+  
     /* ToDo: fix this */
     /*
     foreach($fields as $n=>$v) {
