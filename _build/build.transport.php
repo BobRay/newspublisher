@@ -80,7 +80,7 @@ $snippet->set('name', 'NpEditThisButton');
 $snippet->set('description', '<strong>'.PKG_VERSION.'-'.PKG_RELEASE.'</strong> An edit button for NewsPublisher in MODx Revolution');
 //$snippet->set('category', 0);
 $snippet->set('snippet', file_get_contents($sources['build'] . '/elements/npeditthisbutton.snippet.php'));
-$properties = include $sources['build'].'data/properties.editthisbutton.php';
+$properties = include $sources['build'].'data/properties.npeditthisbutton.php';
 if (!is_array($properties)) $modx->log(modX::LOG_LEVEL_FATAL,'No properties returned for NpEditThisButton.');
 $snippet->setProperties($properties);
 unset($properties);
