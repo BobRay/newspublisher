@@ -1,7 +1,7 @@
 <?php
 
  /**
- * Properties for 
+ * Properties for NewsPublisher
  *
  * @package newspublisher
  * @subpackage build
