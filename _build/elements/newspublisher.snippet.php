@@ -102,7 +102,8 @@ Fix/add &allowAnyPost
     &language    - (optional) Language to use in forms and error messages.
     &prefix      - (optional) Prefix to use for placeholders; defaults to 'np'
     &fielderrortpl - (optional)
-    &initrte     - '(optional) Initialize rich text editor; set this if there are any rich text fields; defaults to 0';
+    &initrte     - '(optional) Initialize rich text editor; set this if there are any rich text fields; defaults to 0'
+    &initdatepicker - (optional) Initialized the datepicker; set this if there are any date fields; defaults to '0'
 
 */
 
