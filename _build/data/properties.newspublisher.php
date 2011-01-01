@@ -1,7 +1,8 @@
 <?php
 
- /**
- * Properties for NewsPublisher
+
+/**
+ Properties for newspublisher
  *
  * @package newspublisher
  * @subpackage build
@@ -183,7 +184,15 @@ $properties = array(
                 'menu' => '',
             ),
         ),
-        'value' => '0',
+        'value' => 'System Default',
+        'lexicon' => 'newspublisher:properties',
+    ),
+    array(
+        'name' => 'initdatepicker',
+        'desc' => 'np_initdatepicker_desc',
+        'type' => 'combo-boolean',
+        'options' => '',
+        'value' => '1',
         'lexicon' => 'newspublisher:properties',
     ),
     array(
@@ -224,6 +233,14 @@ $properties = array(
         'type' => 'textfield',
         'options' => '',
         'value' => '',
+        'lexicon' => 'newspublisher:properties',
+    ),
+    array(
+        'name' => 'multiplelistboxmax',
+        'desc' => 'np_multiplelistboxmax_desc',
+        'type' => 'textfield',
+        'options' => '',
+        'value' => '20',
         'lexicon' => 'newspublisher:properties',
     ),
     array(
@@ -271,7 +288,7 @@ $properties = array(
         'desc' => 'np_prefix_desc',
         'type' => 'textfield',
         'options' => '',
-        'value' => 'rr',
+        'value' => '',
         'lexicon' => 'newspublisher:properties',
     ),
     array(
@@ -337,7 +354,7 @@ $properties = array(
                 'menu' => '',
             ),
         ),
-        'value' => 'Parent',
+        'value' => 'System Default',
         'lexicon' => 'newpublisher:properties',
     ),
     array(
@@ -382,7 +399,7 @@ $properties = array(
                 'menu' => '',
             ),
         ),
-        'value' => '',
+        'value' => 'System Default',
         'lexicon' => 'newspublisher:properties',
     ),
     array(
@@ -423,14 +440,6 @@ $properties = array(
         'type' => 'textfield',
         'options' => '',
         'value' => '',
-        'lexicon' => 'newspublisher:properties',
-    ),
-    array(
-        'name' => 'multiplelistboxmax',
-        'desc' => 'np_multiplelistboxmax_desc',
-        'type' => 'textfield',
-        'options' => '',
-        'value' => '20',
         'lexicon' => 'newspublisher:properties',
     ),
 );
