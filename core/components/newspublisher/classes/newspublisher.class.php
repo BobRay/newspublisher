@@ -60,6 +60,7 @@ class Newspublisher {
     protected $template;
     protected $tpls; // array of tpls
     protected $richtext; // sets richtext checkbox for new docs
+    protected $groups;
 
 
 /** NewsPublisher constructor
@@ -497,7 +498,7 @@ public function displayForm($show) {
 
     foreach($fields as $field) {
         if (in_array($field,$resourceFields)) { /* regular resource field */
-            $val = $this->resource->_fieldMeta[$field][phptype];
+            $val = $this->resource->_fieldMeta[$field]['phptype'];
             if ($field == 'hidemenu') {  /* correct schema error */
                 $val = 'boolean';
             }
@@ -853,7 +854,7 @@ public function saveResource() {
 
     /* correct timestamp $tv fields */
     foreach ($newFields as $field => $val) {
-        if ($this->resource->_fieldMeta[$field][phptype] == 'timestamp') {
+        if ($this->resource->_fieldMeta[$field]['phptype'] == 'timestamp') {
             $fields[$field] = $val . ' ' . $fields[$field . '_time'];
         }
     }
@@ -1021,7 +1022,7 @@ protected function _setGroups($resourceGroups, $parentObj = null) {
     $values = array();
     if ($resourceGroups == 'parent') {
 
-        $resourceGroups = $parentObj->getMany('ResourceGroupResources');
+        $resourceGroups = (array) $parentObj->getMany('ResourceGroupResources');
 
         if (! empty($resourceGroups)) { /* skip if parent doesn't belong to any resource groups */
             /* build $resourceGroups string from parent's groups */
