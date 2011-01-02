@@ -500,13 +500,13 @@ public function displayForm($show) {
     }
 
     /* get the resource field names */
-    $resourceFields = array_keys($this->resource->toArray());
+    $resourceFieldNames = array_keys($this->modx->getFields('modResource'));
 
     foreach($fields as $field) {
-        if (in_array($field,$resourceFields)) { /* regular resource field */
-            $val = $this->resource->_fieldMeta[$field]['phptype'];
+        if (in_array($field,$resourceFieldNames)) { /* regular resource field */
+            $fieldType = $this->resource->_fieldMeta[$field]['phptype'];
             if ($field == 'hidemenu') {  /* correct schema error */
-                $val = 'boolean';
+                $fieldType = 'boolean';
             }
             /* do introtext and content fields */
             if ($field == 'content') {
@@ -524,7 +524,7 @@ public function displayForm($show) {
                 </div>';
 
             } else {
-                switch($val) {
+                switch($fieldType) {
                     case 'string':
                         /* ToDo: $replace[] here */
                         $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->tpls['textTpl']);
@@ -553,7 +553,7 @@ public function displayForm($show) {
                         break;
                     case 'fulltext':
                         /* ToDo: $replace[] and generic template here */
-                        $inner .= '<br />' . $field . ' -- FULLTEXT' . $val . '<br />';
+                        $inner .= '<br />' . $field . ' -- FULLTEXT' . $fieldType . '<br />';
                         break;
                     case 'timestamp':
                         /* ToDo: $replace[] here */
@@ -564,7 +564,7 @@ public function displayForm($show) {
                         break;
                     default:
                         /* ToDo: Generic template here */
-                        $inner .= '<br />' . $field . ' -- OTHER' . $val . '<br />';
+                        $inner .= '<br />' . $field . ' -- OTHER' . $fieldType . '<br />';
                         break;
                 }
             }
