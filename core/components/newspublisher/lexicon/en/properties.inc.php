@@ -68,6 +68,7 @@ $_lang['np_booltpl_desc'] = '(optional) Tpl used for Yes/No resource fields (e.g
  $_lang['np_optionoutertpl_desc'] = '(optional) Tpl used for as a shell for checkbox, list, and radio option TVs.';
 $_lang['np_optiontpl_desc'] = '(optional) Tpl used for each option of checkbox and radio option TVs.';
 $_lang['np_listoptiontpl_desc'] = '(optional) Tpl used for each option of listbox TVs.';
+$_lang['np_aliasprefix_desc'] = '(optional) Prefix to be prepended to alias for new documents with an empty alias; alias will be aliasprefix - timestamp';
 
 
 

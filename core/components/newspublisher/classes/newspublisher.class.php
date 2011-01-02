@@ -876,9 +876,12 @@ public function saveResource() {
         /* ToDo: Move this to init()? */
         /* set alias name of document used to store articles */
         if (empty($fields['alias'])) { /* leave it alone if filled */
-            /* ToDo: Add aliasprefix property */
             if(!$this->aliasTitle) {
-                $alias = 'article-' . time();
+                if (! empty($this->props['aliasprefix'])) {
+                    $alias = $this->props['aliasprefix']. '-' . time();
+                } else {
+                    $alias = time();
+                }
             } else { /* use pagetitle */
                 $alias = $this->modx->stripTags($_POST['pagetitle']);
                 $alias=strtolower($alias);

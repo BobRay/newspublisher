@@ -17,6 +17,14 @@ $properties = array(
         'value' => '1',
         'lexicon' => 'newspublisher:properties',
     ),
+     array(
+        'name' => 'aliasprefix',
+        'desc' => 'np_aliasprefix_desc',
+        'type' => 'textfield',
+        'options' => '',
+        'value' => '1',
+        'lexicon' => 'newspublisher:properties',
+    ),
     array(
         'name' => 'badwords',
         'desc' => 'np_badwords_desc',
