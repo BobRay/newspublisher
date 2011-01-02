@@ -429,16 +429,16 @@ public function getTpls() {
 </div>';
 
     /* The next four Tpls are used for standard resource fields */
-    $this->tpls['textTpl'] = ! empty ($this->props['texttpl'])? $this->modx->getChunk($this->props['texttpl']) : '[[+[[+prefix]].error_[[+npx.fieldName]]]]
+    $this->tpls['textTpl'] = ! empty ($this->props['texttpl'])? $this->modx->getChunk($this->props['texttpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
             <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help:notags]]">[[%resource_[[+npx.fieldName]]]]: </label>
             <input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="60" />';
 
 
-    $this->tpls['intTpl'] = ! empty ($this->props['inttpl'])? $this->modx->getChunk($this->props['inttpl']) : '[[+[[+prefix]].error_[[+npx.fieldName]]]]
+    $this->tpls['intTpl'] = ! empty ($this->props['inttpl'])? $this->modx->getChunk($this->props['inttpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
             <label class="intfield" for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label>
             <input name="[[+npx.fieldName]]" class="int" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="3" />';
 
-    $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : '[[+[[+prefix]].error_[[+npx.fieldName]]]]
+    $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <div class="datepicker">
         <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]:</label>
         <div class = "np_date_hints"><span class = "np_date_hint"> [[%np_date_hint]]</span><span class ="np_time_hint">[[%np_time_hint]]</span></div>
@@ -446,24 +446,26 @@ public function getTpls() {
         <input type="text" class="[[+npx.fieldName]]_time" name="[[+npx.fieldName]]_time" id="[[+npx.fieldName]]_time" value="[[+[[+prefix]].[[+npx.fieldName]]_time]]" />
     </div>';
 
-    $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : '<fieldset class="np-tv-checkbox" title="[[%resource_[[+npx.fieldName]]_help]]"><legend>[[%resource_[[+npx.fieldName]]]]</legend>
+    $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : "\n" . '<fieldset class="np-tv-checkbox" title="[[%resource_[[+npx.fieldName]]_help]]"><legend>[[%resource_[[+npx.fieldName]]]]</legend>
     <input type="hidden" name = "[[+npx.fieldName]]" value = "" />
     <span class="option"><input class="checkbox" type="checkbox" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]" value="1" [[+checked]]/></span>
 </fieldset>';
 
     /* These are the tpls used for TVs of various types */
 
-    $this->tpls['optionOuterTpl'] = ! empty ($this->props['optionoutertpl'])? $this->modx->getChunk($this->props['optionoutertpl']) : "\n".  '<fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
+    $this->tpls['optionOuterTpl'] = ! empty ($this->props['optionoutertpl'])? $this->modx->getChunk($this->props['optionoutertpl']) : "\n".  '    <fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
         [[+npx.hidden]]
                 [[+npx.options]]
-            </fieldset>';
-            $this->tpls['listOuterTpl'] = ! empty ($this->props['listoutertpl'])? $this->modx->getChunk($this->props['listoutertpl']) : "\n".  '<fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
-                <select name="[[+npx.name]]" size="[[+npx.size]]" [[+npx.multiple]]>
-                    [[+npx.options]]
-                </select>
-            </fieldset>';
-            $this->tpls['optionTpl'] = ! empty ($this->props['optiontpl'])? $this->modx->getChunk($this->props['optiontpl']) : "\n". '    <span class="option"><input class="[[+npx.class]]" type="[[+npx.type]]" name="[[+npx.name]]" value="[[+npx.value]]" [[+npx.selected]] [[+npx.multiple]] />[[+npx.text]]</span>';
-            $this->tpls['listOptionTpl'] = ! empty ($this->props['listoptiontpl'])? $this->modx->getChunk($this->props['listoptiontpl']) : "\n". '    <option value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
+    </fieldset>';
+            $this->tpls['listOuterTpl'] = ! empty ($this->props['listoutertpl'])? $this->modx->getChunk($this->props['listoutertpl']) : "\n".  '    <fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
+        <select name="[[+npx.name]]" size="[[+npx.size]]" [[+npx.multiple]]>
+        [[+npx.options]]
+        </select>
+    </fieldset>';
+            $this->tpls['optionTpl'] = ! empty ($this->props['optiontpl'])? $this->modx->getChunk($this->props['optiontpl']) : "\n" .
+                    '        <span class="option"><input class="[[+npx.class]]" type="[[+npx.type]]" name="[[+npx.name]]" value="[[+npx.value]]" [[+npx.selected]][[+npx.multiple]]/>[[+npx.text]]</span>';
+            $this->tpls['listOptionTpl'] = ! empty ($this->props['listoptiontpl'])? $this->modx->getChunk($this->props['listoptiontpl']) :
+            "\n" . '            <option value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
 
 
     /* make sure we have all of them */
@@ -527,7 +529,7 @@ public function displayForm($show) {
                 switch($fieldType) {
                     case 'string':
                         /* ToDo: $replace[] here */
-                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->tpls['textTpl']);
+                        $inner .= str_replace('[[+npx.fieldName]]',$field,$this->tpls['textTpl']);
                         break;
 
                     case 'boolean':
@@ -549,7 +551,7 @@ public function displayForm($show) {
                         break;
                     case 'integer':
                         /* ToDo: $replace[] here */
-                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->tpls['intTpl']);
+                        $inner .= str_replace('[[+npx.fieldName]]',$field,$this->tpls['intTpl']);
                         break;
                     case 'fulltext':
                         /* ToDo: $replace[] and generic template here */
@@ -557,7 +559,7 @@ public function displayForm($show) {
                         break;
                     case 'timestamp':
                         /* ToDo: $replace[] here */
-                        $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$this->tpls['dateTpl']);
+                        $inner .= str_replace('[[+npx.fieldName]]',$field,$this->tpls['dateTpl']);
                         if (! $this->isPostBack) {
                             $this->_splitDate($field,$this->resource->get($field));
                         }
