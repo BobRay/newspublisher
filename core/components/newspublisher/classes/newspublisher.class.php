@@ -137,7 +137,7 @@ class Newspublisher {
                     $this->setError($this->modx->lexicon('np_view_permission_denied'));
                 }
                 if ($this->isPostBack) {
-                    /* str_replace to prevent showing of placeholders */
+                    /* str_replace to prevent rendering of placeholders */
                      $fs = array();
                      foreach($_POST as $k=>$v) {
                          $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
@@ -174,7 +174,7 @@ class Newspublisher {
              else store under current document */
              $this->parentId = !empty($this->props['parent']) ? intval($this->props['parent']):$this->modx->resource->get('id');
 
-            /* str_replace to prevent showing of placeholders */
+            /* str_replace to prevent rendering of placeholders */
              $fs = array();
              foreach($_POST as $k=>$v) {
                  $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
@@ -222,7 +222,7 @@ class Newspublisher {
        }
 
        /* inject NP CSS file */
-       /* empty but sent parameter means use no CSS file at all */
+       /* Empty but sent parameter means use no CSS file at all */
 
        if (empty($this->props['cssfile'])) { /* nothing sent - use default */
            $css = $this->assetsUrl . 'css/newspublisher.css';
@@ -260,7 +260,7 @@ class Newspublisher {
         $this->modx->toPlaceholder('rt_content_2', $ph, $this->prefix );
 
         /* set rich text summary field */
-        //$ph = ! empty($this->props['rtsummary']) ? 'MODX_RichTextWidget':'introtext';
+
         $ph = ! empty($this->props['rtsummary']) ? 'modx-richtext':'introtext';
         $this->modx->toPlaceholder('rt_summary_1', $ph, $this->prefix );
         $ph = ! empty($this->props['rtsummary']) ? 'modx-richtext':'introtext';
@@ -268,8 +268,7 @@ class Newspublisher {
 
         unset($ph);
        if ($this->props['initrte']) {
-            /* sets rich text content placeholders and includes necessary
-             js files */
+            /* set rich text content placeholders and includes necessary js files */
            $tinyPath = $this->modx->getOption('core_path').'components/tinymce/';
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
            $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/ext-all.js');
@@ -292,7 +291,7 @@ class Newspublisher {
                    $tinyproperties['language'] = $this->modx->getOption('fe_editor_lang',array(),$def);
                    $tinyproperties['frontend'] = true;
                    // $tinyproperties['selector'] = 'modx-richtext';
-                                       //$tinyproperties['selector'] = 'modx-richtext';//alternativ to 'frontend = true' you can use a selector for texareas
+                                       //$tinyproperties['selector'] = 'modx-richtext';//alternative to 'frontend = true' you can use a selector for texareas
                    unset($def);
                }
                $tiny->setProperties($tinyproperties);
@@ -407,7 +406,7 @@ protected function _setDefault($field,$parentId) {
  *  @return (bool) true on success, false if a non-empty tpl property
  *  is send and it fails to find the named chunk.
  */
-
+/* ToDo: implement readonly fields */
 public function getTpls() {
         $this->tpls = array();
 
@@ -655,8 +654,9 @@ protected function _displayTv($tvNameOrId) {
         if (empty($ph)) {
             $ph = $tv->get('default_text');
         }
-        if (stristr($ph,'@EVAL')) {
+        if (stristr($ph,'@EVAL') || stristr($_POST[$fields['name']],'@EVAL') || stristr($_POST[$fields['name'].'_time'], '@eval')) {
             $this->setError($this->modx->lexicon('np_no_evals'). $tv->get('name'));
+            return null;
         } else {
             $this->modx->toPlaceholder($fields['name'], $ph, $this->prefix );
         }
@@ -802,7 +802,7 @@ protected function _displayTv($tvNameOrId) {
 
             default:
                 /* ToDo: replace with $this->tpls[] */
-                $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
+                $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
                 break;
 
         }  /* end switch */
