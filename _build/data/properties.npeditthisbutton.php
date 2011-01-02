@@ -1,8 +1,7 @@
 <?php
 
-
-/**
- * Properties for npeditthisbutton
+ /**
+ * Properties for NpEditThisButton
  *
  * @package newspublisher
  * @subpackage build
@@ -46,7 +45,7 @@ $properties = array(
         'desc' => 'np_id_desc',
         'type' => 'numberfield',
         'options' => '',
-        'value' => '8',
+        'value' => '',
         'lexicon' => 'newspublisher:button',
     ),
     array(

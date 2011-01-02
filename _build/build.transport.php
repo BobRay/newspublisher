@@ -20,6 +20,8 @@ $sources= array (
     'build' => $root . '_build/',
     'source_core' => $root . 'core/components/newspublisher',
     'source_assets' => $root . 'assets/components/newspublisher',
+    'data' => $root . '_build/data/',
+    'docs' => $root . 'core/components/newspublisher/docs/',
 );
 unset($root);
 
@@ -44,60 +46,108 @@ $builder->registerNamespace('newspublisher',false,true,'{core_path}components/ne
 
 /* create snippet objects */
 
-$modx->log(xPDO::LOG_LEVEL_INFO,'Adding in snippet: Newspublisher'); flush();
-$snippet= $modx->newObject('modSnippet');
-$snippet->set('name', 'NewsPublisher');
-$snippet->set('description', '<strong>'.PKG_VERSION.'-'.PKG_RELEASE.'</strong> A front-end resource editing snippet for MODx Revolution');
-//$snippet->set('category', 0);
-$snippet->set('snippet', file_get_contents($sources['build'] . '/elements/newspublisher.snippet.php'));
-$properties = include $sources['build'].'data/properties.newspublisher.php';
-if (!is_array($properties)) $modx->log(modX::LOG_LEVEL_FATAL,'No properties returned for NewsPublisher.');
-$snippet->setProperties($properties);
-unset($properties);
+if (false) {
+    $modx->log(xPDO::LOG_LEVEL_INFO,'Adding in snippet: Newspublisher');
+    flush();
+    $snippet= $modx->newObject('modSnippet');
+    $snippet->set('name', 'NewsPublisher');
+    $snippet->set('description', '<strong>'.PKG_VERSION.'-'.PKG_RELEASE.'</strong> A front-end resource creation and editing snippet for MODx Revolution');
+    //$snippet->set('category', 0);
+    $snippet->set('snippet', file_get_contents($sources['build'] . '/elements/newspublisher.snippet.php'));
+    $properties = include $sources['build'].'data/properties.newspublisher.php';
+    if (!is_array($properties)) {
+        $modx->log(modX::LOG_LEVEL_FATAL, 'No properties returned for NewsPublisher.');
+    }
+    $snippet->setProperties($properties);
+    unset($properties);
 
 
-/* create a transport vehicle for the data object */
-$vehicle = $builder->createVehicle($snippet,array(
+    /* create a transport vehicle for the data object */
+    $vehicle = $builder->createVehicle($snippet,array(
+        xPDOTransport::PRESERVE_KEYS => false,
+        xPDOTransport::UPDATE_OBJECT => true,
+        xPDOTransport::UNIQUE_KEY => 'name',
+    ));
+    $vehicle->resolve('file',array(
+        'source' => $sources['source_core'],
+        'target' => "return MODX_CORE_PATH . 'components/';",
+    ));
+    $vehicle->resolve('file',array(
+        'source' => $sources['source_assets'],
+        'target' => "return MODX_ASSETS_PATH . 'components/';",
+    ));
+    $builder->putVehicle($vehicle);
+
+    /* create snippet objects */
+
+    $modx->log(xPDO::LOG_LEVEL_INFO,'Adding in snippet: NpEditThisButton');
+    flush();
+    $snippet= $modx->newObject('modSnippet');
+    $snippet->set('name', 'NpEditThisButton');
+    $snippet->set('description', '<strong>'.PKG_VERSION.'-'.PKG_RELEASE.'</strong> An edit button for NewsPublisher in MODx Revolution');
+    //$snippet->set('category', 0);
+    $snippet->set('snippet', file_get_contents($sources['build'] . '/elements/npeditthisbutton.snippet.php'));
+    $properties = include $sources['build'].'data/properties.npeditthisbutton.php';
+    if (!is_array($properties)) $modx->log(modX::LOG_LEVEL_FATAL,'No properties returned for NpEditThisButton.');
+    $snippet->setProperties($properties);
+    unset($properties);
+}
+
+
+/* create category */
+$category= $modx->newObject('modCategory');
+$category->set('id',1);
+$category->set('category','NewsPublisher');
+
+/* add snippets */
+$modx->log(modX::LOG_LEVEL_INFO,'Adding in snippets.');
+$snippets = include $sources['data'].'transport.snippets.php';
+if (is_array($snippets)) {
+    $category->addMany($snippets);
+} else { $modx->log(modX::LOG_LEVEL_FATAL,'Adding snippets failed.'); }
+
+/* add chunks - we'll need this later if tpls go into chunks */
+/*$modx->log(modX::LOG_LEVEL_INFO,'Adding in chunks.');
+$chunks = include $sources['data'].'transport.chunks.php';
+if (is_array($chunks)) {
+    $category->addMany($chunks);
+} else { $modx->log(modX::LOG_LEVEL_FATAL,'Adding chunks failed.'); }*/
+
+/* create category vehicle */
+$attr = array(
+    xPDOTransport::UNIQUE_KEY => 'category',
     xPDOTransport::PRESERVE_KEYS => false,
     xPDOTransport::UPDATE_OBJECT => true,
-    xPDOTransport::UNIQUE_KEY => 'name',
-));
+    xPDOTransport::RELATED_OBJECTS => true,
+    xPDOTransport::RELATED_OBJECT_ATTRIBUTES => array (
+        'Snippets' => array(
+            xPDOTransport::PRESERVE_KEYS => false,
+            xPDOTransport::UPDATE_OBJECT => true,
+            xPDOTransport::UNIQUE_KEY => 'name',
+        ),
+ /*       'Chunks' => array(
+            xPDOTransport::PRESERVE_KEYS => false,
+            xPDOTransport::UPDATE_OBJECT => true,
+            xPDOTransport::UNIQUE_KEY => 'name',
+        ),*/
+    )
+);
+$vehicle = $builder->createVehicle($category,$attr);
 $vehicle->resolve('file',array(
-    'source' => $sources['source_core'],
-    'target' => "return MODX_CORE_PATH . 'components/';",
-));
-$vehicle->resolve('file',array(
-    'source' => $sources['source_assets'],
-    'target' => "return MODX_ASSETS_PATH . 'components/';",
-));
+        'source' => $sources['source_core'],
+        'target' => "return MODX_CORE_PATH . 'components/';",
+    ));
+    $vehicle->resolve('file',array(
+        'source' => $sources['source_assets'],
+        'target' => "return MODX_ASSETS_PATH . 'components/';",
+    ));
+
 $builder->putVehicle($vehicle);
-
-/* create snippet objects */
-
-$modx->log(xPDO::LOG_LEVEL_INFO,'Adding in snippet: NpEditThisButton'); flush();
-$snippet= $modx->newObject('modSnippet');
-$snippet->set('name', 'NpEditThisButton');
-$snippet->set('description', '<strong>'.PKG_VERSION.'-'.PKG_RELEASE.'</strong> An edit button for NewsPublisher in MODx Revolution');
-//$snippet->set('category', 0);
-$snippet->set('snippet', file_get_contents($sources['build'] . '/elements/npeditthisbutton.snippet.php'));
-$properties = include $sources['build'].'data/properties.npeditthisbutton.php';
-if (!is_array($properties)) $modx->log(modX::LOG_LEVEL_FATAL,'No properties returned for NpEditThisButton.');
-$snippet->setProperties($properties);
-unset($properties);
-
-
-/* create a transport vehicle for the data object */
-$vehicle = $builder->createVehicle($snippet,array(
-    xPDOTransport::PRESERVE_KEYS => false,
-    xPDOTransport::UPDATE_OBJECT => true,
-    xPDOTransport::UNIQUE_KEY => 'name',
-));
-$builder->putVehicle($vehicle);
-
 /* now pack in the license file, readme.txt and setup options */
 $builder->setPackageAttributes(array(
     'license' => file_get_contents($sources['source_core'] . '/docs/license.txt'),
     'readme' => file_get_contents($sources['source_core'] . '/docs/readme.txt'),
+    'changelog' => file_get_contents($sources['docs'] . 'changelog.txt'),
 ));
 
 /* zip up the package */
