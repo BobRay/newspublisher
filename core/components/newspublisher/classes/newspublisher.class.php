@@ -417,7 +417,7 @@ public function getTpls() {
         [[!+[[+prefix]].errors_presubmit:ifnotempty=`[[!+[[+prefix]].errors_presubmit]]`]]
         [[!+[[+prefix]].errors_submit:ifnotempty=`[[!+[[+prefix]].errors_submit]]`]]
         [[!+[[+prefix]].errors:ifnotempty=`[[!+[[+prefix]].errors]]`]]
-        <form action="[[~[[*id]]]]" method="post">
+  <form action="[[~[[*id]]]]" method="post">
             <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
         [[+npx.insert]]
         <span class = "buttons">
@@ -425,17 +425,29 @@ public function getTpls() {
             <input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = \'[[+[[+prefix]].cancel_url]]\' " />
         </span>
         [[+[[+prefix]].post_stuff]]
-    </form>
+  </form>
 </div>';
 
     /* These Tpls are used for standard resource fields */
+    $this->tpls['contentTpl'] = ! empty ($this->props['contenttpl'])? $this->modx->getChunk($this->props['contenttpl']) : "\n" . '[[+[[+prefix]].error_content]]
+            <label for="content" title="[[%resource_content_help]]">[[%resource_content]]: </label>
+            <div class="[[+[[+prefix]].rt_content_1]]">
+                <textarea rows="[[+[[+prefix]].contentrows]]" cols="[[+[[+prefix]].contentcols]]" class="[[+[[+prefix]].rt_content_2]]" name="content" id="content">[[+[[+prefix]].content]]</textarea>
+            </div>';
+
+    $this->tpls['summaryTpl'] = ! empty ($this->props['summarytpl'])? $this->modx->getChunk($this->props['summarytpl']) : "\n" . '[[+[[+prefix]].error_introtext]]
+            <label for="introtext" title="[[%resource_summary_help]]">[[%resource_summary]]: </label>
+            <div class="[[+[[+prefix]].rt_summary_1]]">
+                <textarea  rows="[[+[[+prefix]].summaryrows]]" cols="[[+[[+prefix]].summarycols]]" class="[[+[[+prefix]].rt_summary_2]]" name="introtext" id="introtext">[[+[[+prefix]].introtext]]</textarea>
+            </div>';
+
     $this->tpls['textTpl'] = ! empty ($this->props['texttpl'])? $this->modx->getChunk($this->props['texttpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
-            <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help:notags]]">[[%resource_[[+npx.fieldName]]]]: </label>
-            <input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="60" />';
+    <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help:notags]]">[[%resource_[[+npx.fieldName]]]]: </label>
+        <input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="60" />';
 
     $this->tpls['intTpl'] = ! empty ($this->props['inttpl'])? $this->modx->getChunk($this->props['inttpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
-            <label class="intfield" for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label>
-            <input name="[[+npx.fieldName]]" class="int" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="3" />';
+    <label class="intfield" for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label>
+        <input name="[[+npx.fieldName]]" class="int" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="3" />';
 
     $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <div class="datepicker">
@@ -445,22 +457,21 @@ public function getTpls() {
         <input type="text" class="[[+npx.fieldName]]_time" name="[[+npx.fieldName]]_time" id="[[+npx.fieldName]]_time" value="[[+[[+prefix]].[[+npx.fieldName]]_time]]" />
     </div>';
 
-    $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : "\n" . '<fieldset class="np-tv-checkbox" title="[[%resource_[[+npx.fieldName]]_help]]"><legend>[[%resource_[[+npx.fieldName]]]]</legend>
-    <input type="hidden" name = "[[+npx.fieldName]]" value = "" />
-    <span class="option"><input class="checkbox" type="checkbox" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]" value="1" [[+npx.checked]]/></span>
-</fieldset>';
+    $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : "\n\n" . '    <fieldset class="np-tv-checkbox" title="[[%resource_[[+npx.fieldName]]_help]]"><legend>[[%resource_[[+npx.fieldName]]]]</legend>
+        <input type="hidden" name = "[[+npx.fieldName]]" value = "" />
+        <span class="option"><input class="checkbox" type="checkbox" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]" value="1" [[+npx.checked]]/></span>
+    </fieldset>';
 
     /* These Tpls are used for TVs of various types */
     $this->tpls['textareaTvTpl'] = ! empty ($this->props['textareatvtpl'])? $this->modx->getChunk($this->props['textareatvtpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
          <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]</label>
             <textarea rows="[[+npx.rows]]" cols="[[+npx.cols]]" class="[[+npx.class]]" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]">[[+[[+prefix]].[[+npx.fieldName]]]]</textarea>';
 
-
     $this->tpls['richtextTvTpl']  =  ! empty ($this->props['richtexttvtpl'])? $this->modx->getChunk($this->props['richtexttvtpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
-     <label title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]</label>
-                <div class="modx-richtext">
-                    <textarea rows="[[+npx.rows]]" cols="[[+npx.cols]]" class="modx-richtext" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]">[[+[[+prefix]].[[+npx.fieldName]]]]</textarea>
-                </div>';
+<label title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]</label>
+            <div class="modx-richtext">
+                <textarea rows="[[+npx.rows]]" cols="[[+npx.cols]]" class="modx-richtext" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]">[[+[[+prefix]].[[+npx.fieldName]]]]</textarea>
+            </div>';
 
     /* These are for the outer shell of listboxes, checkboxes, and radio options */
     $this->tpls['optionOuterTpl'] = ! empty ($this->props['optionoutertpl'])? $this->modx->getChunk($this->props['optionoutertpl']) : "\n".  '    <fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
@@ -474,11 +485,11 @@ public function getTpls() {
     </fieldset>';
 
     /* These are for the individual options in listboxes, checkboxes, and radio options */
-            $this->tpls['optionTpl'] = ! empty ($this->props['optiontpl'])? $this->modx->getChunk($this->props['optiontpl']) : "\n" .
-                    '        <span class="option"><input class="[[+npx.class]]" type="[[+npx.type]]" name="[[+npx.name]]" value="[[+npx.value]]" [[+npx.selected]][[+npx.multiple]]/>[[+npx.text]]</span>';
+    $this->tpls['optionTpl'] = ! empty ($this->props['optiontpl'])? $this->modx->getChunk($this->props['optiontpl']) : "\n" .
+            '        <span class="option"><input class="[[+npx.class]]" type="[[+npx.type]]" name="[[+npx.name]]" value="[[+npx.value]]" [[+npx.selected]][[+npx.multiple]]/>[[+npx.text]]</span>';
 
-            $this->tpls['listOptionTpl'] = ! empty ($this->props['listoptiontpl'])? $this->modx->getChunk($this->props['listoptiontpl']) :
-            "\n" . '            <option value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
+    $this->tpls['listOptionTpl'] = ! empty ($this->props['listoptiontpl'])? $this->modx->getChunk($this->props['listoptiontpl']) : "\n" .
+            '            <option value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
 
 
     /* make sure we have all of them */
@@ -525,69 +536,38 @@ public function displayForm($show) {
             }
             /* do introtext and content fields */
             if ($field == 'content') {
-                $inner .= "\n" . '[[+[[+prefix]].error_content]]
-                <label for="content" title="[[%resource_content_help]]">[[%resource_content]]: </label>
-                <div class="[[+[[+prefix]].rt_content_1]]">
-                    <textarea rows="[[+[[+prefix]].contentrows]]" cols="[[+[[+prefix]].contentcols]]" class="[[+[[+prefix]].rt_content_2]]" name="content" id="content">[[+[[+prefix]].content]]</textarea>
-                </div>';
-
+                $inner .= $this->tpls['contentTpl'];
             } else if ($field == 'introtext') {
-                $inner .= "\n" . '[[+[[+prefix]].error_introtext]]
-                <label for="introtext" title="[[%resource_summary_help]]">[[%resource_summary]]: </label>
-                <div class="[[+[[+prefix]].rt_summary_1]]">
-                    <textarea  rows="[[+[[+prefix]].summaryrows]]" cols="[[+[[+prefix]].summarycols]]" class="[[+[[+prefix]].rt_summary_2]]" name="introtext" id="introtext">[[+[[+prefix]].introtext]]</textarea>
-                </div>';
-
+                $inner .= $this->tpls['summaryTpl'];
             } else {
                 $replace = array();
                 $replace['[[+npx.fieldName]]'] = $field;
                 switch($fieldType) {
                     case 'string':
-                        /* ToDo: $replace[] here */
-                        //$inner .= str_replace('[[+npx.fieldName]]',$field,$this->tpls['textTpl']);
                         $inner .= $this->tpls['textTpl'];
                         break;
 
                     case 'boolean':
-                        // $t = $this->tpls['boolTpl'];
                         $inner .= $this->tpls['boolTpl'];
-                        /* ToDo: Simplify this with $replace[] */
                         if ($this->isPostBack) {
                             $checked = $_POST[$field];
                         } else {
                             $checked = $this->resource->get($field);
                         }
                         $replace ['[[+npx.checked]]'] = $checked? 'checked="checked"' : '';
-                        //if ($checked) {
-                        //    $t = str_replace('[[+checked]]','checked="checked"',$t);
-                        //} else {
-                        //    $t = str_replace('[[+checked]]','',$t);
-                       // }
-
-                        // $inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$t);
-                        //$inner .= "\n" . str_replace('[[+npx.fieldName]]',$field,$t);
-
                         break;
+
                     case 'integer':
-                        /* ToDo: $replace[] here */
-                        // $inner .= str_replace('[[+npx.fieldName]]',$field,$this->tpls['intTpl']);
                         $inner .= $this->tpls['intTpl'];
                         break;
-                    case 'fulltext':
-                        /* ToDo: $replace[] and generic template here */
-                        $inner .= '<br />' . $field . ' -- FULLTEXT' . $fieldType . '<br />';
-                        break;
+
                     case 'timestamp':
-                        /* ToDo: $replace[] here */
-                        // $inner .= str_replace('[[+npx.fieldName]]',$field,$this->tpls['dateTpl']);
                         $inner .= $this->tpls['dateTpl'];
                         if (! $this->isPostBack) {
                             $this->_splitDate($field,$this->resource->get($field));
                         }
                         break;
                     default:
-                        /* ToDo: Generic template here */
-                        // $inner .= '<br />' . $field . ' -- OTHER' . $fieldType . '<br />';
                         $inner .= $this->tpls['textTpl'];
                         break;
                 }
@@ -602,7 +582,7 @@ public function displayForm($show) {
             }
         }
     }
-    //$inner = str_replace('[[+prefix]]',$this->prefix,$inner);
+
     $formTpl = str_replace('[[+npx.insert]]',$inner,$this->tpls['outerTpl']);
     $formTpl = str_replace('[[+prefix]]',$this->prefix,$formTpl);
     //die ('<pre' . print_r($formTpl,true));
