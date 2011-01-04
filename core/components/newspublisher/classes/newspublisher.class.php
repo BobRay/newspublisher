@@ -880,20 +880,18 @@ public function saveResource() {
             }
         }
     }
-    $newFields = $_POST;
-    $fields = array_replace($oldFields, $newFields);
 
-    /* correct timestamp $tv fields */
-    foreach ($newFields as $field => $val) {
+    /* correct timestamp resource fields */
+    foreach ($_POST as $field => $val) {
         if ($this->resource->_fieldMeta[$field]['phptype'] == 'timestamp') {
-            if (empty($fields[$field])) {
-                unset($fields[$field]);
+            if (empty($_POST[$field])) {
+                unset($_POST[$field]);
             } else {
-                $fields[$field] = $val . ' ' . $fields[$field . '_time'];
+                $_POST[$field] = $val . ' ' . $_POST[$field . '_time'];
             }
         }
     }
-
+    $fields = array_merge($oldFields, $_POST);
     if (! $this->existing) { /* new document */
 
         /* ToDo: Move this to init()? */
@@ -924,28 +922,17 @@ public function saveResource() {
         $fields['editedby'] = '0';
 
         /* these *might* be in the $_POST array. Set them if not */
-        $fields['hidemenu'] = isset($newFields['hidemenu'])? $newFields['hidemenu']: $this->hidemenu;
-        $fields['template'] = isset ($newFields['template']) ? $newFields['template'] : $this->template;
-        $fields['parent'] = isset ($newFields['parent']) ? $$newFields['parent'] :$this->parentId;
-        $fields['searchable'] = isset ($newFields['searchable']) ? $newFields['searchable'] :$this->searchable;
-        $fields['cacheable'] = isset ($newFields['cacheable']) ? $newFields['cacheable'] :$this->cacheable;
+        $fields['hidemenu'] = isset($_POST['hidemenu'])? $_POST['hidemenu']: $this->hidemenu;
+        $fields['template'] = isset ($_POST['template']) ? $_POST['template'] : $this->template;
+        $fields['parent'] = isset ($_POST['parent']) ? $_POST['parent'] : $this->parentId;
+        $fields['searchable'] = isset ($_POST['searchable']) ? $_POST['searchable'] : $this->searchable;
+        $fields['cacheable'] = isset ($_POST['cacheable']) ? $_POST['cacheable'] : $this->cacheable;
+        $fields['richtext'] = isset ($_POST['richtext']) ? $_POST['richtext'] : $this->richtext;
         $fields['createdby'] = $this->modx->user->get('id');
         $fields['content']  = $this->header . $fields['content'] . $this->footer;
 
     }
   
-    /* ToDo: fix this */
-    /*
-    foreach($fields as $n=>$v) {
-        if(!empty($this->badwords)) $v = preg_replace($this->badwords,'[Filtered]',$v); // remove badwords
-        if (! is_array($v) ){
-            $v = $this->modx->stripTags(htmlspecialchars($v));
-        }
-        $content = str_replace('[[+'.$n.']]',$v,$content);
-    }
-    */
-
-
     /* Add TVs to $fields for processor */
     /* e.g. $fields[tv13] = $_POST['MyTv5'] */
     /* processor handles all types */
