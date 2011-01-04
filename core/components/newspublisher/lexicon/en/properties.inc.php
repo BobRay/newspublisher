@@ -70,6 +70,8 @@ $_lang['np_booltpl_desc'] = '(optional) Tpl used for Yes/No resource fields (e.g
 $_lang['np_optiontpl_desc'] = '(optional) Tpl used for each option of checkbox and radio option TVs.';
 $_lang['np_listoptiontpl_desc'] = '(optional) Tpl used for each option of listbox TVs.';
 $_lang['np_aliasprefix_desc'] = '(optional) Prefix to be prepended to alias for new documents with an empty alias; alias will be aliasprefix - timestamp';
+$_lang['np_intmaxlength_desc'] = '(optional) Max length for integer input fields; defaults to 10.';
+$_lang['np_textmaxlength_desc'] = '(optional) Max length for text input fields; defaults to 60.';
 
 
 

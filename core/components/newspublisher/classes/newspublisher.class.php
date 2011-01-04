@@ -62,6 +62,8 @@ class Newspublisher {
     protected $tpls; // array of tpls
     protected $richtext; // sets richtext checkbox for new docs
     protected $groups;
+    protected $intMaxlength; // max length for integer input fields
+    protected $textMaxlength; // max length for text input fields
 
 
 /** NewsPublisher constructor
@@ -205,6 +207,9 @@ class Newspublisher {
              }
              $this->header = !empty($this->props['headertpl']) ? $this->modx->getChunk($this->props['headertpl']) : '';
              $this->footer = !empty($this->props['footertpl']) ? $this->modx->getChunk($this->props['footertpl']):'';
+
+             $this->intMaxlength = !empty($this->props['intmaxlength'])? $this->props['intmaxlength'] : 10;
+             $this->textMaxlength = !empty($this->props['textmaxlength'])? $this->props['textmaxlength'] : 60;
 
 
 
@@ -440,7 +445,7 @@ public function getTpls() {
 
     $this->tpls['intTpl'] = ! empty ($this->props['inttpl'])? $this->modx->getChunk($this->props['inttpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <label class="intfield" for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]: </label>
-        <input name="[[+npx.fieldName]]" [[+npx.readonly]] class="int" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="6" />';
+        <input name="[[+npx.fieldName]]" [[+npx.readonly]] class="int" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="[[+npx.maxlength]]" />';
 
 /* ToDo: make int and text maxlen props */
     $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
@@ -448,7 +453,7 @@ public function getTpls() {
         <label for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]:</label>
         <div class = "np-date-hints"><span class = "np-date-hint"> [[%np_date_hint]]</span><span class ="np-time-hint">[[%np_time_hint]]</span></div>
         <input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="[[+npx.fieldName]]" name="[[+npx.fieldName]]" maxlength="10" readonly="readonly" value="[[+[[+prefix]].[[+npx.fieldName]]]]" />
-        <input type="text" class="[[+npx.fieldName]]_time" name="[[+npx.fieldName]]_time" id="[[+npx.fieldName]]_time" value="[[+[[+prefix]].[[+npx.fieldName]]_time]]" />
+        <input type="text" class="[[+npx.fieldName]]_time" name="[[+npx.fieldName]]_time" id="[[+npx.fieldName]]_time" maxlength="10" value="[[+[[+prefix]].[[+npx.fieldName]]_time]]" />
     </div>';
 
     $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : "\n\n" . '    <fieldset class="np-tv-checkbox" title="[[+npx.help]]"><legend>[[+npx.caption]]</legend>
@@ -534,7 +539,6 @@ public function displayForm($show) {
                 $fieldType = 'boolean';
             }
 
-            
             /* do content and introtext fields */
             if ($field == 'content') {
                 $replace['[[+npx.rows]]'] = '200';
@@ -559,6 +563,7 @@ public function displayForm($show) {
             } else {
                 switch($fieldType) {
                     case 'string':
+                        $replace['[[+npx.maxlength]]'] = $this->textMaxlength;
                         $inner .= $this->tpls['textTpl'];
                         break;
 
@@ -573,6 +578,7 @@ public function displayForm($show) {
                         break;
 
                     case 'integer':
+                        $replace['[[+npx.maxlength]]'] = $this->intMaxlength;
                         $inner .= $this->tpls['intTpl'];
                         break;
 
@@ -583,6 +589,7 @@ public function displayForm($show) {
                         }
                         break;
                     default:
+                        $replace['[[+npx.maxlength]]'] = $this->textMaxlength;
                         $inner .= $this->tpls['textTpl'];
                         break;
                 }
@@ -654,7 +661,7 @@ protected function _displayTv($tvNameOrId) {
     /* Build TV input code dynamically based on type */
     $tvType = $tv->get('type');
     $tvType = $tvType == 'option'? 'radio' : $tvType;
-    
+
     /* set TV to current value or default if not postBack */
     if (! $this->isPostBack ) {
         $ph = '';
@@ -691,10 +698,12 @@ protected function _displayTv($tvNameOrId) {
         case 'textbox':
         case 'email';
             $formTpl .= $this->tpls['textTpl'];
+            $replace['[[+npx.maxlength]]'] = $this->textMaxlength;
             break;
         case 'image';
             /* ToDo: image browser (someday) */
             $replace['[[+npx.help]]'] = $fields['description'];
+            $replace['[[+npx.maxlength]]'] = $this->textMaxlength;
             $formTpl .= $this->tpls['imageTpl'];
             break;
 
@@ -712,6 +721,11 @@ protected function _displayTv($tvNameOrId) {
             $replace['[[+npx.class]]'] = 'modx-richtext';
             $formTpl .= $this->tpls['textareaTpl'];
 
+            break;
+
+        case 'number':
+            $formTpl .= $this->tpls['intTpl'];
+            $replace['[[+npx.maxlength]]'] = $this->intMaxlength;
             break;
 
         /********* Options *********/

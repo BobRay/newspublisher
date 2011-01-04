@@ -101,11 +101,12 @@ div.newspublisher input.submit {
     width:8em;
 }
 div.newspublisher input.int {
-    width:5em;
+    width:6em;
 }
 input#id {
     background-color:#dcdcdc;
     color:gray;
+    width:4em;
 
 }
 div.newspublisher input.cancel {

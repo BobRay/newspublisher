@@ -443,6 +443,22 @@ $properties = array(
         'value' => '',
         'lexicon' => 'newspublisher:properties',
     ),
+    array(
+        'name' => 'textmaxlength',
+        'desc' => 'np_textmaxlength_desc',
+        'type' => 'numberfield',
+        'options' => '',
+        'value' => '',
+        'lexicon' => 'newspublisher:properties',
+    ),
+    array(
+        'name' => 'intmaxlength',
+        'desc' => 'np_intmaxlength_desc',
+        'type' => 'numberfield',
+        'options' => '',
+        'value' => '',
+        'lexicon' => 'newspublisher:properties',
+    ),
 );
 
 return $properties;
