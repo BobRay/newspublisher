@@ -295,7 +295,6 @@ class Newspublisher {
                    unset($def);
                }
                $tinyproperties['cleanup'] = true; /* prevents "bogus" bug */
-               /* ToDo: Make this and textarea width and height props */
                $tinyproperties['width'] = empty ($this->props['tinywidth'] )? '95%' : $this->props['tinywidth'];
                $tinyproperties['height'] = empty ($this->props['tinyheight'])? '400px' : $this->props['tinyheight'];
                
@@ -412,7 +411,7 @@ protected function _setDefault($field,$parentId) {
  *  @return (bool) true on success, false if a non-empty tpl property
  *  is send and it fails to find the named chunk.
  */
-/* ToDo: implement readonly fields */
+
 public function getTpls() {
         $this->tpls = array();
 
@@ -442,6 +441,7 @@ public function getTpls() {
     $this->tpls['intTpl'] = ! empty ($this->props['inttpl'])? $this->modx->getChunk($this->props['inttpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <label class="intfield" for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]: </label>
         <input name="[[+npx.fieldName]]" [[+npx.readonly]] class="int" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="6" />';
+
 /* ToDo: make int and text maxlen props */
     $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <div class="datepicker">
@@ -651,10 +651,6 @@ protected function _displayTv($tvNameOrId) {
     /* use TV's name as caption if caption is empty */
     $caption = empty($fields['caption'])? $fields['name'] : $fields['caption'];
 
-    /* create error placeholder for field */
-    /* ToDo: Remove this when error placeholder is in all tpls */
-    $formTpl .=  "\n" . "[[+{$this->prefix}.error_". $fields['name'] . ']]' . "\n";
-
     /* Build TV input code dynamically based on type */
     $tvType = $tv->get('type');
     $tvType = $tvType == 'option'? 'radio' : $tvType;
@@ -711,10 +707,8 @@ protected function _displayTv($tvNameOrId) {
             break;
         
         case 'richtext':
-            /* ToDo: replace with $this->tpls[] */
             $replace['[[+npx.rows]]'] = '200';
             $replace['[[+npx.cols]]'] = '600';
-            //$formTpl .= $this->tpls['richtextTvTpl'];
             $replace['[[+npx.class]]'] = 'modx-richtext';
             $formTpl .= $this->tpls['textareaTpl'];
 
@@ -745,7 +739,6 @@ protected function _displayTv($tvNameOrId) {
             $innerReplace['[[+npx.hidden]]'] = ($tvType == 'checkbox') ? '<input type="hidden" name="' . $fields['name'] . '[]" value="" />' : '';
             $innerReplace['[[+npx.class]]'] = 'np-tv-' . $tvType;
             $innerReplace['[[+npx.help]]'] = $fields['description'];
-            // $innerReplace['[[+npx.legend]]'] = $caption;
 
             /* Do outer TPl replacements */
             $formTpl = $this->strReplaceAssoc($innerReplace,$formTpl);
@@ -769,8 +762,7 @@ protected function _displayTv($tvNameOrId) {
             /* loop through options and set selections */
             foreach ($options as $option) {
 
-                /* if field is empty and not in $_POST, get the default value,
-                   else, use the  */
+                /* if field is empty and not in $_POST, get the default value */
                 if(empty($val) && !isset($_POST[$fields['name']])) {
                     $defaults = explode('||',$fields['default_text']);
                     $option = strtok($option,'=');
@@ -815,10 +807,6 @@ protected function _displayTv($tvNameOrId) {
 
             $formTpl = str_replace('[[+npx.options]]',$inner, $formTpl);
             break;
-
-            /*default:
-                $formTpl .= $this->tpls['textTpl'];
-                break;*/
 
     }  /* end switch */
 $formTpl = $this->strReplaceAssoc($replace,$formTpl);
@@ -905,7 +893,7 @@ public function saveResource() {
                 $alias = preg_replace('/\s+/', '-', $alias);
                 $alias = preg_replace('|-+|', '-', $alias);
                 $alias = trim($alias, '-');
-                //$alias = mysql_real_escape_string($alias);
+
             }
             $fields['alias'] = $alias;
         }
