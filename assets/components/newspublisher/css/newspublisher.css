@@ -1,6 +1,15 @@
 div.newspublisher {
-    margin-left:10em;
+    margin-left:0;
     font-family: arial, sans-serif;
+    padding:10em;
+    background-color:#eeeeee;
+}
+
+div.newspublisher img.np-image {
+    margin:0px 0px 0px 20px;
+    height:50px;
+    width:70px;
+    vertical-align:middle;
 }
 
 div.newspublisher label {
@@ -11,31 +20,44 @@ div.newspublisher label {
     display: block;
     font-weight: bold;
 }
-div.np_date_hints {
+div.np-date-hints {
     margin:0;
     padding:0;
 }
-span.np_date_hint {
+span.np-date-hint {
     margin: 1px 0px 3px 0px !important;
     padding: 0px;
 }
-span.np_time_hint {
+span.np-time-hint {
     margin: 1px 120px 3px 110px !important;
     padding: 0px;
 }
 
-div.newspublisher textarea {
+div.newspublisher textarea.textarea {
     font-family: arial, sans-serif;
-    width:60em;
+    width:95%;
     height:10em;
     display:block;
+}
+div.newspublisher textarea.textareamini {
+    font-family: arial, sans-serif;
+    width:55%;
+    height:5em;
+    display:block;
+}
+
+
+
+div.newspublisher form {
+
+    padding:20px 20px 10px 20px;
 }
 div.newspublisher span.buttons {
     display:block;
 }
 /* you can size a particular textarea or textarea (mini) TV
    by using its name (id) like this:
-div.newspublisher textarea#MyTv6 {
+textarea#MyTv6 {
     width:10em;
     height:5em;
 }
@@ -50,9 +72,10 @@ div.newspublisher legend {
 }
 div.newspublisher input {
     font-family: arial, sans-serif;
-    width:20em;
+    width:30em;
     display:inline;
 }
+
 div.newspublisher p.error {
     font-weight: bold;
     color: red;
@@ -78,6 +101,14 @@ div.newspublisher input.submit {
     padding:0;
     width:8em;
 }
+div.newspublisher input.int {
+    width:5em;
+}
+input#id {
+    background-color:#dcdcdc;
+    color:gray;
+
+}
 div.newspublisher input.cancel {
     display:inline;
     margin: 30px;
@@ -95,6 +126,7 @@ div.newspublisher fieldset {
      display: block;
     padding:5px 5px 10px 10px;
     margin:10px 0px 0px 0px;
+    background-color:white;
 }
 fieldset p {
   margin:0;

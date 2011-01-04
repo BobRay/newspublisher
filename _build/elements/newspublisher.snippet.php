@@ -104,6 +104,7 @@ Fix/add &allowAnyPost
     &fielderrortpl - (optional)
     &initrte     - '(optional) Initialize rich text editor; set this if there are any rich text fields; defaults to 0'
     &initdatepicker - (optional) Initialized the datepicker; set this if there are any date fields; defaults to '0'
+    &readonly    - (optional) Comma-separated list of fields that should be read only; does not work on option or richtext fields
 
 */
 

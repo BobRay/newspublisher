@@ -294,7 +294,12 @@ class Newspublisher {
                                        //$tinyproperties['selector'] = 'modx-richtext';//alternative to 'frontend = true' you can use a selector for texareas
                    unset($def);
                }
+               $tinyproperties['cleanup'] = true; /* prevents "bogus" bug */
+               /* ToDo: Make this and textarea width and height props */
+               $tinyproperties['width'] = '95%';
+               
                $tiny->setProperties($tinyproperties);
+
                $html = $tiny->initialize();
 
                $this->modx->regClientStartupScript($tiny->config['assetsUrl'].'jscripts/tiny_mce/langs/'.$tiny->properties['language'].'.js');
@@ -427,51 +432,40 @@ public function getTpls() {
         [[+[[+prefix]].post_stuff]]
   </form>
 </div>';
-
-    /* These Tpls are used for standard resource fields */
-    $this->tpls['contentTpl'] = ! empty ($this->props['contenttpl'])? $this->modx->getChunk($this->props['contenttpl']) : "\n" . '[[+[[+prefix]].error_content]]
-            <label for="content" title="[[%resource_content_help]]">[[%resource_content]]: </label>
-            <div class="[[+[[+prefix]].rt_content_1]]">
-                <textarea rows="[[+[[+prefix]].contentrows]]" cols="[[+[[+prefix]].contentcols]]" class="[[+[[+prefix]].rt_content_2]]" name="content" id="content">[[+[[+prefix]].content]]</textarea>
-            </div>';
-
-    $this->tpls['summaryTpl'] = ! empty ($this->props['summarytpl'])? $this->modx->getChunk($this->props['summarytpl']) : "\n" . '[[+[[+prefix]].error_introtext]]
-            <label for="introtext" title="[[%resource_summary_help]]">[[%resource_summary]]: </label>
-            <div class="[[+[[+prefix]].rt_summary_1]]">
-                <textarea  rows="[[+[[+prefix]].summaryrows]]" cols="[[+[[+prefix]].summarycols]]" class="[[+[[+prefix]].rt_summary_2]]" name="introtext" id="introtext">[[+[[+prefix]].introtext]]</textarea>
-            </div>';
+     /* ToDo: Move these into actual chunks */
 
     $this->tpls['textTpl'] = ! empty ($this->props['texttpl'])? $this->modx->getChunk($this->props['texttpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
-    <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help:notags]]">[[%resource_[[+npx.fieldName]]]]: </label>
-        <input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="60" />';
+    <label for="[[+npx.fieldName]]" [[+npx.readonly]] title="[[%resource_[[+npx.fieldName]]_help:notags]]">[[%resource_[[+npx.fieldName]]]]: </label>
+        <input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="[[+npx.maxlength]]" />';
 
     $this->tpls['intTpl'] = ! empty ($this->props['inttpl'])? $this->modx->getChunk($this->props['inttpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <label class="intfield" for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]: </label>
-        <input name="[[+npx.fieldName]]" class="int" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="3" />';
-
+        <input name="[[+npx.fieldName]]" [[+npx.readonly]] class="int" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="6" />';
+/* ToDo: make int and text maxlen props */
     $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <div class="datepicker">
         <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]:</label>
-        <div class = "np_date_hints"><span class = "np_date_hint"> [[%np_date_hint]]</span><span class ="np_time_hint">[[%np_time_hint]]</span></div>
+        <div class = "np-date-hints"><span class = "np-date-hint"> [[%np_date_hint]]</span><span class ="np-time-hint">[[%np_time_hint]]</span></div>
         <input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="[[+npx.fieldName]]" name="[[+npx.fieldName]]" maxlength="10" readonly="readonly" value="[[+[[+prefix]].[[+npx.fieldName]]]]" />
         <input type="text" class="[[+npx.fieldName]]_time" name="[[+npx.fieldName]]_time" id="[[+npx.fieldName]]_time" value="[[+[[+prefix]].[[+npx.fieldName]]_time]]" />
     </div>';
 
     $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : "\n\n" . '    <fieldset class="np-tv-checkbox" title="[[%resource_[[+npx.fieldName]]_help]]"><legend>[[%resource_[[+npx.fieldName]]]]</legend>
-        <input type="hidden" name = "[[+npx.fieldName]]" value = "" />
+        <input type="hidden" name="[[+npx.fieldName]]" value = "" />
         <span class="option"><input class="checkbox" type="checkbox" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]" value="1" [[+npx.checked]]/></span>
     </fieldset>';
 
-    /* These Tpls are used for TVs of various types */
-    $this->tpls['textareaTvTpl'] = ! empty ($this->props['textareatvtpl'])? $this->modx->getChunk($this->props['textareatvtpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
-         <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]</label>
-            <textarea rows="[[+npx.rows]]" cols="[[+npx.cols]]" class="[[+npx.class]]" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]">[[+[[+prefix]].[[+npx.fieldName]]]]</textarea>';
 
-    $this->tpls['richtextTvTpl']  =  ! empty ($this->props['richtexttvtpl'])? $this->modx->getChunk($this->props['richtexttvtpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
-<label title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]</label>
-            <div class="modx-richtext">
-                <textarea rows="[[+npx.rows]]" cols="[[+npx.cols]]" class="modx-richtext" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]">[[+[[+prefix]].[[+npx.fieldName]]]]</textarea>
-            </div>';
+    $this->tpls['textareaTpl'] = ! empty ($this->props['textareatvtpl'])? $this->modx->getChunk($this->props['textareatvtpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
+         <label for="[[+npx.fieldName]]" title="[[%resource_[[+npx.fieldName]]_help]]">[[%resource_[[+npx.fieldName]]]]</label>
+         <div class="[[+npx.class]]"><textarea rows="[[+npx.rows]]" cols="[[+npx.cols]]" class="[[+npx.class]]" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]">[[+[[+prefix]].[[+npx.fieldName]]]]</textarea></div>';
+
+
+      /* These Tpls are used for TVs of various types */
+    $this->tpls['imageTpl'] = ! empty ($this->props['imagetpl'])? $this->modx->getChunk($this->props['imagetpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
+    <label for="[[+npx.fieldName]]" title="[[+npx.help]]">[[%resource_[[+npx.fieldName]]]]: </label>
+        <input name="[[+npx.fieldName]]" class="image" id="[[+npx.fieldName]]" type="text" value="[[+[[+prefix]].[[+npx.fieldName]]]]" /><img class="np-image" alt="[[+npx.fieldName]]" src="[[+[[+prefix]].[[+npx.fieldName]]]]">';
+
 
     /* These are for the outer shell of listboxes, checkboxes, and radio options */
     $this->tpls['optionOuterTpl'] = ! empty ($this->props['optionoutertpl'])? $this->modx->getChunk($this->props['optionoutertpl']) : "\n".  '    <fieldset class="[[+npx.class]]" title="[[+npx.title]]"><legend>[[+npx.legend]]</legend>
@@ -489,7 +483,7 @@ public function getTpls() {
             '        <span class="option"><input class="[[+npx.class]]" type="[[+npx.type]]" name="[[+npx.name]]" value="[[+npx.value]]" [[+npx.selected]][[+npx.multiple]]/>[[+npx.text]]</span>';
 
     $this->tpls['listOptionTpl'] = ! empty ($this->props['listoptiontpl'])? $this->modx->getChunk($this->props['listoptiontpl']) : "\n" .
-            '            <option value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
+            '            <option class="listoption" value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
 
 
     /* make sure we have all of them */
@@ -500,7 +494,7 @@ public function getTpls() {
             $success = false;
         }
     }
-    
+
     return $success;
 }
 
@@ -529,16 +523,35 @@ public function displayForm($show) {
     $resourceFieldNames = array_keys($this->modx->getFields('modResource'));
 
     foreach($fields as $field) {
+        $replace['[[+npx.fieldName]]'] = $field ;
         if (in_array($field,$resourceFieldNames)) { /* regular resource field */
             $fieldType = $this->resource->_fieldMeta[$field]['phptype'];
             if ($field == 'hidemenu') {  /* correct schema error */
                 $fieldType = 'boolean';
             }
-            /* do introtext and content fields */
+
+            
+            /* do content and introtext fields */
             if ($field == 'content') {
-                $inner .= $this->tpls['contentTpl'];
+                $replace['[[+npx.rows]]'] = '200';
+                $replace['[[+npx.cols]]'] = '600';
+
+                if ($this->props['rtcontent']) {
+                    $replace['[[+npx.class]]'] = 'modx-richtext';
+                } else {
+                     $replace['[[+npx.class]]'] = 'content';
+                }
+                $inner .= $this->tpls['textareaTpl'];
             } else if ($field == 'introtext') {
-                $inner .= $this->tpls['summaryTpl'];
+                $replace['[[+npx.rows]]'] = '200';
+                $replace['[[+npx.cols]]'] = '600';
+
+                if ($this->props['rtsummary']) {
+                    $replace['[[+npx.class]]'] = 'modx-richtext';
+                } else {
+                     $replace['[[+npx.class]]'] = 'introtext';
+                }
+                $inner .= $this->tpls['textareaTpl'];
             } else {
                 $replace = array();
                 $replace['[[+npx.fieldName]]'] = $field;
@@ -572,7 +585,10 @@ public function displayForm($show) {
                         break;
                 }
             }
-            $inner = $this->strReplaceAssoc($replace, $inner);
+            /* ToD: add readonly to props */
+        $replace['[[+npx.readonly]]'] = ($field =='id') || in_array($field, $this->props['readonly'])? 'readonly="readonly"' : '';
+
+        $inner = $this->strReplaceAssoc($replace, $inner);
 
         } else {
             /* see if it's a TV */
@@ -662,6 +678,7 @@ protected function _displayTv($tvNameOrId) {
     $replace = array();
     $replace['[[%resource_[[+npx.fieldName]]_help]]'] = $fields['description'];
     $replace['[[%resource_[[+npx.fieldName]]]]'] = $caption;
+
     $replace['[[+npx.fieldName]]'] = $fields['name'];
     switch ($tvType) {
         case 'date':
@@ -671,31 +688,34 @@ protected function _displayTv($tvNameOrId) {
             }
             break;
 
+        default:
         case 'text':
         case 'textbox':
         case 'email';
+            $formTpl .= $this->tpls['textTpl'];
+            break;
         case 'image';
-            /* ToDo: replace with $this->tpls[] */
             /* ToDo: image browser (someday) */
-            $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' .                    $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
-
+            $replace['[[+npx.help]]'] = $fields['description'];
+            $formTpl .= $this->tpls['imageTpl'];
             break;
 
         case 'textarea':
         case 'textareamini':
-            $replace['[[+npx.rows]]'] = $tvType=='textarea'? 5 : 10;
-            $replace['[[+npx.cols]]'] = 80;
-            $formTpl .= $this->tpls['textareaTvTpl'];
-            $replace['[[+npx.class]]'] = $fields['name'];
+            $replace['[[+npx.cols]]'] = 200;
+            $replace['[[+npx.rows]]'] = 600;
+            $formTpl .= $this->tpls['textareaTpl'];
+            $replace['[[+npx.class]]'] = $tvType == 'textarea' ? 'textarea' : 'textareamini';
             break;
         
         case 'richtext':
             /* ToDo: replace with $this->tpls[] */
-            $replace['[[+npx.rows]]'] = 10;
-            $replace['[[+npx.cols]]'] = 80;
+            $replace['[[+npx.rows]]'] = '200';
+            $replace['[[+npx.cols]]'] = '600';
             //$formTpl .= $this->tpls['richtextTvTpl'];
-            $formTpl .= $this->tpls['textareaTvTpl'];
             $replace['[[+npx.class]]'] = 'modx-richtext';
+            $formTpl .= $this->tpls['textareaTpl'];
+
             break;
 
         /********* Options *********/
@@ -720,7 +740,7 @@ protected function _displayTv($tvNameOrId) {
                 $formTpl = $this->tpls['optionOuterTpl'];
             }
 
-            $innerReplace['[[+npx.hidden]]'] = ($tvType == 'checkbox') ? '<input type="hidden" name = "' . $fields['name'] . '[]" value="" />' : '';
+            $innerReplace['[[+npx.hidden]]'] = ($tvType == 'checkbox') ? '<input type="hidden" name="' . $fields['name'] . '[]" value="" />' : '';
             $innerReplace['[[+npx.class]]'] = 'np-tv-' . $tvType;
             $innerReplace['[[+npx.title]]'] = $fields['description'];
             $innerReplace['[[+npx.legend]]'] = $caption;
@@ -794,10 +814,9 @@ protected function _displayTv($tvNameOrId) {
             $formTpl = str_replace('[[+npx.options]]',$inner, $formTpl);
             break;
 
-            default:
-                /* ToDo: replace with $this->tpls[] */
-                $formTpl .= "\n" . '<label for="' . $fields['name']. '" title="'. $fields['description'] . '">'. $caption  . ' </label><input name="' . $fields['name'] . '" id="' . $fields['name'] . '" type="text" size="40" value="[[+' .$this->prefix .'.' . $fields['name'] . ']]" />';
-                break;
+            /*default:
+                $formTpl .= $this->tpls['textTpl'];
+                break;*/
 
     }  /* end switch */
 $formTpl = $this->strReplaceAssoc($replace,$formTpl);

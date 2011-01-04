@@ -55,6 +55,7 @@ $_lang['np_rtcontent_desc'] = '(optional) Use rich text for the content form fie
 $_lang['np_rtsummary_desc'] = '(optional) Use rich text for the summary (introtext) form field.';
 $_lang['np_searchable_desc'] = "(optional) Sets the flag to as to whether or not the new page is included in site searches; defaults to search_default System Setting for new resources; set to `Parent` to us parent's setting.";
 $_lang['np_show_desc'] = '(optional) Comma separated list of fields/tvs to show.';
+$_lang['np_readonly_desc'] = '(optional) Comma-separated list of fields that should be read only; does not work with option or textarea fields.';
 $_lang['np_template_desc'] = "(optional) Name of template to use for new document; set to `parent` to use parent's template; for `parent`, &parentid must be set; defaults to the default_template System Setting.";
 $_lang['np_contentrows_desc'] = '(optional) Number of rows for the content field.';
 $_lang['np_contentcols_desc'] = '(optional) Number of columns for the content field.';

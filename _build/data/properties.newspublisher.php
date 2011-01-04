@@ -419,6 +419,14 @@ $properties = array(
         'lexicon' => 'newspublisher:properties',
     ),
     array(
+        'name' => 'readonly',
+        'desc' => 'np_readonly_desc',
+        'type' => 'textfield',
+        'options' => '',
+        'value' => '',
+        'lexicon' => 'newspublisher:properties',
+    ),
+    array(
         'name' => 'summarycols',
         'desc' => 'np_summarycols_desc',
         'type' => 'numberfield',
