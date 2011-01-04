@@ -1,8 +1,13 @@
 div.newspublisher {
     margin-left:0;
     font-family: arial, sans-serif;
-    padding:10em;
+    padding: 2em 10em 4em 10em;
     background-color:#eeeeee;
+}
+
+div.newspublisher form {
+    margin: 0;
+    padding:20px 0px 10px 0px;
 }
 
 div.newspublisher img.np-image {
@@ -46,12 +51,6 @@ div.newspublisher textarea.textareamini {
     display:block;
 }
 
-
-
-div.newspublisher form {
-
-    padding:20px 20px 10px 20px;
-}
 div.newspublisher span.buttons {
     display:block;
 }

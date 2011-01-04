@@ -296,7 +296,8 @@ class Newspublisher {
                }
                $tinyproperties['cleanup'] = true; /* prevents "bogus" bug */
                /* ToDo: Make this and textarea width and height props */
-               $tinyproperties['width'] = '95%';
+               $tinyproperties['width'] = empty ($this->props['tinywidth'] )? '95%' : $this->props['tinywidth'];
+               $tinyproperties['height'] = empty ($this->props['tinyheight'])? '400px' : $this->props['tinyheight'];
                
                $tiny->setProperties($tinyproperties);
 
