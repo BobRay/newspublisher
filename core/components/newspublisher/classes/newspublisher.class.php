@@ -447,7 +447,6 @@ public function getTpls() {
     <label class="intfield" for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]: </label>
         <input name="[[+npx.fieldName]]" [[+npx.readonly]] class="int" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="[[+npx.maxlength]]" />';
 
-/* ToDo: make int and text maxlen props */
     $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <div class="datepicker">
         <label for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]:</label>
@@ -873,6 +872,14 @@ public function saveResource() {
             }
     }
     $oldFields = $this->resource->toArray();
+
+    if (!empty($this->badwords)) {
+        foreach($_POST as $field=>$val) {
+            if (! is_array($val)) {
+                $_POST[$field] = preg_replace($this->badwords,'[Filtered]',$val); // remove badwords
+            }
+        }
+    }
     $newFields = $_POST;
     $fields = array_replace($oldFields, $newFields);
 
@@ -884,7 +891,6 @@ public function saveResource() {
             } else {
                 $fields[$field] = $val . ' ' . $fields[$field . '_time'];
             }
-
         }
     }
 
