@@ -77,7 +77,7 @@ if (is_array($snippets)) {
     $category->addMany($snippets);
 } else { $modx->log(modX::LOG_LEVEL_FATAL,'Adding snippets failed.'); }
 
-/* add chunks - we'll need this later if tpls go into chunks */
+/* add chunks  */
 $modx->log(modX::LOG_LEVEL_INFO,'Adding in chunks.');
 $chunks = include $sources['data'].'transport.chunks.php';
 if (is_array($chunks)) {
