@@ -546,6 +546,9 @@ class Newspublisher {
                             break;
 
                         case 'timestamp':
+                            if (! $this->props['initdatepicker']) {
+                                $this->setError($this->modx->lexicon('np_no_datepicker') . $field);
+                            }
                             $inner .= $this->tpls['dateTpl'];
                             if (! $this->isPostBack) {
                                 $this->_splitDate($field,$this->resource->get($field));
@@ -650,6 +653,9 @@ class Newspublisher {
         $replace['[[+npx.fieldName]]'] = $fields['name'];
         switch ($tvType) {
             case 'date':
+                if (! $this->props['initdatepicker']) {
+                    $this->setError($this->modx->lexicon('np_no_datepicker') . $fields['name']);
+                }
                 $formTpl .= $this->tpls['dateTpl'];
                 if (! $this->isPostBack) {
                     $this->_splitDate($fields['name'], $tv->renderOutput());
