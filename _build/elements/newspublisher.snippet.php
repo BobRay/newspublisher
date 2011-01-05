@@ -104,7 +104,8 @@ Fix/add &allowAnyPost
     &initdatepicker - (optional) Initialized the datepicker; set this if there are any date fields; defaults to '0'
     &readonly    - (optional) Comma-separated list of fields that should be read only; does not work on option or richtext fields
     &intmaxlength- (optional) Max length for integer input fields; default: 10
-    &textmaxlength- optional) Max length for text input fields; default 60
+    &textmaxlength- (optional) Max length for text input fields; default 60
+    $hoverhelp    - (optional) Show help when hovering over field caption: default `1`
 
 */
 

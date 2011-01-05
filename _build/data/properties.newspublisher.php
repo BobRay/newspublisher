@@ -459,6 +459,14 @@ $properties = array(
         'value' => '',
         'lexicon' => 'newspublisher:properties',
     ),
+    array(
+        'name' => 'hoverhelp',
+        'desc' => 'np_hoverhelp_desc',
+        'type' => 'combo-boolean',
+        'options' => '',
+        'value' => '1',
+        'lexicon' => 'newspublisher:properties',
+    ),
 );
 
 return $properties;

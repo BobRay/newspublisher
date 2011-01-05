@@ -539,7 +539,7 @@ public function displayForm($show) {
         $replace = array();
         if (in_array($field,$resourceFieldNames)) { /* regular resource field */
 
-            $replace['[[+npx.help]]'] = '[[%resource_' . $field . '_help:notags]]';
+            $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? '[[%resource_' . $field . '_help:notags]]' : '';
             $replace['[[+npx.caption]]'] = '[[%resource_' . $field . ']]';
             $fieldType = $this->resource->_fieldMeta[$field]['phptype'];
             if ($field == 'hidemenu') {  /* correct schema error */
@@ -688,7 +688,7 @@ protected function _displayTv($tvNameOrId) {
     }
 
     $replace = array();
-    $replace['[[+npx.help]]'] = $fields['description'];
+    $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? $fields['description'] :'';
     $replace['[[+npx.caption]]'] = $caption;
 
     $replace['[[+npx.fieldName]]'] = $fields['name'];
@@ -709,7 +709,7 @@ protected function _displayTv($tvNameOrId) {
             break;
         case 'image';
             /* ToDo: image browser (someday) */
-            $replace['[[+npx.help]]'] = $fields['description'];
+            $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? $fields['description'] : '';
             $replace['[[+npx.maxlength]]'] = $this->textMaxlength;
             $formTpl .= $this->tpls['imageTpl'];
             break;
@@ -759,7 +759,7 @@ protected function _displayTv($tvNameOrId) {
 
             $innerReplace['[[+npx.hidden]]'] = ($tvType == 'checkbox') ? '<input type="hidden" name="' . $fields['name'] . '[]" value="" />' : '';
             $innerReplace['[[+npx.class]]'] = 'np-tv-' . $tvType;
-            $innerReplace['[[+npx.help]]'] = $fields['description'];
+            $innerReplace['[[+npx.help]]'] = $this->props['hoverhelp'] ? $fields['description'] : '';
 
             /* Do outer TPl replacements */
             $formTpl = $this->strReplaceAssoc($innerReplace,$formTpl);
