@@ -9,6 +9,16 @@ div.newspublisher form {
     margin: 0;
     padding:20px 0px 10px 0px;
 }
+textarea#content {
+    width:95%;
+    height: 400px;
+}
+
+textarea#introtext {
+    width: 95%;
+    height: 100px;
+}
+
 
 div.newspublisher img.np-image {
     margin:0px 0px 0px 20px;
