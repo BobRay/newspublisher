@@ -497,7 +497,12 @@ class Newspublisher {
                     $replace['[[+npx.cols]]'] = '600';
 
                     if ($this->props['rtcontent']) {
-                        $replace['[[+npx.class]]'] = 'modx-richtext';
+                        if($this->props['initrte']) {
+                            $replace['[[+npx.class]]'] = 'modx-richtext';
+                        } else {
+                            $this->setError($this->modx->lexicon('np_no_rte') . $field);
+                            $replace['[[+npx.class]]'] = 'content';
+                        }
                     } else {
                          $replace['[[+npx.class]]'] = 'content';
                     }
@@ -507,7 +512,13 @@ class Newspublisher {
                     $replace['[[+npx.cols]]'] = '600';
 
                     if ($this->props['rtsummary']) {
-                        $replace['[[+npx.class]]'] = 'modx-richtext';
+                        if($this->props['initrte']) {
+                            $replace['[[+npx.class]]'] = 'modx-richtext';
+                        } else {
+                            $this->setError($this->modx->lexicon('np_no_rte') . $field);
+                            $replace['[[+npx.class]]'] = 'introtext';
+                        }
+
                     } else {
                          $replace['[[+npx.class]]'] = 'introtext';
                     }
@@ -670,7 +681,12 @@ class Newspublisher {
             case 'richtext':
                 $replace['[[+npx.rows]]'] = '200';
                 $replace['[[+npx.cols]]'] = '600';
-                $replace['[[+npx.class]]'] = 'modx-richtext';
+                if ($this->props['initrte']) {
+                    $replace['[[+npx.class]]'] = 'modx-richtext';
+                } else {
+                    $this->setError($this->modx->lexicon('np_no_rte') . $fields['name']);
+                    $replace['[[+npx.class]]'] = 'textarea';
+                }
                 $formTpl .= $this->tpls['textareaTpl'];
 
                 break;
