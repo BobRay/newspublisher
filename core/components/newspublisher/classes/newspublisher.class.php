@@ -26,7 +26,7 @@
  * creating resources. Rich text editing is available for text fields
  * and rich text template variables.
  *
- * Refactored for OOP and Revolution by Bob Ray, 11/2010
+ * Refactored for OOP and Revolution by Bob Ray, January, 2011
  * The Newspublisher class contains all functions relating to NewsPublisher's
  * operation.
  */
@@ -66,20 +66,20 @@ class Newspublisher {
     protected $textMaxlength; // max length for text input fields
 
 
-/** NewsPublisher constructor
- * 
- * @access public
- * @param (reference object) $modx - modx object
- * @param (reference array) $props - scriptProperties array.
- */
+    /** NewsPublisher constructor
+     *
+     * @access public
+     * @param (reference object) $modx - modx object
+     * @param (reference array) $props - scriptProperties array.
+     */
 
     public function __construct(&$modx, &$props) {
         $this->modx =& $modx;
         $this->props =& $props;
         /* NP paths; Set the np. System Settings only for development */
-        $this->corePath = $this->modx->getOption('np.core_path',null,MODX_CORE_PATH.'components/newspublisher/');
-        $this->assetsPath = $this->modx->getOption('np.assets_path',null,MODX_ASSETS_PATH.'components/newspublisher/');
-        $this->assetsUrl = $this->modx->getOption('np.assets_url',null,MODX_ASSETS_URL.'components/newspublisher/');
+        $this->corePath = $this->modx->getOption('np.core_path', null, MODX_CORE_PATH . 'components/newspublisher/');
+        $this->assetsPath = $this->modx->getOption('np.assets_path', null, MODX_ASSETS_PATH . 'components/newspublisher/');
+        $this->assetsUrl = $this->modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/');
     }
 
 /** Sets Postback status
@@ -113,22 +113,25 @@ class Newspublisher {
     public function init($context) {
 
         switch ($context) {
-            case 'mgr': break;
+            case 'mgr':
+                break;
             case 'web':
             default:
-                $language = ! empty($this->props['language']) ? $this->props['language'] . ':' : '';
-                $this->modx->lexicon->load($language.'newspublisher:default');
+                $language = !empty($this->props['language'])
+                        ? $this->props['language'] . ':' : '';
+                $this->modx->lexicon->load($language . 'newspublisher:default');
                 break;
         }
         $this->prefix = $this->props['prefix'];
         /* see if we're editing an existing doc */
         $this->existing = false;
-        if (isset($_POST['np_existing']) && $_POST['np_existing'] == 'true' ) {
-            $this->existing = is_numeric($_POST['np_doc_id'])? $_POST['np_doc_id'] : false;
+        if (isset($_POST['np_existing']) && $_POST['np_existing'] == 'true') {
+            $this->existing = is_numeric($_POST['np_doc_id'])
+                    ? $_POST['np_doc_id'] : false;
         }
 
         /* see if it's a repost */
-        $this->setPostback( isset($_POST['hidSubmit']) && $_POST['hidSubmit'] == 'true');
+        $this->setPostback(isset($_POST['hidSubmit']) && $_POST['hidSubmit'] == 'true');
 
         if($this->existing) {
 
@@ -239,7 +242,7 @@ class Newspublisher {
 
        if (empty($this->props['cssfile'])) { /* nothing sent - use default */
            $css = $this->assetsUrl . 'css/newspublisher.css';
-       } else if (empty($this->props['cssfile']) ) { /* empty param -- no css file */
+       } elseif (empty($this->props['cssfile']) ) { /* empty param -- no css file */
            $css = false;
        } else {  /* set but not empty -- use it */
            $css = $this->assetsUrl . 'components/newspublisher/css/' . $this->props['cssfile'];
@@ -362,17 +365,17 @@ protected function _setDefault($field,$parentId) {
         if ($prop === '1' || $prop === '0') {
             $retVal = $prop;
 
-        } else if ($prop == 'parent' || $prop === 'Parent') {
+        } elseif ($prop == 'parent' || $prop === 'Parent') {
             if ($field == 'groups') {
                 $groupString = $this->_setGroups($prop, $this->parentObj);
                 $retVal = $groupString;
                 unset($groupString);
             } else {
-                    $retVal = $this->parentObj->get($field);
+                $retVal = $this->parentObj->get($field);
             }
-        } else if ($field == 'groups') {
-                /* ToDo: Sanity Check groups here (or in _setGroups() ) */
-                $retVal = $this->_setGroups($prop);
+        } elseif ($field == 'groups') {
+            /* ToDo: Sanity Check groups here (or in _setGroups() ) */
+            $retVal = $this->_setGroups($prop);
         }
     } else { /* not 1, 0, or parent; use system default except for groups */
         switch($field) {
@@ -429,96 +432,17 @@ public function getTpls() {
         $this->tpls = array();
 
         /* this is the outer Tpl for the whole page */
-        $this->tpls['outerTpl'] = !empty ($this->props['outertpl'])? $this->modx->getChunk($this->props['outertpl']): $this->modx->getChunk('npOuterTpl');
-         /*: '<div class="newspublisher">
-        <h2>[[%np_main_header]]</h2>
-        [[!+[[+prefix]].error_header:ifnotempty=`<h3>[[!+[[+prefix]].error_header]]</h3>`]]
-        [[!+[[+prefix]].errors_presubmit:ifnotempty=`[[!+[[+prefix]].errors_presubmit]]`]]
-        [[!+[[+prefix]].errors_submit:ifnotempty=`[[!+[[+prefix]].errors_submit]]`]]
-        [[!+[[+prefix]].errors:ifnotempty=`[[!+[[+prefix]].errors]]`]]
-  <form action="[[~[[*id]]]]" method="post">
-            <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
-        [[+npx.insert]]
-        <span class = "buttons">
-            <input class="submit" type="submit" name="Submit" value="Submit" />
-            <input type="button" class="cancel" name="Cancel" value="Cancel" onclick="window.location = \'[[+[[+prefix]].cancel_url]]\' " />
-        </span>
-        [[+[[+prefix]].post_stuff]]
-  </form>
-</div>';*/
-     /* ToDo: Move these into actual chunks */
-
+    $this->tpls['outerTpl'] = !empty ($this->props['outertpl'])? $this->modx->getChunk($this->props['outertpl']): $this->modx->getChunk('npOuterTpl');
     $this->tpls['textTpl'] = ! empty ($this->props['texttpl'])? $this->modx->getChunk($this->props['texttpl']) : $this->modx->getChunk('npTextTpl');
-
-    /*"\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
-    <label for="[[+npx.fieldName]]" [[+npx.readonly]] title="[[+npx.help]]">[[+npx.caption]]: </label>
-        <input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="[[+npx.maxlength]]" />';*/
-
     $this->tpls['intTpl'] = ! empty ($this->props['inttpl'])? $this->modx->getChunk($this->props['inttpl']) : $this->modx->getChunk('npIntTpl');
-
-    /*"\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
-    <label class="intfield" for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]: </label>
-        <input name="[[+npx.fieldName]]" [[+npx.readonly]] class="int" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="[[+npx.maxlength]]" />';*/
-
     $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : $this->modx->getChunk('npDateTpl');
-     /*"\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
-    <div class="datepicker">
-        <label for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]:</label>
-        <div class = "np-date-hints"><span class = "np-date-hint"> [[%np_date_hint]]</span><span class ="np-time-hint">[[%np_time_hint]]</span></div>
-        <input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="[[+npx.fieldName]]" name="[[+npx.fieldName]]" maxlength="10" readonly="readonly" value="[[+[[+prefix]].[[+npx.fieldName]]]]" />
-        <input type="text" class="[[+npx.fieldName]]_time" name="[[+npx.fieldName]]_time" id="[[+npx.fieldName]]_time" maxlength="10" value="[[+[[+prefix]].[[+npx.fieldName]]_time]]" />
-    </div>';*/
-
     $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : $this->modx->getChunk('npBoolTpl');
-
-    /*"\n\n" . '    <fieldset class="np-tv-checkbox" title="[[+npx.help]]"><legend>[[+npx.caption]]</legend>
-        <input type="hidden" name="[[+npx.fieldName]]" value = "" />
-        <span class="option"><input class="checkbox" type="checkbox" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]" value="1" [[+npx.checked]]/></span>
-    </fieldset>';*/
-
-
     $this->tpls['textareaTpl'] = ! empty ($this->props['textareatvtpl'])? $this->modx->getChunk($this->props['textareatvtpl']) : $this->modx->getChunk('npTextareaTpl');
-
-    /*"\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
-         <label for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]</label>
-         <div class="[[+npx.class]]"><textarea rows="[[+npx.rows]]" cols="[[+npx.cols]]" class="[[+npx.class]]" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]">[[+[[+prefix]].[[+npx.fieldName]]]]</textarea></div>';*/
-
-
-      /* These Tpls are used for TVs of various types */
     $this->tpls['imageTpl'] = ! empty ($this->props['imagetpl'])? $this->modx->getChunk($this->props['imagetpl']) : $this->modx->getChunk('npImageTpl');
-
-    /*"\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
-    <label for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]: </label>
-        <input name="[[+npx.fieldName]]" class="image" id="[[+npx.fieldName]]" type="text" value="[[+[[+prefix]].[[+npx.fieldName]]]]" /><img class="np-image" alt="[[+npx.fieldName]]" src="[[+[[+prefix]].[[+npx.fieldName]]]]" />';*/
-
-
-    /* These are for the outer shell of listboxes, checkboxes, and radio options */
     $this->tpls['optionOuterTpl'] = ! empty ($this->props['optionoutertpl'])? $this->modx->getChunk($this->props['optionoutertpl']) : $this->modx->getChunk('npOptionOuterTpl');
-
-    /*"\n".  '    <fieldset class="[[+npx.class]]" title="[[+npx.help]]"><legend>[[+npx.caption]]</legend>
-        [[+npx.hidden]]
-                [[+npx.options]]
-    </fieldset>';*/
-
-            $this->tpls['listOuterTpl'] = ! empty ($this->props['listoutertpl'])? $this->modx->getChunk($this->props['listoutertpl']) : $this->modx->getChunk('npListOuterTpl');
-            
-            /*"\n".  '    <fieldset class="[[+npx.class]]" title="[[+npx.help]]"><legend>[[+npx.caption]]</legend>
-        <select name="[[+npx.name]]" size="[[+npx.size]]" [[+npx.multiple]]>
-        [[+npx.options]]
-        </select>
-    </fieldset>';*/
-
-    /* These are for the individual options in listboxes, checkboxes, and radio options */
+    $this->tpls['listOuterTpl'] = ! empty ($this->props['listoutertpl'])? $this->modx->getChunk($this->props['listoutertpl']) : $this->modx->getChunk('npListOuterTpl');
     $this->tpls['optionTpl'] = ! empty ($this->props['optiontpl'])? $this->modx->getChunk($this->props['optiontpl']) : $this->modx->getChunk('npOptionTpl');
-
-    /* "\n" .
-            '        <span class="option"><input class="[[+npx.class]]" type="[[+npx.type]]" name="[[+npx.name]]" value="[[+npx.value]]" [[+npx.selected]][[+npx.multiple]]/>[[+npx.text]]</span>';*/
-
     $this->tpls['listOptionTpl'] = ! empty ($this->props['listoptiontpl'])? $this->modx->getChunk($this->props['listoptiontpl']) : $this->modx->getChunk('npListOptionTpl');
-
-    /*"\n" .
-            '            <option class="listoption" value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';*/
-
 
     /* make sure we have all of them */
     $success = true;
@@ -1227,32 +1151,5 @@ public function validate($errorTpl) {
 
 
 } /* end class */
-
-/* array_replace function for pre PHP 5.3 */
-if (!function_exists('array_replace'))
-{
-  function array_replace( array &$array, array &$array1 )
-  {
-    $args = func_get_args();
-    $count = func_num_args();
-
-    for ($i = 0; $i < $count; ++$i) {
-      if (is_array($args[$i])) {
-        foreach ($args[$i] as $key => $val) {
-          $array[$key] = $val;
-        }
-      }
-      else {
-        trigger_error(
-          __FUNCTION__ . '(): Argument #' . ($i+1) . ' is not an array',
-          E_USER_WARNING
-        );
-        return NULL;
-      }
-    }
-
-    return $array;
-  }
-}
 
 ?>
