@@ -65,54 +65,6 @@ $builder->registerNamespace('newspublisher',false,true,'{core_path}components/ne
 
 /* create snippet objects */
 
-if (false) {
-    $modx->log(xPDO::LOG_LEVEL_INFO,'Adding in snippet: Newspublisher');
-    flush();
-    $snippet= $modx->newObject('modSnippet');
-    $snippet->set('name', 'NewsPublisher');
-    $snippet->set('description', '<strong>'.PKG_VERSION.'-'.PKG_RELEASE.'</strong> A front-end resource creation and editing snippet for MODx Revolution');
-    //$snippet->set('category', 0);
-    $snippet->set('snippet', file_get_contents($sources['build'] . '/elements/newspublisher.snippet.php'));
-    $properties = include $sources['build'].'data/properties.newspublisher.php';
-    if (!is_array($properties)) {
-        $modx->log(modX::LOG_LEVEL_FATAL, 'No properties returned for NewsPublisher.');
-    }
-    $snippet->setProperties($properties);
-    unset($properties);
-
-
-    /* create a transport vehicle for the data object */
-    $vehicle = $builder->createVehicle($snippet,array(
-        xPDOTransport::PRESERVE_KEYS => false,
-        xPDOTransport::UPDATE_OBJECT => true,
-        xPDOTransport::UNIQUE_KEY => 'name',
-    ));
-    $vehicle->resolve('file',array(
-        'source' => $sources['source_core'],
-        'target' => "return MODX_CORE_PATH . 'components/';",
-    ));
-    $vehicle->resolve('file',array(
-        'source' => $sources['source_assets'],
-        'target' => "return MODX_ASSETS_PATH . 'components/';",
-    ));
-    $builder->putVehicle($vehicle);
-
-    /* create snippet objects */
-
-    $modx->log(xPDO::LOG_LEVEL_INFO,'Adding in snippet: NpEditThisButton');
-    flush();
-    $snippet= $modx->newObject('modSnippet');
-    $snippet->set('name', 'NpEditThisButton');
-    $snippet->set('description', '<strong>'.PKG_VERSION.'-'.PKG_RELEASE.'</strong> An edit button for NewsPublisher in MODx Revolution');
-    //$snippet->set('category', 0);
-    $snippet->set('snippet', file_get_contents($sources['build'] . '/elements/npeditthisbutton.snippet.php'));
-    $properties = include $sources['build'].'data/properties.npeditthisbutton.php';
-    if (!is_array($properties)) $modx->log(modX::LOG_LEVEL_FATAL,'No properties returned for NpEditThisButton.');
-    $snippet->setProperties($properties);
-    unset($properties);
-}
-
-
 /* create category */
 $category= $modx->newObject('modCategory');
 $category->set('id',1);
