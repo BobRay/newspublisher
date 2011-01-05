@@ -2,10 +2,29 @@
 /**
  * NewsPublisher
  *
- * @package NewsPublisher
- * @version 1.0.0
- * @release Beta1
- * @author Bob Ray <http://bobsguides.com>
+ * Copyright 2010 by Jason Coward <jason@modxcms.com> and Shaun McCormick
+ * <shaun@modxcms.com>
+ *
+ * NewsPublisher is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * NewsPublisher is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * NewsPublisher; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ * @package newspublisher
+ */
+/**
+ * Build NewsPublisher Package
+ *
+ * @package newspublisher
+ * @subpackage build
  */
 $mtime = microtime();
 $mtime = explode(" ", $mtime);
@@ -107,11 +126,11 @@ if (is_array($snippets)) {
 } else { $modx->log(modX::LOG_LEVEL_FATAL,'Adding snippets failed.'); }
 
 /* add chunks - we'll need this later if tpls go into chunks */
-/*$modx->log(modX::LOG_LEVEL_INFO,'Adding in chunks.');
+$modx->log(modX::LOG_LEVEL_INFO,'Adding in chunks.');
 $chunks = include $sources['data'].'transport.chunks.php';
 if (is_array($chunks)) {
     $category->addMany($chunks);
-} else { $modx->log(modX::LOG_LEVEL_FATAL,'Adding chunks failed.'); }*/
+} else { $modx->log(modX::LOG_LEVEL_FATAL,'Adding chunks failed.'); }
 
 /* create category vehicle */
 $attr = array(
@@ -125,11 +144,11 @@ $attr = array(
             xPDOTransport::UPDATE_OBJECT => true,
             xPDOTransport::UNIQUE_KEY => 'name',
         ),
- /*       'Chunks' => array(
+        'Chunks' => array(
             xPDOTransport::PRESERVE_KEYS => false,
             xPDOTransport::UPDATE_OBJECT => true,
             xPDOTransport::UNIQUE_KEY => 'name',
-        ),*/
+        ),
     )
 );
 $vehicle = $builder->createVehicle($category,$attr);

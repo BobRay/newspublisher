@@ -28,24 +28,10 @@
  * Can be used to edit existing documents in conjunction with the
  * NpEditThisButton snippet.
  * /
-/* To Do:
-placeholder prefixes
-phpdoc stuff
-image TVs
-date tvs
-Check permissions?
-Fix/add &allowAnyPost
-*/
 
 /*
-  Version: 3.0.3
-  Modified: November 06, 2010
-
-  Changelog:
-     Mar 05, 06 -- modx_ prefix removed [Mark]
-     Dec 13, 05 -- Now inherits web/manager docgroups thanks to Jared Carlow
-     Nov 06, 10 -- Revolution Conversion and complete OOP refactoring by Bob Ray
-     Nov 15, 10 -- Added TVs to form
+  Version 1.0.0 Beta-1
+  Modified: January 06, 2010
 
      NOTE: You may need the latest version of TinyMCE for rich text editing.
 
@@ -151,9 +137,18 @@ if(empty($fieldErrorTpl)) {
 }
 
 
-$np->getTpls();
-$formTpl .= $np->displayForm($scriptProperties['show']);
+if ($np->getTpls()) {
+    $formTpl .= $np->displayForm($scriptProperties['show']);
+} elseif (empty($np->tpls['outerTpl'])) {
+    $formTpl = '<div class="newspublisher">
+        <h2>[[%np_main_header]]</h2>
+        [[!+[[+prefix]].error_header:ifnotempty=`<h3>[[!+[[+prefix]].error_header]]</h3>`]]
+        [[!+[[+prefix]].errors_presubmit:ifnotempty=`[[!+[[+prefix]].errors_presubmit]]`]]
+        [[!+[[+prefix]].errors_submit:ifnotempty=`[[!+[[+prefix]].errors_submit]]`]]
+        [[!+[[+prefix]].errors:ifnotempty=`[[!+[[+prefix]].errors]]`]]</div>';
 
+}
+$formTpl = str_replace('[[+prefix]]',$np_prefix,$formTpl);
 //die ('<pre>' . print_r($formTpl,true));
 /* handle pre-submission errors */
 $errors = $np->getErrors();
@@ -162,7 +157,7 @@ if (! empty($errors) ) {
    
     $modx->toPlaceholder('error_header',$errorHeaderPresubmit, $np_prefix);
     foreach($errors as $error) {
-        $errorMessage .= str_replace("[[+{$np_prefix} . '.error]]",$error,$errorTpl);
+        $errorMessage .= str_replace('[[+' . $np_prefix . '.error]]',$error,$errorTpl);
     }
     $modx->toPlaceholder('errors_presubmit',$errorMessage, $np_prefix);
     return($formTpl);

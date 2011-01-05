@@ -1,7 +1,7 @@
 <?php
 /**
  * NewsPublisher
- *
+ * Version 1.0.0 Beta-1
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -59,7 +59,7 @@ class Newspublisher {
     protected $cacheable;
     protected $searchable;
     protected $template;
-    protected $tpls; // array of tpls
+    public $tpls; // array of tpls
     protected $richtext; // sets richtext checkbox for new docs
     protected $groups;
     protected $intMaxlength; // max length for integer input fields
@@ -429,7 +429,8 @@ public function getTpls() {
         $this->tpls = array();
 
         /* this is the outer Tpl for the whole page */
-        $this->tpls['outerTpl'] = !empty ($this->props['outertpl'])? $this->modx->getChunk($this->props['outertpl']) : '<div class="newspublisher">
+        $this->tpls['outerTpl'] = !empty ($this->props['outertpl'])? $this->modx->getChunk($this->props['outertpl']): $this->modx->getChunk('npOuterTpl');
+         /*: '<div class="newspublisher">
         <h2>[[%np_main_header]]</h2>
         [[!+[[+prefix]].error_header:ifnotempty=`<h3>[[!+[[+prefix]].error_header]]</h3>`]]
         [[!+[[+prefix]].errors_presubmit:ifnotempty=`[[!+[[+prefix]].errors_presubmit]]`]]
@@ -444,59 +445,79 @@ public function getTpls() {
         </span>
         [[+[[+prefix]].post_stuff]]
   </form>
-</div>';
+</div>';*/
      /* ToDo: Move these into actual chunks */
 
-    $this->tpls['textTpl'] = ! empty ($this->props['texttpl'])? $this->modx->getChunk($this->props['texttpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
+    $this->tpls['textTpl'] = ! empty ($this->props['texttpl'])? $this->modx->getChunk($this->props['texttpl']) : $this->modx->getChunk('npTextTpl');
+
+    /*"\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <label for="[[+npx.fieldName]]" [[+npx.readonly]] title="[[+npx.help]]">[[+npx.caption]]: </label>
-        <input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="[[+npx.maxlength]]" />';
+        <input name="[[+npx.fieldName]]" class="text" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="[[+npx.maxlength]]" />';*/
 
-    $this->tpls['intTpl'] = ! empty ($this->props['inttpl'])? $this->modx->getChunk($this->props['inttpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
+    $this->tpls['intTpl'] = ! empty ($this->props['inttpl'])? $this->modx->getChunk($this->props['inttpl']) : $this->modx->getChunk('npIntTpl');
+
+    /*"\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <label class="intfield" for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]: </label>
-        <input name="[[+npx.fieldName]]" [[+npx.readonly]] class="int" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="[[+npx.maxlength]]" />';
+        <input name="[[+npx.fieldName]]" [[+npx.readonly]] class="int" id="[[+npx.fieldName]]" type="text"  value="[[+[[+prefix]].[[+npx.fieldName]]]]" maxlength="[[+npx.maxlength]]" />';*/
 
-    $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
+    $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : $this->modx->getChunk('npDateTpl');
+     /*"\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <div class="datepicker">
         <label for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]:</label>
         <div class = "np-date-hints"><span class = "np-date-hint"> [[%np_date_hint]]</span><span class ="np-time-hint">[[%np_time_hint]]</span></div>
         <input type="text" class="w4em [[%np_date_format]] divider-dash no-transparency" id="[[+npx.fieldName]]" name="[[+npx.fieldName]]" maxlength="10" readonly="readonly" value="[[+[[+prefix]].[[+npx.fieldName]]]]" />
         <input type="text" class="[[+npx.fieldName]]_time" name="[[+npx.fieldName]]_time" id="[[+npx.fieldName]]_time" maxlength="10" value="[[+[[+prefix]].[[+npx.fieldName]]_time]]" />
-    </div>';
+    </div>';*/
 
-    $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : "\n\n" . '    <fieldset class="np-tv-checkbox" title="[[+npx.help]]"><legend>[[+npx.caption]]</legend>
+    $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : $this->modx->getChunk('npBoolTpl');
+
+    /*"\n\n" . '    <fieldset class="np-tv-checkbox" title="[[+npx.help]]"><legend>[[+npx.caption]]</legend>
         <input type="hidden" name="[[+npx.fieldName]]" value = "" />
         <span class="option"><input class="checkbox" type="checkbox" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]" value="1" [[+npx.checked]]/></span>
-    </fieldset>';
+    </fieldset>';*/
 
 
-    $this->tpls['textareaTpl'] = ! empty ($this->props['textareatvtpl'])? $this->modx->getChunk($this->props['textareatvtpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
+    $this->tpls['textareaTpl'] = ! empty ($this->props['textareatvtpl'])? $this->modx->getChunk($this->props['textareatvtpl']) : $this->modx->getChunk('npTextareaTpl');
+
+    /*"\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
          <label for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]</label>
-         <div class="[[+npx.class]]"><textarea rows="[[+npx.rows]]" cols="[[+npx.cols]]" class="[[+npx.class]]" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]">[[+[[+prefix]].[[+npx.fieldName]]]]</textarea></div>';
+         <div class="[[+npx.class]]"><textarea rows="[[+npx.rows]]" cols="[[+npx.cols]]" class="[[+npx.class]]" name="[[+npx.fieldName]]" id="[[+npx.fieldName]]">[[+[[+prefix]].[[+npx.fieldName]]]]</textarea></div>';*/
 
 
       /* These Tpls are used for TVs of various types */
-    $this->tpls['imageTpl'] = ! empty ($this->props['imagetpl'])? $this->modx->getChunk($this->props['imagetpl']) : "\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
+    $this->tpls['imageTpl'] = ! empty ($this->props['imagetpl'])? $this->modx->getChunk($this->props['imagetpl']) : $this->modx->getChunk('npImageTpl');
+
+    /*"\n" . '[[+[[+prefix]].error_[[+npx.fieldName]]]]
     <label for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]: </label>
-        <input name="[[+npx.fieldName]]" class="image" id="[[+npx.fieldName]]" type="text" value="[[+[[+prefix]].[[+npx.fieldName]]]]" /><img class="np-image" alt="[[+npx.fieldName]]" src="[[+[[+prefix]].[[+npx.fieldName]]]]" />';
+        <input name="[[+npx.fieldName]]" class="image" id="[[+npx.fieldName]]" type="text" value="[[+[[+prefix]].[[+npx.fieldName]]]]" /><img class="np-image" alt="[[+npx.fieldName]]" src="[[+[[+prefix]].[[+npx.fieldName]]]]" />';*/
 
 
     /* These are for the outer shell of listboxes, checkboxes, and radio options */
-    $this->tpls['optionOuterTpl'] = ! empty ($this->props['optionoutertpl'])? $this->modx->getChunk($this->props['optionoutertpl']) : "\n".  '    <fieldset class="[[+npx.class]]" title="[[+npx.help]]"><legend>[[+npx.caption]]</legend>
+    $this->tpls['optionOuterTpl'] = ! empty ($this->props['optionoutertpl'])? $this->modx->getChunk($this->props['optionoutertpl']) : $this->modx->getChunk('npOptionOuterTpl');
+
+    /*"\n".  '    <fieldset class="[[+npx.class]]" title="[[+npx.help]]"><legend>[[+npx.caption]]</legend>
         [[+npx.hidden]]
                 [[+npx.options]]
-    </fieldset>';
-            $this->tpls['listOuterTpl'] = ! empty ($this->props['listoutertpl'])? $this->modx->getChunk($this->props['listoutertpl']) : "\n".  '    <fieldset class="[[+npx.class]]" title="[[+npx.help]]"><legend>[[+npx.caption]]</legend>
+    </fieldset>';*/
+
+            $this->tpls['listOuterTpl'] = ! empty ($this->props['listoutertpl'])? $this->modx->getChunk($this->props['listoutertpl']) : $this->modx->getChunk('npListOuterTpl');
+            
+            /*"\n".  '    <fieldset class="[[+npx.class]]" title="[[+npx.help]]"><legend>[[+npx.caption]]</legend>
         <select name="[[+npx.name]]" size="[[+npx.size]]" [[+npx.multiple]]>
         [[+npx.options]]
         </select>
-    </fieldset>';
+    </fieldset>';*/
 
     /* These are for the individual options in listboxes, checkboxes, and radio options */
-    $this->tpls['optionTpl'] = ! empty ($this->props['optiontpl'])? $this->modx->getChunk($this->props['optiontpl']) : "\n" .
-            '        <span class="option"><input class="[[+npx.class]]" type="[[+npx.type]]" name="[[+npx.name]]" value="[[+npx.value]]" [[+npx.selected]][[+npx.multiple]]/>[[+npx.text]]</span>';
+    $this->tpls['optionTpl'] = ! empty ($this->props['optiontpl'])? $this->modx->getChunk($this->props['optiontpl']) : $this->modx->getChunk('npOptionTpl');
 
-    $this->tpls['listOptionTpl'] = ! empty ($this->props['listoptiontpl'])? $this->modx->getChunk($this->props['listoptiontpl']) : "\n" .
-            '            <option class="listoption" value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';
+    /* "\n" .
+            '        <span class="option"><input class="[[+npx.class]]" type="[[+npx.type]]" name="[[+npx.name]]" value="[[+npx.value]]" [[+npx.selected]][[+npx.multiple]]/>[[+npx.text]]</span>';*/
+
+    $this->tpls['listOptionTpl'] = ! empty ($this->props['listoptiontpl'])? $this->modx->getChunk($this->props['listoptiontpl']) : $this->modx->getChunk('npListOptionTpl');
+
+    /*"\n" .
+            '            <option class="listoption" value="[[+npx.value]]" [[+npx.selected]]>[[+npx.text]]</option>';*/
 
 
     /* make sure we have all of them */
@@ -871,7 +892,6 @@ protected function _splitDate($ph,$timeString) {
 
 public function saveResource() {
 
-    /* ToDo: Add permission test to init to disallow editing of docs that already have tags (remove this?) */
     if (! $this->modx->hasPermission('allow_modx_tags')) {
         $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
         foreach($_POST as $k=>$v)
