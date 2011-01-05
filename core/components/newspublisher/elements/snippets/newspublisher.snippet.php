@@ -96,50 +96,58 @@
 */
 
 /** @define "$modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/')" "VALUE" */
-require_once $modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/').'classes/newspublisher.class.php';
+require_once $modx->getOption('np.core_path', null, $modx->getOption('core_path') . 'components/newspublisher/') . 'classes/newspublisher.class.php';
 
-
-$scriptProperties['prefix'] = empty($scriptProperties['prefix'])? 'np' : $scriptProperties['prefix'];
+/* make sure some prefix is set in $scriptProperties */
+$scriptProperties['prefix'] = empty($scriptProperties['prefix'])
+        ? 'np' : $scriptProperties['prefix'];
 $np_prefix = $scriptProperties['prefix'];
 
+/* create and initialize newspublisher object */
 $np = new Newspublisher($modx, $scriptProperties);
-
 $np->init($modx->context->get('key'));
 
 /* get error Tpl chunk */
-$errorTpl = ! empty($errortpl)? $modx->getChunk($errortpl): '<span class = "errormessage">[[+' . $np_prefix . '.error]]</span>';
+$errorTpl = !empty($errortpl) ? $modx->getChunk($errortpl)
+        : '<span class = "errormessage">[[+' . $np_prefix . '.error]]</span>';
 
-if(empty($errorTpl)) { /* user sent it but it's not there */
-   return $modx->lexicon('np_no_error_tpl') . $scriptProperties['errortpl'];
+if (empty($errorTpl)) { /* user sent it but it's not there */
+    return $modx->lexicon('np_no_error_tpl') . $scriptProperties['errortpl'];
 }
+/* check for errors */
 $errors = $np->getErrors();
-if (! empty($errors) ) { /* doesn't have permission */
+if (!empty($errors)) { /* doesn't have permission */
     foreach ($errors as $error) {
         $errorMessage .= str_replace('[[+' . $np_prefix . '.error]]', $error, $errorTpl);
     }
-    return($errorMessage);
- }
-
-if (! empty ($cancelId)) {
-    $cancelUrl = $modx->makeUrl($cancelId,'','','full');
-} else {
-    $cancelUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $modx->resource->get('id');
+    return ($errorMessage);
 }
-$modx->toPlaceholder('cancel_url',$cancelUrl,$np_prefix);
+
+/* add Cancel button only if requested */
+if (!empty ($cancelId)) {
+    $cancelUrl = $modx->makeUrl($cancelId, '', '', 'full');
+} else {
+    $cancelUrl = isset($_SERVER['HTTP_REFERER'])
+            ? $_SERVER['HTTP_REFERER'] : $modx->resource->get('id');
+}
+$modx->toPlaceholder('cancel_url', $cancelUrl, $np_prefix);
 
 $errorHeaderPresubmit = $modx->lexicon('np_error_presubmit');
 $errorHeaderSubmit = $modx->lexicon('np_error_submit');
 
-$fieldErrorTpl = !empty($fielderrortpl)? $modx->getChunk($fielderrortpl): '<span class = "fielderrormessage">[[+'. $np_prefix . '.error]]</span>';
+$fieldErrorTpl = !empty($fielderrortpl)
+        ? $modx->getChunk($fielderrortpl)
+        : '<span class = "fielderrormessage">[[+' . $np_prefix . '.error]]</span>';
 
-if(empty($fieldErrorTpl)) {
-   return $modx->lexicon('np_no_error_tpl') . $scriptProperties['errortpl'] ;
+if (empty($fieldErrorTpl)) {
+    return $modx->lexicon('np_no_error_tpl') . $scriptProperties['errortpl'];
 }
 
-
+/* make sure we have all Tpl chunks */
 if ($np->getTpls()) {
     $formTpl .= $np->displayForm($scriptProperties['show']);
 } elseif (empty($np->tpls['outerTpl'])) {
+    /* need a tpl to show errors */
     $formTpl = '<div class="newspublisher">
         <h2>[[%np_main_header]]</h2>
         [[!+[[+prefix]].error_header:ifnotempty=`<h3>[[!+[[+prefix]].error_header]]</h3>`]]
@@ -148,69 +156,70 @@ if ($np->getTpls()) {
         [[!+[[+prefix]].errors:ifnotempty=`[[!+[[+prefix]].errors]]`]]</div>';
 
 }
-$formTpl = str_replace('[[+prefix]]',$np_prefix,$formTpl);
-//die ('<pre>' . print_r($formTpl,true));
+/* just in case */
+$formTpl = str_replace('[[+prefix]]', $np_prefix, $formTpl);
+
 /* handle pre-submission errors */
 $errors = $np->getErrors();
 
-if (! empty($errors) ) {
-   
-    $modx->toPlaceholder('error_header',$errorHeaderPresubmit, $np_prefix);
-    foreach($errors as $error) {
-        $errorMessage .= str_replace('[[+' . $np_prefix . '.error]]',$error,$errorTpl);
+if (!empty($errors)) {
+
+    $modx->toPlaceholder('error_header', $errorHeaderPresubmit, $np_prefix);
+    foreach ($errors as $error) {
+        $errorMessage .= str_replace('[[+' . $np_prefix . '.error]]', $error, $errorTpl);
     }
-    $modx->toPlaceholder('errors_presubmit',$errorMessage, $np_prefix);
-    return($formTpl);
- }
- // get postback status
- $isPostBack = $np->getPostBack();
+    $modx->toPlaceholder('errors_presubmit', $errorMessage, $np_prefix);
+    return ($formTpl);
+}
+// get postback status
+$isPostBack = $np->getPostBack();
 
- if ($isPostBack) {
-
+if ($isPostBack) {
+    /* check for errors, validate, and save if no errors */
     $errors = $np->getErrors();
-    if (! empty($errors)) {
-        $modx->toPlaceholder('error_header',$errorHeaderSubmit, $np_prefix);
-        foreach($errors as $error) {
-            $errorMessage .= str_replace("[[+{$np_prefix} . '.error]]",$error,$errorTpl);
+    if (!empty($errors)) {
+        $modx->toPlaceholder('error_header', $errorHeaderSubmit, $np_prefix);
+        foreach ($errors as $error) {
+            $errorMessage .= str_replace("[[+{$np_prefix} . '.error]]", $error, $errorTpl);
         }
-        $modx->toPlaceholder('errors_submit',$errorMessage, $np_prefix);
-        return($formTpl);
+        $modx->toPlaceholder('errors_submit', $errorMessage, $np_prefix);
+        return ($formTpl);
 
     }
-   
+
     /* handle pre-save errors (field errors set in validate() ) */
     $np->validate($fieldErrorTpl);
     $errors = $np->getErrors();
-    if (! empty($errors) ) {
-        foreach($errors as $error) {
-            $errorMessage .= str_replace("[[+{$np_prefix}.error]]",$error,$errorTpl);
+    if (!empty($errors)) {
+        foreach ($errors as $error) {
+            $errorMessage .= str_replace("[[+{$np_prefix}.error]]", $error, $errorTpl);
         }
-        $modx->toPlaceholder('errors_submit',$errorMessage, $np_prefix);
-        $modx->toPlaceholder('error_header',$errorHeaderSubmit, $np_prefix);
+        $modx->toPlaceholder('errors_submit', $errorMessage, $np_prefix);
+        $modx->toPlaceholder('error_header', $errorHeaderSubmit, $np_prefix);
         return $formTpl;
     }
 
     $docId = $np->saveResource(); /* returns ID of edited doc */
-    $postId = $modx->getOption('postId',$scriptProperties,$docId);
+
+    /* if user has set postid, use it, otherwise use ID of the doc */
+    $postId = $modx->getOption('postid', $scriptProperties, $docId);
 
     /* handle save errors */
     $errors = $np->getErrors();
 
-    if (! empty($errors) ) {
-        $modx->toPlaceholder('error_header',$errorHeaderSubmit, $np_prefix);
-        foreach($errors as $error) {
-            $errorMessage .= str_replace("[[+{$np_prefix}.error]]",$error,$errorTpl);
+    if (!empty($errors)) {
+        $modx->toPlaceholder('error_header', $errorHeaderSubmit, $np_prefix);
+        foreach ($errors as $error) {
+            $errorMessage .= str_replace("[[+{$np_prefix}.error]]", $error, $errorTpl);
         }
 
-        $modx->toPlaceholder('errors_submit' , $errorMessage, $np_prefix);
-        
-        return($formTpl);
-    } else {
+        $modx->toPlaceholder('errors_submit', $errorMessage, $np_prefix);
+
+        return ($formTpl);
+    } else { /* successful save -- forward user */
         $np->forward($postId);
     }
-
-
-} else {
-   return $formTpl;
+} else { /* just return the form */
+    return $formTpl;
 }
 ?>

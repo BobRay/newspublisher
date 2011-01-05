@@ -809,7 +809,8 @@ class Newspublisher {
     /** Saves the resource to the database.
      *
      * @access public
-     * @return - (int) returns the ID of the created or edited resource.
+     * @return - (int) returns the ID of the created or edited resource,
+     * or empty string on error.
      * Used by snippet to forward the user.
      *
      */
