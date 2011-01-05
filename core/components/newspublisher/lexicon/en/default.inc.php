@@ -65,8 +65,8 @@ $_lang['np_no_permission'] = ' (you may not have permission for the document or 
 $_lang['np_no_evals'] = 'Cannot edit TVs with @EVAL bindings in the front end: ';
 $_lang['np_no_evals_input'] = 'Cannot use @EVAL bindings in the front end.';
 $_lang['np_no_modx_tags'] = 'You do not have permission to edit resources containing modx tags.';
-$_lang['np_no_rte'] = 'The &amp;initrte is not set, but you asked for this richtext field: ';
-$_lang['np_no_datepicker'] = 'The &amp;initdatepicker is not set, but you asked for this date field: ';
+$_lang['np_no_rte'] = 'The &amp;initrte parameter is not set, but you asked for this richtext field: ';
+$_lang['np_no_datepicker'] = 'The &amp;initdatepicker parameter is not set, but you asked for this date field: ';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Publish Date';
