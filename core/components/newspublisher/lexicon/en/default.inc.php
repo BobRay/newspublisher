@@ -64,6 +64,7 @@ $_lang['np_not_our_tv'] = 'You want to display a TV that is not attached to this
 $_lang['np_no_permission'] = ' (you may not have permission for the document or group referred to)';
 $_lang['np_no_evals'] = 'Cannot edit TVs with @EVAL bindings in the front end: ';
 $_lang['np_no_evals_input'] = 'Cannot use @EVAL bindings in the front end.';
+$_lang['np_no_modx_tags'] = 'You do not have permission to edit resources containing modx tags.';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Publish Date';

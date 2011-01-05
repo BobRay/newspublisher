@@ -149,8 +149,16 @@ class Newspublisher {
 
                 } else {
                     $ph = $this->resource->toArray();
+                    $tags = false;
                     foreach($ph as $k=>$v) {
-                             $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
+                        if (strstr($v, '[[')) {
+                            $tags = true;
+                        }
+                        if ($tags && ! $this->modx->hasPermission('allow_modx_tags')) {
+                            $this->setError($this->modx->lexicon('np_no_modx_tags'));
+                            return;
+                        }
+                        $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
                     }
                     $ph = $fs;
                     $this->modx->toPlaceholders($ph,$this->prefix);
