@@ -54,12 +54,23 @@ div.newspublisher textarea.textareamini {
 div.newspublisher span.buttons {
     display:block;
 }
-/* you can size a particular textarea or textarea (mini) TV
-   by using its name (id) like this:
-textarea#MyTv6 {
+/* you can size or style a particular resource field or TV
+   by using its name (id) like the examples below.
+   Note that this doesn't work with richtext fields. They can
+   only be sized with the tinywidth and tinyheight properties
+*/
+/*
+input#MyTv6 {
     width:10em;
     height:5em;
 }
+
+input#createdby {
+  width:2em;
+  color:red;
+  background-color:gray;
+}
+
 
 */
 div.newspublisher span.option {
