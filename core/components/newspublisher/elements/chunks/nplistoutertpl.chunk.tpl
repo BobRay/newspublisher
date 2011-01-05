@@ -2,4 +2,4 @@
     <select name="[[+npx.name]]" size="[[+npx.size]]" [[+npx.multiple]]>
     [[+npx.options]]
     </select>
-</fieldset>';
+</fieldset>
