@@ -130,6 +130,23 @@ $chunks[11]->fromArray(array(
     'properties' => '',
 ),'',true,true);
 
+$chunks[12]= $modx->newObject('modChunk');
+$chunks[12]->fromArray(array(
+    'id' => 12,
+    'name' => 'npErrorTpl',
+    'description' => 'Tpl chunk for use in the NewsPublisher error header',
+    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/nperrortpl.chunk.tpl'),
+    'properties' => '',
+),'',true,true);
+
+$chunks[13]= $modx->newObject('modChunk');
+$chunks[13]->fromArray(array(
+    'id' => 13,
+    'name' => 'npFieldErrorTpl',
+    'description' => 'Tpl chunk display above each NewsPublisher field',
+    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/npfielderrortpl.chunk.tpl'),
+    'properties' => '',
+),'',true,true);
 
 
 return $chunks;
