@@ -1,3 +1,4 @@
+
 [[+np.error_[[+npx.fieldName]]]]
     <div class="datepicker">
         <label for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]:</label>
