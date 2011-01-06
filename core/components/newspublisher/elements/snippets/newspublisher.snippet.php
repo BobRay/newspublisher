@@ -99,6 +99,7 @@
 require_once $modx->getOption('np.core_path', null, $modx->getOption('core_path') . 'components/newspublisher/') . 'classes/newspublisher.class.php';
 
 /* make sure some prefix is set in $scriptProperties */
+
 $scriptProperties['prefix'] = empty($scriptProperties['prefix'])
         ? 'np' : $scriptProperties['prefix'];
 $np_prefix = $scriptProperties['prefix'];
@@ -110,8 +111,11 @@ $np->getTpls();
 
 
 /* get error Tpl chunk */
-$errorTpl = str_replace('[[+prefix]]', $np_prefix, $np->getTpl('errorTpl'));
-$fieldErrorTpl = str_replace('[[+prefix]]', $np_prefix, $np->getTpl('fieldErrorTpl'));
+//$errorTpl = str_replace('[[+prefix]]', $np_prefix, $np->getTpl('errorTpl'));
+//$fieldErrorTpl = str_replace('[[+prefix]]', $np_prefix, $np->getTpl('fieldErrorTpl'));
+
+$errorTpl =  $np->getTpl('errorTpl');
+$fieldErrorTpl = $np->getTpl('fieldErrorTpl');
 
 /* add Cancel button only if requested */
 if (!empty ($cancelId)) {
@@ -128,7 +132,7 @@ $errorHeaderSubmit = $modx->lexicon('np_error_submit');
 $formTpl .= $np->displayForm($scriptProperties['show']);
 
 /* just in case */
-$formTpl = str_replace('[[+prefix]]', $np_prefix, $formTpl);
+//$formTpl = str_replace('[[+prefix]]', $np_prefix, $formTpl);
 
 /* handle pre-submission errors */
 $errors = $np->getErrors();
@@ -173,7 +177,8 @@ if ($isPostBack) {
     $docId = $np->saveResource(); /* returns ID of edited doc */
 
     /* if user has set postid, use it, otherwise use ID of the doc */
-    $postId = $modx->getOption('postid', $scriptProperties, $docId);
+    $postId = empty($scriptProperties['postid']) ? $docId : $scriptProperties['postid']  ;
+    
 
     /* handle save errors */
     $errors = $np->getErrors();

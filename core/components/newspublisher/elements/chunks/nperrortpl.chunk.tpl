@@ -1,1 +1,1 @@
-<span class = "errormessage">[[+[[+prefix]].error]]</span>
+<span class = "errormessage">[[+np.error]]</span>

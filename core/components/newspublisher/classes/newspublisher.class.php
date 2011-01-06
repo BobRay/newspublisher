@@ -122,7 +122,7 @@ class Newspublisher {
                     $this->modx->lexicon->load($language . 'newspublisher:default');
                     break;
             }
-            $this->prefix = $this->props['prefix'];
+            $this->prefix =  empty($this->props['prefix']) ? 'np' : $this->props['prefix'];
             /* see if we're editing an existing doc */
             $this->existing = false;
             if (isset($_POST['np_existing']) && $_POST['np_existing'] == 'true') {
@@ -460,18 +460,24 @@ class Newspublisher {
         if (empty($this->tpls['outerTpl'])) {
             $this->tpls['outerTpl'] = '<div class="newspublisher">
         <h2>[[%np_main_header]]</h2>
-        [[!+[[+prefix]].error_header:ifnotempty=`<h3>[[!+[[+prefix]].error_header]]</h3>`]]
-        [[!+[[+prefix]].errors_presubmit:ifnotempty=`[[!+[[+prefix]].errors_presubmit]]`]]
-        [[!+[[+prefix]].errors_submit:ifnotempty=`[[!+[[+prefix]].errors_submit]]`]]
-        [[!+[[+prefix]].errors:ifnotempty=`[[!+[[+prefix]].errors]]`]]</div>';
+        [[!+np.error_header:ifnotempty=`<h3>[[!+np.error_header]]</h3>`]]
+        [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
+        [[!+np.errors_submit:ifnotempty=`[[!+np.errors_submit]]`]]
+        [[!+np.errors:ifnotempty=`[[!+np.errors]]`]]</div>';
         }
 
         if (empty($this->tpls['errorTpl'])) {
-            $this->tpls['errorTpl'] = '<span class = "errormessage">[[+' . $this->prefix . '.error]]</span>';
+            $this->tpls['errorTpl'] = '<span class = "errormessage">[[+np.error]]</span>';
         }
 
         if (empty($this->tpls['fieldErrorTpl'])) {
-            $this->tpls['fieldErrorTpl'] = '<span class = "fielderrormessage">[[+' . $this->prefix . '.error]]</span>';
+            $this->tpls['fieldErrorTpl'] = '<span class = "fielderrormessage">[[+np.error]]</span>';
+        }
+
+        /* set different placeholder prefix if requested */
+
+        if ($this->prefix != 'np') {
+            $this->tpls = str_replace('np.', $this->prefix . '.', $this->tpls);
         }
 
         return $success;
@@ -614,7 +620,6 @@ class Newspublisher {
         }
 
         $formTpl = str_replace('[[+npx.insert]]',$inner,$this->tpls['outerTpl']);
-        $formTpl = str_replace('[[+prefix]]',$this->prefix,$formTpl);
         //die ('<pre' . print_r($formTpl,true));
         return $formTpl;
     } /* end displayForm */
