@@ -59,7 +59,7 @@ class Newspublisher {
     protected $cacheable;
     protected $searchable;
     protected $template;
-    public $tpls; // array of tpls
+    protected $tpls; // array of tpls
     protected $richtext; // sets richtext checkbox for new docs
     protected $groups;
     protected $intMaxlength; // max length for integer input fields
@@ -443,6 +443,9 @@ class Newspublisher {
         $this->tpls['listOuterTpl'] = ! empty ($this->props['listoutertpl'])? $this->modx->getChunk($this->props['listoutertpl']) : $this->modx->getChunk('npListOuterTpl');
         $this->tpls['optionTpl'] = ! empty ($this->props['optiontpl'])? $this->modx->getChunk($this->props['optiontpl']) : $this->modx->getChunk('npOptionTpl');
         $this->tpls['listOptionTpl'] = ! empty ($this->props['listoptiontpl'])? $this->modx->getChunk($this->props['listoptiontpl']) : $this->modx->getChunk('npListOptionTpl');
+        $this->tpls['errorTpl'] = ! empty ($this->props['errortpl'])? $this->modx->getChunk($this->props['errortpl']) : $this->modx->getChunk('npErrorTpl');
+        $this->tpls['fieldErrorTpl'] = ! empty ($this->props['fielderrortpl'])? $this->modx->getChunk($this->props['fielderrortpl']) : $this->modx->getChunk('npFieldErrorTpl');
+
 
         /* make sure we have all of them */
         $success = true;
@@ -452,10 +455,39 @@ class Newspublisher {
                 $success = false;
             }
         }
+        /* Set these templates for sure so we can show any errors */
+
+        if (empty($this->tpls['outerTpl'])) {
+            $this->tpls['outerTpl'] = '<div class="newspublisher">
+        <h2>[[%np_main_header]]</h2>
+        [[!+[[+prefix]].error_header:ifnotempty=`<h3>[[!+[[+prefix]].error_header]]</h3>`]]
+        [[!+[[+prefix]].errors_presubmit:ifnotempty=`[[!+[[+prefix]].errors_presubmit]]`]]
+        [[!+[[+prefix]].errors_submit:ifnotempty=`[[!+[[+prefix]].errors_submit]]`]]
+        [[!+[[+prefix]].errors:ifnotempty=`[[!+[[+prefix]].errors]]`]]</div>';
+        }
+
+        if (empty($this->tpls['errorTpl'])) {
+            $this->tpls['errorTpl'] = '<span class = "errormessage">[[+' . $this->prefix . '.error]]</span>';
+        }
+
+        if (empty($this->tpls['fieldErrorTpl'])) {
+            $this->tpls['fieldErrorTpl'] = '<span class = "fielderrormessage">[[+' . $this->prefix . '.error]]</span>';
+        }
 
         return $success;
     }
+/** return a specified tpl
+ *
+ * @access public
+ * @param (string) tpl name
+ *
+ * @return (string) tpl content
+ *  */
 
+    public function getTpl($name) {
+        return $this->tpls[$name];
+}
+    
     /** Creates the HTML for the displayed form by concatenating
      * the necessary Tpls and calling _displayTv() for any TVs.
      *
@@ -500,7 +532,9 @@ class Newspublisher {
                         if($this->props['initrte']) {
                             $replace['[[+npx.class]]'] = 'modx-richtext';
                         } else {
-                            $this->setError($this->modx->lexicon('np_no_rte') . $field);
+                            $msg = $this->modx->lexicon('np_no_rte');
+                            $this->setError($msg . $field);
+                            $this->setFieldError($field, $msg);
                             $replace['[[+npx.class]]'] = 'content';
                         }
                     } else {
@@ -515,7 +549,9 @@ class Newspublisher {
                         if($this->props['initrte']) {
                             $replace['[[+npx.class]]'] = 'modx-richtext';
                         } else {
-                            $this->setError($this->modx->lexicon('np_no_rte') . $field);
+                            $msg = $this->modx->lexicon('np_no_rte');
+                            $this->setError($msg . $field);
+                            $this->setFieldError($field, $msg);
                             $replace['[[+npx.class]]'] = 'introtext';
                         }
 
@@ -547,7 +583,10 @@ class Newspublisher {
 
                         case 'timestamp':
                             if (! $this->props['initdatepicker']) {
-                                $this->setError($this->modx->lexicon('np_no_datepicker') . $field);
+                                $msg = $this->modx->lexicon('np_no_datepicker');
+                                $this->setError($msg . $field);
+                                $this->setFieldError($field, $msg);
+                                //$this->setError($this->modx->lexicon('np_no_datepicker') . $field);
                             }
                             $inner .= $this->tpls['dateTpl'];
                             if (! $this->isPostBack) {
@@ -654,7 +693,10 @@ class Newspublisher {
         switch ($tvType) {
             case 'date':
                 if (! $this->props['initdatepicker']) {
-                    $this->setError($this->modx->lexicon('np_no_datepicker') . $fields['name']);
+                    $msg = $this->modx->lexicon('np_no_datepicker');
+                    $this->setError($msg . $fields['name']);
+                    $this->setFieldError($fields['name'], $msg);
+                    //$this->setError($this->modx->lexicon('np_no_datepicker') . $fields['name']);
                 }
                 $formTpl .= $this->tpls['dateTpl'];
                 if (! $this->isPostBack) {
@@ -690,7 +732,10 @@ class Newspublisher {
                 if ($this->props['initrte']) {
                     $replace['[[+npx.class]]'] = 'modx-richtext';
                 } else {
-                    $this->setError($this->modx->lexicon('np_no_rte') . $fields['name']);
+                    //$this->setError($this->modx->lexicon('np_no_rte') . $fields['name']);
+                    $msg = $this->modx->lexicon('np_no_rte');
+                    $this->setError($msg . $fields['name']);
+                    $this->setFieldError($fields['name'], $msg);
                     $replace['[[+npx.class]]'] = 'textarea';
                 }
                 $formTpl .= $this->tpls['textareaTpl'];
@@ -1131,7 +1176,8 @@ class Newspublisher {
      *  missing required field.
      * */
 
-    public function validate($errorTpl) {
+    public function validate() {
+        $errorTpl = $this->tpls['fieldErrorTpl'];
         $success = true;
         $fields = explode(',', $this->props['required']);
         if (!empty($fields)) {
@@ -1141,10 +1187,11 @@ class Newspublisher {
                     $success = false;
                     /* set ph for field error msg */
                     $msg = $this->modx->lexicon('np_error_required');
-                    $msg = str_replace('[[+name]]', $field, $msg);
+                    $this->setFieldError($field, $msg);
+                    /*$msg = str_replace('[[+name]]', $field, $msg);
                     $msg = str_replace("[[+{$this->prefix}.error]]", $msg, $errorTpl);
                     $ph = 'error_' . $field;
-                    $this->modx->toPlaceholder($ph, $msg, $this->prefix);
+                    $this->modx->toPlaceholder($ph, $msg, $this->prefix);*/
 
                     /* set error for header */
                     $msg = $this->modx->lexicon('np_missing_field');
@@ -1164,6 +1211,7 @@ class Newspublisher {
             if (stristr($_POST[$field], '@EVAL')) {
                 $this->setError($this->modx->lexicon('np_no_evals_input'));
                 $_POST[$field] = '';
+                /* set fields to empty string */
                 $this->modx->toPlaceholder($field, '', $this->prefix);
                 $success = false;
             }
@@ -1173,7 +1221,21 @@ class Newspublisher {
         return $success;
     }
 
+/** Sets placeholder for field error messages
+ * @param (string) $fieldName - name of field
+ * @param (string) $msg - lexicon error message string
+ *
+ */
+    /* ToDo: Change [[+name]] to [[+npx.something]]?, or ditch it (or not)*/
+    public function setFieldError($fieldName, $msg) {
+        $msg = str_replace('[[+name]]', $fieldName, $msg);
+        $msg = str_replace("[[+{$this->prefix}.error]]", $msg, $this->tpls['fieldErrorTpl']);
+        $ph = 'error_' . $fieldName;
+        $this->modx->toPlaceholder($ph, $msg, $this->prefix);
+    }
+
 
 } /* end class */
+
 
 ?>

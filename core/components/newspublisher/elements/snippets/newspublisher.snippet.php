@@ -79,7 +79,7 @@
     &listboxmax  - (optional) Maximum length for listboxes. Default is 8 items.
     &cssfile     - (optional) Name of CSS file to use, or `` for no CSS file; defaults to newspublisher.css.
                        File should be in assets/newspublisher/css/ directory
-    &errortpl    - (optional) Name of Tpl chunk for formatting errors. Must contain [[+np.error]] placeholder.
+    &errortpl    - (optional) Name of Tpl chunk for formatting errors in the header. Must contain [[+np.error]] placeholder.
     &fielderrortpl (optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.
     &groups      - (optional) Resource groups to put new document in (no effect with existing docs);
                        set to 'parent' to use parent's groups.
@@ -106,22 +106,12 @@ $np_prefix = $scriptProperties['prefix'];
 /* create and initialize newspublisher object */
 $np = new Newspublisher($modx, $scriptProperties);
 $np->init($modx->context->get('key'));
+$np->getTpls();
+
 
 /* get error Tpl chunk */
-$errorTpl = !empty($errortpl) ? $modx->getChunk($errortpl)
-        : '<span class = "errormessage">[[+' . $np_prefix . '.error]]</span>';
-
-if (empty($errorTpl)) { /* user sent it but it's not there */
-    return $modx->lexicon('np_no_error_tpl') . $scriptProperties['errortpl'];
-}
-/* check for errors */
-$errors = $np->getErrors();
-if (!empty($errors)) { /* doesn't have permission */
-    foreach ($errors as $error) {
-        $errorMessage .= str_replace('[[+' . $np_prefix . '.error]]', $error, $errorTpl);
-    }
-    return ($errorMessage);
-}
+$errorTpl = str_replace('[[+prefix]]', $np_prefix, $np->getTpl('errorTpl'));
+$fieldErrorTpl = str_replace('[[+prefix]]', $np_prefix, $np->getTpl('fieldErrorTpl'));
 
 /* add Cancel button only if requested */
 if (!empty ($cancelId)) {
@@ -135,27 +125,8 @@ $modx->toPlaceholder('cancel_url', $cancelUrl, $np_prefix);
 $errorHeaderPresubmit = $modx->lexicon('np_error_presubmit');
 $errorHeaderSubmit = $modx->lexicon('np_error_submit');
 
-$fieldErrorTpl = !empty($fielderrortpl)
-        ? $modx->getChunk($fielderrortpl)
-        : '<span class = "fielderrormessage">[[+' . $np_prefix . '.error]]</span>';
+$formTpl .= $np->displayForm($scriptProperties['show']);
 
-if (empty($fieldErrorTpl)) {
-    return $modx->lexicon('np_no_error_tpl') . $scriptProperties['errortpl'];
-}
-
-/* make sure we have all Tpl chunks */
-if ($np->getTpls()) {
-    $formTpl .= $np->displayForm($scriptProperties['show']);
-} elseif (empty($np->tpls['outerTpl'])) {
-    /* need a tpl to show errors */
-    $formTpl = '<div class="newspublisher">
-        <h2>[[%np_main_header]]</h2>
-        [[!+[[+prefix]].error_header:ifnotempty=`<h3>[[!+[[+prefix]].error_header]]</h3>`]]
-        [[!+[[+prefix]].errors_presubmit:ifnotempty=`[[!+[[+prefix]].errors_presubmit]]`]]
-        [[!+[[+prefix]].errors_submit:ifnotempty=`[[!+[[+prefix]].errors_submit]]`]]
-        [[!+[[+prefix]].errors:ifnotempty=`[[!+[[+prefix]].errors]]`]]</div>';
-
-}
 /* just in case */
 $formTpl = str_replace('[[+prefix]]', $np_prefix, $formTpl);
 
@@ -188,7 +159,7 @@ if ($isPostBack) {
     }
 
     /* handle pre-save errors (field errors set in validate() ) */
-    $np->validate($fieldErrorTpl);
+    $np->validate();
     $errors = $np->getErrors();
     if (!empty($errors)) {
         foreach ($errors as $error) {
