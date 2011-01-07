@@ -30,7 +30,7 @@
  * /
 
 /*
-  Version 1.0.0 Beta-1
+  Version 1.0.2 Beta-1
   Modified: January 06, 2010
 
      NOTE: You may need the latest version of TinyMCE for rich text editing.
