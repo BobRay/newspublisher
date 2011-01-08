@@ -1157,8 +1157,9 @@ class Newspublisher {
 
 
             if (is_numeric($this->props['template'])) { /* user sent a number */
+                $t = $this->modx->getObject('modTemplate', $this->props['template']);
                 /* make sure it exists */
-                if (!$this->modx->getObject('modTemplate', $this->props['template'])) {
+                if (! $t) {
                     $this->SetError($this->modx->lexicon('np_no_template_id') . $this->props['template']);
                 }
             } else { /* user sent a template name */
@@ -1166,11 +1167,10 @@ class Newspublisher {
                 if (!$t) {
                     $this->setError($this->modx->lexicon('np_no_template_name') . $this->props['template']);
                 }
-                $template = $t ? $t->get('id')
+            }
+            $template = $t ? $t->get('id')
                         : $this->modx->getOption('default_template');
                 unset($t);
-
-            }
         }
 
         return $template;
