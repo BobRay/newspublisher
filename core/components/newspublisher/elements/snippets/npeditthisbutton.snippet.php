@@ -131,7 +131,7 @@ if (in_array($modx->resource->get('id'), $hidden)) {
 }
 
 /* create and return the form */
-$output = '<form action="[[~[[+np_id]]]]" method="post" style="position:fixed;bottom:' . $bottom . ';right:' . $right . '">';
+$output = '<form action="[[~[[+np_id]]]]" method="post" class="np_button_form" style="position:fixed;bottom:' . $bottom . ';right:' . $right . '">';
 $output .= "\n" . '<input type = "hidden" name="np_existing" value="true" />';
 $output .= "\n" . '<input type = "hidden" name="np_doc_id" value="' . $modx->resource->get('id') . '"/>';
 $output .= "\n" . '<input type="submit" class = "np_edit_this_button" name="submit" value="' . $value . '"/>';
