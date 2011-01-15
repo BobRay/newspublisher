@@ -71,14 +71,6 @@ $properties = array(
         'lexicon' => 'newspublisher:properties',
     ),
     array(
-        'name' => 'cancelbutton',
-        'desc' => 'np_cancelbutton_desc',
-        'type' => 'combo-boolean',
-        'options' => '',
-        'value' => '0',
-        'lexicon' => 'newspublisher:properties',
-    ),
-    array(
         'name' => 'cancelid',
         'desc' => 'np_cancelid_desc',
         'type' => 'combo-boolean',

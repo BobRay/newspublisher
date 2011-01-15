@@ -3,7 +3,7 @@
  * NewsPublisher
  *
  * Copyright 2011 Bob Ray
- * <shaun@modxcms.com>
+ * <http://bobsguides.com>
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -54,7 +54,7 @@ $modx->setLogTarget(XPDO_CLI_MODE ? 'ECHO' : 'HTML');
 
 /* set package info */
 define('PKG_NAME','newspublisher');
-define('PKG_VERSION','1.0.2');
+define('PKG_VERSION','1.0.4');
 define('PKG_RELEASE','Beta1');
 
 /* load builder */

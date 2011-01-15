@@ -1,7 +1,7 @@
 <?php
 /**
  * NewsPublisher
- * Version 1.0.0 Beta-1
+ * Version 1.0.4 Beta-1
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free

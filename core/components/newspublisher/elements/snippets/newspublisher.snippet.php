@@ -30,8 +30,8 @@
  * /
 
 /*
-  Version 1.0.2 Beta-1
-  Modified: January 06, 2010
+  Version 1.0.4 Beta-1
+  Modified: January 16, 2010
 
      NOTE: You may need the latest version of TinyMCE for rich text editing.
 
@@ -46,7 +46,6 @@
                        defaults to publish_default system setting.
     &postid      - (optional) Document id to load on success; defaults to the page created or edited.
     &cancelid    - (optional) Document id to load on cancel; defaults to http_referer.
-    $cancelbutton- (optional) If set, form has a cancel button; defaults to `0`
     &badwords    - (optional) Comma delimited list of words not allowed in new document.
     &template    - (optional) Name of template to use for new document; set to 'parent' to use parent's template;
                        for 'parent', &parent must be set; defaults to system default template.
@@ -87,7 +86,7 @@
     &prefix      - (optional) Prefix to use for placeholders; defaults to 'np'
     &fielderrortpl - (optional)
     &initrte     - '(optional) Initialize rich text editor; set this if there are any rich text fields; defaults to 0'
-    &initdatepicker - (optional) Initialized the datepicker; set this if there are any date fields; defaults to '0'
+    &initdatepicker - (optional) Initialized the datepicker; set this if there are any date fields; defaults to '1'
     &readonly    - (optional) Comma-separated list of fields that should be read only; does not work on option or richtext fields
     &intmaxlength- (optional) Max length for integer input fields; default: 10
     &textmaxlength- (optional) Max length for text input fields; default 60
