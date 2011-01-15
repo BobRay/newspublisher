@@ -2,6 +2,7 @@
 
 /**
  * NpEditThisButton
+ * Copyright 2011 Bob Ray
  *
  * Version 1.0.0 Beta-1
  *

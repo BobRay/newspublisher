@@ -1,9 +1,10 @@
 <?php
 /**
- * NewsPublisher
- *
- * Copyright 2010 by Jason Coward <jason@modxcms.com> and Shaun McCormick
- * <shaun@modxcms.com>
+ * NewsPublisher transport chunks
+ * Copyright 2011 Bob Ray
+ * @file transport.chunks.php
+ * @author Bob Ray <http://bobsguides.com>
+ * @date 1/15/11
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -21,11 +22,11 @@
  * @package newspublisher
  */
 /**
- * Add chunks to package
- *
+ * @description array of chunk objects for NewsPublisher package
  * @package newspublisher
  * @subpackage build
  */
+
 $chunks = array();
 
 $chunks[1]= $modx->newObject('modChunk');

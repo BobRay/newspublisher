@@ -1,8 +1,10 @@
 <?php
 
-
 /**
- * Properties for newspublisher
+ * Default properties for the NewsPublisher snippet
+ * @author Bob Ray
+ * @date 1/15/11
+ * @file properties.newspublisher.php
  *
  * @package newspublisher
  * @subpackage build

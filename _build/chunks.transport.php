@@ -1,9 +1,11 @@
 <?php
 /**
- * NewsPublisher
+ * Utility snippet for NewsPublisher development
  *
- * Copyright 2010 by Jason Coward <jason@modxcms.com> and Shaun McCormick
- * <shaun@modxcms.com>
+ * Copyright 2011 Bob Ray
+ * @file chunks.transport.php
+ * @author Bob Ray <http://bobsguides.com>
+ * @date 1/15/11
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -20,11 +22,10 @@
  *
  * @package newspublisher
  */
+
 /**
  * Utility snippet for development - just installs the
  * Tpl chunks into MODx.
- *
- * Build NewsPublisher Package
  *
  * @package newspublisher
  * @subpackage build

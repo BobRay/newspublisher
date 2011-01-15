@@ -1,7 +1,7 @@
 <?php
 /**
  * NewsPublisher
- *
+ * Copyright 2011 Bob Ray
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -17,12 +17,12 @@
  * Suite 330, Boston, MA 02111-1307 USA
  *
  * @package newspublisher
- * @name newspublisher.class.php
+ * @file newspublisher.class.php
  * @author Raymond Irving
- * @author Bob Ray
+ * @author Bob Ray <http://bobsguides.com>
  
  *
- * The NewsPublisher snippet presents a form in the front end for
+ * @description The NewsPublisher snippet presents a form in the front end for
  * creating resources. Rich text editing is available for text fields and TVs.
  *
  * Can be used to edit existing documents in conjunction with the
@@ -33,64 +33,64 @@
   Version 1.0.4 Beta-1
   Modified: January 16, 2010
 
-     NOTE: You may need the latest version of TinyMCE for rich text editing.
+   NOTE: You may need the latest version of TinyMCE for rich text editing.
 
   Parameters:
-    &parent      - (optional) Folder id where new documents are stored; defaults to NewsPublisher folder.
-    &show        - (optional) Comma separated list of fields/tvs to show (shown in order).
+    @param parent      - (optional) Folder id where new documents are stored; defaults to NewsPublisher folder.
+    @param show        - (optional) Comma separated list of fields/tvs to show (shown in order).
                      defaults to 'pagetitle,longtitle,description,menutitle,pub_date,unpub_date,introtext,content'.
-    &required    - (optional) Comma-separated list of fields/tvs to require; defaults to 'pagetitle,content'.
-    &published   - (optional) Set new resource as published or not
+    @param required    - (optional) Comma-separated list of fields/tvs to require; defaults to 'pagetitle,content'.
+    @param published   - (optional) Set new resource as published or not
                       (will be overridden by publish and unpublish dates).
                        Set to `parent` to match parent's pub status;
                        defaults to publish_default system setting.
-    &postid      - (optional) Document id to load on success; defaults to the page created or edited.
-    &cancelid    - (optional) Document id to load on cancel; defaults to http_referer.
-    &badwords    - (optional) Comma delimited list of words not allowed in new document.
-    &template    - (optional) Name of template to use for new document; set to 'parent' to use parent's template;
+    @param postid      - (optional) Document id to load on success; defaults to the page created or edited.
+    @param cancelid    - (optional) Document id to load on cancel; defaults to http_referer.
+    @param badwords    - (optional) Comma delimited list of words not allowed in new document.
+    @param template    - (optional) Name of template to use for new document; set to 'parent' to use parent's template;
                        for 'parent', &parent must be set; defaults to system default template.
-    &headertpl   - (optional) Header Tpl chunk (chunk name) to be inserted at the beginning of a new document.
-    &footertpl   - (optional) Footer Tpl chunk (chunk name) to be inserted at the end of a new document.
-    &tinyheight  - (optional) Height of richtext areas; default `400px`.
-    &tinywidth   - (optional) Width of richtext areas; default `95%`.
-    &outertpl    - (optional) Tpl used as a shell for the whole page
-    &texttpl     - (optional) Tpl used for text resource fields
-    &inttpl      - (optional) Tpl used for integer resource fields.
-    &datetpl     - (optional) Tpl used for date resource fields and date TVs
-    &booltpl     - (optional) Tpl used for Yes/No resource fields (e.g., published, searchable, etc.).
-    &optionoutertpl - (optional) Tpl used for as a shell for checkbox, list, and radio option TVs.
-    &optiontpl   - (optional) Tpl used for each option of checkbox and radio option TVs.
-    &listoptiontpl - (optional) Tpl used for each option of listbox TVs.
-    &richtext    - (optional) Sets the flag to as to whether or Rich Text Editor is used when editing the page
+    @param headertpl   - (optional) Header Tpl chunk (chunk name) to be inserted at the beginning of a new document.
+    @param footertpl   - (optional) Footer Tpl chunk (chunk name) to be inserted at the end of a new document.
+    @param tinyheight  - (optional) Height of richtext areas; default `400px`.
+    @param tinywidth   - (optional) Width of richtext areas; default `95%`.
+    @param outertpl    - (optional) Tpl used as a shell for the whole page
+    @param texttpl     - (optional) Tpl used for text resource fields
+    @param inttpl      - (optional) Tpl used for integer resource fields.
+    @param datetpl     - (optional) Tpl used for date resource fields and date TVs
+    @param booltpl     - (optional) Tpl used for Yes/No resource fields (e.g., published, searchable, etc.).
+    @param optionoutertpl - (optional) Tpl used for as a shell for checkbox, list, and radio option TVs.
+    @param optiontpl   - (optional) Tpl used for each option of checkbox and radio option TVs.
+    @param listoptiontpl - (optional) Tpl used for each option of listbox TVs.
+    @param richtext    - (optional) Sets the flag to as to whether or Rich Text Editor is used when editing the page
                        content in the Manager; defaults to richtext_default System Setting for new resources;
                        set to `Parent` to use parent's setting.
-    &rtcontent   - (optional) Use rich text for the content form field.
-    &rtsummary   - (optional) Use rich text for the summary (introtext) form field.
-    &hidemenu    - (optional) Sets the flag (0/1) for whether or not the new page shows in the menu; defaults to 1.
-    &searchable  - (optional) Search add-on components can use this to determine whether to include the resource in searches;
+    @param rtcontent   - (optional) Use rich text for the content form field.
+    @param rtsummary   - (optional) Use rich text for the summary (introtext) form field.
+    @param hidemenu    - (optional) Sets the flag (0/1) for whether or not the new page shows in the menu; defaults to 1.
+    @param searchable  - (optional) Search add-on components can use this to determine whether to include the resource in searches;
                        default is search_default System Setting; set to `Parent` to use parent's setting.
-    &cacheable   - (optional) Sets the flag (0/1) for whether or not the new page is marked as cacheable;
+    @param cacheable   - (optional) Sets the flag (0/1) for whether or not the new page is marked as cacheable;
                        default is cache_default System Setting; set to `Parent` to use parent's setting.
 
-    &aliastitle  - (optional) Set to 1 to use lowercase, hyphenated, page title as alias. Defaults to 1.
+    @param aliastitle  - (optional) Set to 1 to use lowercase, hyphenated, page title as alias. Defaults to 1.
                        If 0,'article-(date created)' is used. Ignored if alias is filled in form.
-    &clearcache  - (optional) When set to 1, cache will be cleared after saving the resource; default: 1.
-    &listboxmax  - (optional) Maximum length for listboxes. Default is 8 items.
-    &cssfile     - (optional) Name of CSS file to use, or `` for no CSS file; defaults to newspublisher.css.
+    @param clearcache  - (optional) When set to 1, cache will be cleared after saving the resource; default: 1.
+    @param listboxmax  - (optional) Maximum length for listboxes. Default is 8 items.
+    @param cssfile     - (optional) Name of CSS file to use, or `` for no CSS file; defaults to newspublisher.css.
                        File should be in assets/newspublisher/css/ directory
-    &errortpl    - (optional) Name of Tpl chunk for formatting errors in the header. Must contain [[+np.error]] placeholder.
-    &fielderrortpl (optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.
-    &groups      - (optional) Resource groups to put new document in (no effect with existing docs);
+    @param errortpl    - (optional) Name of Tpl chunk for formatting errors in the header. Must contain [[+np.error]] placeholder.
+    @param fielderrortpl (optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.
+    @param groups      - (optional) Resource groups to put new document in (no effect with existing docs);
                        set to 'parent' to use parent's groups.
-    &language    - (optional) Language to use in forms and error messages.
-    &prefix      - (optional) Prefix to use for placeholders; defaults to 'np'
-    &fielderrortpl - (optional)
-    &initrte     - '(optional) Initialize rich text editor; set this if there are any rich text fields; defaults to 0'
-    &initdatepicker - (optional) Initialized the datepicker; set this if there are any date fields; defaults to '1'
-    &readonly    - (optional) Comma-separated list of fields that should be read only; does not work on option or richtext fields
-    &intmaxlength- (optional) Max length for integer input fields; default: 10
-    &textmaxlength- (optional) Max length for text input fields; default 60
-    $hoverhelp    - (optional) Show help when hovering over field caption: default `1`
+    @param language    - (optional) Language to use in forms and error messages.
+    @param prefix      - (optional) Prefix to use for placeholders; defaults to 'np'
+    @param fielderrortpl - (optional)
+    @param initrte     - '(optional) Initialize rich text editor; set this if there are any rich text fields; defaults to 0'
+    @param initdatepicker - (optional) Initialized the datepicker; set this if there are any date fields; defaults to '1'
+    @param readonly    - (optional) Comma-separated list of fields that should be read only; does not work on option or richtext fields
+    @param intmaxlength- (optional) Max length for integer input fields; default: 10
+    @param textmaxlength- (optional) Max length for text input fields; default 60
+    @param hoverhelp    - (optional) Show help when hovering over field caption: default `1`
 
 */
 

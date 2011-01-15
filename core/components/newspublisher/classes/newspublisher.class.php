@@ -1,7 +1,14 @@
 <?php
+
 /**
  * NewsPublisher
- * Version 1.0.4 Beta-1
+ *
+ * Copyright 2011 Bob Ray
+ *
+ * @file newspublisher.class.php
+ * @author Bob Ray <http://bobsguides.com>
+ * @author Raymond Irving
+ * @date 1/15/11
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -13,16 +20,16 @@
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * NewsPublisher; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
- * Suite 330, Boston, MA 02111-1307 USA
+ * NewsPublisher; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
  *
  * @package newspublisher
- * @name newspublisher.class.php
- * @author Raymond Irving
- * @author Bob Ray
-
+ */
+/**
+ * MODx NewsPublisher Class
  *
- * The NewsPublisher snippet presents a form in the front end for
+ * @package  newspublisher
+ * @description The NewsPublisher snippet presents a form in the front end for
  * creating resources. Rich text editing is available for text fields
  * and rich text template variables.
  *
@@ -31,39 +38,45 @@
  * operation.
  */
 
+
+
+
 class Newspublisher {
     protected $modx;
-    protected $props; //scriptProperties array
-    protected $allTvs; // array of TVs.
-    protected $message;
-    protected $errors;
-    protected $resource;
+    protected $props; /* scriptProperties array */
+    protected $allTvs; /* array of TVs */
+    protected $errors; /* array of errors */
+    protected $resource; /* the current resource */
     protected $parentId;
     protected $parentObj;
-    protected $existing; // editing an existing resource (ID of resource)
-    protected $isPostBack;
-    protected $corePath; // path to NewsPublisher Core
-    protected $assetsPath; // path to NewsPublisher assets dir
-    protected $assetsUrl; // URL to NewsPublisher assets dir
-    protected $aliasTitle; // use alias as title
+    protected $existing; /* (boolean) indicates that we're editing an existing resource (ID of resource) */
+    protected $isPostBack; /* indicates a repost to self */
+    protected $corePath; /* path to NewsPublisher Core */
+    protected $assetsPath; /* path to NewsPublisher assets dir */
+    protected $assetsUrl; /* URL to NewsPublisher assets dir */
+    protected $aliasTitle; /* use alias as title */
     protected $clearcache;
-    protected $header;
-    protected $footer;
-    protected $listboxMax;
-    protected $multipleListboxMax;
-    protected $prefix; // prefix for placeholders
-    protected $badwords; // words to remove
+    protected $header; /* content of optional header chunk */
+    protected $footer;  /* content of optional header chunk */
+    protected $listboxMax; /* max size of listboxes */
+    protected $multipleListboxMax;  /* max size of multi-select listboxes */
+    protected $prefix; /* prefix for placeholders */
+    protected $badwords; /* words to remove */
+
+    /* values for boolean resource fields of new resource */
     protected $published;
     protected $hideMenu;
     protected $alias;
     protected $cacheable;
     protected $searchable;
     protected $template;
-    protected $tpls; // array of tpls
-    protected $richtext; // sets richtext checkbox for new docs
-    protected $groups;
-    protected $intMaxlength; // max length for integer input fields
-    protected $textMaxlength; // max length for text input fields
+    protected $richtext;
+    /********************/
+    
+    protected $tpls; /* array of tpls to use */
+    protected $groups; /* groups to assigne new doc to */
+    protected $intMaxlength; /* max length for integer input fields */
+    protected $textMaxlength; /* max length for text input fields */
 
 
     /** NewsPublisher constructor

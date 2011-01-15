@@ -1,7 +1,10 @@
 <?php
 
  /**
- * Properties for NpEditThisButton
+ * Default properties for the NpEditThisButton snippet
+ * @author Bob Ray
+ * @date 1/15/11
+ * @file properties.newspublisher.php
  *
  * @package newspublisher
  * @subpackage build

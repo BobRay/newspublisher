@@ -1,6 +1,6 @@
 <?php
 /**
- * NewsPublisher
+ * NewsPublisher Build Script
  *
  * Copyright 2011 Bob Ray
  * <http://bobsguides.com>
@@ -23,6 +23,7 @@
 /**
  * Build NewsPublisher Package
  *
+ * @description build script for NewsPublisher package
  * @package newspublisher
  * @subpackage build
  */
