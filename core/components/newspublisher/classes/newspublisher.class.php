@@ -1095,6 +1095,10 @@ class Newspublisher {
             } else {
                 $groupObj = $this->modx->getObject('modResourceGroup', array('name' => $group));
             }
+            if (! $groupObj) {
+                $this->setError($this->modx->lexicon('np_no_resource_group') . $group);
+                return null;
+            }
             $values[] = array(
                 'id' => $groupObj->get('id'),
                 'name' => $groupObj->get('name'),

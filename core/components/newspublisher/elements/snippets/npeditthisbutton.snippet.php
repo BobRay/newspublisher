@@ -20,7 +20,7 @@
  *
  * @package newspublisher
  * @subpackage npeditthisbutton
- * @author Bob Ray
+ * @author Bob Ray <http://bobsguides.com>
 
  *
  * The NpEditThisButton snippet presents a button in the front end for

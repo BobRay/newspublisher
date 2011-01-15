@@ -2,7 +2,7 @@
 /**
  * NewsPublisher
  *
- * Copyright 2010 by Jason Coward <jason@modxcms.com> and Shaun McCormick
+ * Copyright 2011 Bob Ray
  * <shaun@modxcms.com>
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
