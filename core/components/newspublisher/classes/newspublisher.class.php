@@ -5,10 +5,9 @@
  *
  * Copyright 2011 Bob Ray
  *
- * @file newspublisher.class.php
  * @author Bob Ray <http://bobsguides.com>
  * @author Raymond Irving
- * @date 1/15/11
+ * 1/15/11
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -28,8 +27,11 @@
 /**
  * MODx NewsPublisher Class
  *
+ * @version Version 1.0.4
+ *
  * @package  newspublisher
- * @description The NewsPublisher snippet presents a form in the front end for
+ *
+ * The NewsPublisher snippet presents a form in the front end for
  * creating resources. Rich text editing is available for text fields
  * and rich text template variables.
  *
@@ -38,45 +40,133 @@
  * operation.
  */
 
-
-
-
 class Newspublisher {
-    protected $modx;
-    protected $props; /* scriptProperties array */
-    protected $allTvs; /* array of TVs */
-    protected $errors; /* array of errors */
-    protected $resource; /* the current resource */
-    protected $parentId;
-    protected $parentObj;
-    protected $existing; /* (boolean) indicates that we're editing an existing resource (ID of resource) */
-    protected $isPostBack; /* indicates a repost to self */
-    protected $corePath; /* path to NewsPublisher Core */
-    protected $assetsPath; /* path to NewsPublisher assets dir */
-    protected $assetsUrl; /* URL to NewsPublisher assets dir */
-    protected $aliasTitle; /* use alias as title */
-    protected $clearcache;
-    protected $header; /* content of optional header chunk */
-    protected $footer;  /* content of optional header chunk */
-    protected $listboxMax; /* max size of listboxes */
-    protected $multipleListboxMax;  /* max size of multi-select listboxes */
-    protected $prefix; /* prefix for placeholders */
-    protected $badwords; /* words to remove */
 
-    /* values for boolean resource fields of new resource */
+   /**
+    * @var modx object Reference pointer to modx object
+    */
+    protected $modx;
+    /**
+     * @var array scriptProperties array
+     */
+    protected $props;
+    /**
+     * @var array Array of all TVs
+     */
+    protected $allTvs;
+    /**
+     * @var array Array of error messages
+     */
+    protected $errors;
+    /**
+     * @var modResource The current resource
+     */
+    protected $resource;
+    /**
+     * @var int ID of the resource's parent
+     */
+    protected $parentId;
+    /**
+     * @var modResource The parent object
+     */
+    protected $parentObj;
+    /**
+     * @var boolean Indicates that we're editing an existing resource (ID of resource) 
+     */
+    protected $existing;
+    /**
+     * @var boolean Indicates a repost to self
+     */
+    protected $isPostBack;
+    /**
+     * @var string Path to NewsPublisher Core
+     */
+    protected $corePath;
+    /**
+     * @var string Path to NewsPublisher assets directory
+     */
+    protected $assetsPath;
+    /**
+     * @var string URL to NewsPublisher Assets directory
+     */
+    protected $assetsUrl;
+    /**
+     * @var boolean Use alias as title
+     */
+    protected $aliasTitle;
+    /**
+     * @var boolean Clear the cache after saving doc
+     */
+    protected $clearcache;
+    /**
+     * @var string Content of optional header chunk
+     */
+    protected $header;
+    /**
+     * @var string Content of optional footer chunk
+     */
+    protected $footer;
+    /**
+     * @var int Max size of listbox TVs
+     */
+    protected $listboxMax;
+    /**
+     * @var int Max size of multi-select listbox TVs
+     */
+    protected $multipleListboxMax;
+    /**
+     * @var string prefix for placeholders
+     */
+    protected $prefix;
+    /**
+     * @var string Comma-separated list of words to remove
+     */
+    protected $badwords;
+    /**
+     * @var string Value for published resource field
+     */
     protected $published;
+    /**
+     * @var string Value for hidemenu resource field
+     */
     protected $hideMenu;
+    /**
+     * @var string Value for alias resource field
+     */
     protected $alias;
+    /**
+     * @var string Value for cacheable resource field
+     */
     protected $cacheable;
+    /**
+     * @var string Value for searchable resource field
+     */
     protected $searchable;
+    /**
+     * @var string Value for template resource field
+     */
     protected $template;
+    /**
+     * @var string Value for richtext resource field
+     */
     protected $richtext;
-    /********************/
-    
-    protected $tpls; /* array of tpls to use */
-    protected $groups; /* groups to assigne new doc to */
-    protected $intMaxlength; /* max length for integer input fields */
-    protected $textMaxlength; /* max length for text input fields */
+    /**
+     * @var array Array of Tpl chunk contents
+     */
+    protected $tpls;
+    /**
+     * @var string Comma-separated list or resource groups to
+     * assign new docs to
+     */
+    protected $groups;
+    /**
+     * @var int Max length for integer input fields
+     */
+    protected $intMaxlength;
+    /**
+     * @var int Max length for text input fields
+     */
+    protected $textMaxlength;
 
 
     /** NewsPublisher constructor

@@ -3,8 +3,7 @@
 /**
  * Default properties for the NewsPublisher snippet
  * @author Bob Ray
- * @date 1/15/11
- * @file properties.newspublisher.php
+ * 1/15/11
  *
  * @package newspublisher
  * @subpackage build

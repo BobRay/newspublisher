@@ -17,12 +17,11 @@
  * Suite 330, Boston, MA 02111-1307 USA
  *
  * @package newspublisher
- * @file newspublisher.class.php
  * @author Raymond Irving
  * @author Bob Ray <http://bobsguides.com>
  
  *
- * @description The NewsPublisher snippet presents a form in the front end for
+ * Description: The NewsPublisher snippet presents a form in the front end for
  * creating resources. Rich text editing is available for text fields and TVs.
  *
  * Can be used to edit existing documents in conjunction with the
@@ -30,7 +29,7 @@
  * /
 
 /*
-  Version 1.0.4 Beta-1
+  @version Version 1.0.4 Beta-1
   Modified: January 16, 2010
 
    NOTE: You may need the latest version of TinyMCE for rich text editing.

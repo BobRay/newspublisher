@@ -3,9 +3,8 @@
  * Utility snippet for NewsPublisher development
  *
  * Copyright 2011 Bob Ray
- * @file chunks.transport.php
  * @author Bob Ray <http://bobsguides.com>
- * @date 1/15/11
+ * 1/15/11
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free

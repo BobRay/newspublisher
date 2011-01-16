@@ -23,7 +23,7 @@
 /**
  * Build NewsPublisher Package
  *
- * @description build script for NewsPublisher package
+ * Description: Build script for NewsPublisher package
  * @package newspublisher
  * @subpackage build
  */

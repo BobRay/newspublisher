@@ -2,9 +2,8 @@
 /**
  * NewsPublisher transport chunks
  * Copyright 2011 Bob Ray
- * @file transport.chunks.php
  * @author Bob Ray <http://bobsguides.com>
- * @date 1/15/11
+ * 1/15/11
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -22,7 +21,7 @@
  * @package newspublisher
  */
 /**
- * @description array of chunk objects for NewsPublisher package
+ * Description: Array of chunk objects for NewsPublisher package
  * @package newspublisher
  * @subpackage build
  */
