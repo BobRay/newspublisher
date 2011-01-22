@@ -288,7 +288,7 @@ class Newspublisher {
                 $this->resource = $this->modx->newObject('modResource');
                 /* get folder id where we should store articles
                  else store under current document */
-                 $this->parentId = !empty($this->props['parent']) ? intval($this->props['parent']):$this->modx->resource->get('id');
+                 $this->parentId = !empty($this->props['parentid']) ? intval($this->props['parentid']):$this->modx->resource->get('id');
 
                 /* str_replace to prevent rendering of placeholders */
                  $fs = array();
