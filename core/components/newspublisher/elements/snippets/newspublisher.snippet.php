@@ -34,62 +34,62 @@
 
    NOTE: You may need the latest version of TinyMCE for rich text editing.
 
-  Parameters:
-    @param parent      - (optional) Folder id where new documents are stored; defaults to NewsPublisher folder.
-    @param show        - (optional) Comma separated list of fields/tvs to show (shown in order).
+  Properties:
+    @property parent      - (optional) Folder id where new documents are stored; defaults to NewsPublisher folder.
+    @property show        - (optional) Comma separated list of fields/tvs to show (shown in order).
                      defaults to 'pagetitle,longtitle,description,menutitle,pub_date,unpub_date,introtext,content'.
-    @param required    - (optional) Comma-separated list of fields/tvs to require; defaults to 'pagetitle,content'.
-    @param published   - (optional) Set new resource as published or not
+    @property required    - (optional) Comma-separated list of fields/tvs to require; defaults to 'pagetitle,content'.
+    @property published   - (optional) Set new resource as published or not
                       (will be overridden by publish and unpublish dates).
                        Set to `parent` to match parent's pub status;
                        defaults to publish_default system setting.
-    @param postid      - (optional) Document id to load on success; defaults to the page created or edited.
-    @param cancelid    - (optional) Document id to load on cancel; defaults to http_referer.
-    @param badwords    - (optional) Comma delimited list of words not allowed in new document.
-    @param template    - (optional) Name of template to use for new document; set to 'parent' to use parent's template;
+    @property postid      - (optional) Document id to load on success; defaults to the page created or edited.
+    @property cancelid    - (optional) Document id to load on cancel; defaults to http_referer.
+    @property badwords    - (optional) Comma delimited list of words not allowed in new document.
+    @property template    - (optional) Name of template to use for new document; set to 'parent' to use parent's template;
                        for 'parent', &parent must be set; defaults to system default template.
-    @param headertpl   - (optional) Header Tpl chunk (chunk name) to be inserted at the beginning of a new document.
-    @param footertpl   - (optional) Footer Tpl chunk (chunk name) to be inserted at the end of a new document.
-    @param tinyheight  - (optional) Height of richtext areas; default `400px`.
-    @param tinywidth   - (optional) Width of richtext areas; default `95%`.
-    @param outertpl    - (optional) Tpl used as a shell for the whole page
-    @param texttpl     - (optional) Tpl used for text resource fields
-    @param inttpl      - (optional) Tpl used for integer resource fields.
-    @param datetpl     - (optional) Tpl used for date resource fields and date TVs
-    @param booltpl     - (optional) Tpl used for Yes/No resource fields (e.g., published, searchable, etc.).
-    @param optionoutertpl - (optional) Tpl used for as a shell for checkbox, list, and radio option TVs.
-    @param optiontpl   - (optional) Tpl used for each option of checkbox and radio option TVs.
-    @param listoptiontpl - (optional) Tpl used for each option of listbox TVs.
-    @param richtext    - (optional) Sets the flag to as to whether or Rich Text Editor is used when editing the page
+    @property headertpl   - (optional) Header Tpl chunk (chunk name) to be inserted at the beginning of a new document.
+    @property footertpl   - (optional) Footer Tpl chunk (chunk name) to be inserted at the end of a new document.
+    @property tinyheight  - (optional) Height of richtext areas; default `400px`.
+    @property tinywidth   - (optional) Width of richtext areas; default `95%`.
+    @property outertpl    - (optional) Tpl used as a shell for the whole page
+    @property texttpl     - (optional) Tpl used for text resource fields
+    @property inttpl      - (optional) Tpl used for integer resource fields.
+    @property datetpl     - (optional) Tpl used for date resource fields and date TVs
+    @property booltpl     - (optional) Tpl used for Yes/No resource fields (e.g., published, searchable, etc.).
+    @property optionoutertpl - (optional) Tpl used for as a shell for checkbox, list, and radio option TVs.
+    @property optiontpl   - (optional) Tpl used for each option of checkbox and radio option TVs.
+    @property listoptiontpl - (optional) Tpl used for each option of listbox TVs.
+    @property richtext    - (optional) Sets the flag to as to whether or Rich Text Editor is used when editing the page
                        content in the Manager; defaults to richtext_default System Setting for new resources;
                        set to `Parent` to use parent's setting.
-    @param rtcontent   - (optional) Use rich text for the content form field.
-    @param rtsummary   - (optional) Use rich text for the summary (introtext) form field.
-    @param hidemenu    - (optional) Sets the flag (0/1) for whether or not the new page shows in the menu; defaults to 1.
-    @param searchable  - (optional) Search add-on components can use this to determine whether to include the resource in searches;
+    @property rtcontent   - (optional) Use rich text for the content form field.
+    @property rtsummary   - (optional) Use rich text for the summary (introtext) form field.
+    @property hidemenu    - (optional) Sets the flag (0/1) for whether or not the new page shows in the menu; defaults to 1.
+    @property searchable  - (optional) Search add-on components can use this to determine whether to include the resource in searches;
                        default is search_default System Setting; set to `Parent` to use parent's setting.
-    @param cacheable   - (optional) Sets the flag (0/1) for whether or not the new page is marked as cacheable;
+    @property cacheable   - (optional) Sets the flag (0/1) for whether or not the new page is marked as cacheable;
                        default is cache_default System Setting; set to `Parent` to use parent's setting.
 
-    @param aliastitle  - (optional) Set to 1 to use lowercase, hyphenated, page title as alias. Defaults to 1.
+    @property aliastitle  - (optional) Set to 1 to use lowercase, hyphenated, page title as alias. Defaults to 1.
                        If 0,'article-(date created)' is used. Ignored if alias is filled in form.
-    @param clearcache  - (optional) When set to 1, cache will be cleared after saving the resource; default: 1.
-    @param listboxmax  - (optional) Maximum length for listboxes. Default is 8 items.
-    @param cssfile     - (optional) Name of CSS file to use, or `` for no CSS file; defaults to newspublisher.css.
+    @property clearcache  - (optional) When set to 1, cache will be cleared after saving the resource; default: 1.
+    @property listboxmax  - (optional) Maximum length for listboxes. Default is 8 items.
+    @property cssfile     - (optional) Name of CSS file to use, or `` for no CSS file; defaults to newspublisher.css.
                        File should be in assets/newspublisher/css/ directory
-    @param errortpl    - (optional) Name of Tpl chunk for formatting errors in the header. Must contain [[+np.error]] placeholder.
-    @param fielderrortpl (optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.
-    @param groups      - (optional) Resource groups to put new document in (no effect with existing docs);
+    @property errortpl    - (optional) Name of Tpl chunk for formatting errors in the header. Must contain [[+np.error]] placeholder.
+    @property fielderrortpl (optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.
+    @property groups      - (optional) Resource groups to put new document in (no effect with existing docs);
                        set to 'parent' to use parent's groups.
-    @param language    - (optional) Language to use in forms and error messages.
-    @param prefix      - (optional) Prefix to use for placeholders; defaults to 'np'
-    @param fielderrortpl - (optional)
-    @param initrte     - '(optional) Initialize rich text editor; set this if there are any rich text fields; defaults to 0'
-    @param initdatepicker - (optional) Initialized the datepicker; set this if there are any date fields; defaults to '1'
-    @param readonly    - (optional) Comma-separated list of fields that should be read only; does not work on option or richtext fields
-    @param intmaxlength- (optional) Max length for integer input fields; default: 10
-    @param textmaxlength- (optional) Max length for text input fields; default 60
-    @param hoverhelp    - (optional) Show help when hovering over field caption: default `1`
+    @property language    - (optional) Language to use in forms and error messages.
+    @property prefix      - (optional) Prefix to use for placeholders; defaults to 'np'
+    @property fielderrortpl - (optional)
+    @property initrte     - '(optional) Initialize rich text editor; set this if there are any rich text fields; defaults to 0'
+    @property initdatepicker - (optional) Initialized the datepicker; set this if there are any date fields; defaults to '1'
+    @property readonly    - (optional) Comma-separated list of fields that should be read only; does not work on option or richtext fields
+    @property intmaxlength- (optional) Max length for integer input fields; default: 10
+    @property textmaxlength- (optional) Max length for text input fields; default 60
+    @property hoverhelp    - (optional) Show help when hovering over field caption: default `1`
 
 */
 

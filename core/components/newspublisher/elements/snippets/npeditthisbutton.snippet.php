@@ -28,19 +28,19 @@
  * editing resources. Clicking on the button launches NewsPublisher
  * for the current page.
  *
- * @param $npId (int) - ID of newspublisher page (set automatically on first run).
- * @param $noShow - Comma-separated list of IDs of documents
+ * @property $npId (int) - ID of newspublisher page (set automatically on first run).
+ * @property $noShow - Comma-separated list of IDs of documents
  *      on which the button should not be displayed. Defaults to
  *      home page, and NewsPublisher page.
- * @param $bottom (optional) - distance from bottom of window to place
+ * @property $bottom (optional) - distance from bottom of window to place
  *      button. Can be in any legal CSS format. Defaults to `20%`.
- * @param $right (optional) - distance from right of window to place
+ * @property $right (optional) - distance from right of window to place
  *      button. Can be in any legal CSS format. Defaults to `20%`.
- * @param $buttonCaption (optional -- not actually a parameter) -
+ * @property $buttonCaption (optional -- not actually a parameter) -
  *      Caption for edit button.
  *      Defaults to np_edit language string or "Edit" if empty.
- * @param $language (optional) - Language to use for error messages.
- * @param $debug (optional) - Displays the button on all pages with
+ * @property $language (optional) - Language to use for error messages.
+ * @property $debug (optional) - Displays the button on all pages with
  *      either the $buttonCaption, or a message explaining why it
  *      would not be shown.
  *
