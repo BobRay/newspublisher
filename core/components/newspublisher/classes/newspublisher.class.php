@@ -828,8 +828,8 @@ class Newspublisher {
 
             case 'textarea':
             case 'textareamini':
-                $replace['[[+npx.cols]]'] = 200;
-                $replace['[[+npx.rows]]'] = 600;
+                $replace['[[+npx.rows]]'] = '200';
+                $replace['[[+npx.cols]]'] = '600';
                 $formTpl .= $this->tpls['textareaTpl'];
                 $replace['[[+npx.class]]'] = $tvType == 'textarea' ? 'textarea' : 'textareamini';
                 break;
