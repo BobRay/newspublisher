@@ -19,3 +19,15 @@ rich text TVs.
 
 The rich text editing function does not work with the current version
 of TinyMCE, but should (hopefully) work with future releases.
+
+Here's a fix for the TinyMCE problem (Thanks to Bruno17!):
+
+Change line 170 of /assets/components/tinymce/tiny.js from this:
+
+        Ext.getCmp('modx-panel-resource').markDirty();
+
+
+To this:
+
+        var pr = Ext.getCmp('modx-panel-resource');
+        if (pr) pr.markDirty();
