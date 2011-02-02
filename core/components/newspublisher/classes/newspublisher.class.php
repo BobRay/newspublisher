@@ -27,7 +27,7 @@
 /**
  * MODx NewsPublisher Class
  *
- * @version Version 1.0.4
+ * @version Version 1.0.5
  *
  * @package  newspublisher
  *

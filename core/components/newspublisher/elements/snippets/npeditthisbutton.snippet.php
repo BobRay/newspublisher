@@ -4,7 +4,7 @@
  * NpEditThisButton
  * Copyright 2011 Bob Ray
  *
- * @version Version 1.0.0 Beta-1
+ * @version Version 1.0.0 beta-1
  *
  * NpEditThisButton is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free

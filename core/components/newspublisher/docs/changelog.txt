@@ -1,5 +1,10 @@
 Changelog for NewsPublisher
 
+NewsPublisher 1.0.5
+-------------------
+Fixed bug in transport package
+Added tutorial to docs
+
 NewsPublisher 1.0.4
 -------------------
 Changed a few defaults
