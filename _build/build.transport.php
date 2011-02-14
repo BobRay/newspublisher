@@ -55,7 +55,7 @@ $modx->setLogTarget(XPDO_CLI_MODE ? 'ECHO' : 'HTML');
 
 /* set package info */
 define('PKG_NAME','newspublisher');
-define('PKG_VERSION','1.0.5');
+define('PKG_VERSION','1.0.6');
 define('PKG_RELEASE','beta1');
 
 /* load builder */
