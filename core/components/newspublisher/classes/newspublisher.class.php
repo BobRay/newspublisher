@@ -1058,6 +1058,7 @@ class Newspublisher {
             $fields['editedby'] = '0';
 
             /* these *might* be in the $_POST array. Set them if not */
+            $fields['published'] = isset($_POST['published'])? $_POST['published']: $this->published;
             $fields['hidemenu'] = isset($_POST['hidemenu'])? $_POST['hidemenu']: $this->hidemenu;
             $fields['template'] = isset ($_POST['template']) ? $_POST['template'] : $this->template;
             $fields['parent'] = isset ($_POST['parent']) ? $_POST['parent'] : $this->parentId;
