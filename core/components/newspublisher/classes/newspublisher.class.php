@@ -609,9 +609,7 @@ class Newspublisher {
     public function displayForm($show) {
 
         $fields = explode(',',$show);
-        foreach ($fields as $field) {
-            $field = trim($field);
-        }
+        $inner = '';
 
         if (! $this->resource) {
             $this->setError($this->modx->lexicon('np_no_resource'));
@@ -622,6 +620,7 @@ class Newspublisher {
         $resourceFieldNames = array_keys($this->modx->getFields('modResource'));
 
         foreach($fields as $field) {
+            $field = trim($field);
             $replace = array();
             if (in_array($field,$resourceFieldNames)) { /* regular resource field */
 
@@ -695,7 +694,6 @@ class Newspublisher {
                                 $msg = $this->modx->lexicon('np_no_datepicker');
                                 $this->setError($msg . $field);
                                 $this->setFieldError($field, $msg);
-                                //$this->setError($this->modx->lexicon('np_no_datepicker') . $field);
                             }
                             $inner .= $this->tpls['dateTpl'];
                             if (! $this->isPostBack) {
@@ -708,10 +706,20 @@ class Newspublisher {
                             break;
                     }
                 }
-                /* ToD: add readonly to props */
-            $replace['[[+npx.readonly]]'] = ($field =='id') || in_array($field, $this->props['readonly'])? 'readonly="readonly"' : '';
-            $replace['[[+npx.fieldName]]'] = $field ;
-            $inner = $this->strReplaceAssoc($replace, $inner);
+
+            /* make sure id is readonly and any other fields sent in the &readonly param */
+                if ($field == 'id') {
+                    $replace['[[+npx.readonly]]'] = 'readonly="readonly"';
+                } elseif ($this->props['readonly']) {
+                    $readOnlyArray = explode(',', $this->props['readonly']);
+                    if (in_array($field, $readOnlyArray)) {
+                        $replace['[[+npx.readonly]]'] = 'readonly="readonly"';
+                    }
+                    unset($readOnlyArray);
+                }
+
+                $replace['[[+npx.fieldName]]'] = $field ;
+                $inner = $this->strReplaceAssoc($replace, $inner);
 
             } else {
                 /* see if it's a TV */
@@ -723,7 +731,7 @@ class Newspublisher {
         }
 
         $formTpl = str_replace('[[+npx.insert]]',$inner,$this->tpls['outerTpl']);
-        //die ('<pre' . print_r($formTpl,true));
+        //die ('<pre>' . print_r($formTpl,true));
         return $formTpl;
     } /* end displayForm */
 

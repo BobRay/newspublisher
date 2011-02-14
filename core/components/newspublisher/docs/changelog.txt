@@ -1,5 +1,9 @@
 Changelog for NewsPublisher
 
+NewsPublisher 1.0.6
+-------------------
+Fixed bug with in_array() error from readonly property
+
 NewsPublisher 1.0.5
 -------------------
 Fixed bug in transport package
