@@ -167,7 +167,14 @@ class Newspublisher {
      * @var int Max length for text input fields
      */
     protected $textMaxlength;
-
+    /**
+     * @var string imageTvWidth width of image tv input area
+     */
+    protected $imageTvWidth;
+    /**
+     * @var string imageTvHeight height of image tv input area
+     */
+    protected $imageTvHeight;
 
     /** NewsPublisher constructor
      *
@@ -358,6 +365,8 @@ class Newspublisher {
            $this->listboxMax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
            $this->MultipleListboxMax = $this->props['multiplelistboxmax']? $this->props['multiplelistboxmax'] : 8;
 
+           $this->imageTvWidth = ! empty($this->props['imagetvwidth'])? $this->props['imagetvwidth'] : '700px';
+           $this->imageTvHeight = ! empty($this->props['imagetvheight'])? $this->props['imagetvheight'] : '500px';
 
            $ph = ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
            $this->modx->toPlaceholder('contentrows',$ph,$this->prefix);
@@ -409,13 +418,14 @@ class Newspublisher {
                        $def = $this->modx->getOption('cultureKey',null,$this->modx->getOption('manager_language',null,'en'));
                        $tinyproperties['language'] = $this->modx->getOption('fe_editor_lang',array(),$def);
                        $tinyproperties['frontend'] = true;
-                       // $tinyproperties['selector'] = 'modx-richtext';
-                                           //$tinyproperties['selector'] = 'modx-richtext';//alternative to 'frontend = true' you can use a selector for texareas
                        unset($def);
                    }
                    $tinyproperties['cleanup'] = true; /* prevents "bogus" bug */
                    $tinyproperties['width'] = empty ($this->props['tinywidth'] )? '95%' : $this->props['tinywidth'];
                    $tinyproperties['height'] = empty ($this->props['tinyheight'])? '400px' : $this->props['tinyheight'];
+
+                   //$tinyproperties['tiny.custom_buttons1'] = 'image';
+                   //$tinyproperties['tiny.custom_buttons2'] = '';
 
                    $tiny->setProperties($tinyproperties);
 
@@ -423,11 +433,32 @@ class Newspublisher {
 
                    $this->modx->regClientStartupScript($tiny->config['assetsUrl'].'jscripts/tiny_mce/langs/'.$tiny->properties['language'].'.js');
                    $this->modx->regClientStartupScript($tiny->config['assetsUrl'].'tiny.browser.js');
-                   $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
-                       Ext.onReady(function() {
-                       MODx.loadRTE();
-                       });
-                   </script>');
+                   //mod by Bruno
+
+                   if ($this->props['hasimagetv']) {
+                       $rt_configs = array(
+                           "selector" => "rt_imagetv",
+                           "width" => $this->imageTvWidth,
+                           "height" => $this->imageTvHeight,
+                           "buttons1" => "image",
+                           "buttons2" => "",
+                           "theme_advanced_buttons1" => "image",
+                           "theme_advanced_buttons2" => "",
+                        );
+
+                       $cfg = '';
+                       foreach ($rt_configs as $cf_key => $cf_value){
+                           $cfg.='Tiny.config.'.$cf_key.' = "'.$cf_value.'";';
+                       }
+                       $js.=$cfg.' MODx.loadRTE();';
+
+                       $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
+                           Ext.onReady(function() {
+                           MODx.loadRTE();
+                           '.$js.'
+                           });
+                       </script>');
+                   }
                } /* end if ($whichEditor == 'TinyMCE') */
 
            } /* end if ($richtext) */
@@ -797,6 +828,13 @@ class Newspublisher {
                 $this->setError($this->modx->lexicon('np_no_evals'). $tv->get('name'));
                 return null;
             } else {
+                if ($tvType='image') {
+                    if ($this->existing) {
+                        $ph = $tv->renderOutput($this->existing);
+                    } else {
+                        $ph = '<img src="' . $ph . '" />';
+                    }
+                }
                 $this->modx->toPlaceholder($fields['name'], $ph, $this->prefix );
             }
         }
@@ -827,6 +865,7 @@ class Newspublisher {
                 $formTpl .= $this->tpls['textTpl'];
                 $replace['[[+npx.maxlength]]'] = $this->textMaxlength;
                 break;
+
             case 'image';
                 /* ToDo: image browser (someday) */
                 $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? $fields['description'] : '';
@@ -1078,6 +1117,10 @@ class Newspublisher {
             $fields['tvs'] = true;
             foreach ($this->allTvs as $tv) {
                 $name = $tv->get('name');
+                if ($tv->get('type')==  'image') {
+                    $_POST[$name] = preg_replace('/(^.*src=")([^"]*)(".*$)/','${2}',$_POST[$name]);
+                }
+                
                 if ($tv->get('type') == 'date') {
                     $fields['tv' . $tv->get('id')] = $_POST[$name] . ' ' . $_POST[$name . '_time'];
                 } else {
