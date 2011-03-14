@@ -460,6 +460,30 @@ $properties = array(
         'value' => '1',
         'lexicon' => 'newspublisher:properties',
     ),
+    array(
+        'name' => 'hasimagetv',
+        'desc' => 'np_hasimagetv_desc',
+        'type' => 'combo-boolean',
+        'options' => '',
+        'value' => '0',
+        'lexicon' => 'newspublisher:properties',
+    ),
+    array(
+        'name' => 'imagetvheight',
+        'desc' => 'np_imagetvheight_desc',
+        'type' => 'textfield',
+        'options' => '',
+        'value' => '300px',
+        'lexicon' => 'newspublisher:properties',
+    ),
+    array(
+        'name' => 'imagetvwidth',
+        'desc' => 'np_imagetvwidth_desc',
+        'type' => 'textfield',
+        'options' => '',
+        'value' => '500px',
+        'lexicon' => 'newspublisher:properties',
+    ),
 );
 
 return $properties;

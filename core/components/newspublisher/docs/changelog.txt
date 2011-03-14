@@ -2,6 +2,9 @@ Changelog for NewsPublisher
 
 NewsPublisher 1.0.6
 -------------------
+Fixed bug with hasimagetv and TinyMCE init
+Added hasimagetv, imagetvheight, imagetvwidth properties
+Added id prefixes to avoid CSS collisions
 Added support for Image TVs
 Fixed bug with published status
 Fixed bug with in_array() error from readonly property

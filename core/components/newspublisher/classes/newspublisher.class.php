@@ -457,14 +457,15 @@ class Newspublisher {
                            $cfg.='Tiny.config.'.$cf_key.' = "'.$cf_value.'";';
                        }
                        $js.=$cfg.' MODx.loadRTE();';
-
-                       $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
-                           Ext.onReady(function() {
-                           MODx.loadRTE();
-                           '.$js.'
-                           });
-                       </script>');
                    }
+
+                   $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
+                       Ext.onReady(function() {
+                       MODx.loadRTE();
+                       '.$js.'
+                       });
+                   </script>');
+
                } /* end if ($whichEditor == 'TinyMCE') */
 
            } /* end if ($richtext) */

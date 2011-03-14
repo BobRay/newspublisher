@@ -90,6 +90,9 @@
     @property intmaxlength- (optional) Max length for integer input fields; default: 10
     @property textmaxlength- (optional) Max length for text input fields; default 60
     @property hoverhelp    - (optional) Show help when hovering over field caption: default `1`
+    @property hasimagetv   - (required if there are Image TVs) - Initialize Image Browser; default `0`
+    @property imagetvheight - (optional) Height of image TV area; default `300px`
+    @property imagetvwidth - (optional) Width of image TV area; default `500px`
 
 */
 
