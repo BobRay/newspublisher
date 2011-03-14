@@ -365,8 +365,8 @@ class Newspublisher {
            $this->listboxMax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
            $this->MultipleListboxMax = $this->props['multiplelistboxmax']? $this->props['multiplelistboxmax'] : 8;
 
-           $this->imageTvWidth = ! empty($this->props['imagetvwidth'])? $this->props['imagetvwidth'] : '700px';
-           $this->imageTvHeight = ! empty($this->props['imagetvheight'])? $this->props['imagetvheight'] : '500px';
+           $this->imageTvWidth = ! empty($this->props['imagetvwidth'])? $this->props['imagetvwidth'] : '500px';
+           $this->imageTvHeight = ! empty($this->props['imagetvheight'])? $this->props['imagetvheight'] : '300px';
 
            $ph = ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
            $this->modx->toPlaceholder('contentrows',$ph,$this->prefix);
@@ -380,19 +380,25 @@ class Newspublisher {
            $ph = ! empty($this->props['summarycols'])? $this->props['summarycols'] : '60';
            $this->modx->toPlaceholder('summarycols',$ph, $this->prefix);
 
-           /* do rich text stuff */
-            //$ph = ! empty($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
-            $ph = ! empty($this->props['rtcontent']) ? 'modx-richtext':'content';
-            $this->modx->toPlaceholder('rt_content_1', $ph, $this->prefix );
-            $ph = ! empty($this->props['rtcontent']) ? 'modx-richtext':'content';
-            $this->modx->toPlaceholder('rt_content_2', $ph, $this->prefix );
+           if (false) { /* do rich text stuff */
+               //$ph = ! empty($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
+               $ph = !empty($this->props['rtcontent'])
+                       ? 'modx-richtext' : 'np-content';
+               $this->modx->toPlaceholder('rt_content_1', $ph, $this->prefix);
+               $ph = !empty($this->props['rtcontent'])
+                       ? 'modx-richtext' : 'np-content';
+               $this->modx->toPlaceholder('rt_content_2', $ph, $this->prefix);
 
-            /* set rich text summary field */
 
-            $ph = ! empty($this->props['rtsummary']) ? 'modx-richtext':'introtext';
-            $this->modx->toPlaceholder('rt_summary_1', $ph, $this->prefix );
-            $ph = ! empty($this->props['rtsummary']) ? 'modx-richtext':'introtext';
-            $this->modx->toPlaceholder('rt_summary_2', $ph, $this->prefix );
+               /* set rich text summary field */
+
+               $ph = !empty($this->props['rtsummary'])
+                       ? 'modx-richtext' : 'np-introtext';
+               $this->modx->toPlaceholder('rt_summary_1', $ph, $this->prefix);
+               $ph = !empty($this->props['rtsummary'])
+                       ? 'modx-richtext' : 'np-introtext';
+               $this->modx->toPlaceholder('rt_summary_2', $ph, $this->prefix);
+           }
 
             unset($ph);
            if ($this->props['initrte']) {
@@ -674,10 +680,10 @@ class Newspublisher {
                             $msg = $this->modx->lexicon('np_no_rte');
                             $this->setError($msg . $field);
                             $this->setFieldError($field, $msg);
-                            $replace['[[+npx.class]]'] = 'content';
+                            $replace['[[+npx.class]]'] = 'np-content';
                         }
                     } else {
-                         $replace['[[+npx.class]]'] = 'content';
+                         $replace['[[+npx.class]]'] = 'np-content';
                     }
                     $inner .= $this->tpls['textareaTpl'];
                 } elseif ($field == 'introtext') {
@@ -691,11 +697,11 @@ class Newspublisher {
                             $msg = $this->modx->lexicon('np_no_rte');
                             $this->setError($msg . $field);
                             $this->setFieldError($field, $msg);
-                            $replace['[[+npx.class]]'] = 'introtext';
+                            $replace['[[+npx.class]]'] = 'np-introtext';
                         }
 
                     } else {
-                         $replace['[[+npx.class]]'] = 'introtext';
+                         $replace['[[+npx.class]]'] = 'np-introtext';
                     }
                     $inner .= $this->tpls['textareaTpl'];
                 } else {
@@ -828,15 +834,15 @@ class Newspublisher {
                 $this->setError($this->modx->lexicon('np_no_evals'). $tv->get('name'));
                 return null;
             } else {
-                if ($tvType='image') {
-                    if ($tvType='image') {
+
+                if ($tvType=='image') {
                     if ($this->existing) {
                         $ph = '<img src="' . $tv->getValue($this->existing). '" />';
                     } else {
                        $ph='';
                     }
                 }
-                }
+                
                 $this->modx->toPlaceholder($fields['name'], $ph, $this->prefix );
             }
         }

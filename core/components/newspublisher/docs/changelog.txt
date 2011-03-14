@@ -2,6 +2,7 @@ Changelog for NewsPublisher
 
 NewsPublisher 1.0.6
 -------------------
+Added support for Image TVs
 Fixed bug with published status
 Fixed bug with in_array() error from readonly property
 

@@ -9,12 +9,12 @@ div.newspublisher form {
     margin: 0;
     padding:20px 0px 10px 0px;
 }
-textarea#content {
+textarea#np-content {
     width:95%;
-    height: 400px;
+    height: 300px;
 }
 
-textarea#introtext {
+textarea#np-introtext {
     width: 95%;
     height: 100px;
 }
@@ -124,7 +124,7 @@ div.newspublisher input.submit {
 div.newspublisher input.int {
     width:6em;
 }
-input#id {
+input#np-id {
     background-color:#dcdcdc;
     color:gray;
     width:4em;
@@ -149,16 +149,16 @@ div.newspublisher fieldset {
     margin:10px 0px 0px 0px;
     background-color:white;
 }
-fieldset p {
+div.newspublisher fieldset p {
   margin:0;
   padding: 0;
 }
-fieldset select {
+div.newspublisher fieldset select {
   width:10em;
   margin:0;
   padding: 0;
 }
-fieldset option {
+div.newspublisher fieldset option {
   margin:0;
   padding: 0;
 }
