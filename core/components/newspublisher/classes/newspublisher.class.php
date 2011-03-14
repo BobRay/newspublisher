@@ -829,11 +829,13 @@ class Newspublisher {
                 return null;
             } else {
                 if ($tvType='image') {
+                    if ($tvType='image') {
                     if ($this->existing) {
-                        $ph = $tv->renderOutput($this->existing);
+                        $ph = '<img src="' . $tv->getValue($this->existing). '" />';
                     } else {
-                        $ph = '<img src="' . $ph . '" />';
+                       $ph='';
                     }
+                }
                 }
                 $this->modx->toPlaceholder($fields['name'], $ph, $this->prefix );
             }
@@ -850,7 +852,7 @@ class Newspublisher {
                     $msg = $this->modx->lexicon('np_no_datepicker');
                     $this->setError($msg . $fields['name']);
                     $this->setFieldError($fields['name'], $msg);
-                    //$this->setError($this->modx->lexicon('np_no_datepicker') . $fields['name']);
+
                 }
                 $formTpl .= $this->tpls['dateTpl'];
                 if (! $this->isPostBack) {
@@ -867,7 +869,6 @@ class Newspublisher {
                 break;
 
             case 'image';
-                /* ToDo: image browser (someday) */
                 $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? $fields['description'] : '';
                 $replace['[[+npx.maxlength]]'] = $this->textMaxlength;
                 $formTpl .= $this->tpls['imageTpl'];
