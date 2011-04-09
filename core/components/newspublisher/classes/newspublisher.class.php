@@ -770,6 +770,7 @@ class Newspublisher {
 
         $formTpl = str_replace('[[+npx.insert]]',$inner,$this->tpls['outerTpl']);
         //die ('<pre>' . print_r($formTpl,true));
+        // die ('$_POST<br /><pre>' . print_r($_POST,true));
         return $formTpl;
     } /* end displayForm */
 
@@ -916,17 +917,27 @@ class Newspublisher {
             case 'checkbox':
             case 'listbox':
             case 'listbox-multiple':
-                $innerReplace = array();
+            case 'dropdown':
 
+                $innerReplace = array();
+                /* handle @ binding TVs */
+                if (preg_match('/^@/',$fields['elements'])) {
+                    $fields['elements'] = $tv->processBindings($fields['elements']);
+                }
                 $options = explode('||',$fields['elements']);
-                $postfix = ($tvType == 'checkbox' || $tvType=='listbox-multiple')? '[]' : '';
+
+                $postfix = ($tvType == 'checkbox' || $tvType=='listbox-multiple' || $tvType=='listbox')? '[]' : '';
                 $innerReplace['[[+npx.name]]'] = $fields['name'] . $postfix;
 
-                if($tvType == 'listbox' || $tvType == 'listbox-multiple') {
+                if($tvType == 'listbox' || $tvType == 'listbox-multiple' || $tvType == 'dropdown') {
                     $formTpl = $this->tpls['listOuterTpl'];
                     $innerReplace['[[+npx.multiple]]'] = ($tvType == 'listbox-multiple')? ' multiple="multiple" ': '';
                     $count = count($options);
-                    $max = ($tvType == 'listbox')? $this->listboxMax : $this->multipleListboxMax;
+                    if ($tvType == 'dropdown') {
+                        $max = 1;
+                    } else {
+                        $max = ($tvType == 'listbox')? $this->listboxMax : $this->multipleListboxMax;
+                    }
                     $innerReplace['[[+npx.size]]'] = ($count <= $max)? $count : $max;
                 } else {
                     $formTpl = $this->tpls['optionOuterTpl'];
@@ -965,9 +976,13 @@ class Newspublisher {
                         $rvalue = strtok('=');
                         $rvalue = $rvalue? $rvalue : $option;
                     } else {
-                        $rvalue = $option;
+                        $option = strtok($option,'=');
+
+                        $rvalue = strtok('=');
+                        $rvalue = $rvalue? $rvalue : $option;
+                        //$rvalue = $option;
                     }
-                    if ($tvType == 'listbox' || $tvType =='listbox-multiple') {
+                    if ($tvType == 'listbox' || $tvType =='listbox-multiple' || $tvType == 'dropdown') {
                         $optionTpl = $this->tpls['listOptionTpl'];
                         $innerReplace['[[+npx.value]]'] = $rvalue;
                     } else {
@@ -990,9 +1005,8 @@ class Newspublisher {
                         }
 
                     /*  field value is not empty */
-                    } elseif ((is_array($val) && in_array($option,$val)) || ($option == $val)) {
-
-                                $innerReplace['[[+npx.selected]]'] = $selected;
+                    } elseif ((is_array($val) && in_array($rvalue,$val)) || ($option == $val)) {
+                            $innerReplace['[[+npx.selected]]'] = $selected;
                     }
 
                     $innerReplace['[[+npx.text]]'] = $option;
@@ -1132,6 +1146,12 @@ class Newspublisher {
                 if ($tv->get('type') == 'date') {
                     $fields['tv' . $tv->get('id')] = $_POST[$name] . ' ' . $_POST[$name . '_time'];
                 } else {
+                    if (is_array($_POST[$name])) {
+                        /* get rid of phantom checkbox */
+                        if ($tv->get('type')=='checkbox') {
+                            unset($_POST[$name][0]);
+                        }
+                    }
                     $fields['tv' . $tv->get('id')] = $_POST[$name];
                 }
             }
