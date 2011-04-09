@@ -972,16 +972,13 @@ class Newspublisher {
                     /* if field is empty and not in $_POST, get the default value */
                     if(empty($val) && !isset($_POST[$fields['name']])) {
                         $defaults = explode('||',$fields['default_text']);
-                        $option = strtok($option,'=');
-                        $rvalue = strtok('=');
-                        $rvalue = $rvalue? $rvalue : $option;
-                    } else {
-                        $option = strtok($option,'=');
 
-                        $rvalue = strtok('=');
-                        $rvalue = $rvalue? $rvalue : $option;
-                        //$rvalue = $option;
                     }
+                    $option = strtok($option,'=');
+
+                    $rvalue = strtok('=');
+                    $rvalue = $rvalue? $rvalue : $option;
+
                     if ($tvType == 'listbox' || $tvType =='listbox-multiple' || $tvType == 'dropdown') {
                         $optionTpl = $this->tpls['listOptionTpl'];
                         $innerReplace['[[+npx.value]]'] = $rvalue;
