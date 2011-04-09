@@ -1,5 +1,12 @@
 Changelog for NewsPublisher
 
+NewsPublisher 1.0.7
+Fixed bug with phantom checkbox
+Handle @ binding TVs
+Handle dropdown TVs
+Fixed bug with == TVs
+
+
 NewsPublisher 1.0.6
 -------------------
 Fixed bug with hasimagetv and TinyMCE init
