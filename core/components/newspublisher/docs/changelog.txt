@@ -1,6 +1,11 @@
 Changelog for NewsPublisher
 
+NewsPublisher 1.0.8
+-------------------
+Added makeUrl() code back in for proper redirection
+
 NewsPublisher 1.0.7
+-------------------
 Fixed bug with phantom checkbox
 Handle @ binding TVs
 Handle dropdown TVs

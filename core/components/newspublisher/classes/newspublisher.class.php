@@ -1227,9 +1227,9 @@ class Newspublisher {
             /* redirect to post id */
 
             /* ToDo: The next two lines can probably be removed once makeUrl() and sendRedirect() are updated */
-            $controller = $this->modx->getOption('request_controller',null,'index.php');
-            $goToUrl = $controller . '?id=' . $postId;
-
+            //$controller = $this->modx->getOption('request_controller',null,'index.php');
+            //$goToUrl = $controller . '?id=' . $postId;
+            
             $this->modx->sendRedirect($goToUrl);
         }
 
