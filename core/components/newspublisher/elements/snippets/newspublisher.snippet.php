@@ -119,8 +119,8 @@ $errorTpl =  $np->getTpl('errorTpl');
 $fieldErrorTpl = $np->getTpl('fieldErrorTpl');
 
 /* add Cancel button only if requested */
-if (!empty ($cancelId)) {
-    $cancelUrl = $modx->makeUrl($cancelId, '', '', 'full');
+if (!empty ($scriptProperties['cancelid'])) {
+    $cancelUrl = $modx->makeUrl($scriptProperties['cancelid'], '', '', 'full');
 } else {
     $cancelUrl = isset($_SERVER['HTTP_REFERER'])
             ? $_SERVER['HTTP_REFERER'] : $modx->resource->get('id');

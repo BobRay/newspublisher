@@ -3,6 +3,7 @@ Changelog for NewsPublisher
 NewsPublisher 1.0.8
 -------------------
 Added makeUrl() code back in for proper redirection
+Fixed bug with cancelid orthography
 
 NewsPublisher 1.0.7
 -------------------
