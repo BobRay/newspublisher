@@ -420,7 +420,8 @@ class Newspublisher {
                    $tinyproperties=$plugin->getProperties();
                    require_once $tinyPath.'tinymce.class.php';
                    $tiny = new TinyMCE($this->modx,$tinyproperties,$tinyUrl);
-                   if (isset($this->props['forfrontend']) || $this->modx->isFrontend()) {
+                   // if (isset($this->props['forfrontend']) || $this->modx->isFrontend()) {
+                   if (isset($this->props['forfrontend']) || $this->modx->context->get('key') != 'mgr') {
                        $def = $this->modx->getOption('cultureKey',null,$this->modx->getOption('manager_language',null,'en'));
                        $tinyproperties['language'] = $this->modx->getOption('fe_editor_lang',array(),$def);
                        $tinyproperties['frontend'] = true;
