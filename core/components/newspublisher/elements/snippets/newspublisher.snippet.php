@@ -75,7 +75,7 @@
                        If 0,'article-(date created)' is used. Ignored if alias is filled in form.
     @property clearcache  - (optional) When set to 1, cache will be cleared after saving the resource; default: 1.
     @property listboxmax  - (optional) Maximum length for listboxes. Default is 8 items.
-    @property cssfile     - (optional) Name of CSS file to use, or `` for no CSS file; defaults to newspublisher.css.
+    @property cssfile     - (optional) Name of CSS file to use, or `0` for no CSS file; defaults to newspublisher.css.
                        File should be in assets/newspublisher/css/ directory
     @property errortpl    - (optional) Name of Tpl chunk for formatting errors in the header. Must contain [[+np.error]] placeholder.
     @property fielderrortpl (optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.
