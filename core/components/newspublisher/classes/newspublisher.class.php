@@ -7,7 +7,7 @@
  *
  * @author Bob Ray <http://bobsguides.com>
  * @author Raymond Irving
- * 1/15/11
+ * 6/02/11
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -27,7 +27,7 @@
 /**
  * MODx NewsPublisher Class
  *
- * @version Version 1.0.7
+ * @version Version 1.1-pl
  *
  * @package  newspublisher
  *

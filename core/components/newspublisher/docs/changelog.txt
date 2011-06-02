@@ -1,5 +1,10 @@
 Changelog for NewsPublisher
 
+NewsPublisher 1.1-pl
+--------------------
+Fixed bug with deprecated isFrontend() call
+Fixed bug with specifying no CSS file
+
 NewsPublisher 1.0.8
 -------------------
 Added makeUrl() code back in for proper redirection

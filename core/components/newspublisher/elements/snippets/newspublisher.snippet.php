@@ -29,8 +29,8 @@
  * /
 
 /*
-  @version Version 1.0.7 beta-1
-  Modified: January 16, 2010
+  @version Version 1.1-pl
+  Modified: June 2, 2011
 
    NOTE: You may need the latest version of TinyMCE for rich text editing.
 
