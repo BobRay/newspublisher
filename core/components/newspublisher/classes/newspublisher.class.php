@@ -1126,6 +1126,7 @@ class Newspublisher {
             $fields['richtext'] = isset ($_POST['richtext']) ? $_POST['richtext'] : $this->richtext;
             $fields['createdby'] = $this->modx->user->get('id');
             $fields['content']  = $this->header . $fields['content'] . $this->footer;
+            $fields['context_key'] = $this->modx->context->get('key');
 
         }
 
