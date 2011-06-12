@@ -1339,7 +1339,7 @@ class Newspublisher {
                 $this->setError($this->modx->lexicon('np_parent_not_found') . $this->parentId);
             }
 
-        } elseif (!empty($this->props->template)) {
+        } elseif (!empty($this->props['template)'])) {
 
 
             if (is_numeric($this->props['template'])) { /* user sent a number */
