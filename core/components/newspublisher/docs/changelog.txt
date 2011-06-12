@@ -1,6 +1,11 @@
 Changelog for NewsPublisher
 
-NewsPublisher 1.1-pl
+NewsPublisher 1.1.1-pl
+----------------------
+Fixed bug with specifying template
+Fixed bug with missing context_key
+
+NewsPublisher 1.1.0-pl
 --------------------
 Fixed bug with deprecated isFrontend() call
 Fixed bug with specifying no CSS file

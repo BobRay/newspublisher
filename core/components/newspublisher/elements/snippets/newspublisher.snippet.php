@@ -29,7 +29,7 @@
  * /
 
 /*
-  @version Version 1.1-pl
+  @version Version 1.1.1-pl
   Modified: June 2, 2011
 
    NOTE: You may need the latest version of TinyMCE for rich text editing.
