@@ -355,7 +355,7 @@ class Newspublisher {
            } elseif (empty($this->props['cssfile'])) { /* nothing sent - use default */
                $css = $this->assetsUrl . 'css/newspublisher.css';
            } else {  /* set but not empty -- use it */
-               $css = $this->assetsUrl . 'components/newspublisher/css/' . $this->props['cssfile'];
+               $css = $this->assetsUrl . 'css/' . $this->props['cssfile'];
            }
 
            if ($css !== false) {
