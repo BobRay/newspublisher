@@ -1,5 +1,11 @@
 Changelog for NewsPublisher
 
+NewsPublisher 1.1.2-pl
+----------------------
+Fixed bug with user-supplied CSS file
+
+
+
 NewsPublisher 1.1.1-pl
 ----------------------
 Fixed bug with specifying template

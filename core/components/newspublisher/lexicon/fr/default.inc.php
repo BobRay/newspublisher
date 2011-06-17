@@ -22,7 +22,7 @@
  * Default Lexicon Topic
  *
  * @package newspublisher
- * @subpackge lexicon
+ * @subpackage lexicon
  */
 $_lang['np_no_error_tpl'] = 'Impossible de trouver &amp;errortpl: [[+tpl]]';
 $_lang['np_main_header'] = 'Créer/éditer une ressource';
