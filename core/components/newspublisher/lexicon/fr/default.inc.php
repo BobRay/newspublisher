@@ -38,6 +38,7 @@ $_lang['np_folder_not_sent'] = 'Vous avez configuré &amp;template "à parent" m
 $_lang['np_resource_save_failed'] = 'Une erreur est survenue lors de la sauvegarde de la ressource.';
 $_lang['np_to_template_id'] = 'Il n\'y a pas de modèle ayant pour ID: [[+id]].';
 $_lang['np_to_template_name'] = 'Il n\'y a pas de modèle ayant pour nom: [[+name]].';
+$_lang['np_date_format'] = 'd-dt-m-dt-Y';
 
 
 

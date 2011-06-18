@@ -35,6 +35,12 @@ div.newspublisher label {
     display: block;
     font-weight: bold;
 }
+
+div.datepicker input {
+        width:10em !important;
+    }
+
+
 div.np-date-hints {
     margin:0;
     padding:0;

@@ -1,10 +1,10 @@
 Changelog for NewsPublisher
 
-NewsPublisher 1.1.2-pl
+NewsPublisher 1.2.0-pl
 ----------------------
 Fixed bug with user-supplied CSS file
-
-
+Updated DatePicker to V5
+Better International dates
 
 NewsPublisher 1.1.1-pl
 ----------------------

@@ -1039,14 +1039,29 @@ class Newspublisher {
      *  */
 
     protected function _splitDate($ph,$timeString) {
-        $s = substr($timeString,11,5);
-        $s = $s? $s : '';
-        $this->modx->toPlaceholder($ph . '_time' , $s, $this->prefix);
-        $s = substr($timeString,0,10);
-        $s = $s? $s : '';
-        $this->modx->toPlaceholder($ph, $s, $this->prefix);
+            $s = substr($timeString,11,5);
+            $s = $s? $s : '';
+            $this->modx->toPlaceholder($ph . '_time' , $s, $this->prefix);
 
+            /* format date string according to np_date_format lexicon entry
+             * (see http://www.frequency-decoder.com/2009/09/09/unobtrusive-date-picker-widget-v5
+             * for details)
+             */
+            if ($timeString) {
+              $format = $this->modx->lexicon('np_date_format');
+              $format = str_replace( '-sp-', ' ', $format);
+              $format = str_replace( '-dt-', '.', $format);
+              $format = str_replace( '-sl-', '/', $format);
+              $format = str_replace( '-ds-', '-', $format);
+              $format = str_replace( '-cc-', ',', $format);
+              $timestamp = mktime(0, 0, 0, substr($timeString,5,2), substr($timeString,8,2), substr($timeString,0,4));
+              $s = date($format, $timestamp);
+            } else {
+              $s = '';
+            }
+            $this->modx->toPlaceholder($ph, $s, $this->prefix);
     }
+
 
     /** Saves the resource to the database.
      *
