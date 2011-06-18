@@ -5,6 +5,7 @@ NewsPublisher 1.2.0-rc1
 Fixed bug with user-supplied CSS file
 Updated DatePicker to V5
 Better International dates
+Fixed bug with forward to new page
 
 NewsPublisher 1.1.1-pl
 ----------------------
