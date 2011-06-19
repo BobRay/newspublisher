@@ -135,7 +135,7 @@ $formTpl .= $np->displayForm($scriptProperties['show']);
 /* just in case */
 //$formTpl = str_replace('[[+prefix]]', $np_prefix, $formTpl);
 
-/* handle pre-submission errors */
+/* handle pre-submission errors (no form shown) */
 $errors = $np->getErrors();
 
 if (!empty($errors)) {
@@ -145,7 +145,7 @@ if (!empty($errors)) {
         $errorMessage .= str_replace('[[+' . $np_prefix . '.error]]', $error, $errorTpl);
     }
     $modx->toPlaceholder('errors_presubmit', $errorMessage, $np_prefix);
-    return ($formTpl);
+    return '<div class="newspublisher">' . $errorHeaderPresubmit . $errorMessage . '</div>';
 }
 // get postback status
 $isPostBack = $np->getPostBack();

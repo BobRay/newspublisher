@@ -232,6 +232,21 @@ class Newspublisher {
                     $this->modx->lexicon->load($language . 'newspublisher:default');
                     break;
             }
+                       /* inject NP CSS file */
+           /* Empty but sent parameter means use no CSS file at all */
+
+           if ($this->props['cssfile'] === '0') { /* 0 sent, -- no css file */
+               $css = false;
+           } elseif (empty($this->props['cssfile'])) { /* nothing sent - use default */
+               $css = $this->assetsUrl . 'css/newspublisher.css';
+           } else {  /* set but not empty -- use it */
+               $css = $this->assetsUrl . 'css/' . $this->props['cssfile'];
+           }
+
+           if ($css !== false) {
+               $this->modx->regClientCSS($css);
+           }
+
             $this->prefix =  empty($this->props['prefix']) ? 'np' : $this->props['prefix'];
             /* see if we're editing an existing doc */
             $this->existing = false;
@@ -345,21 +360,6 @@ class Newspublisher {
            if($this->props['initdatepicker']) {
                 $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
                 $this->modx->regClientStartupScript($this->assetsUrl . 'datepicker/js/datepicker.js');
-           }
-
-           /* inject NP CSS file */
-           /* Empty but sent parameter means use no CSS file at all */
-
-           if ($this->props['cssfile'] === '0') { /* 0 sent, -- no css file */
-               $css = false;
-           } elseif (empty($this->props['cssfile'])) { /* nothing sent - use default */
-               $css = $this->assetsUrl . 'css/newspublisher.css';
-           } else {  /* set but not empty -- use it */
-               $css = $this->assetsUrl . 'css/' . $this->props['cssfile'];
-           }
-
-           if ($css !== false) {
-               $this->modx->regClientCSS($css);
            }
 
            $this->listboxMax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
