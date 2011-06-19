@@ -51,6 +51,14 @@ $properties = array(
         'lexicon' => 'newspublisher:button',
     ),
     array(
+        'name' => 'np_edit_id',
+        'desc' => 'np_edit_id_desc',
+        'type' => 'numberfield',
+        'options' => '',
+        'value' => '',
+        'lexicon' => 'newspublisher:button',
+    ),
+    array(
         'name' => 'right',
         'desc' => 'np_right_desc',
         'type' => 'textfield',
