@@ -35,7 +35,7 @@ $_lang['np_no_resource_save_document_permission'] = 'No Resource save permission
 $_lang['np_no_edit_home_page'] = 'Can not edit home page';
 $_lang['np_no_np_id'] = 'Could not set the np_id default property. Set it manually to the ID of the Newspublisher page.';
 $_lang['np_id_desc'] = 'ID of newspublisher page (set automatically on first run).';
-$_lang['np_edit_id_desc'] = 'ID of page to edit. Used this in an edit button tag in your getResources Tpl chunk to have multiple buttons on a page: [[!NpEditThisButton? &edit_id=`[[+id]]]].';
+$_lang['np_edit_id_desc'] = 'ID of page to edit (bottom and right properties are ignored -- button is displayed inline). You can use this in an edit button tag in your getResources Tpl chunk to have multiple buttons on a page: [[!NpEditThisButton? &edit_id=`[[+id]]`]].';
 $_lang['np_noShow_desc'] = 'Comma - separated list of IDs of documents on which the button should not be displayed . Defaults to home page, and NewsPublisher page .';
 $_lang['np_bottom_desc'] = '(optional) - distance from bottom of window to place button. Can be in any legal CSS format. Defaults to `20%`.';
 $_lang['np_right_desc'] = '(optional) - distance from right of window to place button. Can be in any legal CSS format. Defaults to `20%`.';

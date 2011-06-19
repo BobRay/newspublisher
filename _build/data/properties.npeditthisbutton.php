@@ -19,6 +19,14 @@ $properties = array(
         'lexicon' => 'newspublisher:button',
     ),
     array(
+        'name' => 'right',
+        'desc' => 'np_right_desc',
+        'type' => 'textfield',
+        'options' => '',
+        'value' => '',
+        'lexicon' => 'newspublisher:button',
+    ),
+    array(
         'name' => 'debug',
         'desc' => 'np_debug_desc',
         'type' => 'combo-boolean',
@@ -58,14 +66,7 @@ $properties = array(
         'value' => '',
         'lexicon' => 'newspublisher:button',
     ),
-    array(
-        'name' => 'right',
-        'desc' => 'np_right_desc',
-        'type' => 'textfield',
-        'options' => '',
-        'value' => '',
-        'lexicon' => 'newspublisher:button',
-    ),
+
 );
 
 return $properties;

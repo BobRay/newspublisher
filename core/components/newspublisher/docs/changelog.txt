@@ -8,6 +8,7 @@ Better International dates (thanks to mschlegel)
 Fixed bug with forward to new page
 Updated Translations
 Revised Edit button to allow multiple buttons on a page (thanks to mschlegel)
+Better handling of presubmit errors - no form shown
 
 NewsPublisher 1.1.1-pl
 ----------------------
