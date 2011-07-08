@@ -21,58 +21,58 @@
  */
 /**
  * Properties (German property descriptions) Lexicon Topic
- * (still awaiting translation) (German translation by mschlegal)
+ * (German translation by mschlegal)
  *
  * @package newspublisher
  * @subpackage lexicon
  */
 
 /* NewsPublisher Property Description strings */
-$_lang['np_aliastitle_desc'] = "(optional) Set to Yes to use lowercase, hyphenated, page title as alias. default: Yes - If set to No, 'article-(date created)' is used.  Ignored if alias is filled in form.";
-$_lang['np_badwords_desc'] = '(optional) Comma delimited list of words not allowed in document.';
-$_lang['np_cacheable_desc'] = "(optional) Sets the flag to as to whether or not the resource is cached; default: cache_default System Setting for new resources; set to `Parent` to use parent's setting.";
-$_lang['np_cancelid_desc'] = '(optional) Document id to load on cancel; default: http_referer.';
-$_lang['np_clearcache_desc'] = '(optional) When set to Yes, the cache will be cleared after saving the resource; default: Yes.';
-$_lang['np_cssfile_desc'] = '(optional) Name of CSS file to use, or `` for no CSS file; default: newspublisher.css. File should be in assets/newspublisher/css/ directory';
-$_lang['np_errortpl_desc'] = '(optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.';
-$_lang['np_fielderrortpl_desc'] = '(optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.';
-$_lang['np_footertpl_desc'] = '(optional) Footer Tpl chunk (chunk name) to be inserted at the end of a new document.';
-$_lang['np_groups_desc'] = "(optional) Resource groups to put new document in (no effect with existing docs); set to `parent` to use parent's groups.";
-$_lang['np_headertpl_desc'] = '(optional) Header Tpl chunk (chunk name) to be inserted at the beginning of a new document.';
-$_lang['np_hidemenu_desc'] = "(optional) Sets the flag to as to whether or not the new page shows in the menu; default: hidemenu_default System Setting for new resources; set to `Parent to use parent's setting";
-$_lang['np_initrte_desc'] = '(optional) Initialize rich text editor; set this if there are any rich text fields; default: No';
-$_lang['np_initdatepicker_desc'] = '(optional) Initialize date picker; set this if there are any date fields; default: Yes';
-$_lang['np_language_desc'] = '(optional) Language to use in forms and error messages.';
-$_lang['np_listboxmax_desc'] = '(optional) Maximum length for listboxes. Default is 8 items.';
-$_lang['np_multiplelistboxmax_desc'] = '(optional) Maximum length for multi-select listboxes. Default is 20 items.';
-$_lang['np_parentid_desc'] = '(optional) Folder id where new documents are stored; default: NewsPublisher folder.';
-$_lang['np_postid_desc'] = '(optional) Document id to load on success; default: the page created or edited.';
-$_lang['np_prefix_desc'] = "(optional) Prefix to use for placeholders; default: 'np.'";
-$_lang['np_published_desc'] = "(optional) Set new resource as published or not (will be overridden by publish and unpublish dates). Set to `parent` to match parent's pub status; default: publish_default system setting.";
-$_lang['np_required_desc'] = '(optional) Comma separated list of fields/tvs to require.';
-$_lang['np_richtext_desc'] = "(optional) Sets the flag to as to whether or Rich Text Editor is used to when editing the page content in the Manager; default: richtext_default System Setting for new resources; set to `Parent` to use parent's setting.";
-$_lang['np_rtcontent_desc'] = '(optional) Use rich text for the content form field.';
-$_lang['np_rtsummary_desc'] = '(optional) Use rich text for the summary (introtext) form field.';
-$_lang['np_searchable_desc'] = "(optional) Sets the flag to as to whether or not the new page is included in site searches; default: search_default System Setting for new resources; set to `Parent` to us parent's setting.";
-$_lang['np_show_desc'] = '(optional) Comma separated list of fields/tvs to show.';
-$_lang['np_readonly_desc'] = '(optional) Comma-separated list of fields that should be read only; does not work with option or textarea fields.';
-$_lang['np_template_desc'] = "(optional) Name of template to use for new document; set to `parent` to use parent's template; for `parent`, &parentid must be set; default: the default_template System Setting.";
-$_lang['np_tinyheight_desc'] = '(optional) Height of richtext areas; default is `400px`.';
-$_lang['np_tinywidth_desc'] = '(optional) Width of richtext areas; default is `95%`.';
-$_lang['np_summaryrows_desc'] = '(optional) Number of rows for the summary field.';
-$_lang['np_summarycols_desc'] = '(optional) Number of columns for the summary field.';
-$_lang['np_outertpl_desc'] = '(optional) Tpl used as a shell for the whole page.';
-$_lang['np_texttpl_desc'] = '(optional) Tpl used for text resource fields.';
-$_lang['np_inttpl_desc'] = '(optional) Tpl used for integer resource fields.';
-$_lang['np_datetpl_desc'] = '(optional) Tpl used for date resource fields and date TVs';
-$_lang['np_booltpl_desc'] = '(optional) Tpl used for Yes/No resource fields (e.g., published, searchable, etc.).';
- $_lang['np_optionoutertpl_desc'] = '(optional) Tpl used for as a shell for checkbox, list, and radio option TVs.';
-$_lang['np_optiontpl_desc'] = '(optional) Tpl used for each option of checkbox and radio option TVs.';
-$_lang['np_listoptiontpl_desc'] = '(optional) Tpl used for each option of listbox TVs.';
-$_lang['np_aliasprefix_desc'] = '(optional) Prefix to be prepended to alias for new documents with an empty alias; alias will be aliasprefix - timestamp';
-$_lang['np_intmaxlength_desc'] = '(optional) Max length for integer input fields; default: 10.';
-$_lang['np_textmaxlength_desc'] = '(optional) Max length for text input fields; default: 60.';
-$_lang['np_hoverhelp_desc'] = '(optional) Show help when hovering over field caption; default: Yes.';
-$_lang['np_hasimagetv_desc'] = '(required if there are any image TVs) Initialize image browser; default: No.';
-$_lang['np_imagetvheight_desc'] = '(optional) Height of image TV area; default: 300px.';
-$_lang['np_imagetvwidth_desc'] = '(optional) Width of image TV area; default: 500px.';
+$_lang['np_aliastitle_desc'] = "(optional) Auf Ja setzen, um den Seitentitel in Kleinbuchstaben mit Bindestrichen als Alias zu benutzen. Standardeinstellung: Ja - Wenn Nein angegeben, wird 'article-Erstellungsdatum' benutzt.  Ignoriert, wenn im Formular ein Alias angegeben wurde.";
+$_lang['np_badwords_desc'] = '(optional) Komma-separierte Liste von Wörtern, die im Dokument nicht erlaubt sind.';
+$_lang['np_cacheable_desc'] = "(optional) Soll die Ressource in den Cache übernommen werden oder nicht? Standardeinstellung: Wert der Systemeinstellung 'cache_default' (für neue Ressourcen); Geben Sie `Parent` an, um die Einstellung der Elternressource zu verwenden.";
+$_lang['np_cancelid_desc'] = '(optional) Dokument-ID, die geladen werden soll, wenn abgebrochen wurde. Standardeinstellung: http_referer.';
+$_lang['np_clearcache_desc'] = '(optional) Wenn auf Ja gesetzt, wird der Cache nach dem Speichern der Ressource gelöscht. Standardeinstellung: Ja.';
+$_lang['np_cssfile_desc'] = '(optional) Name der zu benutzenden CSS-Datei oder ``, um gar keine CSS-Datei zu benutzen; Standardeinstellung: newspublisher.css. Die Datei sollte im Ordner assets/newspublisher/css/ sein';
+$_lang['np_errortpl_desc'] = '(optional) Name des Template-Chunks zur Anzeige von Fehlermeldungen für die einzelnen Felder. Muss den Platzhalter [[+np.error]] enthalten.';
+$_lang['np_fielderrortpl_desc'] = '(optional) Name des Template-Chunks zur Darstellung von Fehlermeldungen für die einzelnen Felder. Muss den Platzhalter [[+np.error]] enthalten.';
+$_lang['np_footertpl_desc'] = '(optional) Template-Chunk (Name) zur Darstellung eines Fußbereiches am Ende jedes neuen Dokumentes.';
+$_lang['np_groups_desc'] = "(optional) Ressourcen-Gruppe, zu welcher das neue Dokument gehören soll (hat keinen Effekt auf die existierenden Dokumente); Auf `parent` setzen, um die Gruppe der Elternressource zu verwenden.";
+$_lang['np_headertpl_desc'] = '(optional)  Template-Chunk (Name) zur Darstellung eines Kopfbereiches am Anfang jedes neuen Dokumentes.';
+$_lang['np_hidemenu_desc'] = "(optional) Wenn auf 'Ja' gesetzt, wird die neue Seite nicht in Seiten-Menüs angezeigt; Standardeinstellung: hidemenu_default System-Einstellung für neue Ressourcen; Geben Sie `Parent` an, um die Einstellung der Elternressource zu verwenden.";
+$_lang['np_initrte_desc'] = '(optional) Rich-Text-Editor initialisieren. Setzen, wenn Rich-Text-Eingabefelder vorhanden sind. Standardeinstellung: Nein';
+$_lang['np_initdatepicker_desc'] = '(optional) Kalender initialisieren. Setzen, wenn Eingabefelder für ein Datum vorhanden sind. Standardeinstellung: Ja';
+$_lang['np_language_desc'] = '(optional) Sprache für Formulare und Fehlermeldungen.';
+$_lang['np_listboxmax_desc'] = '(optional) Maximale Länge von Auswahllisten. Standard: 8 Einträge.';
+$_lang['np_multiplelistboxmax_desc'] = '(optional) Maximale Länge von Auswahllisten mit Mehrfachauswahl. Standard: 20 Einträge.';
+$_lang['np_parentid_desc'] = '(optional) ID der Container-Ressource, in der neue Dokumente gespeichert werden sollen. Standardeinstellung: Newspublisher-Ressource.';
+$_lang['np_postid_desc'] = '(optional) Ressourcen-ID, die nach erfolgreichem Speichern geladen werden soll. Standardeinstellung: die gerade erstellte/bearbeitete Seite.';
+$_lang['np_prefix_desc'] = "(optional) Präfix für Platzhalter; Standardeinstellung: 'np.'";
+$_lang['np_published_desc'] = "(optional) Einstellung, die darüber entscheidet, ob die Ressource publiziert ist oder nicht (wird durch Setzen von Publikations-/Rückzugsdatum ausser Kraft gesetzt). Auf `parent` setzen, um den Publikations-Status der Elternressource zu übernehmen. Standardeinstellung: publish_default Systemeinstellung.";
+$_lang['np_required_desc'] = '(optional) Komma-separierte Liste von Feldern/TVs, welche zwingend eine Eingabe benötigen.';
+$_lang['np_richtext_desc'] = "(optional) Wenn aktiviert wird beim Bearbeiten des Seiteninhalts im MODx-Manager ein Rich-Text-Editor benutzt. Standardeinstellung: richtext_default Systemeinstellung für neue Ressourcen. Geben Sie `Parent` an, um die Einstellung der Elternressource zu verwenden.";
+$_lang['np_rtcontent_desc'] = '(optional) Hauptinhalt als Rich-Text eingeben.';
+$_lang['np_rtsummary_desc'] = '(optional) Zusammenfassung (introtext) als Rich-Text eingeben.';
+$_lang['np_searchable_desc'] = "(optional) Wenn aktiviert, werden neu erstellte Dokumente in die Seitensuche eingeschlossen. Standardeinstellung: search_default Systemeinstellung für neue Ressourcen. Geben Sie `Parent` an, um die Einstellung der Elternressource zu verwenden.";
+$_lang['np_show_desc'] = '(optional) Komma-separierte Liste von Feldern/TVs, die angezeigt werden sollen.';
+$_lang['np_readonly_desc'] = '(optional) Komma-separierte Liste von Feldern, die nur gelesen werden können (nicht bearbeitet); funktioniert nicht mit <textarea>-Feldern.';
+$_lang['np_template_desc'] = "(optional) Name des Templates, das für neue Dokumente verwendet wird. Geben Sie `Parent` an, um das Template der Elternressource zu verwenden. Für `Parent` muss &parentid gesetzt werden. Standardeinstellung: default_template Systemeinstellung.";
+$_lang['np_tinyheight_desc'] = '(optional) Höhe der Rich-Text-Eingabefelder; Standard ist `400px`.';
+$_lang['np_tinywidth_desc'] = '(optional) Breite der Rich-Text-Eingabefelder; Standard ist `95%`.';
+$_lang['np_summaryrows_desc'] = '(optional) Anzahl Zeilen des Eingabefeldes für die Zusammenfassung (introtext).';
+$_lang['np_summarycols_desc'] = '(optional) Anzahl Spalten des Eingabefeldes für die Zusammenfassung (introtext).';
+$_lang['np_outertpl_desc'] = '(optional) Template-Chunk für das Grundgerüst der Seite.';
+$_lang['np_texttpl_desc'] = '(optional) Template-Chunk für Text-Ressourcenfelder.';
+$_lang['np_inttpl_desc'] = '(optional) Template-Chunk für Eingabefelder für ganze Zahlen.';
+$_lang['np_datetpl_desc'] = '(optional) Template-Chunk für Datums-Eingabefelder';
+$_lang['np_booltpl_desc'] = '(optional) Template-Chunk für Ja/Nein-Eingabefelder (z.B. veröffentlicht, durchsuchbar, usw.).';
+ $_lang['np_optionoutertpl_desc'] = '(optional) Template-Chunk für das Grundgerüst von Checkbox-, Listen- und Optionsschaltflächen-TVs.';
+$_lang['np_optiontpl_desc'] = '(optional) Template-Chunk für jede einzelne Checkbox-, Listen- und Optionsschaltflächen-TV.';
+$_lang['np_listoptiontpl_desc'] = '(optional) Template-Chunk für jede einzelne Options-/Auswahlfeld-(Listbox-)TV.';
+$_lang['np_aliasprefix_desc'] = "(optional) Präfix, das vor dem Alias von neuen Dokumenten eingefügt wird. Für Dokumente mit einem leeren Alias wird der Alias die Form 'Alias-Präfix - Zeitstempel' haben";
+$_lang['np_intmaxlength_desc'] = '(optional) Maximale Länge für Ganzzahl-Eingabefelder; Standardeinstellung: 10.';
+$_lang['np_textmaxlength_desc'] = '(optional) Maximale Länge für Text-Eingabefelder; Standardeinstellung: 60.';
+$_lang['np_hoverhelp_desc'] = '(optional) Hilfe anzeigen, wenn die Maus über die Feld-Überschrift fährt. Standardeinstellung: Ja.';
+$_lang['np_hasimagetv_desc'] = 'Bild-Browser initialisieren (benötigt, wenn Bild-TVs angezeigt werden sollen); Standardeinstellung: Nein.';
+$_lang['np_imagetvheight_desc'] = '(optional) Höhe des Bild-TV-Bereiches; Standardeinstellung: 300px.';
+$_lang['np_imagetvwidth_desc'] = '(optional) Höhe des Bild-TV-Bereiches; Standardeinstellung: 500px.';

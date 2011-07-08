@@ -20,7 +20,7 @@
  * @package newspublisher
  */
 /**
- * Button German Lexicon Topic (incomplete) (German translation by mschlegal)
+ * Button German Lexicon Topic (German translation by mschlegal)
  *
  * @package newspublisher
  * @subpackage lexicon
@@ -29,14 +29,15 @@
 
 /* NewsPublisher EditThisButton strings */
 $_lang['np_edit'] = 'Bearbeiten';
-$_lang['np_no_edit_document_permission'] = 'No edit_document permission';
-$_lang['np_no_context_save_document_permission'] = 'No context save_document permission';
-$_lang['np_no_resource_save_document_permission'] = 'No Resource save permission on this document';
-$_lang['np_no_edit_home_page'] = 'Can not edit home page';
-$_lang['np_no_np_id'] = 'Could not set the np_id default property. Set it manually to the ID of the Newspublisher page.';
-$_lang['np_id_desc'] = 'ID of newspublisher page (set automatically on first run).';
-$_lang['np_noShow_desc'] = 'Comma - separated list of IDs of documents on which the button should not be displayed . Defaults to home page, and NewsPublisher page .';
-$_lang['np_bottom_desc'] = '(optional) - distance from bottom of window to place button. Can be in any legal CSS format. Defaults to `20%`.';
-$_lang['np_right_desc'] = '(optional) - distance from right of window to place button. Can be in any legal CSS format. Defaults to `20%`.';
-$_lang['np_language_desc'] = '(optional) - Language to use for error messages.';
-$_lang['np_debug_desc'] = '(optional) - Displays the button on all pages with either the $buttonCaption, or a message explaining why it would not be shown.';
+$_lang['np_no_edit_document_permission'] = 'Keine Rechte, Dokumente zu bearbeiten';
+$_lang['np_no_context_save_document_permission'] = 'Keine Rechte, Dokumente in diesem Kontext zu speichern';
+$_lang['np_no_resource_save_document_permission'] = 'Keine Rechte, dieses Dokument zu speichern';
+$_lang['np_no_edit_home_page'] = 'Kann Startseite nicht bearbeiten';
+$_lang['np_no_np_id'] = 'Konnte np_id nicht setzen. Setzen Sie die ID der Newspublisher-Seite manuell.';
+$_lang['np_id_desc'] = 'ID der Newspublisher-Seite (automatisch im ersten Durchgang gesetzt).';
+$_lang['np_edit_id_desc'] = 'ID der zu bearbeitenden Seite (`bottom` und `right` werden ignoriert -- der Knopf wird immer an der Position angezeigt, an welcher er platziert wurde). Dies ermöglicht es, mehrere bearbeiten-Knöpfe pro Seite anzuzeigen, z.B. indem Sie einen Knopf im Template-Chunk von getResources platzieren: [[!NpEditThisButton? &edit_id=`[[+id]]`]].';
+$_lang['np_noShow_desc'] = 'Komma-separierte liste von IDs von Dokumenten, bei welchen der Knopf nicht angezeigt werden soll. Standard-IDs: Startseite und Newspublisher-Seite.';
+$_lang['np_bottom_desc'] = '(optional) - Abstand des Knopfes vom unteren Rand des Fensters. Jedes in CSS zulässige Maß kann angegeben werden. Standardwert: `20%`.';
+$_lang['np_right_desc'] = '(optional) - Abstand des Knopfes vom rechten Rand des Fensters. Jedes in CSS zulässige Maß kann angegeben werden. Standardwert: `20%`.';
+$_lang['np_language_desc'] = '(optional) - Für Fehlermeldungen zu verwendende Sprache.';
+$_lang['np_debug_desc'] = '(optional) - Wenn auf `1` gesetzt, wird immer ein bearbeiten-Knopf angezeigt, entweder mit der normalen Beschriftung oder mit einer Meldung, die erklärt, warum der Knopf normalerweise nicht angezeigt wird.';
