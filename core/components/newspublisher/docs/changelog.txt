@@ -1,5 +1,11 @@
 Changelog for NewsPublisher
 
+NewsPublisher 1.2.0-rc2
+-----------------------
+Fixed bug with hidemenu property
+Fixed bug with template property
+German translation is complete
+
 NewsPublisher 1.2.0-rc1
 ----------------------
 Fixed bug with user-supplied CSS file

@@ -27,7 +27,7 @@
 /**
  * MODx NewsPublisher Class
  *
- * @version Version 1.2.0-rc1
+ * @version Version 1.2.0-rc2
  *
  * @package  newspublisher
  *
@@ -1133,7 +1133,7 @@ class Newspublisher {
 
             /* these *might* be in the $_POST array. Set them if not */
             $fields['published'] = isset($_POST['published'])? $_POST['published']: $this->published;
-            $fields['hidemenu'] = isset($_POST['hidemenu'])? $_POST['hidemenu']: $this->hidemenu;
+            $fields['hidemenu'] = isset($_POST['hidemenu'])? $_POST['hidemenu']: $this->hideMenu;
             $fields['template'] = isset ($_POST['template']) ? $_POST['template'] : $this->template;
             $fields['parent'] = isset ($_POST['parent']) ? $_POST['parent'] : $this->parentId;
             $fields['searchable'] = isset ($_POST['searchable']) ? $_POST['searchable'] : $this->searchable;
@@ -1354,7 +1354,7 @@ class Newspublisher {
                 $this->setError($this->modx->lexicon('np_parent_not_found') . $this->parentId);
             }
 
-        } elseif (!empty($this->props['template)'])) {
+        } elseif (!empty($this->props['template'])) {
 
 
             if (is_numeric($this->props['template'])) { /* user sent a number */
