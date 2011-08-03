@@ -923,6 +923,68 @@ class Newspublisher {
                 $formTpl .= $this->_processList($name, $replace, $tvType, $options, $selected, $params['allowBlank']=='true');
                 break;
 
+            case 'resourcelist':
+
+                /* code adapted from core/model/modx/processors/element/tv/renders/mgr/input/resourcelist.php */
+
+                $parents = $tv->get('elements');
+                $bindingsResult = $tv->processBindings($tv->get('elements'), $this->modx->resource->get('id'));
+                $parents = $tv->parseInputOptions($bindingsResult);
+                $parents = !empty($params['parents']) || $params['parents'] === '0' ? explode(',',$params['parents']) : $parents;
+                $params['depth'] = !empty($params['depth']) ? $params['depth'] : 10;
+                if (empty($parents) || (empty($parents[0]) && $parents[0] !== '0')) { $parents = array($this->modx->getOption('site_start',null,1)); }
+
+                $parentList = array();
+                foreach ($parents as $parent) {
+                    $parent = $this->modx->getObject('modResource',$parent);
+                    if ($parent) $parentList[] = $parent;
+                }
+
+                /* get all children */
+                $ids = array();
+                foreach ($parentList as $parent) {
+                    if ($params['includeParent'] != 'false') $ids[] = $parent->get('id');
+                    $children = $this->modx->getChildIds($parent->get('id'),$params['depth'],array(
+                        'context' => $parent->get('context_key'),
+                    ));
+                    $ids = array_merge($ids,$children);
+                }
+                $ids = array_unique($ids);
+
+                if (empty($ids)) {
+                    $resources = array();
+
+                } else {
+
+                    /* get resources */
+                    $c = $this->modx->newQuery('modResource');
+                    $c->leftJoin('modResource','Parent');
+                    if (!empty($ids)) {
+                        $c->where(array('modResource.id:IN' => $ids));
+                    }
+                    if (!empty($params['where'])) {
+                        $params['where'] = $this->modx->fromJSON($params['where']);
+                        $c->where($params['where']);
+                    }
+                    $c->sortby('Parent.menuindex,modResource.menuindex','ASC');
+                    if (!empty($params['limit'])) {
+                        $c->limit($params['limit']);
+                    }
+                    $resources = $this->modx->getCollection('modResource',$c);
+                }
+
+                /* iterate */
+                $options = array();
+                foreach ($resources as $resource) {
+                    $id = $resource->get('id');
+                    $options[$resource->get('pagetitle')] = $id; //.' ('.$resource->get('id').')',
+                    if ($id == $tv->getValue($this->existing)) $selected[] = $id;
+                }
+
+                /* If the list is empty do not require selecting something */
+                if (!$options) $params['allowBlank'] = 'true';
+                $formTpl .= $this->_processList($name, $replace, 'dropdown', $options, $selected, $params['showNone']=='true' || $params['allowBlank']=='true');
+                break;
                 
         }  /* end switch */
         
