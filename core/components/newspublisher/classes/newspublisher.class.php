@@ -221,15 +221,15 @@ class Newspublisher {
      */
 
         public function init($context) {
-
+            $language = !empty($this->props['language'])
+                    ? $this->props['language']
+                    : $this->modx->getOption('cultureKey',null,$this->modx->getOption('manager_language',null,'en'));
             switch ($context) {
                 case 'mgr':
                     break;
                 case 'web':
                 default:
-                    $language = !empty($this->props['language'])
-                            ? $this->props['language'] . ':' : '';
-                    $this->modx->lexicon->load($language . 'newspublisher:default');
+                    $this->modx->lexicon->load($language . ':newspublisher:default');
                     break;
             }
                        /* inject NP CSS file */
@@ -359,7 +359,7 @@ class Newspublisher {
            $this->template = $this->_getTemplate();
            if($this->props['initdatepicker']) {
                 $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
-                $this->modx->regClientStartupScript($this->assetsUrl . 'datepicker/js/datepicker.js');
+                $this->modx->sjscripts[] = '<script type=text/javascript src="' . $this->assetsUrl . 'datepicker/js/datepicker.packed.js">{"lang":"' . $language . '"}</script>';
            }
 
            $this->listboxMax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
@@ -422,8 +422,7 @@ class Newspublisher {
                    $tiny = new TinyMCE($this->modx,$tinyproperties,$tinyUrl);
                    // if (isset($this->props['forfrontend']) || $this->modx->isFrontend()) {
                    if (isset($this->props['forfrontend']) || $this->modx->context->get('key') != 'mgr') {
-                       $def = $this->modx->getOption('cultureKey',null,$this->modx->getOption('manager_language',null,'en'));
-                       $tinyproperties['language'] = $this->modx->getOption('fe_editor_lang',array(),$def);
+                       $tinyproperties['language'] = $this->modx->getOption('fe_editor_lang',array(),$language);
                        $tinyproperties['frontend'] = true;
                        unset($def);
                    }
