@@ -659,106 +659,11 @@ class Newspublisher {
 
         foreach($fields as $field) {
             $field = trim($field);
-            $replace = array();
-            if (in_array($field,$resourceFieldNames)) { /* regular resource field */
-
-                $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? '[[%resource_' . $field . '_help:notags]]' : '';
-                $replace['[[+npx.caption]]'] = '[[%resource_' . $field . ']]';
-                $fieldType = $this->resource->_fieldMeta[$field]['phptype'];
-                if ($field == 'hidemenu') {  /* correct schema error */
-                    $fieldType = 'boolean';
-                }
-
-                /* do content and introtext fields */
-                if ($field == 'content') {
-                    $replace['[[+npx.rows]]'] = '200';
-                    $replace['[[+npx.cols]]'] = '600';
-
-                    if ($this->props['rtcontent']) {
-                        if($this->props['initrte']) {
-                            $replace['[[+npx.class]]'] = 'modx-richtext';
-                        } else {
-                            $msg = $this->modx->lexicon('np_no_rte');
-                            $this->setError($msg . $field);
-                            $this->setFieldError($field, $msg);
-                            $replace['[[+npx.class]]'] = 'np-content';
-                        }
-                    } else {
-                         $replace['[[+npx.class]]'] = 'np-content';
-                    }
-                    $inner .= $this->tpls['textareaTpl'];
-                } elseif ($field == 'introtext') {
-                    $replace['[[+npx.rows]]'] = '200';
-                    $replace['[[+npx.cols]]'] = '600';
-
-                    if ($this->props['rtsummary']) {
-                        if($this->props['initrte']) {
-                            $replace['[[+npx.class]]'] = 'modx-richtext';
-                        } else {
-                            $msg = $this->modx->lexicon('np_no_rte');
-                            $this->setError($msg . $field);
-                            $this->setFieldError($field, $msg);
-                            $replace['[[+npx.class]]'] = 'np-introtext';
-                        }
-
-                    } else {
-                         $replace['[[+npx.class]]'] = 'np-introtext';
-                    }
-                    $inner .= $this->tpls['textareaTpl'];
-                } else {
-                    switch($fieldType) {
-                        case 'string':
-                            $replace['[[+npx.maxlength]]'] = $this->textMaxlength;
-                            $inner .= $this->tpls['textTpl'];
-                            break;
-
-                        case 'boolean':
-                            $inner .= $this->tpls['boolTpl'];
-                            if ($this->isPostBack) {
-                                $checked = $_POST[$field];
-                            } else {
-                                $checked = $this->resource->get($field);
-                            }
-                            $replace ['[[+npx.checked]]'] = $checked? 'checked="checked"' : '';
-                            break;
-
-                        case 'integer':
-                            $replace['[[+npx.maxlength]]'] = $this->intMaxlength;
-                            $inner .= $this->tpls['intTpl'];
-                            break;
-
-                        case 'timestamp':
-                            if (! $this->props['initdatepicker']) {
-                                $msg = $this->modx->lexicon('np_no_datepicker');
-                                $this->setError($msg . $field);
-                                $this->setFieldError($field, $msg);
-                            }
-                            $inner .= $this->tpls['dateTpl'];
-                            if (! $this->isPostBack) {
-                                $this->_splitDate($field,$this->resource->get($field));
-                            }
-                            break;
-                        default:
-                            $replace['[[+npx.maxlength]]'] = $this->textMaxlength;
-                            $inner .= $this->tpls['textTpl'];
-                            break;
-                    }
-                }
-
-            /* make sure id is readonly and any other fields sent in the &readonly param */
-                if ($field == 'id') {
-                    $replace['[[+npx.readonly]]'] = 'readonly="readonly"';
-                } elseif ($this->props['readonly']) {
-                    $readOnlyArray = explode(',', $this->props['readonly']);
-                    if (in_array($field, $readOnlyArray)) {
-                        $replace['[[+npx.readonly]]'] = 'readonly="readonly"';
-                    }
-                    unset($readOnlyArray);
-                }
-
-                $replace['[[+npx.fieldName]]'] = $field ;
-                $inner = $this->strReplaceAssoc($replace, $inner);
-
+            
+            if (in_array($field,$resourceFieldNames)) {
+                /* regular resource field */
+                $inner .= $this->_displayField($field);
+              
             } else {
                 /* see if it's a TV */
                 $retVal = $this->_displayTv($field);
@@ -767,7 +672,6 @@ class Newspublisher {
                 }
             }
         }
-
         $formTpl = str_replace('[[+npx.insert]]',$inner,$this->tpls['outerTpl']);
         //die ('<pre>' . print_r($formTpl,true));
         // die ('$_POST<br /><pre>' . print_r($_POST,true));
@@ -775,6 +679,75 @@ class Newspublisher {
     } /* end displayForm */
 
 
+    /** displays an individual field
+     * @access protected
+     * @param $field (string) name of the field
+     * @return (string) returns the HTML code for the field.
+     */
+
+    protected function _displayField($field) {
+      
+        $replace = array();
+        $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? '[[%resource_' . $field . '_help:notags]]' : '';
+        $replace['[[+npx.caption]]'] = '[[%resource_' . $field . ']]';
+        $fieldType = $this->resource->_fieldMeta[$field]['phptype'];
+        if ($field == 'hidemenu') {  /* correct schema error */
+            $fieldType = 'boolean';
+        }
+
+        if ($field == 'id') {
+            $replace['[[+npx.readonly]]'] = 'readonly="readonly"';
+        } elseif ($this->props['readonly']) {
+            $readOnlyArray = explode(',', $this->props['readonly']);
+            if (in_array($field, $readOnlyArray)) {
+                $replace['[[+npx.readonly]]'] = 'readonly="readonly"';
+            }
+            unset($readOnlyArray);
+        }
+
+        $replace['[[+npx.fieldName]]'] = $field ;
+
+
+        /* do content and introtext fields */
+        switch ($field) {
+            case 'content':
+                $type = $this->resource->get('class_key');
+                if ($type == 'modSymLink' || $type == 'modWebLink') {
+                    $replace['[[+npx.caption]]'] = '[[%weblink]]';
+                    $replace['[[+npx.help]]'] = '[[%weblink_help]]';
+                    $inner .= $this->_processSimple($field, $replace, 'textTpl');
+                } else {
+                    $inner .= $this->_processTextarea($field, $replace, $this->props['rtcontent'], 'np-content');
+                }
+                break;
+
+            case 'introtext':
+                $inner .= $this->_processTextarea($field, $replace, $this->props['rtsummary'], 'np-introtext');
+                break;
+
+            default:
+                switch($fieldType) {
+                    case 'string':
+                    default:
+                        $inner .= $this->_processSimple($field, $replace, 'textTpl');
+                        break;
+
+                    case 'boolean':
+                        $inner .= $this->_processBoolean($field, $replace, $this->resource->get($field));
+                        break;
+
+                    case 'integer':
+                        $inner .= $this->_processSimple($field, $replace, 'intTpl');
+                        break;
+
+                    case 'timestamp':
+                        $inner .= $this->_processDate($field, $replace, $this->resource->get($field));
+                        break;
+                }
+        }
+        return $inner;
+    }
+    
 
     /** displays an individual TV
      *
@@ -814,9 +787,11 @@ class Newspublisher {
         $formTpl = '';
         $tv = $tvObj;
         $fields = $tv->toArray();
+        $name = $fields['name'];
 
+        $params = $tv->get('input_properties');
         /* use TV's name as caption if caption is empty */
-        $caption = empty($fields['caption'])? $fields['name'] : $fields['caption'];
+        $caption = empty($fields['caption'])? $name : $fields['caption'];
 
         /* Build TV input code dynamically based on type */
         $tvType = $tv->get('type');
@@ -830,11 +805,12 @@ class Newspublisher {
             }
             /* empty value gets default_text for both new and existing docs */
             if (empty($ph)) {
-                $ph = $tv->get('default_text');
+                $ph = $fields['default_text'];
             }
-            if (stristr($ph,'@EVAL') || stristr($_POST[$fields['name']],'@EVAL') || stristr($_POST[$fields['name'].'_time'], '@eval')) {
+            if (stristr($ph,'@EVAL') || stristr($_POST[$name],'@EVAL') || stristr($_POST[$name.'_time'], '@eval')) {
                 $this->setError($this->modx->lexicon('np_no_evals'). $tv->get('name'));
                 return null;
+                
             } else {
 
                 if ($tvType=='image') {
@@ -845,73 +821,41 @@ class Newspublisher {
                     }
                 }
                 
-                $this->modx->toPlaceholder($fields['name'], $ph, $this->prefix );
+                $this->modx->toPlaceholder($name, $ph, $this->prefix );
             }
         }
 
         $replace = array();
         $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? $fields['description'] :'';
         $replace['[[+npx.caption]]'] = $caption;
+        $replace['[[+npx.fieldName]]'] = $name;
 
-        $replace['[[+npx.fieldName]]'] = $fields['name'];
         switch ($tvType) {
             case 'date':
-                if (! $this->props['initdatepicker']) {
-                    $msg = $this->modx->lexicon('np_no_datepicker');
-                    $this->setError($msg . $fields['name']);
-                    $this->setFieldError($fields['name'], $msg);
-
-                }
-                $formTpl .= $this->tpls['dateTpl'];
-                if (! $this->isPostBack) {
-                    $this->_splitDate($fields['name'], $tv->renderOutput());
-                }
+                $formTpl .= $this->_processDate($name, $replace,  $tv->getValue($this->existing), $params);
                 break;
 
             default:
             case 'text':
             case 'textbox':
             case 'email';
-                $formTpl .= $this->tpls['textTpl'];
-                $replace['[[+npx.maxlength]]'] = $this->textMaxlength;
+                $formTpl .= $this->_processSimple($name, $replace, 'textTpl');
                 break;
 
-            case 'image';
-                $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? $fields['description'] : '';
-                $replace['[[+npx.maxlength]]'] = $this->textMaxlength;
-                $formTpl .= $this->tpls['imageTpl'];
+            case 'number':
+                $formTpl .= $this->_processSimple($name, $replace, 'intTpl');
                 break;
 
             case 'textarea':
             case 'textareamini':
-                $replace['[[+npx.rows]]'] = '200';
-                $replace['[[+npx.cols]]'] = '600';
-                $formTpl .= $this->tpls['textareaTpl'];
-                $replace['[[+npx.class]]'] = $tvType == 'textarea' ? 'textarea' : 'textareamini';
+                $formTpl .= $this->_processTextarea($name, $replace, false, $tvType);
                 break;
 
             case 'richtext':
-                $replace['[[+npx.rows]]'] = '200';
-                $replace['[[+npx.cols]]'] = '600';
-                if ($this->props['initrte']) {
-                    $replace['[[+npx.class]]'] = 'modx-richtext';
-                } else {
-                    //$this->setError($this->modx->lexicon('np_no_rte') . $fields['name']);
-                    $msg = $this->modx->lexicon('np_no_rte');
-                    $this->setError($msg . $fields['name']);
-                    $this->setFieldError($fields['name'], $msg);
-                    $replace['[[+npx.class]]'] = 'textarea';
-                }
-                $formTpl .= $this->tpls['textareaTpl'];
+                $formTpl .= $this->_processTextarea($name, $replace, true, 'textarea');
 
                 break;
 
-            case 'number':
-                $formTpl .= $this->tpls['intTpl'];
-                $replace['[[+npx.maxlength]]'] = $this->intMaxlength;
-                break;
-
-            /********* Options *********/
 
             case 'radio':
             case 'checkbox':
@@ -919,104 +863,35 @@ class Newspublisher {
             case 'listbox-multiple':
             case 'dropdown':
 
-                $innerReplace = array();
+            
                 /* handle @ binding TVs */
                 if (preg_match('/^@/',$fields['elements'])) {
                     $fields['elements'] = $tv->processBindings($fields['elements']);
                 }
-                $options = explode('||',$fields['elements']);
+                $elements = explode('||',$fields['elements']);
 
-                $postfix = ($tvType == 'checkbox' || $tvType=='listbox-multiple' || $tvType=='listbox')? '[]' : '';
-                $innerReplace['[[+npx.name]]'] = $fields['name'] . $postfix;
-
-                if($tvType == 'listbox' || $tvType == 'listbox-multiple' || $tvType == 'dropdown') {
-                    $formTpl = $this->tpls['listOuterTpl'];
-                    $innerReplace['[[+npx.multiple]]'] = ($tvType == 'listbox-multiple')? ' multiple="multiple" ': '';
-                    $count = count($options);
-                    if ($tvType == 'dropdown') {
-                        $max = 1;
-                    } else {
-                        $max = ($tvType == 'listbox')? $this->listboxMax : $this->multipleListboxMax;
-                    }
-                    $innerReplace['[[+npx.size]]'] = ($count <= $max)? $count : $max;
-                } else {
-                    $formTpl = $this->tpls['optionOuterTpl'];
+                /* parse options */
+                $options = array();
+                foreach ($elements as $option) {
+                    $text = strtok($option,'=');
+                    $option = strtok('=');
+                    $option = $option? $option : $text;
+                    $options[$text] = $option;
                 }
 
-                $innerReplace['[[+npx.hidden]]'] = ($tvType == 'checkbox') ? '<input type="hidden" name="' . $fields['name'] . '[]" value="" />' : '';
-                $innerReplace['[[+npx.class]]'] = 'np-tv-' . $tvType;
-                $innerReplace['[[+npx.help]]'] = $this->props['hoverhelp'] ? $fields['description'] : '';
+                /* selected entries */
+                $selected = explode('||',$tv->getValue($this->existing));
 
-                /* Do outer TPl replacements */
-                $formTpl = $this->strReplaceAssoc($innerReplace,$formTpl);
-
-                /* new replace array for options */
-                $innerReplace = array();
-                $innerReplace['[[+npx.name]]'] = $fields['name'] . $postfix;
-
-                /* get TVs current value from DB or $_POST */
-                if ($this->existing  && ! $this->isPostBack)  {
-                    if (is_array($options)) {
-                        $val = explode('||',$tv->getValue($this->existing));
-                    } else {
-                        $val = $tv->renderOutput($this->existing);
-                    }
-                } else {
-                    $val = $_POST[$fields['name']];
-                }
-                $inner = '';
-
-                /* loop through options and set selections */
-                foreach ($options as $option) {
-
-                    /* if field is empty and not in $_POST, get the default value */
-                    if(empty($val) && !isset($_POST[$fields['name']])) {
-                        $defaults = explode('||',$fields['default_text']);
-
-                    }
-                    $option = strtok($option,'=');
-
-                    $rvalue = strtok('=');
-                    $rvalue = $rvalue? $rvalue : $option;
-
-                    if ($tvType == 'listbox' || $tvType =='listbox-multiple' || $tvType == 'dropdown') {
-                        $optionTpl = $this->tpls['listOptionTpl'];
-                        $innerReplace['[[+npx.value]]'] = $rvalue;
-                    } else {
-                        $optionTpl = $this->tpls['optionTpl'];
-                        $innerReplace['[[+npx.class]]'] = $tvType;
-                        $innerReplace['[[+npx.type]]'] = $tvType;
-                        $innerReplace['[[+npx.name]]'] = $fields['name'].$postfix;
-                        $innerReplace['[[+npx.value]]'] = $rvalue;
-                    }
-
-                    /* Set string to use for selected options */
-                    $selected = ($tvType == 'radio' || $tvType == 'checkbox')? 'checked="checked"' : 'selected="selected"';
-
-                    $innerReplace['[[+npx.selected]]'] = ''; /* default to not set */
-
-                    /* empty and not in $_POST -- use default */
-                    if (empty($val)  && !isset($_POST[$fields['name']])) {
-                        if ($fields['default_text'] == $rvalue || in_array($rvalue,$defaults) ){
-                            $innerReplace['[[+npx.selected]]'] = $selected;
-                        }
-
-                    /*  field value is not empty */
-                    } elseif ((is_array($val) && in_array($rvalue,$val)) || ($option == $val)) {
-                            $innerReplace['[[+npx.selected]]'] = $selected;
-                    }
-
-                    $innerReplace['[[+npx.text]]'] = $option;
-                    $optionTpl = $this->strReplaceAssoc($innerReplace,$optionTpl);
-                    $inner .= $optionTpl;
-
-                } /* end of option loop */
-
-                $formTpl = str_replace('[[+npx.options]]',$inner, $formTpl);
+                /* render HTML */
+                $formTpl .= $this->_processList($name, $replace, $tvType, $options, $selected, $params['allowBlank']=='true');
                 break;
 
+                
         }  /* end switch */
-        $formTpl = $this->strReplaceAssoc($replace, $formTpl);
+        
+        /* Add TV to required fields if blank values are not allowed */
+        if ($params['allowBlank'] == 'false') $this->props['required'] .= ',' . $name;
+        
         return $formTpl;
     }
 
@@ -1029,18 +904,30 @@ class Newspublisher {
     public function strReplaceAssoc(array $replace, $subject) {
        return str_replace(array_keys($replace), array_values($replace), $subject);
     }
-    /** Splits time string into date and time and sets
+    
+
+    /** Produces the HTML code for date fields/TVs
+     * Splits time string into date and time and sets
      * placeholders for each of them
      *
      * @access protected
-     * @param $ph - (string) placeholder to set
-     * @param $timeString - (string) time string
-     *  */
+     * @param $name - (string) name of the field/TV
+     * @param $PHs - (array) associative array of placeholders and their values to be inserted 
+     * @param $timestring - (string) date-time string in the format "2011-04-01 13:20:01"
+     * @ param $options - (array) Associative array of options. Accepts 'disabledDates', 'disabledDays', 'minDateValue' and 'maxDateValue' (in the format used for the corresponding TV input options)
+     * @return (string) - date field/TV HTML code */
+    
+    protected function _processDate($name, $PHs, $timeString, $options = array()) {
 
-    protected function _splitDate($ph,$timeString) {
+        if (! $this->props['initdatepicker']) {
+            $msg = $this->modx->lexicon('np_no_datepicker');
+            $this->setError($msg . $name);
+            $this->setFieldError($name, $msg);
+        }
+        
+        if (! $this->isPostBack) {
             $s = substr($timeString,11,5);
-            $s = $s? $s : '';
-            $this->modx->toPlaceholder($ph . '_time' , $s, $this->prefix);
+            $this->modx->toPlaceholder($name . '_time' , $s, $this->prefix);
 
             /* format date string according to np_date_format lexicon entry
              * (see http://www.frequency-decoder.com/2009/09/09/unobtrusive-date-picker-widget-v5
@@ -1058,7 +945,144 @@ class Newspublisher {
             } else {
               $s = '';
             }
-            $this->modx->toPlaceholder($ph, $s, $this->prefix);
+            $this->modx->toPlaceholder($name, $s, $this->prefix);
+          }
+
+        return $this->strReplaceAssoc($PHs, $this->tpls['dateTpl']);
+    }
+    /** Produces the HTML code for simple text fields/TVs
+     * 
+     * @access protected
+     * @param $name - (string) name of the field/TV
+     * @param $PHs - (array) associative array of placeholders and their values to be inserted
+     * @param $tplName - (string) name of the template chunk that should be used
+     * @return (string) - field/TV HTML code */
+
+    protected function _processSimple($name, $PHs, $tplName) {
+        $PHs['[[+npx.maxlength]]'] = $this->textMaxlength;
+        return $this->strReplaceAssoc($PHs, $this->tpls[$tplName]);
+    }
+
+
+    
+    /** Produces the HTML code for boolean (checkbox) fields/TVs
+     * 
+     * @access protected
+     * @param $name - (string) name of the field/TV
+     * @param $PHs - (array) associative array of placeholders and their values to be inserted
+     * @param $checked - (bool) Is the Checkbox activated?  (ignored on postback)
+     * @return (string) - field/TV HTML code */
+
+    protected function _processBoolean($name, $PHs, $checked) {
+        if ($this->isPostBack) {
+            $checked = $_POST[$name];
+        }
+        $PHs ['[[+npx.checked]]'] = $checked? 'checked="checked"' : '';
+        
+        return $this->strReplaceAssoc($PHs, $this->tpls['boolTpl']);
+    }
+
+    
+    /** Produces the HTML code for list fields/TVs
+     * 
+     * @access protected
+     * @param $name - (string) name of the field/TV
+     * @param $PHs - (array) associative array of placeholders and their values to be inserted
+     * @param $options - (array) associative array of list entries in the form array('displayed text' => 'value'), e.g. array('resource with ID 8' =>)
+     * @param $selected - (array) Array of list entries ($options values) that are currently selected (ignored on postback)
+     * @param $showNone - (bool) If true, the first option will be 'empty' (only a dash)
+     * @return (string) - field/TV HTML code */
+
+    protected function _processList($name, $PHs, $type, $options, $selected = null, $showNone = false) {
+
+        // if blank selections are allowed, add a blank ('-') field as first option
+        // TODO: should 'listbox' and 'radio' have one or not????? Should there always be an empty option,
+        // irrespective of the allowBlank TV input option????
+        if ($showNone && $type == 'dropdown') $options = array_merge(array('-' => ''), $options);
+
+        $postfix = ($type == 'checkbox' || $type=='listbox-multiple' || $type=='listbox')? '[]' : '';
+        $PHs['[[+npx.name]]'] = $name . $postfix;
+
+        if($type == 'listbox' || $type == 'listbox-multiple' || $type == 'dropdown') {
+            $formTpl = $this->tpls['listOuterTpl'];
+            $PHs['[[+npx.multiple]]'] = ($type == 'listbox-multiple')? ' multiple="multiple" ': '';
+            $count = count($options);
+            if ($type == 'dropdown') {
+                $max = 1;
+            } else {
+                $max = ($type == 'listbox')? $this->listboxMax : $this->multipleListboxMax;
+            }
+            $PHs['[[+npx.size]]'] = ($count <= $max)? $count : $max;
+        } else {
+            $formTpl = $this->tpls['optionOuterTpl'];
+        }
+
+        $PHs['[[+npx.hidden]]'] = ($type == 'checkbox')? '<input type="hidden" name="' . $name . '[]" value="" />' : '';
+        $PHs['[[+npx.class]]'] = 'np-tv-' . $type;
+
+        /* Do outer TPl replacements */
+        $formTpl = $this->strReplaceAssoc($PHs,$formTpl);
+
+        /* new replace array for options */
+        $inner = '';
+        $PHs = array();
+        $PHs['[[+npx.name]]'] = $name . $postfix;
+
+        // if postback -> use selection from $_POST
+        if ($this->isPostBack) $selected = $_POST[$name];
+        if (!is_array($selected)) $selected = array($selected);
+
+        /* Set HTML code to use for selected options */
+        $selectedCode = ($type == 'radio' || $type == 'checkbox')? 'checked="checked"' : 'selected="selected"';
+
+        if ($type == 'listbox' || $type =='listbox-multiple' || $type == 'dropdown') {
+            $optionTpl = $this->tpls['listOptionTpl'];
+        } else {
+            $optionTpl = $this->tpls['optionTpl'];
+            $PHs['[[+npx.class]]'] = $PHs['[[+npx.type]]'] = $type;
+        }
+
+        /* loop through options and set selections */
+        foreach ($options as $text => $value) {
+            $PHs['[[+npx.name]]'] = $name . $postfix;
+            $PHs['[[+npx.value]]'] = $value;
+            $PHs['[[+npx.selected]]'] = in_array($value, $selected) ? $selectedCode : '';
+            $PHs['[[+npx.text]]'] = $text;
+            $inner .= $this->strReplaceAssoc($PHs,$optionTpl);
+        }
+
+        return str_replace('[[+npx.options]]',$inner, $formTpl);
+    }
+
+
+    /** Produces the HTML code for textarea fields/TVs
+     * 
+     * @access protected
+     * @param $name - (string) name of the field/TV
+     * @param $PHs - (array) associative array of placeholders and their values to be inserted
+     * @param $RichText - (bool) Is this a Richtext field?
+     * @param $noRTE_class - (string) class name for non-Richtext textareas
+     * @param $rows - (int) number of rows in the textarea
+     * @param $columns - (int) width (number of columns) of the textarea
+     * @return (string) - field/TV HTML code */
+
+    protected function _processTextarea($name, $PHs, $RichText, $noRTE_class, $rows = 20, $columnns = 60) {
+        $PHs['[[+npx.rows]]'] = $rows;
+        $PHs['[[+npx.cols]]'] = $columns;
+
+        if ($RichText) {
+            if($this->props['initrte']) {
+                $PHs['[[+npx.class]]'] = 'modx-richtext';
+            } else {
+                $msg = $this->modx->lexicon('np_no_rte');
+                $this->setError($msg . $field);
+                $this->setFieldError($field, $msg);
+                $PHs['[[+npx.class]]'] = $noRTE_class;
+            }
+        } else {
+            $PHs['[[+npx.class]]'] = $noRTE_class;
+        }
+        return $this->strReplaceAssoc($PHs, $this->tpls['textareaTpl']);
     }
 
 
