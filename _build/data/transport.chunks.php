@@ -74,8 +74,6 @@ $chunks[5]->fromArray(array(
     'properties' => '',
 ),'',true,true);
 
-
-
 $chunks[6]= $modx->newObject('modChunk');
 $chunks[6]->fromArray(array(
     'id' => 6,
@@ -88,60 +86,69 @@ $chunks[6]->fromArray(array(
 $chunks[7]= $modx->newObject('modChunk');
 $chunks[7]->fromArray(array(
     'id' => 7,
-    'name' => 'npIntTpl',
-    'description' => 'Tpl chunk for NewsPublisher integer fields',
-    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/npinttpl.chunk.tpl'),
+    'name' => 'npFileTpl',
+    'description' => 'Tpl chunk for NewsPublisher file TVs',
+    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/npfiletpl.chunk.tpl'),
     'properties' => '',
 ),'',true,true);
 
 $chunks[8]= $modx->newObject('modChunk');
 $chunks[8]->fromArray(array(
     'id' => 8,
-    'name' => 'npListOuterTpl',
-    'description' => 'Outer Tpl chunk for NewsPublisher listbox TVs',
-    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/nplistoutertpl.chunk.tpl'),
+    'name' => 'npIntTpl',
+    'description' => 'Tpl chunk for NewsPublisher integer fields',
+    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/npinttpl.chunk.tpl'),
     'properties' => '',
 ),'',true,true);
 
 $chunks[9]= $modx->newObject('modChunk');
 $chunks[9]->fromArray(array(
     'id' => 9,
-    'name' => 'npListOptionTpl',
-    'description' => 'Inner Tpl chunk for NewsPublisher listbox TVs (used for each option)',
-    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/nplistoptiontpl.chunk.tpl'),
+    'name' => 'npListOuterTpl',
+    'description' => 'Outer Tpl chunk for NewsPublisher listbox TVs',
+    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/nplistoutertpl.chunk.tpl'),
     'properties' => '',
 ),'',true,true);
 
 $chunks[10]= $modx->newObject('modChunk');
 $chunks[10]->fromArray(array(
     'id' => 10,
-    'name' => 'npOptionOuterTpl',
-    'description' => 'Outer Tpl chunk for NewsPublisher checkbox and radio TVs',
-    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/npoptionoutertpl.chunk.tpl'),
+    'name' => 'npListOptionTpl',
+    'description' => 'Inner Tpl chunk for NewsPublisher listbox TVs (used for each option)',
+    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/nplistoptiontpl.chunk.tpl'),
     'properties' => '',
 ),'',true,true);
 
 $chunks[11]= $modx->newObject('modChunk');
 $chunks[11]->fromArray(array(
     'id' => 11,
-    'name' => 'npOptionTpl',
-    'description' => 'Inner Tpl chunk for NewsPublisher checkbox and radio TVs (used for each option)',
-    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/npoptiontpl.chunk.tpl'),
+    'name' => 'npOptionOuterTpl',
+    'description' => 'Outer Tpl chunk for NewsPublisher checkbox and radio TVs',
+    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/npoptionoutertpl.chunk.tpl'),
     'properties' => '',
 ),'',true,true);
 
 $chunks[12]= $modx->newObject('modChunk');
 $chunks[12]->fromArray(array(
     'id' => 12,
-    'name' => 'npErrorTpl',
-    'description' => 'Tpl chunk for use in the NewsPublisher error header',
-    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/nperrortpl.chunk.tpl'),
+    'name' => 'npOptionTpl',
+    'description' => 'Inner Tpl chunk for NewsPublisher checkbox and radio TVs (used for each option)',
+    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/npoptiontpl.chunk.tpl'),
     'properties' => '',
 ),'',true,true);
 
 $chunks[13]= $modx->newObject('modChunk');
 $chunks[13]->fromArray(array(
     'id' => 13,
+    'name' => 'npErrorTpl',
+    'description' => 'Tpl chunk for use in the NewsPublisher error header',
+    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/nperrortpl.chunk.tpl'),
+    'properties' => '',
+),'',true,true);
+
+$chunks[14]= $modx->newObject('modChunk');
+$chunks[14]->fromArray(array(
+    'id' => 14,
     'name' => 'npFieldErrorTpl',
     'description' => 'Tpl chunk display above each NewsPublisher field',
     'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/npfielderrortpl.chunk.tpl'),

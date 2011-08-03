@@ -115,6 +115,31 @@ $vehicle->resolve('file',array(
     ));
 
 $builder->putVehicle($vehicle);
+
+
+
+/* Add filebrowser action */
+$modx->log(modX::LOG_LEVEL_INFO,'Adding filebrowser action.');
+$browserAction= $modx->newObject('modAction');
+$browserAction->fromArray(array(
+    'id' => 1,
+    'namespace' => 'newspublisher',
+    'controller' => 'filebrowser',
+    'haslayout' => false,
+    'parent' => 0,
+    'lang_topics' => '',
+    'assets' => '',            
+), '', true, true);
+$vehicle= $builder->createVehicle($browserAction,array (
+    xPDOTransport::PRESERVE_KEYS => false,
+    xPDOTransport::UPDATE_OBJECT => true,
+    xPDOTransport::UNIQUE_KEY => array ('namespace','controller'),
+));
+$builder->putVehicle($vehicle);
+unset($vehicle,$browserAction);
+
+
+
 /* now pack in the license file, readme.txt and setup options */
 $builder->setPackageAttributes(array(
     'license' => file_get_contents($sources['source_core'] . '/docs/license.txt'),

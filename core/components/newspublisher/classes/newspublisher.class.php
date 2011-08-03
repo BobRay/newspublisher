@@ -47,6 +47,10 @@ class Newspublisher {
     */
     protected $modx;
     /**
+     * @var string current context
+     */
+    protected $context;
+    /**
      * @var array scriptProperties array
      */
     protected $props;
@@ -167,14 +171,6 @@ class Newspublisher {
      * @var int Max length for text input fields
      */
     protected $textMaxlength;
-    /**
-     * @var string imageTvWidth width of image tv input area
-     */
-    protected $imageTvWidth;
-    /**
-     * @var string imageTvHeight height of image tv input area
-     */
-    protected $imageTvHeight;
 
     /** NewsPublisher constructor
      *
@@ -221,6 +217,8 @@ class Newspublisher {
      */
 
         public function init($context) {
+            $this->context = $context;
+            
             $language = !empty($this->props['language'])
                     ? $this->props['language']
                     : $this->modx->getOption('cultureKey',null,$this->modx->getOption('manager_language',null,'en'));
@@ -365,8 +363,6 @@ class Newspublisher {
            $this->listboxMax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
            $this->MultipleListboxMax = $this->props['multiplelistboxmax']? $this->props['multiplelistboxmax'] : 8;
 
-           $this->imageTvWidth = ! empty($this->props['imagetvwidth'])? $this->props['imagetvwidth'] : '500px';
-           $this->imageTvHeight = ! empty($this->props['imagetvheight'])? $this->props['imagetvheight'] : '300px';
 
            $ph = ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
            $this->modx->toPlaceholder('contentrows',$ph,$this->prefix);
@@ -439,25 +435,6 @@ class Newspublisher {
 
                    $this->modx->regClientStartupScript($tiny->config['assetsUrl'].'jscripts/tiny_mce/langs/'.$tiny->properties['language'].'.js');
                    $this->modx->regClientStartupScript($tiny->config['assetsUrl'].'tiny.browser.js');
-                   //mod by Bruno
-
-                   if ($this->props['hasimagetv']) {
-                       $rt_configs = array(
-                           "selector" => "rt_imagetv",
-                           "width" => $this->imageTvWidth,
-                           "height" => $this->imageTvHeight,
-                           "buttons1" => "image",
-                           "buttons2" => "",
-                           "theme_advanced_buttons1" => "image",
-                           "theme_advanced_buttons2" => "",
-                        );
-
-                       $cfg = '';
-                       foreach ($rt_configs as $cf_key => $cf_value){
-                           $cfg.='Tiny.config.'.$cf_key.' = "'.$cf_value.'";';
-                       }
-                       $js.=$cfg.' MODx.loadRTE();';
-                   }
 
                    $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
                        Ext.onReady(function() {
@@ -580,6 +557,7 @@ class Newspublisher {
         $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : $this->modx->getChunk('npBoolTpl');
         $this->tpls['textareaTpl'] = ! empty ($this->props['textareatvtpl'])? $this->modx->getChunk($this->props['textareatvtpl']) : $this->modx->getChunk('npTextareaTpl');
         $this->tpls['imageTpl'] = ! empty ($this->props['imagetpl'])? $this->modx->getChunk($this->props['imagetpl']) : $this->modx->getChunk('npImageTpl');
+        $this->tpls['fileTpl'] = ! empty ($this->props['filetpl'])? $this->modx->getChunk($this->props['filetpl']) : $this->modx->getChunk('npFileTpl');
         $this->tpls['optionOuterTpl'] = ! empty ($this->props['optionoutertpl'])? $this->modx->getChunk($this->props['optionoutertpl']) : $this->modx->getChunk('npOptionOuterTpl');
         $this->tpls['listOuterTpl'] = ! empty ($this->props['listoutertpl'])? $this->modx->getChunk($this->props['listoutertpl']) : $this->modx->getChunk('npListOuterTpl');
         $this->tpls['optionTpl'] = ! empty ($this->props['optiontpl'])? $this->modx->getChunk($this->props['optiontpl']) : $this->modx->getChunk('npOptionTpl');
@@ -850,14 +828,6 @@ class Newspublisher {
                 
             } else {
 
-                if ($tvType=='image') {
-                    if ($this->existing) {
-                        $ph = '<img src="' . $tv->getValue($this->existing). '" />';
-                    } else {
-                       $ph='';
-                    }
-                }
-                
                 $this->modx->toPlaceholder($name, $ph, $this->prefix );
             }
         }
@@ -985,6 +955,71 @@ class Newspublisher {
                 if (!$options) $params['allowBlank'] = 'true';
                 $formTpl .= $this->_processList($name, $replace, 'dropdown', $options, $selected, $params['showNone']=='true' || $params['allowBlank']=='true');
                 break;
+            case 'image':
+            case 'file':
+                            
+                /* code adapted from core/model/modx/processors/element/tv/renders/mgr/input/file.php
+                 * and (...)/image.php */
+
+                $this->modx->getService('fileHandler','modFileHandler', '', array('context' => $this->context));
+
+                $workingContext = $this->modx->getContext($this->context);
+                $params['wctx'] = $this->context;
+                $this->modx->fileHandler->context =& $workingContext;
+
+                $value = $tv->getValue($this->existing);
+
+                /* get base path based on either TV param or filemanager_path */
+                $replacePaths = array(
+                    '[[++base_path]]' => $workingContext->getOption('base_path',null,MODX_BASE_PATH),
+                    '[[++core_path]]' => $workingContext->getOption('core_path',null,MODX_CORE_PATH),
+                    '[[++manager_path]]' => $workingContext->getOption('manager_path',null,MODX_MANAGER_PATH),
+                    '[[++assets_path]]' => $workingContext->getOption('assets_path',null,MODX_ASSETS_PATH),
+                    '[[++base_url]]' => $workingContext->getOption('base_url',null,MODX_BASE_URL),
+                    '[[++manager_url]]' => $workingContext->getOption('manager_url',null,MODX_MANAGER_URL),
+                    '[[++assets_url]]' => $workingContext->getOption('assets_url',null,MODX_ASSETS_URL),
+                );
+                $replaceKeys = array_keys($replacePaths);
+                $replaceValues = array_values($replacePaths);
+
+                if (empty($params['basePath'])) {
+                    $params['basePath'] = $this->modx->fileHandler->getBasePath();
+                    $params['basePath'] = str_replace($replaceKeys,$replaceValues,$params['basePath']);
+                    $params['basePathRelative'] = $workingContext->getOption('filemanager_path_relative',true) ? 1 : 0;
+                } else {
+                    $params['basePath'] = str_replace($replaceKeys,$replaceValues,$params['basePath']);
+                    $params['basePathRelative'] = !isset($params['basePathRelative']) || in_array($params['basePathRelative'],array('true',1,'1'));
+                }
+                if (empty($params['baseUrl'])) {
+                    $params['baseUrl'] = $this->modx->fileHandler->getBaseUrl();
+                    $params['baseUrl'] = str_replace($replaceKeys,$replaceValues,$params['baseUrl']);
+                    $params['baseUrlRelative'] = $workingContext->getOption('filemanager_url_relative',true) ? 1 : 0;
+                } else {
+                    $params['baseUrl'] = str_replace($replaceKeys,$replaceValues,$params['baseUrl']);
+                    $params['baseUrlRelative'] = !isset($params['baseUrlRelative']) || in_array($params['baseUrlRelative'],array('true',1,'1'));
+                }
+                $modxBasePath = $this->modx->getOption('base_path',null,MODX_BASE_PATH);
+                if ($params['basePathRelative'] && $modxBasePath != '/') {
+                    $params['basePath'] = ltrim(str_replace($modxBasePath,'',$params['basePath']),'/');
+                }
+                $modxBaseUrl = $this->modx->getOption('base_url',null,MODX_BASE_URL);
+                if ($params['baseUrlRelative'] && $modxBaseUrl != '/') {
+                    $params['baseUrl'] = ltrim(str_replace($modxBaseUrl,'',$params['baseUrl']),'/');
+                }
+
+                if (!empty($params['baseUrl']) && !empty($value)) {
+                    $relativeValue = $params['baseUrl'].ltrim($value,'/');
+                } else {
+                    $relativeValue = $value;
+                }
+                if (!empty($value) && strpos($value,'/') !== false) {
+                    $dir = pathinfo($value,PATHINFO_DIRNAME);
+                    $dir = rtrim($dir,'/').'/';
+                    $params['openTo'] = $dir;
+                }
+
+                $formTpl .= $this->_processFile($name, $replace, $tvType.'Tpl', $params);
+                break;
                 
         }  /* end switch */
         
@@ -1093,6 +1128,27 @@ class Newspublisher {
     }
 
 
+    /** Produces the HTML code for file/image TVs
+     * 
+     * @access protected
+     * @param $name - (string) name of the TV
+     * @param $PHs - (array) associative array of placeholders and their values to be inserted 
+     * @param $tplName - (string) name of the template chunk that should be used
+     * @ param $options - (array) Associative array of options. Accepts all file/image TV input options
+     * @return (string) - HTML code */
+
+    protected function _processFile($name, $PHs, $tplName, $options = array()) {
+
+        $browserAction = $this->modx->getObject('modAction',array('namespace'  => 'newspublisher'));
+        $url = $browserAction ? $this->modx->getOption('manager_url',null,MODX_MANAGER_URL).'index.php?a='.$browserAction->get('id') : null;
+
+        foreach ($options as $opt => $val) $url .= '&' . $opt . '=' . $val;
+
+        /* Javascript for launching file browser */
+        $PHs['[[+npx.launchBrowser]]'] = "var popup=window.open('" . $url . "', 'select file', 'width=' + Math.min(screen.availWidth,1000) + ',height=' + Math.min(screen.availHeight*0.9,700) + 'resizable=no,status=no,location=no,toolbar=no');popup.focus();browserPathInput=getElementById('np-" . $name . "');return false;";
+        
+        return $this->strReplaceAssoc($PHs, $this->tpls[$tplName]);
+    }
     
     /** Produces the HTML code for boolean (checkbox) fields/TVs
      * 
@@ -1305,9 +1361,6 @@ class Newspublisher {
             $fields['tvs'] = true;
             foreach ($this->allTvs as $tv) {
                 $name = $tv->get('name');
-                if ($tv->get('type')==  'image') {
-                    $_POST[$name] = preg_replace('/(^.*src=")([^"]*)(".*$)/','${2}',$_POST[$name]);
-                }
                 
                 if ($tv->get('type') == 'date') {
                     $fields['tv' . $tv->get('id')] = $_POST[$name] . ' ' . $_POST[$name . '_time'];

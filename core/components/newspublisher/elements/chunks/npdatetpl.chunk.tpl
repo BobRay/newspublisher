@@ -26,6 +26,4 @@
 	      [[+npx.disabledDates]]
         });
       </script>
-
 </div>
-
