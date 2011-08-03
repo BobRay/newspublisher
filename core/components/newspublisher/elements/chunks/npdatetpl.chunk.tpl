@@ -22,7 +22,8 @@
         datePickerController.createDatePicker({
           formElements:{"[[+npx.fieldName]]":"[[%np_date_format]]"},
           callbackFunctions:{"dateset":[ check_[[+npx.fieldName]] ]},
-          noFadeEffect:true
+          noFadeEffect:true,
+	      [[+npx.disabledDates]]
         });
       </script>
 

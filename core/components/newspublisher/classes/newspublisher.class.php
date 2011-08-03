@@ -1034,11 +1034,8 @@ class Newspublisher {
              */
             if ($timeString) {
               $format = $this->modx->lexicon('np_date_format');
-              $format = str_replace( '-sp-', ' ', $format);
-              $format = str_replace( '-dt-', '.', $format);
-              $format = str_replace( '-sl-', '/', $format);
-              $format = str_replace( '-ds-', '-', $format);
-              $format = str_replace( '-cc-', ',', $format);
+              $format = str_replace( array('-','sp','dt','sl','ds','cc'),
+                                     array( '', ' ', '.', '/', '-', ','), $format);
               $timestamp = mktime(0, 0, 0, substr($timeString,5,2), substr($timeString,8,2), substr($timeString,0,4));
               $s = date($format, $timestamp);
             } else {
@@ -1046,6 +1043,39 @@ class Newspublisher {
             }
             $this->modx->toPlaceholder($name, $s, $this->prefix);
           }
+          
+          /* Set disabled dates */
+          
+          $disabled = '';
+          if ($options['disabledDates']) {
+              $disabled .= 'disabledDates:{';
+              foreach (explode(',', $options['disabledDates']) as $d) {
+                  $disabled .= '"';
+                  $d = str_replace('-', '', $d);
+                  $d = str_replace('.', '*', $d);
+                  if (! (strpos($d, '^') === false)) {
+                      $d = str_replace('^',  str_repeat('*', 9 - strlen($d)), $d);
+                  }
+                  $disabled .= $d . '":1,';
+              }
+              $disabled .= '},';
+          }
+          if ($options['disabledDays']) {
+              $disabled .= 'disabledDays:[';
+              $days = explode(',', $options['disabledDays']);
+              for ($day = 1; $day <= 7; $day++) {
+                  $disabled .= (in_array($day, $days) ? 1 : 0) . ',';
+              }
+              $disabled .= '],';
+          }
+          if ($options['minDateValue']) {
+              $disabled .= 'rangeLow:"' . str_replace('-', '', $options['minDateValue']) . '",';
+          }
+          if ($options['maxDateValue']) {
+              $disabled .= 'rangeHigh:"' . str_replace('-', '', $options['maxDateValue']) . '",';
+          }
+          
+          $PHs['[[+npx.disabledDates]]'] = $disabled;
 
         return $this->strReplaceAssoc($PHs, $this->tpls['dateTpl']);
     }
