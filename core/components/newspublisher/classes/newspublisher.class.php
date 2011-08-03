@@ -725,6 +725,43 @@ class Newspublisher {
                 $inner .= $this->_processTextarea($field, $replace, $this->props['rtsummary'], 'np-introtext');
                 break;
 
+            case 'template':
+                $options = array();
+                $templates = $this->modx->getCollection('modTemplate');
+                foreach ($templates as $template) {
+                    if ($template->checkPolicy('list')) {
+                        $options[$template->get('templatename')] = $template->get('id');
+                    }
+                }
+                $inner .= $this->_processList($field, $replace, 'dropdown', $options, array($this->modx->getOption('default_template')), true);
+                break;
+
+            case 'contentType':
+                $options = array();
+                if (!isset($contentTypes)) $contentTypes = $this->modx->getCollection('modContentType');
+                foreach ($contentTypes as $type) {
+                    $options[$type->get('name')] = $type->get('mime_type');
+                  }
+                $inner .= $this->_processList($field, $replace, 'dropdown', $options);
+                break;
+                
+            case 'class_key':
+                $options = array();
+                $classes = array('modDocument', 'modSymLink', 'modWebLink', 'modStaticResource');
+                foreach ($classes as $key) $options[$key] = $key;
+                $inner .= $this->_processList($field, $replace, 'dropdown', $options);
+                break;
+                
+            case 'content_dispo':
+                $options = array();
+                $dispo = array('inline', 'attachment');
+                foreach ($dispo as $key) $options[$this->modx->lexicon($key)] = $key;
+                $inner .= $this->_processList($field, $replace, 'dropdown', $options);
+                break;
+
+            case 'uri_override':
+                $fieldType = 'boolean';
+                
             default:
                 switch($fieldType) {
                     case 'string':
