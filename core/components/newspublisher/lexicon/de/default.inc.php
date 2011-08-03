@@ -50,6 +50,7 @@ $_lang['np_to_template_name'] = 'Es gibt kein Template mit diesem Namen: ';
 $_lang['np_date_hint'] = '(T.M.J)';
 $_lang['np_time_hint'] = '(Zeit - irgendein Format)';
 $_lang['np_date_format'] = 'd-dt-m-dt-Y';
+$_lang['np_invalid_date'] = 'Datum ungültig!';
 $_lang['np_view_permission_denied'] = 'Sie besitzen nicht die nötigen Zugriffsrechte, um dieses Dokument anzuzeigen';
 $_lang['np_create_permission_denied'] = 'Sie besitzen nicht die nötigen Zugriffsrechte, um ein Dokument zu erstellen';
 $_lang['np_save_permission_denied'] = 'Sie besitzen nicht die nötigen Zugriffsrechte, um dieses Dokument anzuzeigen';
