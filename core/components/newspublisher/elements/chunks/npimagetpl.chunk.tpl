@@ -1,7 +1,7 @@
     [[+np.error_[[+npx.fieldName]]]]
     <label for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]: </label>
     <input name="[[+npx.fieldName]]" class="image" id="np-[[+npx.fieldName]]" onchange="[[+npx.fieldName]]_preview(this.value)" type="text"  value="[[+np.[[+npx.fieldName]]]]" />
-    <a href="#" onclick="[[+npx.launchBrowser]]">browse</a>
+    <button type="button" onclick="[[+npx.launchBrowser]]">[[%np_launch_image_browser]]</button>
     <div id="[[+npx.fieldName]]_preview_container"></div>
 
     <script type="text/javascript">

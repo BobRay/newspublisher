@@ -68,6 +68,8 @@ $_lang['np_no_evals_input'] = 'Cannot use @EVAL bindings in the front end.';
 $_lang['np_no_modx_tags'] = 'You do not have permission to edit resources containing modx tags.';
 $_lang['np_no_rte'] = 'The &amp;initrte parameter is not set, but you asked for this richtext field: ';
 $_lang['np_no_datepicker'] = 'The &amp;initdatepicker parameter is not set, but you asked for this date field: ';
+$_lang['np_launch_image_browser'] = 'select/upload';
+$_lang['np_launch_file_browser'] = 'select/upload';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Publish Date';
