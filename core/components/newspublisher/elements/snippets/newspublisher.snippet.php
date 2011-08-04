@@ -73,6 +73,8 @@
 
     @property aliastitle  - (optional) Set to 1 to use lowercase, hyphenated, page title as alias. Defaults to 1.
                        If 0,'article-(date created)' is used. Ignored if alias is filled in form.
+    @property aliasprefix - (optional) Prefix to be prepended to alias for new documents with an empty alias; alias will be aliasprefix - timestamp (or alias - customDate if the 'aliasdatesuffix property was set)";
+    @property aliasdatesuffix - (optional) Allows to have a formatted date/time instead of the timestamp suffix. Example: '_Ymd' leads to 'aliasprefix_20110707' (see documentation for the php date() function for all formatting options). Default: empty";
     @property clearcache  - (optional) When set to 1, cache will be cleared after saving the resource; default: 1.
     @property listboxmax  - (optional) Maximum length for listboxes. Default is 8 items.
     @property cssfile     - (optional) Name of CSS file to use, or `0` for no CSS file; defaults to newspublisher.css.

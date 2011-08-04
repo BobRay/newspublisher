@@ -1321,10 +1321,11 @@ class Newspublisher {
             /* set alias name of document used to store articles */
             if (empty($fields['alias'])) { /* leave it alone if filled */
                 if (!$this->aliasTitle) {
+                    $suffix = !empty($this->props['aliasdatesuffix']) ? date($this->props['aliasdatesuffix']) : '-' . time();
                     if (!empty($this->props['aliasprefix'])) {
-                        $alias = $this->props['aliasprefix'] . '-' . time();
+                        $alias = $this->props['aliasprefix'] . $suffix;
                     } else {
-                        $alias = time();
+                        $alias = $suffix;
                     }
                 } else { /* use pagetitle */
                     $alias = $this->modx->stripTags($_POST['pagetitle']);
