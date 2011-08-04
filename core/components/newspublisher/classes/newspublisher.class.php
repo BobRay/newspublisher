@@ -1018,7 +1018,7 @@ class Newspublisher {
                     $params['openTo'] = $dir;
                 }
 
-                $formTpl .= $this->_processFile($name, $replace, $tvType.'Tpl', $params);
+                $formTpl .= $this->_processFile($name, $replace, $tvType.'Tpl', $tvType=='image', $params);
                 break;
                 
         }  /* end switch */
@@ -1134,13 +1134,18 @@ class Newspublisher {
      * @param $name - (string) name of the TV
      * @param $PHs - (array) associative array of placeholders and their values to be inserted 
      * @param $tplName - (string) name of the template chunk that should be used
+     * @param $showPreview - (bool) If true, a npx.phpthumbBaseUrl placeholder will be set for producing a preview thumbnail. The &src, &w and &h attributes should be appended from within the template chunk
      * @ param $options - (array) Associative array of options. Accepts all file/image TV input options
      * @return (string) - HTML code */
 
-    protected function _processFile($name, $PHs, $tplName, $options = array()) {
+    protected function _processFile($name, $PHs, $tplName, $showPreview = true, $options = array()) {
 
         $browserAction = $this->modx->getObject('modAction',array('namespace'  => 'newspublisher'));
         $url = $browserAction ? $this->modx->getOption('manager_url',null,MODX_MANAGER_URL).'index.php?a='.$browserAction->get('id') : null;
+        
+        if ($showPreview) {
+            $PHs['[[+npx.phpthumbBaseUrl]]'] = $this->modx->getOption('connectors_url',null,MODX_CONNECTORS_URL) . "system/phpthumb.php?basePath=" .$options['basePath']. "&basePathRelative=" .$options['basePathRelative']. "&baseUrl=" .$options['baseUrl']. "&baseUrlRelative=" .$options['baseUrlRelative']. "&baseUrlPrependCheckSlash=" . $options['baseUrlPrependCheckSlash'];
+        }
 
         foreach ($options as $opt => $val) $url .= '&' . $opt . '=' . $val;
 
