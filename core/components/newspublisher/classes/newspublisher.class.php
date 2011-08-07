@@ -690,9 +690,12 @@ class Newspublisher {
         switch ($field) {
             case 'content':
                 $type = $this->resource->get('class_key');
+
                 if ($type == 'modSymLink' || $type == 'modWebLink') {
-                    $replace['[[+npx.caption]]'] = '[[%weblink]]';
-                    $replace['[[+npx.help]]'] = '[[%weblink_help]]';
+                    $type = strtolower(substr($type, 3));
+                    $replace['[[+npx.caption]]'] = $this->modx->lexicon($type);
+                    $replace['[[+npx.help]]'] = $this->modx->lexicon($type.'_help');
+
                     $inner .= $this->_processSimple($field, $replace, 'textTpl');
                 } else {
                     $inner .= $this->_processTextarea($field, $replace, $this->props['rtcontent'], 'np-content');
