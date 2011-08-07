@@ -29,7 +29,7 @@
 <link rel="stylesheet" type="text/css" href="templates/{$_config.manager_theme}/css/ie.css" />
 <![endif]-->
 </head>
-<body>
+<body style="overflow:hidden">
 
 {literal}
 <script type="text/javascript">
