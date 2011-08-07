@@ -73,6 +73,3 @@ $_lang['np_aliasprefix_desc'] = "(optional) Präfix, das vor dem Alias von neuen
 $_lang['np_intmaxlength_desc'] = '(optional) Maximale Länge für Ganzzahl-Eingabefelder; Standardeinstellung: 10.';
 $_lang['np_textmaxlength_desc'] = '(optional) Maximale Länge für Text-Eingabefelder; Standardeinstellung: 60.';
 $_lang['np_hoverhelp_desc'] = '(optional) Hilfe anzeigen, wenn die Maus über die Feld-Überschrift fährt. Standardeinstellung: Ja.';
-$_lang['np_hasimagetv_desc'] = 'Bild-Browser initialisieren (benötigt, wenn Bild-TVs angezeigt werden sollen); Standardeinstellung: Nein.';
-$_lang['np_imagetvheight_desc'] = '(optional) Höhe des Bild-TV-Bereiches; Standardeinstellung: 300px.';
-$_lang['np_imagetvwidth_desc'] = '(optional) Höhe des Bild-TV-Bereiches; Standardeinstellung: 500px.';

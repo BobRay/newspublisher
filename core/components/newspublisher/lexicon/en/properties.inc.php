@@ -72,10 +72,6 @@ $_lang['np_aliasprefix_desc'] = '(optional) Prefix to be prepended to alias for 
 $_lang['np_intmaxlength_desc'] = '(optional) Max length for integer input fields; default: 10.';
 $_lang['np_textmaxlength_desc'] = '(optional) Max length for text input fields; default: 60.';
 $_lang['np_hoverhelp_desc'] = '(optional) Show help when hovering over field caption; default: Yes.';
-$_lang['np_hasimagetv_desc'] = '(required if there are any image TVs) Initialize image browser; default: No.';
-$_lang['np_imagetvheight_desc'] = '(optional) Height of image TV area; default: 300px.';
-$_lang['np_imagetvwidth_desc'] = '(optional) Width of image TV area; default: 500px.';
-
 
 
 
