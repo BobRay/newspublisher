@@ -40,6 +40,9 @@ Ext.onReady(function() {
         ,baseUrlRelative: '{/literal}{$baseUrlRelative}{literal}' || ''
         ,allowedFileTypes: '{/literal}{$allowedFileTypes}{literal}' || ''
         ,openTo: '{/literal}{$openTo}{literal}' || ''
+        ,listeners: {
+            'hide': {fn:function() { window.close(); },scope:this}
+        }
         ,onSelect: function(data) {
             // add file url to text field
             window.opener.browserPathInput.value = data.relativeUrl;
