@@ -26,7 +26,7 @@ class FilebrowserManagerController extends modManagerController {
      * @return void
      */
     public function loadCustomCssJs() {
-
+        $this->modx->regClientStartupScript($this->modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/').'js/widgets/modx.np.browser.js');
     }
 
     /**
@@ -35,7 +35,7 @@ class FilebrowserManagerController extends modManagerController {
      * @return mixed
      */
     public function process(array $scriptProperties = array()) {
-
+        $scriptProperties['np_assets_url'] = $this->modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/');
         // required??
         //$_SERVER['HTTP_MODAUTH'] = $_SESSION["modx.{$this->modx->context->get('key')}.user.token"];
         //$scriptProperties['site_id'] = $_SERVER['HTTP_MODAUTH'];

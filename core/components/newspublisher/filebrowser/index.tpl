@@ -29,7 +29,7 @@
 <link rel="stylesheet" type="text/css" href="templates/{$_config.manager_theme}/css/ie.css" />
 <![endif]-->
 </head>
-<body style="overflow:hidden">
+<body>
 
 {literal}
 <script type="text/javascript">
@@ -43,9 +43,7 @@ Ext.onReady(function() {
         'HTTP_MODAUTH': '{/literal}{$site_id}{literal}'
     };
     browser = MODx.load({
-        xtype: 'modx-browser'
-        ,width: '100%'
-        ,height: 695
+        xtype: 'modx-browser-np'
         ,hideFiles: true
         ,value: window.opener.browserPathInput.value || ''
         ,wctx: '{/literal}{$wctx}{literal}' || 'web'

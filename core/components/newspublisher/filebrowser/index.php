@@ -9,6 +9,9 @@
 
 if (!$modx->hasPermission('file_manager')) return $modx->error->failure($modx->lexicon('permission_denied'));
 
+$modx->regClientStartupScript($modx->getOption('manager_url').'assets/modext/core/modx.view.js');
+$modx->regClientStartupScript($modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/').'js/widgets/modx.np.browser.js');
+
 foreach ($_GET as $opt => $val) {
     $modx->smarty->assign($opt, $val);
 }
