@@ -669,9 +669,6 @@ class Newspublisher {
         $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? '[[%resource_' . $field . '_help:notags]]' : '';
         $replace['[[+npx.caption]]'] = '[[%resource_' . $field . ']]';
         $fieldType = $this->resource->_fieldMeta[$field]['phptype'];
-        if ($field == 'hidemenu') {  /* correct schema error */
-            $fieldType = 'boolean';
-        }
 
         if ($field == 'id') {
             $replace['[[+npx.readonly]]'] = 'readonly="readonly"';
@@ -740,7 +737,8 @@ class Newspublisher {
                 $inner .= $this->_processList($field, $replace, 'dropdown', $options);
                 break;
 
-            case 'uri_override':
+            case 'uri_override': /* correct schema errors */
+            case 'hidemenu':
                 $fieldType = 'boolean';
                 
             default:
