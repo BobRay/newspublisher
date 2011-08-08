@@ -30,7 +30,6 @@ Ext.onReady(function() {
     browser = MODx.load({
         xtype: 'modx-browser-np'
         ,hideFiles: true
-        ,value: window.opener.browserPathInput.value || ''
         ,wctx: '{/literal}{$wctx}{literal}' || 'web'
         ,basePath: '{/literal}{$basePath}{literal}' || ''
         ,basePathRelative: '{/literal}{$basePathRelative}{literal}' || ''
