@@ -1209,7 +1209,7 @@ class Newspublisher {
         }
 
         $PHs['[[+npx.hidden]]'] = ($type == 'checkbox')? '<input type="hidden" name="' . $name . '[]" value="" />' : '';
-        $PHs['[[+npx.class]]'] = 'np-tv-' . $type;
+        $PHs['[[+npx.class]]'] = $type;
 
         /* Do outer TPl replacements */
         $formTpl = $this->strReplaceAssoc($PHs,$formTpl);

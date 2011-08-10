@@ -1,6 +1,6 @@
-[[+np.error_[[+npx.fieldName]]]]
-    <fieldset class="[[+npx.class]]" title="[[+npx.help]]"><legend>[[+npx.caption]]</legend>
-        <select name="[[+npx.name]]" size="[[+npx.size]]" [[+npx.multiple]]>
-            [[+npx.options]]
-            </select>
+    [[+np.error_[[+npx.fieldName]]]]
+    <fieldset  id="np-[[+npx.fieldName]]-container" class="[[+npx.class]]" title="[[+npx.help]]"><legend>[[+npx.caption]]</legend>
+      <select name="[[+npx.name]]" size="[[+npx.size]]" [[+npx.multiple]]>
+        [[+npx.options]]
+      </select>
     </fieldset>

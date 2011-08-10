@@ -19,14 +19,6 @@ textarea#np-introtext {
     height: 100px;
 }
 
-
-div.newspublisher img.np-image {
-    margin:0px 0px 0px 20px;
-    height:50px;
-    width:70px;
-    vertical-align:middle;
-}
-
 div.newspublisher label {
     width: 10em;
     text-align: left;
@@ -36,7 +28,7 @@ div.newspublisher label {
     font-weight: bold;
 }
 
-div.datepicker input {
+div.np-date input {
         width:10em !important;
     }
 
@@ -71,12 +63,12 @@ div.newspublisher span.buttons {
     display:block;
 }
 /* you can size or style a particular resource field or TV
-   by using its name (id) like the examples below.
+   by using its name like the examples below.
    Note that this doesn't work with richtext fields. They can
    only be sized with the tinywidth and tinyheight properties
 */
 /*
-input#MyTv6 {
+input#MyTVName {
     width:10em;
     height:5em;
 }
@@ -86,9 +78,26 @@ input#createdby {
   color:red;
   background-color:gray;
 }
-
-
 */
+
+/* Whole 'elements' (representing a single field/TV) of the form 
+   can be styled as follows:
+*/
+/*
+div#np-image-container#MyImage {
+    padding: 10px;
+    border: 1px solid silver;
+    margin: 10px 0;
+    width: 40em;
+}
+
+fieldset#checkbox {
+    display: inline-block;
+    margin: 10px 30px 0 0;
+    vertical-align: middle;
+}
+*/
+
 div.newspublisher span.option {
     display:block;
 }
@@ -168,25 +177,25 @@ div.newspublisher fieldset option {
   margin:0;
   padding: 0;
 }
-fieldset.np-tv-radio {
+fieldset.np-radio {
    width:10em;
 }
-fieldset.np-tv-checkbox {
+fieldset.np-checkbox {
    width:10em;
 }
-fieldset.np-tv-listbox {
+fieldset.np-listbox {
    width:10em;
 }
-fieldset.np-tv-listbox-multiple {
+fieldset.np-listbox-multiple {
    width:10em;
 }
 
-fieldset.np-tv-text {
+fieldset.np-text {
    width:10em;
 }
-fieldset.np-tv-textbox {
+fieldset.np-textbox {
    width:10em;
 }
-fieldset.np-tv-email {
+fieldset.np-email {
    width:10em;
 }
