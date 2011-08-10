@@ -711,7 +711,7 @@ class Newspublisher {
                         $options[$template->get('templatename')] = $template->get('id');
                     }
                 }
-                $inner .= $this->_processList($field, $replace, 'dropdown', $options, array($this->resource->get('template')), true);
+                $inner .= $this->_processList($field, $replace, 'listbox', $options, array($this->resource->get('template')), true);
                 break;
 
             case 'contentType':
@@ -720,21 +720,21 @@ class Newspublisher {
                 foreach ($contentTypes as $type) {
                     $options[$type->get('name')] = $type->get('mime_type');
                   }
-                $inner .= $this->_processList($field, $replace, 'dropdown', $options);
+                $inner .= $this->_processList($field, $replace, 'listbox', $options);
                 break;
                 
             case 'class_key':
                 $options = array();
                 $classes = array('modDocument', 'modSymLink', 'modWebLink', 'modStaticResource');
                 foreach ($classes as $key) $options[$key] = $key;
-                $inner .= $this->_processList($field, $replace, 'dropdown', $options);
+                $inner .= $this->_processList($field, $replace, 'listbox', $options);
                 break;
                 
             case 'content_dispo':
                 $options = array();
                 $dispo = array('inline', 'attachment');
                 foreach ($dispo as $key) $options[$this->modx->lexicon($key)] = $key;
-                $inner .= $this->_processList($field, $replace, 'dropdown', $options);
+                $inner .= $this->_processList($field, $replace, 'listbox', $options);
                 break;
 
             case 'uri_override': /* correct schema errors */
@@ -954,7 +954,7 @@ class Newspublisher {
 
                 /* If the list is empty do not require selecting something */
                 if (!$options) $params['allowBlank'] = 'true';
-                $formTpl .= $this->_processList($name, $replace, 'dropdown', $options, $selected, $params['showNone']=='true' || $params['allowBlank']=='true');
+                $formTpl .= $this->_processList($name, $replace, 'listbox', $options, $selected, $params['showNone']=='true' || $params['allowBlank']=='true');
                 break;
             case 'image':
             case 'file':
