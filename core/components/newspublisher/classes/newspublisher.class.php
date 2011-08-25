@@ -693,14 +693,14 @@ class Newspublisher {
                     $replace['[[+npx.caption]]'] = $this->modx->lexicon($type);
                     $replace['[[+npx.help]]'] = $this->modx->lexicon($type.'_help');
 
-                    $inner .= $this->_processSimple($field, $replace, 'textTpl');
+                    $inner .= $this->_displaySimple($field, 'textTpl');
                 } else {
-                    $inner .= $this->_processTextarea($field, $replace, $this->props['rtcontent'], 'np-content');
+                    $inner .= $this->_displayTextarea($field, $this->props['rtcontent'], 'np-content');
                 }
                 break;
 
             case 'introtext':
-                $inner .= $this->_processTextarea($field, $replace, $this->props['rtsummary'], 'np-introtext');
+                $inner .= $this->_displayTextarea($field, $this->props['rtsummary'], 'np-introtext');
                 break;
 
             case 'template':
@@ -711,7 +711,7 @@ class Newspublisher {
                         $options[$template->get('templatename')] = $template->get('id');
                     }
                 }
-                $inner .= $this->_processList($field, $replace, 'listbox', $options, array($this->resource->get('template')), true);
+                $inner .= $this->_displayList($field, 'listbox', $options, array($this->resource->get('template')), true);
                 break;
 
             case 'contentType':
@@ -720,21 +720,21 @@ class Newspublisher {
                 foreach ($contentTypes as $type) {
                     $options[$type->get('name')] = $type->get('mime_type');
                   }
-                $inner .= $this->_processList($field, $replace, 'listbox', $options);
+                $inner .= $this->_displayList($field, 'listbox', $options);
                 break;
                 
             case 'class_key':
                 $options = array();
                 $classes = array('modDocument', 'modSymLink', 'modWebLink', 'modStaticResource');
                 foreach ($classes as $key) $options[$key] = $key;
-                $inner .= $this->_processList($field, $replace, 'listbox', $options);
+                $inner .= $this->_displayList($field, 'listbox', $options);
                 break;
                 
             case 'content_dispo':
                 $options = array();
                 $dispo = array('inline', 'attachment');
                 foreach ($dispo as $key) $options[$this->modx->lexicon($key)] = $key;
-                $inner .= $this->_processList($field, $replace, 'listbox', $options);
+                $inner .= $this->_displayList($field, 'listbox', $options);
                 break;
 
             case 'uri_override': /* correct schema errors */
@@ -745,22 +745,25 @@ class Newspublisher {
                 switch($fieldType) {
                     case 'string':
                     default:
-                        $inner .= $this->_processSimple($field, $replace, 'textTpl');
+                        $inner .= $this->_displaySimple($field, 'textTpl');
                         break;
 
                     case 'boolean':
-                        $inner .= $this->_processBoolean($field, $replace, $this->resource->get($field));
+                        $inner .= $this->_displayBoolean($field, $this->resource->get($field));
                         break;
 
                     case 'integer':
-                        $inner .= $this->_processSimple($field, $replace, 'intTpl');
+                        $inner .= $this->_displaySimple($field, 'intTpl');
                         break;
 
                     case 'timestamp':
-                        $inner .= $this->_processDate($field, $replace, $this->resource->get($field));
+                        $inner .= $this->_displayDateInput($field, $this->resource->get($field));
                         break;
                 }
         }
+
+        $inner = $this->strReplaceAssoc($replace, $inner);
+        
         return $inner;
     }
     
@@ -840,27 +843,27 @@ class Newspublisher {
 
         switch ($tvType) {
             case 'date':
-                $formTpl .= $this->_processDate($name, $replace,  $tv->getValue($this->existing), $params);
+                $formTpl .= $this->_displayDateInput($name, $tv->getValue($this->existing), $params);
                 break;
 
             default:
             case 'text':
             case 'textbox':
             case 'email';
-                $formTpl .= $this->_processSimple($name, $replace, 'textTpl');
+                $formTpl .= $this->_displaySimple($name, 'textTpl');
                 break;
 
             case 'number':
-                $formTpl .= $this->_processSimple($name, $replace, 'intTpl');
+                $formTpl .= $this->_displaySimple($name, 'intTpl');
                 break;
 
             case 'textarea':
             case 'textareamini':
-                $formTpl .= $this->_processTextarea($name, $replace, false, $tvType);
+                $formTpl .= $this->_displayTextarea($name, false, $tvType);
                 break;
 
             case 'richtext':
-                $formTpl .= $this->_processTextarea($name, $replace, true, 'textarea');
+                $formTpl .= $this->_displayTextarea($name, true, 'textarea');
 
                 break;
 
@@ -891,7 +894,7 @@ class Newspublisher {
                 $selected = explode('||',$tv->getValue($this->existing));
 
                 /* render HTML */
-                $formTpl .= $this->_processList($name, $replace, $tvType, $options, $selected, $params['allowBlank']=='true');
+                $formTpl .= $this->_displayList($name, $tvType, $options, $selected, $params['allowBlank']=='true');
                 break;
 
             case 'resourcelist':
@@ -954,7 +957,7 @@ class Newspublisher {
 
                 /* If the list is empty do not require selecting something */
                 if (!$options) $params['allowBlank'] = 'true';
-                $formTpl .= $this->_processList($name, $replace, 'listbox', $options, $selected, $params['showNone']=='true' || $params['allowBlank']=='true');
+                $formTpl .= $this->_displayList($name, 'listbox', $options, $selected, $params['showNone']=='true' || $params['allowBlank']=='true');
                 break;
             case 'image':
             case 'file':
@@ -1019,11 +1022,13 @@ class Newspublisher {
                     $params['openTo'] = $dir;
                 }
 
-                $formTpl .= $this->_processFile($name, $replace, $tvType.'Tpl', $params);
+                $formTpl .= $this->_displayFileInput($name, $tvType.'Tpl', $params);
                 break;
                 
         }  /* end switch */
         
+        $formTpl = $this->strReplaceAssoc($replace, $formTpl);
+
         /* Add TV to required fields if blank values are not allowed */
         if ($params['allowBlank'] == 'false') $this->props['required'] .= ',' . $name;
         
@@ -1047,12 +1052,11 @@ class Newspublisher {
      *
      * @access protected
      * @param $name - (string) name of the field/TV
-     * @param $PHs - (array) associative array of placeholders and their values to be inserted 
      * @param $timestring - (string) date-time string in the format "2011-04-01 13:20:01"
      * @ param $options - (array) Associative array of options. Accepts 'disabledDates', 'disabledDays', 'minDateValue' and 'maxDateValue' (in the format used for the corresponding TV input options)
      * @return (string) - date field/TV HTML code */
     
-    protected function _processDate($name, $PHs, $timeString, $options = array()) {
+    protected function _displayDateInput($name, $timeString, $options = array()) {
 
         if (! $this->props['initdatepicker']) {
             $msg = $this->modx->lexicon('np_no_datepicker');
@@ -1111,7 +1115,7 @@ class Newspublisher {
               $disabled .= 'rangeHigh:"' . str_replace('-', '', $options['maxDateValue']) . '",';
           }
           
-          $PHs['[[+npx.disabledDates]]'] = $disabled;
+          $PHs = array('[[+npx.disabledDates]]' => $disabled);
 
         return $this->strReplaceAssoc($PHs, $this->tpls['dateTpl']);
     }
@@ -1119,12 +1123,11 @@ class Newspublisher {
      * 
      * @access protected
      * @param $name - (string) name of the field/TV
-     * @param $PHs - (array) associative array of placeholders and their values to be inserted
      * @param $tplName - (string) name of the template chunk that should be used
      * @return (string) - field/TV HTML code */
 
-    protected function _processSimple($name, $PHs, $tplName) {
-        $PHs['[[+npx.maxlength]]'] = $this->textMaxlength;
+    protected function _displaySimple($name, $tplName) {
+        $PHs = array('[[+npx.maxlength]]' => $this->textMaxlength);
         return $this->strReplaceAssoc($PHs, $this->tpls[$tplName]);
     }
 
@@ -1133,17 +1136,23 @@ class Newspublisher {
      * 
      * @access protected
      * @param $name - (string) name of the TV
-     * @param $PHs - (array) associative array of placeholders and their values to be inserted 
      * @param $tplName - (string) name of the template chunk that should be used
      * @param $options - (array) Associative array of options. Accepts all file/image TV input options
      * @return (string) - HTML code */
 
-    protected function _processFile($name, $PHs, $tplName, $options = array()) {
+    protected function _displayFileInput($name, $tplName, $options = array()) {
 
         $browserAction = $this->modx->getObject('modAction',array('namespace'  => 'newspublisher'));
         $url = $browserAction ? $this->modx->getOption('manager_url',null,MODX_MANAGER_URL).'index.php?a='.$browserAction->get('id') : null;
 
-        $PHs['[[+npx.phpthumbBaseUrl]]'] = $this->modx->getOption('connectors_url',null,MODX_CONNECTORS_URL) . "system/phpthumb.php?basePath=" .$options['basePath']. "&basePathRelative=" .$options['basePathRelative']. "&baseUrl=" .$options['baseUrl']. "&baseUrlRelative=" .$options['baseUrlRelative']. "&baseUrlPrependCheckSlash=" . $options['baseUrlPrependCheckSlash'];
+        $PHs = array('[[+npx.phpthumbBaseUrl]]' =>
+                $this->modx->getOption('connectors_url',null,MODX_CONNECTORS_URL)
+                    . 'system/phpthumb.php?basePath=' . $options['basePath']
+                    . '&basePathRelative=' . $options['basePathRelative']
+                    . '&baseUrl=' .$options['baseUrl']
+                    . '&baseUrlRelative=' . $options['baseUrlRelative']
+                    . '&baseUrlPrependCheckSlash=' . $options['baseUrlPrependCheckSlash']
+                );
 
         foreach ($options as $opt => $val) $url .= '&' . $opt . '=' . $val;
 
@@ -1157,15 +1166,14 @@ class Newspublisher {
      * 
      * @access protected
      * @param $name - (string) name of the field/TV
-     * @param $PHs - (array) associative array of placeholders and their values to be inserted
      * @param $checked - (bool) Is the Checkbox activated?  (ignored on postback)
      * @return (string) - field/TV HTML code */
 
-    protected function _processBoolean($name, $PHs, $checked) {
+    protected function _displayBoolean($name, $checked) {
         if ($this->isPostBack) {
             $checked = $_POST[$name];
         }
-        $PHs ['[[+npx.checked]]'] = $checked? 'checked="checked"' : '';
+        $PHs = array('[[+npx.checked]]' => $checked? 'checked="checked"' : '');
         
         return $this->strReplaceAssoc($PHs, $this->tpls['boolTpl']);
     }
@@ -1175,13 +1183,12 @@ class Newspublisher {
      * 
      * @access protected
      * @param $name - (string) name of the field/TV
-     * @param $PHs - (array) associative array of placeholders and their values to be inserted
      * @param $options - (array) associative array of list entries in the form array('displayed text' => 'value'), e.g. array('resource with ID 8' =>)
      * @param $selected - (array) Array of list entries ($options values) that are currently selected (ignored on postback)
      * @param $showNone - (bool) If true, the first option will be 'empty' (only a dash)
      * @return (string) - field/TV HTML code */
 
-    protected function _processList($name, $PHs, $type, $options, $selected = null, $showNone = false) {
+    protected function _displayList($name, $type, $options, $selected = null, $showNone = false) {
 
         // if blank selections are allowed, add a blank ('-') field as first option
         // TODO: should 'listbox' and 'radio' have one or not????? Should there always be an empty option,
@@ -1189,7 +1196,8 @@ class Newspublisher {
         if ($showNone && $type == 'dropdown') $options = array_merge(array('-' => ''), $options);
 
         $postfix = ($type == 'checkbox' || $type=='listbox-multiple' || $type=='listbox')? '[]' : '';
-        $PHs['[[+npx.name]]'] = $name . $postfix;
+        
+        $PHs = array('[[+npx.name]]' => $name . $postfix);
 
         if($type == 'listbox' || $type == 'listbox-multiple' || $type == 'dropdown') {
             $formTpl = $this->tpls['listOuterTpl'];
@@ -1213,8 +1221,7 @@ class Newspublisher {
 
         /* new replace array for options */
         $inner = '';
-        $PHs = array();
-        $PHs['[[+npx.name]]'] = $name . $postfix;
+        $PHs = array('[[+npx.name]]' => $name . $postfix);
 
         // if postback -> use selection from $_POST
         if ($this->isPostBack) $selected = $_POST[$name];
@@ -1247,16 +1254,17 @@ class Newspublisher {
      * 
      * @access protected
      * @param $name - (string) name of the field/TV
-     * @param $PHs - (array) associative array of placeholders and their values to be inserted
      * @param $RichText - (bool) Is this a Richtext field?
      * @param $noRTE_class - (string) class name for non-Richtext textareas
      * @param $rows - (int) number of rows in the textarea
      * @param $columns - (int) width (number of columns) of the textarea
      * @return (string) - field/TV HTML code */
 
-    protected function _processTextarea($name, $PHs, $RichText, $noRTE_class, $rows = 20, $columnns = 60) {
-        $PHs['[[+npx.rows]]'] = $rows;
-        $PHs['[[+npx.cols]]'] = $columns;
+    protected function _displayTextarea($name, $RichText, $noRTE_class, $rows = 20, $columnns = 60) {
+        $PHs = array(
+            '[[+npx.rows]]' => $rows,
+            '[[+npx.cols]]' => $columns
+            );
 
         if ($RichText) {
             if($this->props['initrte']) {
