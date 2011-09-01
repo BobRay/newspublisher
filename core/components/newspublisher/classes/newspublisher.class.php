@@ -1439,7 +1439,24 @@ class Newspublisher {
         $ph = 'error_' . $fieldName;
         $this->modx->toPlaceholder($ph, $msg, $this->prefix);
     }
+public function my_debug($message, $clear = false) {
+    global $modx;
 
+    $chunk = $modx->getObject('modChunk', array('name'=>'debug'));
+    if (! $chunk) {
+        $chunk = $modx->newObject('modChunk', array('name'=>'debug'));
+        $chunk->save();
+        $chunk = $modx->getObject('modChunk', array('name'=>'debug'));
+    }
+    if ($clear) {
+        $content = '';
+    } else {
+        $content = $chunk->getContent();
+    }
+    $content .= $message;
+    $chunk->setContent($content);
+    $chunk->save();
+}
 
 } /* end class */
 
