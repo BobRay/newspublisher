@@ -107,15 +107,13 @@ $np_prefix = $scriptProperties['prefix'];
 /* create and initialize newspublisher object */
 $np = new Newspublisher($modx, $scriptProperties);
 $np->init($modx->context->get('key'));
-$np->getTpls();
-
 
 /* get error Tpl chunk */
 //$errorTpl = str_replace('[[+prefix]]', $np_prefix, $np->getTpl('errorTpl'));
 //$fieldErrorTpl = str_replace('[[+prefix]]', $np_prefix, $np->getTpl('fieldErrorTpl'));
 
-$errorTpl =  $np->getTpl('errorTpl');
-$fieldErrorTpl = $np->getTpl('fieldErrorTpl');
+$errorTpl =  $np->getTpl('ErrorTpl');
+$fieldErrorTpl = $np->getTpl('FieldErrorTpl');
 
 /* add Cancel button only if requested */
 if (!empty ($scriptProperties['cancelid'])) {

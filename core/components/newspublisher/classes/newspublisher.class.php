@@ -536,71 +536,7 @@ class Newspublisher {
         return $retVal;
     }
 
-    /** Sets the array of Tpl strings use to create the form.
-     *  Attempts to get chunks of names are send as parameters,
-     *  used defaults if not.
-     *
-     *  @access public
-     *
-     *  @return (bool) true on success, false if a non-empty tpl property
-     *  is send and it fails to find the named chunk.
-     */
 
-    public function getTpls() {
-            $this->tpls = array();
-
-            /* this is the outer Tpl for the whole page */
-        $this->tpls['outerTpl'] = !empty ($this->props['outertpl'])? $this->modx->getChunk($this->props['outertpl']): $this->modx->getChunk('npOuterTpl');
-        $this->tpls['textTpl'] = ! empty ($this->props['texttpl'])? $this->modx->getChunk($this->props['texttpl']) : $this->modx->getChunk('npTextTpl');
-        $this->tpls['intTpl'] = ! empty ($this->props['inttpl'])? $this->modx->getChunk($this->props['inttpl']) : $this->modx->getChunk('npIntTpl');
-        $this->tpls['dateTpl'] = ! empty ($this->props['datetpl'])? $this->modx->getChunk($this->props['datetpl']) : $this->modx->getChunk('npDateTpl');
-        $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : $this->modx->getChunk('npBoolTpl');
-        $this->tpls['textareaTpl'] = ! empty ($this->props['textareatvtpl'])? $this->modx->getChunk($this->props['textareatvtpl']) : $this->modx->getChunk('npTextareaTpl');
-        $this->tpls['imageTpl'] = ! empty ($this->props['imagetpl'])? $this->modx->getChunk($this->props['imagetpl']) : $this->modx->getChunk('npImageTpl');
-        $this->tpls['fileTpl'] = ! empty ($this->props['filetpl'])? $this->modx->getChunk($this->props['filetpl']) : $this->modx->getChunk('npFileTpl');
-        $this->tpls['optionOuterTpl'] = ! empty ($this->props['optionoutertpl'])? $this->modx->getChunk($this->props['optionoutertpl']) : $this->modx->getChunk('npOptionOuterTpl');
-        $this->tpls['listOuterTpl'] = ! empty ($this->props['listoutertpl'])? $this->modx->getChunk($this->props['listoutertpl']) : $this->modx->getChunk('npListOuterTpl');
-        $this->tpls['optionTpl'] = ! empty ($this->props['optiontpl'])? $this->modx->getChunk($this->props['optiontpl']) : $this->modx->getChunk('npOptionTpl');
-        $this->tpls['listOptionTpl'] = ! empty ($this->props['listoptiontpl'])? $this->modx->getChunk($this->props['listoptiontpl']) : $this->modx->getChunk('npListOptionTpl');
-        $this->tpls['errorTpl'] = ! empty ($this->props['errortpl'])? $this->modx->getChunk($this->props['errortpl']) : $this->modx->getChunk('npErrorTpl');
-        $this->tpls['fieldErrorTpl'] = ! empty ($this->props['fielderrortpl'])? $this->modx->getChunk($this->props['fielderrortpl']) : $this->modx->getChunk('npFieldErrorTpl');
-
-
-        /* make sure we have all of them */
-        $success = true;
-        foreach($this->tpls as $tpl=>$val) {
-            if (empty($val)) {
-                $this->setError($this->modx->lexicon('np_no_tpl') . $tpl);
-                $success = false;
-            }
-        }
-        /* Set these templates for sure so we can show any errors */
-
-        if (empty($this->tpls['outerTpl'])) {
-            $this->tpls['outerTpl'] = '<div class="newspublisher">
-        <h2>[[%np_main_header]]</h2>
-        [[!+np.error_header:ifnotempty=`<h3>[[!+np.error_header]]</h3>`]]
-        [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
-        [[!+np.errors_submit:ifnotempty=`[[!+np.errors_submit]]`]]
-        [[!+np.errors:ifnotempty=`[[!+np.errors]]`]]</div>';
-        }
-
-        if (empty($this->tpls['errorTpl'])) {
-            $this->tpls['errorTpl'] = '<span class = "errormessage">[[+np.error]]</span>';
-        }
-
-        if (empty($this->tpls['fieldErrorTpl'])) {
-            $this->tpls['fieldErrorTpl'] = '<span class = "fielderrormessage">[[+np.error]]</span>';
-        }
-
-        /* set different placeholder prefix if requested */
-
-        if ($this->prefix != 'np') {
-            $this->tpls = str_replace('np.', $this->prefix . '.', $this->tpls);
-        }
-
-        return $success;
-    }
 /** return a specified tpl
  *
  * @access public
@@ -609,10 +545,47 @@ class Newspublisher {
  * @return (string) tpl content
  *  */
 
-    public function getTpl($name) {
-        return $this->tpls[$name];
-}
+    public function getTpl($tpl) {
+        if (!isset($this->tpls[$tpl])) {
+            $this->tpls[$tpl] = !empty ($this->props[strtolower($tpl)])
+                    ? $this->modx->getChunk($this->props[strtolower($tpl)])
+                    : $this->modx->getChunk('np' . $tpl);
+
+            if (empty($this->tpls[$tpl])) {
+                $this->setError($this->modx->lexicon('np_no_tpl') . $tpl);
+
+                switch ($tpl) {
+                    case 'OuterTpl':
+                        $this->tpls[$tpl] = '<div class="newspublisher">
+                            <h2>[[%np_main_header]]</h2>
+                            [[!+np.error_header:ifnotempty=`<h3>[[!+np.error_header]]</h3>`]]
+                            [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
+                            [[!+np.errors_submit:ifnotempty=`[[!+np.errors_submit]]`]]
+                            [[!+np.errors:ifnotempty=`[[!+np.errors]]`]]</div>';
+                        break;
+
+                    case 'ErrorTpl':
+                        $this->tpls[$tpl] = '<span class = "errormessage">[[+np.error]]</span>';
+                        break;
+
+                    case 'FieldErrorTpl':
+                        $this->tpls[$tpl] = '<span class = "fielderrormessage">[[+np.error]]</span>';
+                        break;
+                }
+            }
     
+            /* set different placeholder prefix if requested */
+            
+            if ($this->prefix != 'np') {
+                $this->tpls[$tpl] = str_replace('np.', $this->prefix . '.', $this->tpls[$tpl]);
+            }
+            
+        }
+        
+        return $this->tpls[$tpl];
+    }
+
+
     /** Creates the HTML for the displayed form by concatenating
      * the necessary Tpls and calling _displayTv() for any TVs.
      *
@@ -629,7 +602,7 @@ class Newspublisher {
 
         if (! $this->resource) {
             $this->setError($this->modx->lexicon('np_no_resource'));
-            return $this->tpls['outerTpl'];
+            return $this->getTpl('OuterTpl');
         }
 
         /* get the resource field names */
@@ -650,7 +623,7 @@ class Newspublisher {
                 }
             }
         }
-        $formTpl = str_replace('[[+npx.insert]]',$inner,$this->tpls['outerTpl']);
+        $formTpl = str_replace('[[+npx.insert]]',$inner,$this->getTpl('OuterTpl'));
         //die ('<pre>' . print_r($formTpl,true));
         // die ('$_POST<br /><pre>' . print_r($_POST,true));
         return $formTpl;
@@ -745,7 +718,7 @@ class Newspublisher {
                 switch($fieldType) {
                     case 'string':
                     default:
-                        $inner .= $this->_displaySimple($field, 'textTpl');
+                        $inner .= $this->_displaySimple($field, 'TextTpl');
                         break;
 
                     case 'boolean':
@@ -753,7 +726,7 @@ class Newspublisher {
                         break;
 
                     case 'integer':
-                        $inner .= $this->_displaySimple($field, 'intTpl');
+                        $inner .= $this->_displaySimple($field, 'IntTpl');
                         break;
 
                     case 'timestamp':
@@ -850,11 +823,11 @@ class Newspublisher {
             case 'text':
             case 'textbox':
             case 'email';
-                $formTpl .= $this->_displaySimple($name, 'textTpl');
+                $formTpl .= $this->_displaySimple($name, 'TextTpl');
                 break;
 
             case 'number':
-                $formTpl .= $this->_displaySimple($name, 'intTpl');
+                $formTpl .= $this->_displaySimple($name, 'IntTpl');
                 break;
 
             case 'textarea':
@@ -1117,7 +1090,7 @@ class Newspublisher {
           
           $PHs = array('[[+npx.disabledDates]]' => $disabled);
 
-        return $this->strReplaceAssoc($PHs, $this->tpls['dateTpl']);
+        return $this->strReplaceAssoc($PHs, $this->getTpl('DateTpl'));
     }
     /** Produces the HTML code for simple text fields/TVs
      * 
@@ -1128,7 +1101,7 @@ class Newspublisher {
 
     protected function _displaySimple($name, $tplName) {
         $PHs = array('[[+npx.maxlength]]' => $this->textMaxlength);
-        return $this->strReplaceAssoc($PHs, $this->tpls[$tplName]);
+        return $this->strReplaceAssoc($PHs, $this->getTpl($tplName));
     }
 
 
@@ -1159,7 +1132,7 @@ class Newspublisher {
         /* Javascript for launching file browser */
         $PHs['[[+npx.launchBrowser]]'] = "var popup=window.open('" . $url . "', 'select file', 'width=' + Math.min(screen.availWidth,1000) + ',height=' + Math.min(screen.availHeight*0.9,700) + 'resizable=no,status=no,location=no,toolbar=no');popup.focus();browserPathInput=getElementById('np-" . $name . "');return false;";
         
-        return $this->strReplaceAssoc($PHs, $this->tpls[$tplName]);
+        return $this->strReplaceAssoc($PHs, $this->getTpl($tplName));
     }
     
     /** Produces the HTML code for boolean (checkbox) fields/TVs
@@ -1175,7 +1148,7 @@ class Newspublisher {
         }
         $PHs = array('[[+npx.checked]]' => $checked? 'checked="checked"' : '');
         
-        return $this->strReplaceAssoc($PHs, $this->tpls['boolTpl']);
+        return $this->strReplaceAssoc($PHs, $this->getTpl('boolTpl'));
     }
 
     
@@ -1200,7 +1173,7 @@ class Newspublisher {
         $PHs = array('[[+npx.name]]' => $name . $postfix);
 
         if($type == 'listbox' || $type == 'listbox-multiple' || $type == 'dropdown') {
-            $formTpl = $this->tpls['listOuterTpl'];
+            $formTpl = $this->getTpl('ListOuterTpl');
             $PHs['[[+npx.multiple]]'] = ($type == 'listbox-multiple')? ' multiple="multiple" ': '';
             $count = count($options);
             if ($type == 'dropdown') {
@@ -1210,7 +1183,7 @@ class Newspublisher {
             }
             $PHs['[[+npx.size]]'] = ($count <= $max)? $count : $max;
         } else {
-            $formTpl = $this->tpls['optionOuterTpl'];
+            $formTpl = $this->getTpl('OptionOuterTpl');
         }
 
         $PHs['[[+npx.hidden]]'] = ($type == 'checkbox')? '<input type="hidden" name="' . $name . '[]" value="" />' : '';
@@ -1231,9 +1204,9 @@ class Newspublisher {
         $selectedCode = ($type == 'radio' || $type == 'checkbox')? 'checked="checked"' : 'selected="selected"';
 
         if ($type == 'listbox' || $type =='listbox-multiple' || $type == 'dropdown') {
-            $optionTpl = $this->tpls['listOptionTpl'];
+            $optionTpl = $this->getTpl('ListOptionTpl');
         } else {
-            $optionTpl = $this->tpls['optionTpl'];
+            $optionTpl = $this->getTpl('OptionTpl');
             $PHs['[[+npx.class]]'] = $PHs['[[+npx.type]]'] = $type;
         }
 
@@ -1278,7 +1251,7 @@ class Newspublisher {
         } else {
             $PHs['[[+npx.class]]'] = $noRTE_class;
         }
-        return $this->strReplaceAssoc($PHs, $this->tpls['textareaTpl']);
+        return $this->strReplaceAssoc($PHs, $this->getTpl('TextareaTpl'));
     }
 
 
@@ -1600,7 +1573,7 @@ class Newspublisher {
      * */
 
     public function validate() {
-        $errorTpl = $this->tpls['fieldErrorTpl'];
+        $errorTpl = $this->getTpl('FieldErrorTpl');
         $success = true;
         $fields = explode(',', $this->props['required']);
         if (!empty($fields)) {
@@ -1652,7 +1625,7 @@ class Newspublisher {
     /* ToDo: Change [[+name]] to [[+npx.something]]?, or ditch it (or not)*/
     public function setFieldError($fieldName, $msg) {
         $msg = str_replace('[[+name]]', $fieldName, $msg);
-        $msg = str_replace("[[+{$this->prefix}.error]]", $msg, $this->tpls['fieldErrorTpl']);
+        $msg = str_replace("[[+{$this->prefix}.error]]", $msg, $this->getTpl('FieldErrorTpl'));
         $ph = 'error_' . $fieldName;
         $this->modx->toPlaceholder($ph, $msg, $this->prefix);
     }
