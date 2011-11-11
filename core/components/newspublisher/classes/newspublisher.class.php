@@ -458,6 +458,58 @@ class Newspublisher {
                            $cfg.='Tiny.config.'.$cf_key.' = "'.$cf_value.'";';
                        }
                        $js.=$cfg.' MODx.loadRTE();';
+                   } else if ($this->props['hasfiletv']) {
+                       $rt_configs = array(
+                           "selector" => "rt_filetv",
+                           "width" => $this->imageTvWidth,
+                           "height" => $this->imageTvHeight,
+                           "buttons1" => "mybutton,image",
+                           "buttons2" => "",
+                           "buttons3" => "",
+                           "theme_advanced_buttons1" => "mybutton,image",
+                           "theme_advanced_buttons2" => "",
+                           "theme_advanced_buttons3" => "",
+                           /*"setup" => "function(ed) {
+
+                                   ed.addButton('mybutton', {
+                                       title : 'My button',
+                                       image : 'img/example.gif',
+                                       onclick : function() {
+
+                                           ed.focus();
+                                           ed.selection.setContent('Hello world!');
+                                       }
+                                   });
+                               }",*/
+
+
+                       );
+                       $cfg = '';
+                       foreach ($rt_configs as $cf_key => $cf_value){
+                           $cfg.='Tiny.config.'.$cf_key.' = "'.$cf_value.'";';
+                       }
+                       $js.=$cfg.' MODx.loadRTE();';
+
+
+                      /* $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
+ function(ed) {' . "
+
+                                   ed.addButton('mybutton', {
+                                       title : 'My button',
+                                       image : 'img/flash.gif',
+                                       onclick : function() {
+
+                                           ed.focus();
+                                           ed.selection.setContent('Hello world!');
+                                       }
+                                   });
+                                   </script>");*/
+
+                      /* $cfg = '';
+                       foreach ($rt_configs as $cf_key => $cf_value){
+                           $cfg.='Tiny.config.'.$cf_key.' = "'.$cf_value.'";';
+                       }
+                       $js.=$cfg.' MODx.loadRTE();';*/
                    }
 
                    $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
@@ -581,6 +633,7 @@ class Newspublisher {
         $this->tpls['boolTpl'] = ! empty ($this->props['booltpl'])? $this->modx->getChunk($this->props['booltpl']) : $this->modx->getChunk('npBoolTpl');
         $this->tpls['textareaTpl'] = ! empty ($this->props['textareatvtpl'])? $this->modx->getChunk($this->props['textareatvtpl']) : $this->modx->getChunk('npTextareaTpl');
         $this->tpls['imageTpl'] = ! empty ($this->props['imagetpl'])? $this->modx->getChunk($this->props['imagetpl']) : $this->modx->getChunk('npImageTpl');
+        $this->tpls['fileTpl'] = ! empty ($this->props['filetpl'])? $this->modx->getChunk($this->props['filetpl']) : $this->modx->getChunk('npfileTpl');
         $this->tpls['optionOuterTpl'] = ! empty ($this->props['optionoutertpl'])? $this->modx->getChunk($this->props['optionoutertpl']) : $this->modx->getChunk('npOptionOuterTpl');
         $this->tpls['listOuterTpl'] = ! empty ($this->props['listoutertpl'])? $this->modx->getChunk($this->props['listoutertpl']) : $this->modx->getChunk('npListOuterTpl');
         $this->tpls['optionTpl'] = ! empty ($this->props['optiontpl'])? $this->modx->getChunk($this->props['optiontpl']) : $this->modx->getChunk('npOptionTpl');
@@ -845,6 +898,13 @@ class Newspublisher {
                        $ph='';
                     }
                 }
+                if ($tvType=='file') {
+                    if ($this->existing) {
+                        $ph = $tv->getValue($this->existing);
+                    } else {
+                       $ph='';
+                    }
+                }
                 
                 $this->modx->toPlaceholder($fields['name'], $ph, $this->prefix );
             }
@@ -881,6 +941,11 @@ class Newspublisher {
                 $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? $fields['description'] : '';
                 $replace['[[+npx.maxlength]]'] = $this->textMaxlength;
                 $formTpl .= $this->tpls['imageTpl'];
+                break;
+             case 'file';
+                $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? $fields['description'] : '';
+                $replace['[[+npx.maxlength]]'] = $this->textMaxlength;
+                $formTpl .= $this->tpls['fileTpl'];
                 break;
 
             case 'textarea':
@@ -1150,6 +1215,25 @@ class Newspublisher {
         /* processor handles all types */
 
         if (!empty($this->allTvs)) {
+            /* *********************************************
+             * Deal with bug in resource update processor. *
+             * Set $fields to current TV value for all TVs *
+             * This section can be removed when it's fixed *
+             ********************************************* */
+            if ($this->existing) {
+                $t_resourceTVs = $this->resource->getMany('TemplateVars');
+                $t_resourceId = $this->resource->get('id');
+                foreach ($t_resourceTVs as $t_tv) {
+                    $t_tvId = $t_tv->get('id');
+                    $t_value = $t_tv->getValue($t_resourceId);
+                    $fields['tv' . $t_tvId] = $t_value;
+                }
+                unset($t_resourceTVs,$t_resourceId,$t_tvId,$t_value);
+            }
+
+
+
+            /* ****************************************** */
             $fields['tvs'] = true;
             foreach ($this->allTvs as $tv) {
                 $name = $tv->get('name');

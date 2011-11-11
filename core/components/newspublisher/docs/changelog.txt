@@ -1,5 +1,9 @@
 Changelog for NewsPublisher
 
+NewsPublisher 1.2.1-pl
+----------------------
+Fixed serious bug with TV values being lost for TVs not shown in form due to bug in resource update processor
+
 NewsPublisher 1.2.0-rc2
 -----------------------
 Fixed bug with hidemenu property
