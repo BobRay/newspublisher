@@ -68,8 +68,8 @@ $_lang['np_no_evals_input'] = 'Kann im Frontend keine @EVAL-Bindings benutzen.';
 $_lang['np_no_modx_tags'] = 'Sie haben nicht die nötigen Rechte, um Ressourcen mit MODx-Tags zu bearbeiten.';
 $_lang['np_no_rte'] = 'Der Parameter &amp;initrte wurde nicht gesetzt, obwohl Sie dieses Richtext-Feld anzeigen möchten: ';
 $_lang['np_no_datepicker'] = 'Der Parameter &amp;initdatepicker wurde nicht gesetzt, obwohl Sie dieses Datums-Feld anzeigen möchten: ';
-$_lang['np_launch_image_browser'] = 'auswählen/hochladen';
-$_lang['np_launch_file_browser'] = 'auswählen/hochladen';
+$_lang['np_launch_image_browser'] = 'Bild auswählen';
+$_lang['np_launch_file_browser'] = 'Datei auswählen';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Veröffentlichen am';
