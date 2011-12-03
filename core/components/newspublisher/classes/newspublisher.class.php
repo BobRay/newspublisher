@@ -1343,6 +1343,25 @@ class Newspublisher {
         /* processor handles all types */
 
         if (!empty($this->allTvs)) {
+            /* *********************************************
+             * Deal with bug in resource update processor. *
+             * Set $fields to current TV value for all TVs *
+             * This section can be removed when it's fixed *
+             ********************************************* */
+            if ($this->existing) {
+                $t_resourceTVs = $this->resource->getMany('TemplateVars');
+                $t_resourceId = $this->resource->get('id');
+                foreach ($t_resourceTVs as $t_tv) {
+                    $t_tvId = $t_tv->get('id');
+                    $t_value = $t_tv->getValue($t_resourceId);
+                    $fields['tv' . $t_tvId] = $t_value;
+                }
+                unset($t_resourceTVs,$t_resourceId,$t_tvId,$t_value);
+            }
+
+
+
+            /* ****************************************** */
             $fields['tvs'] = true;
             foreach ($this->allTvs as $tv) {
                 $name = $tv->get('name');
@@ -1629,7 +1648,24 @@ class Newspublisher {
         $ph = 'error_' . $fieldName;
         $this->modx->toPlaceholder($ph, $msg, $this->prefix);
     }
+public function my_debug($message, $clear = false) {
+    global $modx;
 
+    $chunk = $modx->getObject('modChunk', array('name'=>'debug'));
+    if (! $chunk) {
+        $chunk = $modx->newObject('modChunk', array('name'=>'debug'));
+        $chunk->save();
+        $chunk = $modx->getObject('modChunk', array('name'=>'debug'));
+    }
+    if ($clear) {
+        $content = '';
+    } else {
+        $content = $chunk->getContent();
+    }
+    $content .= $message;
+    $chunk->setContent($content);
+    $chunk->save();
+}
 
 } /* end class */
 
