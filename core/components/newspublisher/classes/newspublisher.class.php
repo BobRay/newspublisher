@@ -681,7 +681,7 @@ class Newspublisher {
                 $templates = $this->modx->getCollection('modTemplate');
                 foreach ($templates as $template) {
                     if ($template->checkPolicy('list')) {
-                        $options[$template->get('templatename')] = $template->get('id');
+                        $options[$template->get('id')] = $template->get('templatename');
                     }
                 }
                 $inner .= $this->_displayList($field, 'listbox', $options, array($this->resource->get('template')), true);
@@ -691,7 +691,7 @@ class Newspublisher {
                 $options = array();
                 if (!isset($contentTypes)) $contentTypes = $this->modx->getCollection('modContentType');
                 foreach ($contentTypes as $type) {
-                    $options[$type->get('name')] = $type->get('mime_type');
+                    $options[$type->get('mime_type')] = $type->get('name');
                   }
                 $inner .= $this->_displayList($field, 'listbox', $options);
                 break;
@@ -706,7 +706,7 @@ class Newspublisher {
             case 'content_dispo':
                 $options = array();
                 $dispo = array('inline', 'attachment');
-                foreach ($dispo as $key) $options[$this->modx->lexicon($key)] = $key;
+                foreach ($dispo as $key) $options[$key] = $this->modx->lexicon($key);
                 $inner .= $this->_displayList($field, 'listbox', $options);
                 break;
 
@@ -860,7 +860,7 @@ class Newspublisher {
                     $text = strtok($option,'=');
                     $option = strtok('=');
                     $option = $option? $option : $text;
-                    $options[$text] = $option;
+                    $options[$option] = $text;
                 }
 
                 /* selected entries */
@@ -924,7 +924,7 @@ class Newspublisher {
                 $options = array();
                 foreach ($resources as $resource) {
                     $id = $resource->get('id');
-                    $options[$resource->get('pagetitle')] = $id; //.' ('.$resource->get('id').')',
+                    $options[$id] = $resource->get('pagetitle'); //.' ('.$resource->get('id').')',
                     if ($id == $tv->getValue($this->existing)) $selected[] = $id;
                 }
 
@@ -1156,9 +1156,9 @@ class Newspublisher {
      * 
      * @access protected
      * @param $name - (string) name of the field/TV
-     * @param $options - (array) associative array of list entries in the form array('displayed text' => 'value'), e.g. array('resource with ID 8' =>)
+     * @param $options - (array) associative array of list entries in the form array('value' => 'text to display').
      * @param $selected - (array) Array of list entries ($options values) that are currently selected (ignored on postback)
-     * @param $showNone - (bool) If true, the first option will be 'empty' (only a dash)
+     * @param $showNone - (bool) If true, the first option will be 'empty' (represented by a dash)
      * @return (string) - field/TV HTML code */
 
     protected function _displayList($name, $type, $options, $selected = null, $showNone = false) {
@@ -1166,7 +1166,7 @@ class Newspublisher {
         // if blank selections are allowed, add a blank ('-') field as first option
         // TODO: should 'listbox' and 'radio' have one or not????? Should there always be an empty option,
         // irrespective of the allowBlank TV input option????
-        if ($showNone && $type == 'dropdown') $options = array_merge(array('-' => ''), $options);
+        if ($showNone && $type == 'dropdown') $options = array_merge(array('' => '-'), $options);
 
         $postfix = ($type == 'checkbox' || $type=='listbox-multiple' || $type=='listbox')? '[]' : '';
         
@@ -1211,7 +1211,7 @@ class Newspublisher {
         }
 
         /* loop through options and set selections */
-        foreach ($options as $text => $value) {
+        foreach ($options as $value => $text) {
             $PHs['[[+npx.name]]'] = $name . $postfix;
             $PHs['[[+npx.value]]'] = $value;
             $PHs['[[+npx.selected]]'] = in_array($value, $selected) ? $selectedCode : '';
