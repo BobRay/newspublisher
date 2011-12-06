@@ -639,6 +639,7 @@ class Newspublisher {
     protected function _displayField($field) {
       
         $replace = array();
+        $inner = '';
         $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? '[[%resource_' . $field . '_help:notags]]' : '';
         $replace['[[+npx.caption]]'] = '[[%resource_' . $field . ']]';
         $fieldType = $this->resource->_fieldMeta[$field]['phptype'];
