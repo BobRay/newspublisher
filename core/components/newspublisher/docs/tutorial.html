@@ -5,6 +5,13 @@ that resource. You do not have to create *any* form fields. NewsPublisher create
 
 <p><i>Note: Earlier versions of TinyMCE do not work correctly in the front end. Be sure you're using the current version.</i>
 </p>
+<h3>Important Security Note</h3>
+<p>If you show a file or image TV on your NewsPublisher form, your user will need to have Manager access in order to use the File/Image browser. If the user manually types in a Manager URL, he or she can access any part of the Manager. If you are going to include file or image TVs in your NewsPublisher form, it is *very* important that the user have a Context Access ACL entry for the mgr context that severely limits what the user can do in the Manager. <b>Do not use the Administrator Policy for this ACL entry!!!</b> If you do, the user can potentially do anything you can do in the Manager (including deleting you and becoming the admin Super User). In order for the Image or File TVs to work in NewsPublisher, the Login snippet must contain the following property setting:</p>
+
+<pre><fixedpre>
+    &contexts=`web,mgr`
+</fixedpre></pre>
+
 <h3>Installing NewsPublisher for MODx Revolution</h3>
 <p>
 Go to System | Package Management on the main menu in the MODx Manager and click on the "Download Extras" button. That will take you to the Revolution Repository (AKA Web Transport Facility). Put NewsPublisher in the search box and press Enter. Click on the "Download" button, and when it changes to "Downloaded," click on the "Finish" button. That should bring you back to your Package Management grid. Click on the "Install" button next to NewsPublisher in the grid. The NewsPublisher snippet should now be installed.</p>
