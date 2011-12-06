@@ -47,26 +47,27 @@
  *
  */
 
-
-$language = $modx->getOption('language', $scriptProperties, null);
+/* ToDo: Internationalize button caption debug messages */
+$props =& $scriptProperties;
+/* let user &language property override default language */
+$language = $modx->getOption('language', $props, null);
 $language = $language ? $language . ':' : '';
 $modx->lexicon->load($language . 'newspublisher:button');
 
 /* Caption for edit button  */
-$debug = $modx->getOption('debug', $scriptProperties, false);
-$buttonCaption = $modx->lexicon('np_edit');
-$buttonCaption = empty($buttonCaption) ? 'np_edit' : $buttonCaption;
-$bottom = empty($scriptProperties['bottom']) ? '20%' : $bottom;
-$right = empty($scriptProperties['right']) ? '20%' : $right;
+$debug = $modx->getOption('debug', $props, false);
+$buttonCaption = empty($props['buttonCaption'])? $modx->lexicon('np_edit') : $props['buttonCaption'];
+$bottom = empty($props['bottom']) ? '20%' : $props['bottom'];
+$right = empty($props['right']) ? '20%' : $props['right'];
 
 $assetsUrl = $modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/');
 $modx->regClientCss($assetsUrl . 'css/button.css');
 
 /* value will be unchanged if there are no errors  */
-$value = $buttonCaption;
+$defaultButtonCaption = $buttonCaption;
 
-$npId = $modx->getOption('np_id', $scriptProperties, '');
-$npEditId = $modx->getOption('np_edit_id', $scriptProperties, '');
+$npId = $modx->getOption('np_id', $props, '');
+$npEditId = $modx->getOption('np_edit_id', $props, '');
 
 /* set the np_id property to the ID of the NewsPublisher page
  * on first run if possible, error message if not */
@@ -105,7 +106,7 @@ if (empty($npId)) {
     }
     /* Failed - turn on debug to error message will display in button */
     if (!$success) {
-        $value = $modx->lexicon('np_no_np_id');
+        $defaultButtonCaption = $modx->lexicon('np_no_np_id');
         $debug = true;
     }
 }
@@ -113,36 +114,36 @@ $modx->setPlaceholder('np_id', $npId);
 
 /* check permissions on current page */
 if (!$modx->hasPermission('edit_document')) {
-    $value = $modx->lexicon('np_no_edit_document_permission');
+    $defaultButtonCaption = $modx->lexicon('np_no_edit_document_permission');
 }
 
 if (!$modx->hasPermission('save_document')) {
-    $value = $modx->lexicon('np_no_context_save_document_permission');
+    $defaultButtonCaption = $modx->lexicon('np_no_context_save_document_permission');
 }
 
 if (!$modx->resource->checkPolicy('save')) {
-    $value = $modx->lexicon('np_no_resource_save_document_permission');
+    $defaultButtonCaption = $modx->lexicon('np_no_resource_save_document_permission');
 }
 
-$npEditId = $modx->getOption('np_edit_id',$scriptProperties,'');
+$npEditId = $modx->getOption('np_edit_id',$props,'');
 $resourceToEdit = empty($npEditId)? $modx->resource->get('id') : $npEditId;
 
 /* Don't show if current page is in the noShow list */
-$noShow = $modx->getOption('noShow', $scriptProperties, '');
+$noShow = $modx->getOption('noShow', $props, '');
 if (empty($noShow)) {
     $noShow = $npId . ',' . $modx->getOption('site_start');
 }
 $hidden = explode(',', $noShow);
 $hidden[] = $npId;
-if (in_array($$resourceToEdit, $hidden)) {
-    $value = 'In noShow list';
+if (in_array($resourceToEdit, $hidden)) {
+    $defaultButtonCaption = 'In noShow list';
 }
 
 
 
 /* Don't show on the the home page */
 if ($npEditId == $modx->getOption('site_start')) {
-    $value = $modx->lexicon('np_no_edit_home_page');
+    $defaultButtonCaption = $modx->lexicon('np_no_edit_home_page');
 }
 
 
@@ -155,11 +156,11 @@ $output = '<form action="[[~[[+np_id]]]]" method="post" class="np_button_form" s
 }
 $output .= "\n" . '<input type = "hidden" name="np_existing" value="true" />';
 $output .= "\n" . '<input type = "hidden" name="np_doc_id" value="' . $resourceToEdit . '"/>';
-$output .= "\n" . '<input type="submit" class = "np_edit_this_button" name="submit" value="' . $value . '"/>';
+$output .= "\n" . '<input type="submit" class = "np_edit_this_button" name="submit" value="' . $defaultButtonCaption . '"/>';
 $output .= "\n" . '</form>';
 
 /* Not OK -- don't show button unless debug is on */
-if (($value != $buttonCaption) && !$debug) {
+if (($defaultButtonCaption != $buttonCaption) && !$debug) {
     $output = '';
 }
 
