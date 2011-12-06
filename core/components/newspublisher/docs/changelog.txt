@@ -1,5 +1,29 @@
 Changelog for NewsPublisher
 
+NewsPublisher 1.3.0-rc1
+-----------------------
+Implemented Markus Schlegel's improvements
+Now handles both file and image TVs
+Change Button Text for image/file TVs
+Only loads required Tpl chunks
+Small changes to _displayList
+Improvements in code generation functions
+Always sets 'phpthumbBaseUrl' placeholder
+Removed deprecated dropdown list type
+Improvements to datepicker JS
+Code simplification and cleanup
+Faster popup loading and resizing
+Scrollbars disabled in file browser
+Corrected Symlink and Weblink captions and help
+Field error messages for lists
+Removed hasimagetv, imagetvwidth, and imagetvheight properties
+Added 'aliasdatesuffix' property for formatting the date suffix
+Preview for selected images
+Support for ResourceList TVs
+Internationalization of invalid date message
+Datepicker language setting more reliable
+
+
 NewsPublisher 1.2.1-pl
 ----------------------
 Fixed serious bug with TV values being lost for TVs not shown in form due to bug in resource update processor
