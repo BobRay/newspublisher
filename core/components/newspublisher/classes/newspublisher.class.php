@@ -1233,7 +1233,7 @@ class Newspublisher {
      * @param $columns - (int) width (number of columns) of the textarea
      * @return (string) - field/TV HTML code */
 
-    protected function _displayTextarea($name, $RichText, $noRTE_class, $rows = 20, $columnns = 60) {
+    protected function _displayTextarea($name, $RichText, $noRTE_class, $rows = 20, $columns = 60) {
         $PHs = array(
             '[[+npx.rows]]' => $rows,
             '[[+npx.cols]]' => $columns
