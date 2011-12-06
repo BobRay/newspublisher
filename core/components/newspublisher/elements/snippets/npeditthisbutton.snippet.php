@@ -40,6 +40,7 @@
  * @property buttonCaption (optional) - Caption for edit button.
  *      Defaults to np_edit language string.
  * @property language (optional) - Language to use for error messages.
+ *      Use to override current language setting
  *      Defaults to current language setting.
  * @property debug (optional) - Displays the button on *all* pages with
  *      either the $buttonCaption, or a message explaining why it
