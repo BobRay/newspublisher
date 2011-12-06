@@ -275,6 +275,7 @@ class Newspublisher {
 
                     } else {
                         $ph = $this->resource->toArray();
+                        $fs = array();
                         $tags = false;
                         foreach($ph as $k=>$v) {
                             if (strstr($v, '[[')) {
