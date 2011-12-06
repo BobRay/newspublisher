@@ -37,11 +37,11 @@
  *      button. Can be in any legal CSS format. Defaults to `20%`.
  * @property right (optional) - distance from right of window to place
  *      button. Can be in any legal CSS format. Defaults to `20%`.
- * @property buttonCaption (optional -- not actually a parameter) -
- *      Caption for edit button.
- *      Defaults to np_edit language string or "Edit" if empty.
+ * @property buttonCaption (optional) - Caption for edit button.
+ *      Defaults to np_edit language string.
  * @property language (optional) - Language to use for error messages.
- * @property debug (optional) - Displays the button on all pages with
+ *      Defaults to current language setting.
+ * @property debug (optional) - Displays the button on *all* pages with
  *      either the $buttonCaption, or a message explaining why it
  *      would not be shown.
  *
