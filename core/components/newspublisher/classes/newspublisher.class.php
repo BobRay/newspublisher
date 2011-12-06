@@ -362,7 +362,7 @@ class Newspublisher {
            }
 
            $this->listboxMax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
-           $this->MultipleListboxMax = $this->props['multiplelistboxmax']? $this->props['multiplelistboxmax'] : 8;
+           $this->multipleListboxMax = $this->props['multiplelistboxmax']? $this->props['multiplelistboxmax'] : 8;
 
 
            $ph = ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
