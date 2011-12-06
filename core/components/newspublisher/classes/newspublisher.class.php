@@ -520,7 +520,7 @@ class Newspublisher {
 
                 default:
                     $this->setError($this->modx->lexicon('np_unknown_field') . $field);
-                    return;
+                    return null;
             }
             if ($option != 'groups') {
                 $retVal = $this->modx->getOption($option);
