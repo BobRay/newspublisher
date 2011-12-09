@@ -27,7 +27,7 @@
 /**
  * MODx NewsPublisher Class
  *
- * @version Version 1.2.0-rc2
+ * @version Version 1.3.0-rc1
  *
  * @package  newspublisher
  *
@@ -275,6 +275,7 @@ class Newspublisher {
 
                     } else {
                         $ph = $this->resource->toArray();
+                        $fs = array();
                         $tags = false;
                         foreach($ph as $k=>$v) {
                             if (strstr($v, '[[')) {
@@ -361,7 +362,7 @@ class Newspublisher {
            }
 
            $this->listboxMax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
-           $this->MultipleListboxMax = $this->props['multiplelistboxmax']? $this->props['multiplelistboxmax'] : 8;
+           $this->multipleListboxMax = $this->props['multiplelistboxmax']? $this->props['multiplelistboxmax'] : 8;
 
 
            $ph = ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
@@ -520,7 +521,7 @@ class Newspublisher {
 
                 default:
                     $this->setError($this->modx->lexicon('np_unknown_field') . $field);
-                    return;
+                    return null;
             }
             if ($option != 'groups') {
                 $retVal = $this->modx->getOption($option);
@@ -639,6 +640,7 @@ class Newspublisher {
     protected function _displayField($field) {
       
         $replace = array();
+        $inner = '';
         $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? '[[%resource_' . $field . '_help:notags]]' : '';
         $replace['[[+npx.caption]]'] = '[[%resource_' . $field . ']]';
         $fieldType = $this->resource->_fieldMeta[$field]['phptype'];
@@ -1235,7 +1237,7 @@ class Newspublisher {
      * @param $columns - (int) width (number of columns) of the textarea
      * @return (string) - field/TV HTML code */
 
-    protected function _displayTextarea($name, $RichText, $noRTE_class, $rows = 20, $columnns = 60) {
+    protected function _displayTextarea($name, $RichText, $noRTE_class, $rows = 20, $columns = 60) {
         $PHs = array(
             '[[+npx.rows]]' => $rows,
             '[[+npx.cols]]' => $columns
@@ -1246,8 +1248,8 @@ class Newspublisher {
                 $PHs['[[+npx.class]]'] = 'modx-richtext';
             } else {
                 $msg = $this->modx->lexicon('np_no_rte');
-                $this->setError($msg . $field);
-                $this->setFieldError($field, $msg);
+                $this->setError($msg . $name);
+                $this->setFieldError($name, $msg);
                 $PHs['[[+npx.class]]'] = $noRTE_class;
             }
         } else {
