@@ -70,6 +70,7 @@ $_lang['np_no_rte'] = 'The &amp;initrte parameter is not set, but you asked for 
 $_lang['np_no_datepicker'] = 'The &amp;initdatepicker parameter is not set, but you asked for this date field: ';
 $_lang['np_launch_image_browser'] = 'Select an image';
 $_lang['np_launch_file_browser'] = 'Select a file';
+$_lang['np_no_action_found'] = 'The newspublisher/filebrowser action could not be found. You may have deleted it accidentally. Please reinstall newspublisher.';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Publish Date';

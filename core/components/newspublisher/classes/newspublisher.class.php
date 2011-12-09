@@ -1120,21 +1120,29 @@ class Newspublisher {
         $browserAction = $this->modx->getObject('modAction',array('namespace'  => 'newspublisher'));
         $url = $browserAction ? $this->modx->getOption('manager_url',null,MODX_MANAGER_URL).'index.php?a='.$browserAction->get('id') : null;
 
-        $PHs = array('[[+npx.phpthumbBaseUrl]]' =>
-                $this->modx->getOption('connectors_url',null,MODX_CONNECTORS_URL)
-                    . 'system/phpthumb.php?basePath=' . $options['basePath']
-                    . '&basePathRelative=' . $options['basePathRelative']
-                    . '&baseUrl=' .$options['baseUrl']
-                    . '&baseUrlRelative=' . $options['baseUrlRelative']
-                    . '&baseUrlPrependCheckSlash=' . $options['baseUrlPrependCheckSlash']
-                );
+        if ($url) {
 
-        $url .= '&tv=' . $name;
-        $_SESSION['newspublisher']['filebrowser'][$name] = $options;
+            $PHs = array('[[+npx.phpthumbBaseUrl]]' =>
+                    $this->modx->getOption('connectors_url',null,MODX_CONNECTORS_URL)
+                        . 'system/phpthumb.php?basePath=' . $options['basePath']
+                        . '&basePathRelative=' . $options['basePathRelative']
+                        . '&baseUrl=' .$options['baseUrl']
+                        . '&baseUrlRelative=' . $options['baseUrlRelative']
+                        . '&baseUrlPrependCheckSlash=' . $options['baseUrlPrependCheckSlash']
+                    );
 
-        /* Javascript for launching file browser */
+            $url .= '&tv=' . $name;
+            $_SESSION['newspublisher']['filebrowser'][$name] = $options;
 
-        $PHs['[[+npx.launchBrowser]]'] = "var popup=window.open('" . $url . "', 'select file', 'width=' + Math.min(screen.availWidth,1000) + ',height=' + Math.min(screen.availHeight*0.9,700) + 'resizable=no,status=no,location=no,toolbar=no');popup.focus();browserPathInput=getElementById('np-" . $name . "');return false;";
+            /* Javascript for launching file browser */
+
+            $PHs['[[+npx.launchBrowser]]'] = "var popup=window.open('" . $url . "', 'select file', 'width=' + Math.min(screen.availWidth,1000) + ',height=' + Math.min(screen.availHeight*0.9,700) + 'resizable=no,status=no,location=no,toolbar=no');popup.focus();browserPathInput=getElementById('np-" . $name . "');return false;";
+
+        } else {
+            
+            $this->setError($this->modx->lexicon('np_no_action_found'));
+            return null;
+        }            
         
         return $this->strReplaceAssoc($PHs, $this->getTpl($tplName));
     }
