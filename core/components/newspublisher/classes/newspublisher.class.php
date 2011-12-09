@@ -1127,9 +1127,11 @@ class Newspublisher {
                     . '&baseUrlPrependCheckSlash=' . $options['baseUrlPrependCheckSlash']
                 );
 
-        foreach ($options as $opt => $val) $url .= '&' . $opt . '=' . $val;
+        $url .= '&tv=' . $name;
+        $_SESSION['newspublisher']['filebrowser'][$name] = $options;
 
         /* Javascript for launching file browser */
+
         $PHs['[[+npx.launchBrowser]]'] = "var popup=window.open('" . $url . "', 'select file', 'width=' + Math.min(screen.availWidth,1000) + ',height=' + Math.min(screen.availHeight*0.9,700) + 'resizable=no,status=no,location=no,toolbar=no');popup.focus();browserPathInput=getElementById('np-" . $name . "');return false;";
         
         return $this->strReplaceAssoc($PHs, $this->getTpl($tplName));

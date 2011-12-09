@@ -18,7 +18,8 @@ class FilebrowserManagerController extends modManagerController {
      * @return bool
      */
     public function checkPermissions() {
-        return $this->modx->hasPermission('file_manager');
+        // only allow access if the browser was launched from within the newspublisher page
+        return $this->modx->hasPermission('file_manager') && isset($_SESSION['newspublisher']['filebrowser'][$_GET['tv']]);
     }
 
     /**
@@ -35,12 +36,8 @@ class FilebrowserManagerController extends modManagerController {
      * @return mixed
      */
     public function process(array $scriptProperties = array()) {
-        $scriptProperties['np_assets_url'] = $this->modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/');
-        // required??
-        //$_SERVER['HTTP_MODAUTH'] = $_SESSION["modx.{$this->modx->context->get('key')}.user.token"];
-        //$scriptProperties['site_id'] = $_SERVER['HTTP_MODAUTH'];
 
-        return $scriptProperties;
+        return $_SESSION['newspublisher']['filebrowser'][$_GET['tv']];
     }
 
     /**
