@@ -861,7 +861,8 @@ class Newspublisher {
                 $selected = explode('||',$tv->getValue($this->existing));
 
                 /* render HTML */
-                $formTpl .= $this->_displayList($name, $tvType, $options, $selected, $params['allowBlank']=='true');
+                $formTpl .= $this->_displayList($name, $tvType, $options, $selected,
+                                                $params['allowBlank']=='true' && ($tvType=='listbox' || $tvType=='dropdown'));
                 break;
 
             case 'resourcelist':
@@ -924,7 +925,7 @@ class Newspublisher {
 
                 /* If the list is empty do not require selecting something */
                 if (!$options) $params['allowBlank'] = 'true';
-                $formTpl .= $this->_displayList($name, 'listbox', $options, $selected, $params['showNone']=='true' || $params['allowBlank']=='true');
+                $formTpl .= $this->_displayList($name, 'listbox', $options, $selected, $params['showNone']!='false');
                 break;
 
                 
@@ -1192,15 +1193,12 @@ class Newspublisher {
      * @param $name - (string) name of the field/TV
      * @param $options - (array) associative array of list entries in the form array('value' => 'text to display').
      * @param $selected - (array) Array of list entries ($options values) that are currently selected (ignored on postback)
-     * @param $showNone - (bool) If true, the first option will be 'empty' (represented by a dash)
+     * @param $showNone - (bool) If true, the first option will be 'empty' (represented by a '-')
      * @return (string) - field/TV HTML code */
 
     protected function _displayList($name, $type, $options, $selected = null, $showNone = false) {
 
-        // if blank selections are allowed, add a blank ('-') field as first option
-        // TODO: should 'listbox' and 'radio' have one or not????? Should there always be an empty option,
-        // irrespective of the allowBlank TV input option????
-        if ($showNone && $type == 'dropdown') $options = array_merge(array('' => '-'), $options);
+        if ($showNone) $options = array_merge(array('' => '-'), $options);
 
         $postfix = ($type == 'checkbox' || $type=='listbox-multiple' || $type=='listbox')? '[]' : '';
         
