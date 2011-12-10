@@ -1,6 +1,7 @@
 
 MODx.browser.NP = function(config) {
     config = config || {};
+    MODx.browserOpen = true; // Hide the button for opening another browser
     this.ident = Ext.id();
     this.view = MODx.load({
         xtype: 'modx-browser-view'
