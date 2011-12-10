@@ -31,11 +31,7 @@ Ext.onReady(function() {
         xtype: 'modx-browser-np'
         ,hideFiles: true
         ,wctx: '{/literal}{$wctx}{literal}' || 'web'
-        ,basePath: '{/literal}{$basePath}{literal}' || ''
-        ,basePathRelative: '{/literal}{$basePathRelative}{literal}' || ''
-        ,baseUrl: '{/literal}{$baseUrl}{literal}' || ''
-        ,baseUrlRelative: '{/literal}{$baseUrlRelative}{literal}' || ''
-        ,allowedFileTypes: '{/literal}{$allowedFileTypes}{literal}' || ''
+        ,source: '{/literal}{$source}{literal}'
         ,openTo: '{/literal}{$openTo}{literal}' || ''
         ,listeners: {
             'hide': {fn:function() { window.close(); },scope:this}

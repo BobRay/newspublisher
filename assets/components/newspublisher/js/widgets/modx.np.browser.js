@@ -11,6 +11,7 @@ MODx.browser.NP = function(config) {
         ,basePathRelative: config.basePathRelative || null
         ,baseUrl: config.baseUrl || ''
         ,baseUrlRelative: config.baseUrlRelative || null
+        ,source: config.source || MODx.config.default_media_source
         ,allowedFileTypes: config.allowedFileTypes || ''
         ,wctx: config.wctx || 'web'
         ,openTo: config.openTo || ''
@@ -25,6 +26,7 @@ MODx.browser.NP = function(config) {
         ,basePathRelative: config.basePathRelative || null
         ,baseUrl: config.baseUrl || ''
         ,baseUrlRelative: config.baseUrlRelative || null
+        ,source: config.source || MODx.config.default_media_source
         ,hideFiles: config.hideFiles || false
         ,openTo: config.openTo || ''
         ,ident: this.ident
@@ -33,6 +35,12 @@ MODx.browser.NP = function(config) {
         ,rootVisible: true
         ,listeners: {
             'afterUpload': {fn:function() { this.view.run(); },scope:this}
+            ,'changeSource': {fn:function(s) {
+                this.config.source = s;
+                this.view.config.source = s;
+                this.view.baseParams.source = s;
+                this.view.run();
+            },scope:this}
         }
     });
     this.tree.on('click',function(node,e) {
@@ -58,12 +66,15 @@ MODx.browser.NP = function(config) {
             ,height: '100%'
             ,items: this.tree
             ,autoScroll: true
+            ,split: true
+            ,border: false
         },{
             id: this.ident+'-browser-view'
             ,cls: 'modx-pb-view-ct'
             ,region: 'center'
             ,autoScroll: true
             ,width: 450
+            ,border: false
             ,items: this.view
             ,tbar: this.getToolbar()
         },{
@@ -71,6 +82,7 @@ MODx.browser.NP = function(config) {
             ,cls: 'modx-pb-details-ct'
             ,region: 'east'
             ,split: true
+            ,border: false
             ,width: 200
             ,minWidth: 200
             ,maxWidth: 300
@@ -79,6 +91,8 @@ MODx.browser.NP = function(config) {
             ,cls: 'modx-pb-buttons'
             ,region: 'south'
             ,split: false
+            ,border: false
+            ,style: 'padding: 4px 8px'
             ,bbar: ['->',{
                 id: this.ident+'-ok-btn'
                 ,text: _('ok')
@@ -125,6 +139,7 @@ Ext.extend(MODx.browser.NP,Ext.Viewport,{
             ,basePathRelative: this.config.basePathRelative || null
             ,baseUrl: this.config.baseUrl || ''
             ,baseUrlRelative: this.config.baseUrlRelative || null
+            ,source: this.config.source
             ,allowedFileTypes: this.config.allowedFileTypes || ''
             ,wctx: this.config.wctx || 'web'
         });

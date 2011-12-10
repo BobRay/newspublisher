@@ -934,6 +934,8 @@ class Newspublisher {
                 if (!$options) $params['allowBlank'] = 'true';
                 $formTpl .= $this->_displayList($name, 'listbox', $options, $selected, $params['showNone']=='true' || $params['allowBlank']=='true');
                 break;
+
+                
             case 'image':
             case 'file':
                             
@@ -941,63 +943,89 @@ class Newspublisher {
                  * and (...)/image.php */
 
                 $this->modx->getService('fileHandler','modFileHandler', '', array('context' => $this->context));
-
-                $workingContext = $this->modx->getContext($this->context);
-                $params['wctx'] = $this->context;
-                $this->modx->fileHandler->context =& $workingContext;
-
+                $params['wctx'] = $this->context; // not sure if this is important, doesn't seem to have an effect
                 $value = $tv->getValue($this->existing);
+                $openTo = '';
 
-                /* get base path based on either TV param or filemanager_path */
-                $replacePaths = array(
-                    '[[++base_path]]' => $workingContext->getOption('base_path',null,MODX_BASE_PATH),
-                    '[[++core_path]]' => $workingContext->getOption('core_path',null,MODX_CORE_PATH),
-                    '[[++manager_path]]' => $workingContext->getOption('manager_path',null,MODX_MANAGER_PATH),
-                    '[[++assets_path]]' => $workingContext->getOption('assets_path',null,MODX_ASSETS_PATH),
-                    '[[++base_url]]' => $workingContext->getOption('base_url',null,MODX_BASE_URL),
-                    '[[++manager_url]]' => $workingContext->getOption('manager_url',null,MODX_MANAGER_URL),
-                    '[[++assets_url]]' => $workingContext->getOption('assets_url',null,MODX_ASSETS_URL),
-                );
-                $replaceKeys = array_keys($replacePaths);
-                $replaceValues = array_values($replacePaths);
+                if (method_exists($tv, 'getSource')) { /* MODx version is 2.20 or higher */
+                    
+                    $source = $tv->getSource($this->context);
+                    if (!$source) {
+                        $this->setError($this->modx->lexicon('np_no_media_source') . $name);
+                        return null;
+                    }
+                    if (!$source->getWorkingContext()) {
+                        $this->setError($this->modx->lexicon('np_source_wctx_error') . $name);
+                    }
+                    $source->initialize();
+                    $params['source'] = $source->get('id');
+                    
+                    if (!$source->checkPolicy('view')) {
+                        $this->setError($this->modx->lexicon('np_media_source_access_denied') . $name);
+                        return null;
+                    }
 
-                if (empty($params['basePath'])) {
-                    $params['basePath'] = $this->modx->fileHandler->getBasePath();
-                    $params['basePath'] = str_replace($replaceKeys,$replaceValues,$params['basePath']);
-                    $params['basePathRelative'] = $workingContext->getOption('filemanager_path_relative',true) ? 1 : 0;
-                } else {
-                    $params['basePath'] = str_replace($replaceKeys,$replaceValues,$params['basePath']);
-                    $params['basePathRelative'] = !isset($params['basePathRelative']) || in_array($params['basePathRelative'],array('true',1,'1'));
-                }
-                if (empty($params['baseUrl'])) {
-                    $params['baseUrl'] = $this->modx->fileHandler->getBaseUrl();
-                    $params['baseUrl'] = str_replace($replaceKeys,$replaceValues,$params['baseUrl']);
-                    $params['baseUrlRelative'] = $workingContext->getOption('filemanager_url_relative',true) ? 1 : 0;
-                } else {
-                    $params['baseUrl'] = str_replace($replaceKeys,$replaceValues,$params['baseUrl']);
-                    $params['baseUrlRelative'] = !isset($params['baseUrlRelative']) || in_array($params['baseUrlRelative'],array('true',1,'1'));
-                }
-                $modxBasePath = $this->modx->getOption('base_path',null,MODX_BASE_PATH);
-                if ($params['basePathRelative'] && $modxBasePath != '/') {
-                    $params['basePath'] = ltrim(str_replace($modxBasePath,'',$params['basePath']),'/');
-                }
-                $modxBaseUrl = $this->modx->getOption('base_url',null,MODX_BASE_URL);
-                if ($params['baseUrlRelative'] && $modxBaseUrl != '/') {
-                    $params['baseUrl'] = ltrim(str_replace($modxBaseUrl,'',$params['baseUrl']),'/');
+                    if (!empty($value)) {
+                        $openTo = $source->getOpenTo($value,$params);
+                    }
+                    $tv->set('relativeValue',$value);
+
+                } else { /* MODx versions below 2.20 */
+
+                    $workingContext = $this->modx->getContext($this->context);
+                    $this->modx->fileHandler->context =& $workingContext;
+
+
+                    /* get base path based on either TV param or filemanager_path */
+                    $replacePaths = array(
+                        '[[++base_path]]' => $workingContext->getOption('base_path',null,MODX_BASE_PATH),
+                        '[[++core_path]]' => $workingContext->getOption('core_path',null,MODX_CORE_PATH),
+                        '[[++manager_path]]' => $workingContext->getOption('manager_path',null,MODX_MANAGER_PATH),
+                        '[[++assets_path]]' => $workingContext->getOption('assets_path',null,MODX_ASSETS_PATH),
+                        '[[++base_url]]' => $workingContext->getOption('base_url',null,MODX_BASE_URL),
+                        '[[++manager_url]]' => $workingContext->getOption('manager_url',null,MODX_MANAGER_URL),
+                        '[[++assets_url]]' => $workingContext->getOption('assets_url',null,MODX_ASSETS_URL),
+                    );
+                    $replaceKeys = array_keys($replacePaths);
+                    $replaceValues = array_values($replacePaths);
+
+                    if (empty($params['basePath'])) {
+                        $params['basePath'] = $this->modx->fileHandler->getBasePath();
+                        $params['basePath'] = str_replace($replaceKeys,$replaceValues,$params['basePath']);
+                        $params['basePathRelative'] = $workingContext->getOption('filemanager_path_relative',true) ? 1 : 0;
+                    } else {
+                        $params['basePath'] = str_replace($replaceKeys,$replaceValues,$params['basePath']);
+                        $params['basePathRelative'] = !isset($params['basePathRelative']) || in_array($params['basePathRelative'],array('true',1,'1'));
+                    }
+                    if (empty($params['baseUrl'])) {
+                        $params['baseUrl'] = $this->modx->fileHandler->getBaseUrl();
+                        $params['baseUrl'] = str_replace($replaceKeys,$replaceValues,$params['baseUrl']);
+                        $params['baseUrlRelative'] = $workingContext->getOption('filemanager_url_relative',true) ? 1 : 0;
+                    } else {
+                        $params['baseUrl'] = str_replace($replaceKeys,$replaceValues,$params['baseUrl']);
+                        $params['baseUrlRelative'] = !isset($params['baseUrlRelative']) || in_array($params['baseUrlRelative'],array('true',1,'1'));
+                    }
+                    $modxBasePath = $this->modx->getOption('base_path',null,MODX_BASE_PATH);
+                    if ($params['basePathRelative'] && $modxBasePath != '/') {
+                        $params['basePath'] = ltrim(str_replace($modxBasePath,'',$params['basePath']),'/');
+                    }
+                    $modxBaseUrl = $this->modx->getOption('base_url',null,MODX_BASE_URL);
+                    if ($params['baseUrlRelative'] && $modxBaseUrl != '/') {
+                        $params['baseUrl'] = ltrim(str_replace($modxBaseUrl,'',$params['baseUrl']),'/');
+                    }
+
+                    if (!empty($params['baseUrl']) && !empty($value)) {
+                        $relativeValue = $params['baseUrl'].ltrim($value,'/');
+                    } else {
+                        $relativeValue = $value;
+                    }
+                    if (!empty($value) && strpos($value,'/') !== false) {
+                        $openTo = pathinfo($value,PATHINFO_DIRNAME);
+                        $openTo = rtrim($openTo,'/').'/';
+                    }
                 }
 
-                if (!empty($params['baseUrl']) && !empty($value)) {
-                    $relativeValue = $params['baseUrl'].ltrim($value,'/');
-                } else {
-                    $relativeValue = $value;
-                }
-                if (!empty($value) && strpos($value,'/') !== false) {
-                    $dir = pathinfo($value,PATHINFO_DIRNAME);
-                    $dir = rtrim($dir,'/').'/';
-                    $params['openTo'] = $dir;
-                }
-
-                $formTpl .= $this->_displayFileInput($name, $tvType.'Tpl', $params);
+                $formTpl .= $this->_displayFileInput($name, $tvType.'Tpl', $params, $openTo);
                 break;
                 
         }  /* end switch */
@@ -1112,39 +1140,41 @@ class Newspublisher {
      * @access protected
      * @param $name - (string) name of the TV
      * @param $tplName - (string) name of the template chunk that should be used
-     * @param $options - (array) Associative array of options. Accepts all file/image TV input options
+     * @param $sourceOptions - (array) Associative array of options. Accepts all file/image TV input options.
+     *       Possible options: all (processed) TV input options (Revo versions below 2.20), respectively the media source.
+     *       'wctx' doesn't seem to have an effect (?)
+     * @param $openTo - (string) Path for the directory to open to
      * @return (string) - HTML code */
 
-    protected function _displayFileInput($name, $tplName, $options = array()) {
+    protected function _displayFileInput($name, $tplName, $sourceOptions = array(), $openTo = '') {
 
         $browserAction = $this->modx->getObject('modAction',array('namespace'  => 'newspublisher'));
-        $url = $browserAction ? $this->modx->getOption('manager_url',null,MODX_MANAGER_URL).'index.php?a='.$browserAction->get('id') : null;
+        $browserUrl = $browserAction ? $this->modx->getOption('manager_url',null,MODX_MANAGER_URL).'index.php?a='.$browserAction->get('id') : null;
 
-        if ($url) {
+        if ($browserUrl) {
 
-            $PHs = array('[[+npx.phpthumbBaseUrl]]' =>
-                    $this->modx->getOption('connectors_url',null,MODX_CONNECTORS_URL)
-                        . 'system/phpthumb.php?basePath=' . $options['basePath']
-                        . '&basePathRelative=' . $options['basePathRelative']
-                        . '&baseUrl=' .$options['baseUrl']
-                        . '&baseUrlRelative=' . $options['baseUrlRelative']
-                        . '&baseUrlPrependCheckSlash=' . $options['baseUrlPrependCheckSlash']
-                    );
+            $phpthumbUrl = $this->modx->getOption('connectors_url',null,MODX_CONNECTORS_URL) . 'system/phpthumb.php?';
+            foreach ($sourceOptions as $key => $value) {
+                $phpthumbUrl .= "&{$key}={$value}";
+            }
 
-            $url .= '&tv=' . $name;
-            $_SESSION['newspublisher']['filebrowser'][$name] = $options;
+            $browserUrl .= '&tv=' . $name;
+            $sourceOptions['openTo'] = $openTo;
+            $_SESSION['newspublisher']['filebrowser'][$name] = $sourceOptions;
 
-            /* Javascript for launching file browser */
-
-            $PHs['[[+npx.launchBrowser]]'] = "var popup=window.open('" . $url . "', 'select file', 'width=' + Math.min(screen.availWidth,1000) + ',height=' + Math.min(screen.availHeight*0.9,700) + 'resizable=no,status=no,location=no,toolbar=no');popup.focus();browserPathInput=getElementById('np-" . $name . "');return false;";
+             $PHs = array(
+                '[[+npx.phpthumbBaseUrl]]' => $phpthumbUrl,
+                '[[+npx.launchBrowser]]'   => "var popup=window.open('{$browserUrl}', 'select file', 'width=' + Math.min(screen.availWidth,1000) + ',height=' + Math.min(screen.availHeight*0.9,700) + 'resizable=no,status=no,location=no,toolbar=no');popup.focus();browserPathInput=getElementById('np-{$name}');return false;"
+            );
+            
+            return $this->strReplaceAssoc($PHs, $this->getTpl($tplName));
 
         } else {
             
             $this->setError($this->modx->lexicon('np_no_action_found'));
             return null;
-        }            
-        
-        return $this->strReplaceAssoc($PHs, $this->getTpl($tplName));
+        }
+    
     }
     
     /** Produces the HTML code for boolean (checkbox) fields/TVs
@@ -1256,8 +1286,8 @@ class Newspublisher {
                 $PHs['[[+npx.class]]'] = 'modx-richtext';
             } else {
                 $msg = $this->modx->lexicon('np_no_rte');
-                $this->setError($msg . $name);
-                $this->setFieldError($name, $msg);
+                $this->setError($msg . $field);
+                $this->setFieldError($field, $msg);
                 $PHs['[[+npx.class]]'] = $noRTE_class;
             }
         } else {
