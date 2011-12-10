@@ -678,21 +678,21 @@ class Newspublisher {
                         $options[$template->get('id')] = $template->get('templatename');
                     }
                 }
-                $inner .= $this->_displayList($field, 'listbox', $options, array($this->resource->get('template')));
+                $inner .= $this->_displayList($field, 'listbox', $options, $this->resource->get('template'));
                 break;
 
             case 'class_key':
                 $options = array();
                 $classes = array('modDocument', 'modSymLink', 'modWebLink', 'modStaticResource');
                 foreach ($classes as $key) $options[$key] = $key;
-                $inner .= $this->_displayList($field, 'listbox', $options);
+                $inner .= $this->_displayList($field, 'listbox', $options, $this->resource->get('class_key'));
                 break;
                 
             case 'content_dispo':
                 $options = array();
                 $dispo = array('inline', 'attachment');
-                foreach ($dispo as $key) $options[$key] = $this->modx->lexicon($key);
-                $inner .= $this->_displayList($field, 'listbox', $options);
+                foreach ($dispo as $k => $v) $options[$k] = $this->modx->lexicon($v);
+                $inner .= $this->_displayList($field, 'listbox', $options, $this->resource->get('content_dispo'));
                 break;
 
             case 'uri_override': /* correct schema errors */
@@ -831,7 +831,6 @@ class Newspublisher {
             case 'listbox':
             case 'listbox-multiple':
             case 'dropdown':
-
             
                 /* handle @ binding TVs */
                 if (preg_match('/^@/',$fields['elements'])) {
@@ -1183,7 +1182,8 @@ class Newspublisher {
      * @access protected
      * @param $name - (string) name of the field/TV
      * @param $options - (array) associative array of list entries in the form array('value' => 'text to display').
-     * @param $selected - (array) Array of list entries ($options values) that are currently selected (ignored on postback)
+     * @param $selected - (mixed) List entry or array of (mutiple) list entries ($options values) that are currently selected
+     *                            (this option ignored on postback)
      * @param $showNone - (bool) If true, the first option will be 'empty' (represented by a '-')
      * @return (string) - field/TV HTML code */
 
