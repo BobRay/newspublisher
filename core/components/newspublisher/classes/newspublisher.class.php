@@ -678,18 +678,9 @@ class Newspublisher {
                         $options[$template->get('id')] = $template->get('templatename');
                     }
                 }
-                $inner .= $this->_displayList($field, 'listbox', $options, array($this->resource->get('template')), true);
+                $inner .= $this->_displayList($field, 'listbox', $options, array($this->resource->get('template')));
                 break;
 
-            case 'contentType':
-                $options = array();
-                if (!isset($contentTypes)) $contentTypes = $this->modx->getCollection('modContentType');
-                foreach ($contentTypes as $type) {
-                    $options[$type->get('mime_type')] = $type->get('name');
-                  }
-                $inner .= $this->_displayList($field, 'listbox', $options);
-                break;
-                
             case 'class_key':
                 $options = array();
                 $classes = array('modDocument', 'modSymLink', 'modWebLink', 'modStaticResource');
