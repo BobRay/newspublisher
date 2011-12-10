@@ -256,6 +256,19 @@ class Newspublisher {
             /* see if it's a repost */
             $this->setPostback(isset($_POST['hidSubmit']) && $_POST['hidSubmit'] == 'true');
 
+            if ($this->isPostBack) {
+                $fs = array();
+                foreach($_POST as $k => $v) {
+                    /* Don't use arrays for HTML select/radio fields with a single element.
+                     * The nested arrays cause problems when saving fields */
+                    if (is_array($v) && count($v)==1) $_POST[$k] = reset($v);
+                    
+                    /* str_replace to prevent rendering of placeholders */
+                    $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
+                }
+                $this->modx->toPlaceholders($fs,$this->prefix);
+            }
+
             if($this->existing) {
 
                 $this->resource = $this->modx->getObject('modResource', $this->existing);
@@ -264,24 +277,11 @@ class Newspublisher {
                     if (!$this->modx->hasPermission('view_document') || !$this->resource->checkPolicy('view') ) {
                         $this->setError($this->modx->lexicon('np_view_permission_denied'));
                     }
-                    if ($this->isPostBack) {
-                        /* str_replace to prevent rendering of placeholders */
-                         $fs = array();
-                         foreach($_POST as $k=>$v) {
-                             $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
-                         }
-                        $this->modx->toPlaceholders($fs,$this->prefix);
-
-
-                    } else {
+                    if (! $this->isPostBack) {
                         $ph = $this->resource->toArray();
                         $fs = array();
-                        $tags = false;
                         foreach($ph as $k=>$v) {
-                            if (strstr($v, '[[')) {
-                                $tags = true;
-                            }
-                            if ($tags && ! $this->modx->hasPermission('allow_modx_tags')) {
+                            if (strstr($v, '[[') && ! $this->modx->hasPermission('allow_modx_tags')) {
                                 $this->setError($this->modx->lexicon('np_no_modx_tags'));
                                 return;
                             }
@@ -310,14 +310,6 @@ class Newspublisher {
                 /* get folder id where we should store articles
                  else store under current document */
                  $this->parentId = !empty($this->props['parentid']) ? intval($this->props['parentid']):$this->modx->resource->get('id');
-
-                /* str_replace to prevent rendering of placeholders */
-                 $fs = array();
-                 foreach($_POST as $k=>$v) {
-                     $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
-                 }
-                 $this->modx->toPlaceholders($fs,$this->prefix);
-
 
                  $this->aliasTitle = $this->props['aliastitle']? true : false;
                  $this->clearcache = isset($_POST['clearcache'])? $_POST['clearcache'] : $this->props['clearcache'] ? true: false;
@@ -1665,7 +1657,9 @@ class Newspublisher {
         }
 
         foreach ($fields as $field) {
-            if (stristr($_POST[$field], '@EVAL')) {
+            $value = $_POST[$field];
+            if (is_array($value)) $value = implode($value, '');
+            if (stristr($value, '@EVAL')) {
                 $this->setError($this->modx->lexicon('np_no_evals_input'));
                 $_POST[$field] = '';
                 /* set fields to empty string */
