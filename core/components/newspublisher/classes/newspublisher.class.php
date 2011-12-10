@@ -1198,7 +1198,7 @@ class Newspublisher {
 
     protected function _displayList($name, $type, $options, $selected = null, $showNone = false) {
 
-        if ($showNone) $options = array_merge(array('' => '-'), $options);
+        if ($showNone) $options = array('' => '-') + $options;
 
         $postfix = ($type == 'checkbox' || $type=='listbox-multiple' || $type=='listbox')? '[]' : '';
         
