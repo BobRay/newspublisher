@@ -335,12 +335,9 @@ class Newspublisher {
                  $this->header = !empty($this->props['headertpl']) ? $this->modx->getChunk($this->props['headertpl']) : '';
                  $this->footer = !empty($this->props['footertpl']) ? $this->modx->getChunk($this->props['footertpl']):'';
 
-                 $this->intMaxlength = !empty($this->props['intmaxlength'])? $this->props['intmaxlength'] : 10;
-                 $this->textMaxlength = !empty($this->props['textmaxlength'])? $this->props['textmaxlength'] : 60;
-
-
 
             }
+
              if( !empty($this->props['badwords'])) {
                  $this->badwords = str_replace(' ','', $this->props['badwords']);
                  $this->badwords = "/".str_replace(',','|', $this->badwords)."/i";
@@ -356,6 +353,8 @@ class Newspublisher {
            $this->listboxMax = $this->props['listboxmax']? $this->props['listboxmax'] : 8;
            $this->multipleListboxMax = $this->props['multiplelistboxmax']? $this->props['multiplelistboxmax'] : 8;
 
+           $this->intMaxlength = !empty($this->props['intmaxlength'])? $this->props['intmaxlength'] : 10;
+           $this->textMaxlength = !empty($this->props['textmaxlength'])? $this->props['textmaxlength'] : 60;
 
            $ph = ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
            $this->modx->toPlaceholder('contentrows',$ph,$this->prefix);
@@ -660,7 +659,7 @@ class Newspublisher {
                     $replace['[[+npx.caption]]'] = $this->modx->lexicon($type);
                     $replace['[[+npx.help]]'] = $this->modx->lexicon($type.'_help');
 
-                    $inner .= $this->_displaySimple($field, 'textTpl');
+                    $inner .= $this->_displaySimple($field, 'textTpl', $this->textMaxlength);
                 } else {
                     $inner .= $this->_displayTextarea($field, $this->props['rtcontent'], 'np-content');
                 }
@@ -703,7 +702,7 @@ class Newspublisher {
                 switch($fieldType) {
                     case 'string':
                     default:
-                        $inner .= $this->_displaySimple($field, 'TextTpl');
+                        $inner .= $this->_displaySimple($field, 'TextTpl', $this->textMaxlength);
                         break;
 
                     case 'boolean':
@@ -711,7 +710,7 @@ class Newspublisher {
                         break;
 
                     case 'integer':
-                        $inner .= $this->_displaySimple($field, 'IntTpl');
+                        $inner .= $this->_displaySimple($field, 'IntTpl', $this->intMaxlength);
                         break;
 
                     case 'timestamp':
@@ -808,11 +807,11 @@ class Newspublisher {
             case 'text':
             case 'textbox':
             case 'email';
-                $formTpl .= $this->_displaySimple($name, 'TextTpl');
+                $formTpl .= $this->_displaySimple($name, 'TextTpl', $this->textMaxlength);
                 break;
 
             case 'number':
-                $formTpl .= $this->_displaySimple($name, 'IntTpl');
+                $formTpl .= $this->_displaySimple($name, 'IntTpl', $this->intMaxlength);
                 break;
 
             case 'textarea':
@@ -1110,10 +1109,11 @@ class Newspublisher {
      * @access protected
      * @param $name - (string) name of the field/TV
      * @param $tplName - (string) name of the template chunk that should be used
+     * @param $maxLength - (int) Max length for the input field (in characters)
      * @return (string) - field/TV HTML code */
 
-    protected function _displaySimple($name, $tplName) {
-        $PHs = array('[[+npx.maxlength]]' => $this->textMaxlength);
+    protected function _displaySimple($name, $tplName, $maxLength = 10) {
+        $PHs = array('[[+npx.maxlength]]' => $maxLength);
         return $this->strReplaceAssoc($PHs, $this->getTpl($tplName));
     }
 
