@@ -1176,7 +1176,7 @@ class Newspublisher {
      * @param $name - (string) name of the field/TV
      * @param $options - (array) associative array of list entries in the form array('value' => 'text to display').
      * @param $selected - (mixed) List entry or array of (mutiple) list entries ($options values) that are currently selected
-     *                            (this option ignored on postback)
+     *                            (this option is ignored on postback)
      * @param $showNone - (bool) If true, the first option will be 'empty' (represented by a '-')
      * @return (string) - field/TV HTML code */
 
