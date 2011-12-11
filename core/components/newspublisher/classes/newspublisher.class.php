@@ -356,18 +356,6 @@ class Newspublisher {
            $this->intMaxlength = !empty($this->props['intmaxlength'])? $this->props['intmaxlength'] : 10;
            $this->textMaxlength = !empty($this->props['textmaxlength'])? $this->props['textmaxlength'] : 60;
 
-           $ph = ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
-           $this->modx->toPlaceholder('contentrows',$ph,$this->prefix);
-
-           $ph = ! empty($this->props['contentcols'])? $this->props['contentcols'] : '60';
-           $this->modx->toPlaceholder('contentcols',$ph, $this->prefix);
-
-           $ph = ! empty($this->props['summaryrows'])? $this->props['summaryrows'] : '10';
-           $this->modx->toPlaceholder('summaryrows',$ph, $this->prefix);
-
-           $ph = ! empty($this->props['summarycols'])? $this->props['summarycols'] : '60';
-           $this->modx->toPlaceholder('summarycols',$ph, $this->prefix);
-
            if (false) { /* do rich text stuff */
                //$ph = ! empty($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
                $ph = !empty($this->props['rtcontent'])
@@ -660,13 +648,18 @@ class Newspublisher {
                     $replace['[[+npx.help]]'] = $this->modx->lexicon($type.'_help');
 
                     $inner .= $this->_displaySimple($field, 'textTpl', $this->textMaxlength);
+                    
                 } else {
-                    $inner .= $this->_displayTextarea($field, $this->props['rtcontent'], 'np-content');
+                    $rows =  ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
+                    $cols =  ! empty($this->props['contentcols'])? $this->props['contentcols'] : '60';
+                    $inner .= $this->_displayTextarea($field, $this->props['rtcontent'], 'np-content', $rows, $cols);
                 }
                 break;
 
             case 'introtext':
-                $inner .= $this->_displayTextarea($field, $this->props['rtsummary'], 'np-introtext');
+                $rows =  ! empty($this->props['summaryrows'])? $this->props['summaryrows'] : '10';
+                $cols =  ! empty($this->props['summarycols'])? $this->props['summarycols'] : '60';
+                $inner .= $this->_displayTextarea($field, $this->props['rtsummary'], 'np-introtext', $rows, $cols);
                 break;
 
             case 'template':
