@@ -19,7 +19,7 @@ textarea#np-introtext {
     height: 100px;
 }
 
-div.newspublisher label {
+div.newspublisher label.fieldlabel {
     width: 10em;
     text-align: left;
     margin: 12px 5px 3px 0px;

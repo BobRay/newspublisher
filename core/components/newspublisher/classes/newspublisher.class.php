@@ -1234,12 +1234,15 @@ class Newspublisher {
         }
 
         /* loop through options and set selections */
+        $idx = 1;
         foreach ($options as $value => $text) {
             $PHs['[[+npx.name]]'] = $name . $postfix;
             $PHs['[[+npx.value]]'] = $value;
+            $PHs['[[+npx.idx]]'] = $idx;
             $PHs['[[+npx.selected]]'] = in_array($value, $selected) ? $selectedCode : '';
             $PHs['[[+npx.text]]'] = $text;
             $inner .= $this->strReplaceAssoc($PHs,$optionTpl);
+            $idx++;
         }
 
         return str_replace('[[+npx.options]]',$inner, $formTpl);

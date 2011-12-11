@@ -1,6 +1,6 @@
     <div id="np-[[+npx.fieldName]]-container" class="np-image">
         [[+np.error_[[+npx.fieldName]]]]
-        <label for="[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]: </label>
+        <label class="fieldlabel" for="np-[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]: </label>
         <input name="[[+npx.fieldName]]" class="image" id="np-[[+npx.fieldName]]" onchange="[[+npx.fieldName]]_preview(this.value)" type="text"  value="[[+np.[[+npx.fieldName]]]]" />
         <button type="button" onclick="[[+npx.launchBrowser]]">[[%np_launch_image_browser]]</button>
         <div id="[[+npx.fieldName]]_preview_container"></div>
