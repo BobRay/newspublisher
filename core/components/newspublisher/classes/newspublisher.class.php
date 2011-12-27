@@ -640,19 +640,28 @@ class Newspublisher {
         /* do content and introtext fields */
         switch ($field) {
             case 'content':
-                $type = $this->resource->get('class_key');
+                /* adjust content field type according to class_key */
+                if ($this->existing) $class_key = $this->resource->get('class_key');
+                else $class_key = isset($_POST['class_key']) ? $_POST['class_key'] : 'modDocument';
 
-                if ($type == 'modSymLink' || $type == 'modWebLink') {
-                    $type = strtolower(substr($type, 3));
-                    $replace['[[+npx.caption]]'] = $this->modx->lexicon($type);
-                    $replace['[[+npx.help]]'] = $this->modx->lexicon($type.'_help');
-
-                    $inner .= $this->_displaySimple($field, 'textTpl', $this->textMaxlength);
+                switch ($class_key) {
+                    case 'modDocument':
+                        $rows =  ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
+                        $cols =  ! empty($this->props['contentcols'])? $this->props['contentcols'] : '60';
+                        $inner .= $this->_displayTextarea($field, $this->props['rtcontent'], 'np-content', $rows, $cols);
+                        break;
                     
-                } else {
-                    $rows =  ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
-                    $cols =  ! empty($this->props['contentcols'])? $this->props['contentcols'] : '60';
-                    $inner .= $this->_displayTextarea($field, $this->props['rtcontent'], 'np-content', $rows, $cols);
+                    case 'modWebLink':
+                    case 'modSymLink':
+                        $class_key = strtolower(substr($class_key, 3));
+                        $replace['[[+npx.caption]]'] = $this->modx->lexicon($class_key);
+                        $replace['[[+npx.help]]'] = $this->modx->lexicon($class_key.'_help');
+                        $inner .= $this->_displaySimple($field, 'TextTpl', $this->textMaxlength);
+                        break;
+
+                    case 'modStaticResource':
+                        $replace['[[+npx.caption]]'] = $this->modx->lexicon('staticresource');
+                        $inner .= $this->_displayFileInput($field, 'fileTpl');
                 }
                 break;
 
@@ -1134,7 +1143,7 @@ class Newspublisher {
                 $phpthumbUrl .= "&{$key}={$value}";
             }
 
-            $browserUrl .= '&tv=' . $name;
+            $browserUrl .= '&field=' . $name;
             $sourceOptions['openTo'] = $openTo;
             $_SESSION['newspublisher']['filebrowser'][$name] = $sourceOptions;
 

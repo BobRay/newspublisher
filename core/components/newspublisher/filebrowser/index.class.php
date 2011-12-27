@@ -19,7 +19,7 @@ class FilebrowserManagerController extends modManagerController {
      */
     public function checkPermissions() {
         // only allow access if the browser was launched from within the newspublisher page
-        return $this->modx->hasPermission('file_manager') && isset($_SESSION['newspublisher']['filebrowser'][$_GET['tv']]);
+        return $this->modx->hasPermission('file_manager') && isset($_SESSION['newspublisher']['filebrowser'][$_GET['field']]);
     }
 
     /**
@@ -37,7 +37,7 @@ class FilebrowserManagerController extends modManagerController {
      */
     public function process(array $scriptProperties = array()) {
 
-        return $_SESSION['newspublisher']['filebrowser'][$_GET['tv']];
+        return $_SESSION['newspublisher']['filebrowser'][$_GET['field']];
     }
 
     /**

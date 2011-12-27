@@ -9,14 +9,14 @@
 
 
 // Only allow access if the browser was launched from within the newspublisher page
-if (!$modx->hasPermission('file_manager') || !isset($_SESSION['newspublisher']['filebrowser'][$_GET['tv']]))
+if (!$modx->hasPermission('file_manager') || !isset($_SESSION['newspublisher']['filebrowser'][$_GET['field']]))
     return $modx->error->failure($modx->lexicon('permission_denied'));
 
 
 $modx->regClientStartupScript($modx->getOption('manager_url').'assets/modext/core/modx.view.js');
 $modx->regClientStartupScript($modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/').'js/widgets/modx.np.browser.js');
 
-foreach ($_SESSION['newspublisher']['filebrowser'][$_GET['tv']] as $opt => $val) {
+foreach ($_SESSION['newspublisher']['filebrowser'][$_GET['field']] as $opt => $val) {
     $modx->smarty->assign($opt, $val);
 }
 
