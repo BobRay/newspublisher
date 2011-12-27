@@ -684,8 +684,8 @@ class Newspublisher {
 
             case 'class_key':
                 $options = array();
-                $classes = array('modDocument', 'modSymLink', 'modWebLink', 'modStaticResource');
-                foreach ($classes as $key) $options[$key] = $key;
+                $classes = array('modDocument' => 'document', 'modSymLink' => 'symlink', 'modWebLink' => 'weblink', 'modStaticResource' => 'static_resource');
+                foreach ($classes as $k => $v) $options[$k] = $this->modx->lexicon($v);
                 $inner .= $this->_displayList($field, 'listbox', $options, $this->resource->get('class_key'));
                 break;
                 
