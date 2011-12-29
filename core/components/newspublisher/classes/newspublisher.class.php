@@ -660,7 +660,7 @@ class Newspublisher {
                         break;
 
                     case 'modStaticResource':
-                        $replace['[[+npx.caption]]'] = $this->modx->lexicon('staticresource');
+                        $replace['[[+npx.caption]]'] = $this->modx->lexicon('static_resource');
                         $inner .= $this->_displayFileInput($field, 'fileTpl');
                 }
                 break;
