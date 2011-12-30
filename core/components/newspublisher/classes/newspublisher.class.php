@@ -785,7 +785,7 @@ class Newspublisher {
             if (empty($ph)) {
                 $ph = $fields['default_text'];
             }
-            if (stristr($ph,'@EVAL') || stristr($_POST[$name],'@EVAL') || stristr($_POST[$name.'_time'], '@eval')) {
+            if (stristr($ph,'@EVAL')) {
                 $this->setError($this->modx->lexicon('np_no_evals'). $tv->get('name'));
                 return null;
                 
@@ -1631,10 +1631,6 @@ class Newspublisher {
                     /* set ph for field error msg */
                     $msg = $this->modx->lexicon('np_error_required');
                     $this->setFieldError($field, $msg);
-                    /*$msg = str_replace('[[+name]]', $field, $msg);
-                    $msg = str_replace("[[+{$this->prefix}.error]]", $msg, $errorTpl);
-                    $ph = 'error_' . $field;
-                    $this->modx->toPlaceholder($ph, $msg, $this->prefix);*/
 
                     /* set error for header */
                     $msg = $this->modx->lexicon('np_missing_field');
@@ -1645,19 +1641,18 @@ class Newspublisher {
             }
         }
 
-        $fields = explode(',', $this->props['show']);
-        foreach ($fields as $field) {
-            $field = trim($field);
-        }
-
-        foreach ($fields as $field) {
-            $value = $_POST[$field];
+        /* Ensure TV bindings do not contain an @EVAL binding */
+        foreach ($this->allTvs as $tv) {
+            $name = $tv->get('name');
+            $value = $_POST[$name];
             if (is_array($value)) $value = implode('', $value);
+            if (isset($_POST[$name . '_time'])) $value .= $_POST[$name . '_time'];
+
             if (stristr($value, '@EVAL')) {
                 $this->setError($this->modx->lexicon('np_no_evals_input'));
-                $_POST[$field] = '';
+                $_POST[$name] = '';
                 /* set fields to empty string */
-                $this->modx->toPlaceholder($field, '', $this->prefix);
+                $this->modx->toPlaceholder($name, '', $this->prefix);
                 $success = false;
             }
 
