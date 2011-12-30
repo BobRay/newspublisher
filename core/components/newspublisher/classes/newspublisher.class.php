@@ -1652,7 +1652,7 @@ class Newspublisher {
 
         foreach ($fields as $field) {
             $value = $_POST[$field];
-            if (is_array($value)) $value = implode($value, '');
+            if (is_array($value)) $value = implode('', $value);
             if (stristr($value, '@EVAL')) {
                 $this->setError($this->modx->lexicon('np_no_evals_input'));
                 $_POST[$field] = '';
