@@ -68,6 +68,14 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 &amp;aliastitle (0/1) - Use this if you want an automatic alias for your resources 
     (a hyphenated, lowercase version of the pagetitle)
 
+&amp;aliasprefix (string) - prefix for aliases, used only if alias is empty. Alias
+    will be prefix + raw unix timestamp, unless &amp;aliasdatesuffix is set.
+
+&amp;aliasdateformat (string) - Format for alias timestamp. If alias is empty
+    and this is set, the alias will be the prefix (if any) + a formatted date/time.
+    It's strongly recommended to include minutes and seconds in this to avoid
+    duplicate aliases.
+
 &amp;initrte - (0/1) - Use this if you will be showing any rich text fields. 
 
 &amp;rtcontent - (0/1) - Use this if you want richtext editing for the content field.
@@ -78,6 +86,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 &amp;parentid (integer) - ID of the parent for new pages; default to NewsPublisher page.
     (must be set if any other property is set to `Parent`.</pre>
+
 
 <p>The next five properties control the standard page settings of the resource being
 created (whether you show them or not). They can each be set to `1`, `0`, `Parent`,
