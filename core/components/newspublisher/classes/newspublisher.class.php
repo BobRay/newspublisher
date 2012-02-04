@@ -172,6 +172,7 @@ class Newspublisher {
      */
     protected $textMaxlength;
 
+
     /** NewsPublisher constructor
      *
      * @access public
@@ -377,51 +378,42 @@ class Newspublisher {
            }
 
             unset($ph);
-           if ($this->props['initrte']) {
-                /* set rich text content placeholders and includes necessary js files */
-               $tinyPath = $this->modx->getOption('core_path').'components/tinymce/';
-               $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
-               $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/ext-all.js');
-               $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/modext/core/modx.js');
 
+            /* new code from Markus Schlegel */
+            if ($this->props['initrte']) {
 
                $whichEditor = $this->modx->getOption('which_editor',null,'');
 
-               $plugin=$this->modx->getObject('modPlugin',array('name'=>$whichEditor));
                if ($whichEditor == 'TinyMCE' ) {
-                   //$tinyUrl = $this->modx->getOption('assets_url').'components/tinymcefe/';
+                    $plugin=$this->modx->getObject('modPlugin',array('name'=>'TinyMCE'));
+
+                    /* set rich text content placeholders and includes necessary js files */
+                    $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/adapter/ext/ext-base.js');
+                    $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/ext3/ext-all.js');
+                    $this->modx->regClientStartupScript($this->modx->getOption('manager_url').'assets/modext/core/modx.js');
+
+                    $tinyPath = $this->modx->getOption('core_path').'components/tinymce/';
                     $tinyUrl = $this->modx->getOption('assets_url').'components/tinymce/';
-                   /* OnRichTextEditorInit */
 
-                   $tinyproperties=$plugin->getProperties();
-                   require_once $tinyPath.'tinymce.class.php';
-                   $tiny = new TinyMCE($this->modx,$tinyproperties,$tinyUrl);
-                   // if (isset($this->props['forfrontend']) || $this->modx->isFrontend()) {
-                   if (isset($this->props['forfrontend']) || $this->modx->context->get('key') != 'mgr') {
-                       $tinyproperties['language'] = $this->modx->getOption('fe_editor_lang',array(),$language);
-                       $tinyproperties['frontend'] = true;
-                       unset($def);
-                   }
-                   $tinyproperties['cleanup'] = true; /* prevents "bogus" bug */
-                   $tinyproperties['width'] = empty ($this->props['tinywidth'] )? '95%' : $this->props['tinywidth'];
-                   $tinyproperties['height'] = empty ($this->props['tinyheight'])? '400px' : $this->props['tinyheight'];
+                    $tinyproperties=$plugin->getProperties();
+                    require_once $tinyPath.'tinymce.class.php';
+                    $tiny = new TinyMCE($this->modx,$tinyproperties,$tinyUrl);
 
-                   //$tinyproperties['tiny.custom_buttons1'] = 'image';
-                   //$tinyproperties['tiny.custom_buttons2'] = '';
+                    $tinyproperties['language'] = $this->modx->getOption('fe_editor_lang',array(),$language);
+                    $tinyproperties['frontend'] = true;
+                    $tinyproperties['cleanup'] = true; /* prevents "bogus" bug */
+                    $tinyproperties['width'] = empty ($this->props['tinywidth'] )? '95%' : $this->props['tinywidth'];
+                    $tinyproperties['height'] = empty ($this->props['tinyheight'])? '400px' : $this->props['tinyheight'];
 
-                   $tiny->setProperties($tinyproperties);
+                    $tiny->setProperties($tinyproperties);
+                    $tiny->initialize();
 
-                   $html = $tiny->initialize();
-
-                   $this->modx->regClientStartupScript($tiny->config['assetsUrl'].'jscripts/tiny_mce/langs/'.$tiny->properties['language'].'.js');
-                   $this->modx->regClientStartupScript($tiny->config['assetsUrl'].'tiny.browser.js');
-
-                   $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
-                       Ext.onReady(function() {
-                       MODx.loadRTE();
-                       '.$js.'
-                       });
-                   </script>');
+                    $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
+                        delete Tiny.config.setup; // remove manager specific initialization code (depending on ModExt)
+                        Ext.onReady(function() {
+                            MODx.loadRTE();
+                        });
+                    </script>');
 
                } /* end if ($whichEditor == 'TinyMCE') */
 
@@ -1328,7 +1320,7 @@ class Newspublisher {
             /* set alias name of document used to store articles */
             if (empty($fields['alias'])) { /* leave it alone if filled */
                 if (!$this->aliasTitle) {
-                    $suffix = !empty($this->props['aliasdatesuffix']) ? date($this->props['aliasdatesuffix']) : '-' . time();
+                    $suffix = !empty($this->props['aliasdateformat']) ? date($this->props['aliasdateformat']) : '-' . time();
                     if (!empty($this->props['aliasprefix'])) {
                         $alias = $this->props['aliasprefix'] . $suffix;
                     } else {
