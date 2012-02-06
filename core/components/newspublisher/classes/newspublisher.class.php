@@ -375,7 +375,7 @@ class Newspublisher {
 
                     $tinyproperties=$plugin->getProperties();
                     require_once $tinyPath.'tinymce.class.php';
-                    $tiny = new TinyMCE($this->modx,$tinyproperties,$tinyUrl);
+                    $tiny = new TinyMCE($this->modx, $tinyproperties);
 
                     $tinyproperties['language'] = $this->modx->getOption('fe_editor_lang',array(),$language);
                     $tinyproperties['frontend'] = true;
