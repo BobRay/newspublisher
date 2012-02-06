@@ -357,28 +357,6 @@ class Newspublisher {
            $this->intMaxlength = !empty($this->props['intmaxlength'])? $this->props['intmaxlength'] : 10;
            $this->textMaxlength = !empty($this->props['textmaxlength'])? $this->props['textmaxlength'] : 60;
 
-           if (false) { /* do rich text stuff */
-               //$ph = ! empty($this->props['rtcontent']) ? 'MODX_RichTextWidget':'content';
-               $ph = !empty($this->props['rtcontent'])
-                       ? 'modx-richtext' : 'np-content';
-               $this->modx->toPlaceholder('rt_content_1', $ph, $this->prefix);
-               $ph = !empty($this->props['rtcontent'])
-                       ? 'modx-richtext' : 'np-content';
-               $this->modx->toPlaceholder('rt_content_2', $ph, $this->prefix);
-
-
-               /* set rich text summary field */
-
-               $ph = !empty($this->props['rtsummary'])
-                       ? 'modx-richtext' : 'np-introtext';
-               $this->modx->toPlaceholder('rt_summary_1', $ph, $this->prefix);
-               $ph = !empty($this->props['rtsummary'])
-                       ? 'modx-richtext' : 'np-introtext';
-               $this->modx->toPlaceholder('rt_summary_2', $ph, $this->prefix);
-           }
-
-            unset($ph);
-
             /* new code from Markus Schlegel */
             if ($this->props['initrte']) {
 
@@ -397,7 +375,7 @@ class Newspublisher {
 
                     $tinyproperties=$plugin->getProperties();
                     require_once $tinyPath.'tinymce.class.php';
-                    $tiny = new TinyMCE($this->modx,$tinyproperties);
+                    $tiny = new TinyMCE($this->modx,$tinyproperties,$tinyUrl);
 
                     $tinyproperties['language'] = $this->modx->getOption('fe_editor_lang',array(),$language);
                     $tinyproperties['frontend'] = true;
