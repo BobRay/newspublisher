@@ -115,7 +115,7 @@ $vehicle->resolve('file',array(
     ));
 
 $builder->putVehicle($vehicle);
-
+unset($browserAction);
 
 
 /* Add filebrowser action */
@@ -136,8 +136,19 @@ $vehicle= $builder->createVehicle($browserAction,array (
     xPDOTransport::UNIQUE_KEY => array ('namespace','controller'),
 ));
 $builder->putVehicle($vehicle);
-unset($vehicle,$browserAction);
 
+/* NewsPublisher access policy */
+$modx->log(modX::LOG_LEVEL_INFO,'Adding access policy.');
+$policies = include $sources['data'].'transport.accesspolicies.php';
+foreach ($policies as $policy) {
+    $vehicle= $builder->createVehicle($policy,array (
+        xPDOTransport::PRESERVE_KEYS => false,
+        xPDOTransport::UPDATE_OBJECT => true,
+        xPDOTransport::UNIQUE_KEY => 'name',
+    ));
+    $builder->putVehicle($vehicle);
+}
+if ($vehicle) unset($vehicle);
 
 
 /* now pack in the license file, readme.txt and setup options */
