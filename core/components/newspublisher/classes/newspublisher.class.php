@@ -1076,6 +1076,7 @@ class Newspublisher {
 
         return $this->strReplaceAssoc($PHs, $this->getTpl('DateTpl'));
     }
+    
     /** Produces the HTML code for simple text fields/TVs
      * 
      * @access protected
@@ -1119,7 +1120,7 @@ class Newspublisher {
 
              $PHs = array(
                 '[[+npx.phpthumbBaseUrl]]' => $phpthumbUrl,
-                '[[+npx.launchBrowser]]'   => "var popup=window.open('{$browserUrl}', 'select file', 'width=' + Math.min(screen.availWidth,1000) + ',height=' + Math.min(screen.availHeight*0.9,700) + 'resizable=no,status=no,location=no,toolbar=no');popup.focus();browserPathInput=getElementById('np-{$name}');return false;"
+                '[[+npx.browserUrl]]'   => $browserUrl
             );
             
             return $this->strReplaceAssoc($PHs, $this->getTpl($tplName));
