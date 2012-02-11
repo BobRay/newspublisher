@@ -12,12 +12,13 @@ class FilebrowserManagerController extends modManagerController {
     public $loadBaseJavascript = true;
     public $loadHeader = false;
     public $loadFooter = false;
-    
+
     /**
      * Check for any permissions or requirements to load page
      * @return bool
      */
     public function checkPermissions() {
+
         // only allow access if the browser was launched from within the newspublisher page
         return $this->modx->hasPermission('file_manager') && isset($_SESSION['newspublisher']['filebrowser'][$_GET['field']]);
     }

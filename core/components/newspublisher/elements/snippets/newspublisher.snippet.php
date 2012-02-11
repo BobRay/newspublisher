@@ -96,10 +96,16 @@
 */
 
 /** @define "$modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/')" "VALUE" */
+
+    /* @var $modx modX */
+
 require_once $modx->getOption('np.core_path', null, $modx->getOption('core_path') . 'components/newspublisher/') . 'classes/newspublisher.class.php';
 
 /* Let &require override &required (it's a common mistake to use &require)
    this will only happen if the user explicitly sets &require in the tag */
+
+$errorMessage = '';
+$formTpl = '';
 
 if (isset($scriptProperties['require'])) {
     $scriptProperties['required'] = $scriptProperties['require'];

@@ -47,7 +47,7 @@ class Newspublisher {
     */
     protected $modx;
     /**
-     * @var string current context
+     * @var $context string name of current context
      */
     protected $context;
     /**
@@ -55,7 +55,7 @@ class Newspublisher {
      */
     protected $props;
     /**
-     * @var array Array of all TVs
+     * @var $allTvs array Array of all TVs
      */
     protected $allTvs;
     /**
@@ -63,7 +63,7 @@ class Newspublisher {
      */
     protected $errors;
     /**
-     * @var modResource The current resource
+     * @var $resource modResource The current resource
      */
     protected $resource;
     /**
@@ -71,7 +71,7 @@ class Newspublisher {
      */
     protected $parentId;
     /**
-     * @var modResource The parent object
+     * @var $parentObj modResource The parent object
      */
     protected $parentObj;
     /**
@@ -372,7 +372,7 @@ class Newspublisher {
 
                     $tinyPath = $this->modx->getOption('core_path').'components/tinymce/';
                     $tinyUrl = $this->modx->getOption('assets_url').'components/tinymce/';
-
+                    /* @var $plugin modPlugin */
                     $tinyproperties=$plugin->getProperties();
                     require_once $tinyPath.'tinymce.class.php';
                     $tiny = new TinyMCE($this->modx, $tinyproperties);
@@ -587,7 +587,7 @@ class Newspublisher {
      */
 
     protected function _displayField($field) {
-      
+        /* @var $template modTemplateVar */
         $replace = array();
         $inner = '';
         $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? '[[%resource_' . $field . '_help:notags]]' : '';
@@ -706,7 +706,10 @@ class Newspublisher {
      */
 
     protected function _displayTv($tvNameOrId) {
-
+        /* @var $tvObj modTemplateVar */
+        /* @var $tv modTemplateVar */
+        /* @var $parent modResource */
+        /* @var $resource modResource */
 
         if (is_numeric($tvNameOrId)) {
            $tvObj = $this->modx->getObject('modTemplateVar',$tvNameOrId);
@@ -1103,7 +1106,7 @@ class Newspublisher {
      * @return (string) - HTML code */
 
     protected function _displayFileInput($name, $tplName, $sourceOptions = array(), $openTo = '') {
-
+        /* @var $browserAction modAction */
         $browserAction = $this->modx->getObject('modAction',array('namespace'  => 'newspublisher'));
         $browserUrl = $browserAction ? $this->modx->getOption('manager_url',null,MODX_MANAGER_URL).'index.php?a='.$browserAction->get('id') : null;
 
@@ -1348,6 +1351,7 @@ class Newspublisher {
              * This section can be removed when it's fixed *
              ********************************************* */
             if ($this->existing) {
+                /* @var $t_tv modTemplateVar */
                 $t_resourceTVs = $this->resource->getMany('TemplateVars');
                 $t_resourceId = $this->resource->get('id');
                 foreach ($t_resourceTVs as $t_tv) {
@@ -1363,6 +1367,7 @@ class Newspublisher {
             /* ****************************************** */
             $fields['tvs'] = true;
             foreach ($this->allTvs as $tv) {
+                /* @var $tv modtemplateVar */
                 $name = $tv->get('name');
                 
                 if ($tv->get('type') == 'date') {
@@ -1397,6 +1402,7 @@ class Newspublisher {
         } else {
             $response = $this->modx->runProcessor('resource/create', $fields);
         }
+        /* @var $response modProcessorResponse */
         if ($response->isError()) {
             if ($response->hasFieldErrors()) {
                 $fieldErrors = $response->getAllErrors();
@@ -1434,6 +1440,8 @@ class Newspublisher {
                 $postId = $this->existing? $this->existing : $this->resource->get('id');
             }
             /* clear cache on new resource */
+            /* @var $cacheManager modCacheManager */
+            /* ToDo: clearCache is deprecated */
             if (! $this->existing) {
                $cacheManager = $this->modx->getCacheManager();
                $cacheManager->clearCache(array (
@@ -1470,7 +1478,7 @@ class Newspublisher {
      */
 
     protected function _setGroups($resourceGroups, $parentObj = null) {
-
+        /* @var $parentObj modResource */
         $values = array();
         if ($resourceGroups == 'parent') {
 
@@ -1480,6 +1488,7 @@ class Newspublisher {
                 /* build $resourceGroups string from parent's groups */
                 $groupNumbers = array();
                 foreach ($resourceGroups as $resourceGroup) {
+                    /* @var $resourceGroup modResourceGroup */
                     $groupNumbers[] = $resourceGroup->get('document_group');
                 }
                 $resourceGroups = implode(',', $groupNumbers);
@@ -1494,6 +1503,7 @@ class Newspublisher {
         $groups = explode(',', $resourceGroups);
 
         foreach ($groups as $group) {
+            /* @var $groupObj modResourceGroup */
             $group = trim($group);
             if (is_numeric($group)) {
                 $groupObj = $this->modx->getObject('modResourceGroup', $group);
@@ -1577,6 +1587,7 @@ class Newspublisher {
                     $this->setError($this->modx->lexicon('np_no_template_name') . $this->props['template']);
                 }
             }
+            /* @var $t modTemplate */
             $template = $t ? $t->get('id')
                         : $this->modx->getOption('default_template');
                 unset($t);
@@ -1614,6 +1625,7 @@ class Newspublisher {
 
         /* Ensure TV bindings do not contain an @EVAL binding */
         foreach ($this->allTvs as $tv) {
+            /* @var $tv modTemplateVar */
             $name = $tv->get('name');
             $value = $_POST[$name];
             if (is_array($value)) $value = implode('', $value);
@@ -1645,6 +1657,7 @@ class Newspublisher {
         $this->modx->toPlaceholder($ph, $msg, $this->prefix);
     }
 public function my_debug($message, $clear = false) {
+    /* @var $chunk modChunk */
     global $modx;
 
     $chunk = $modx->getObject('modChunk', array('name'=>'debug'));
@@ -1664,6 +1677,3 @@ public function my_debug($message, $clear = false) {
 }
 
 } /* end class */
-
-
-?>

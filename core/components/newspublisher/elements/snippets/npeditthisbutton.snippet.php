@@ -48,6 +48,7 @@
  *
  */
 
+/* @var $modx modX */
 /* ToDo: Internationalize button caption debug messages */
 $props =& $scriptProperties;
 /* let user &language property override default language */
@@ -73,12 +74,14 @@ $npEditId = $modx->getOption('np_edit_id', $props, '');
 /* set the np_id property to the ID of the NewsPublisher page
  * on first run if possible, error message if not */
 if (empty($npId)) {
+
     $npObj = $modx->getObject('modResource', array('pagetitle' => 'NewsPublisher'));
     if (!$npObj) { /* Try lowercase version */
         $npObj = $modx->getObject('modResource', array('pagetitle' => 'Newspublisher'));
     }
     $success = true;
     if ($npObj) {
+        /* @var $npObj modSnippet */
         $npId = $npObj->get('id');
         $npObj = $modx->getObject('modSnippet', array('name' => 'NpEditThisButton'));
         if ($npObj) {
