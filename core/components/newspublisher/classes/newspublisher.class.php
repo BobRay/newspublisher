@@ -1243,8 +1243,8 @@ class Newspublisher {
                 $PHs['[[+npx.class]]'] = 'modx-richtext';
             } else {
                 $msg = $this->modx->lexicon('np_no_rte');
-                $this->setError($msg . $field);
-                $this->setFieldError($field, $msg);
+                $this->setError($msg . $name);
+                $this->setFieldError($name, $msg);
                 $PHs['[[+npx.class]]'] = $noRTE_class;
             }
         } else {
