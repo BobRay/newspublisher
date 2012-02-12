@@ -42,6 +42,7 @@ $sources= array (
     'source_assets' => $root . 'assets/components/newspublisher',
     'data' => $root . '_build/data/',
     'docs' => $root . 'core/components/newspublisher/docs/',
+    'resolvers' => $root . '_build/resolvers/',
 );
 unset($root);
 
@@ -115,21 +116,10 @@ $vehicle->resolve('file',array(
     ));
 
 $builder->putVehicle($vehicle);
-unset($browserAction);
-
 
 /* Add filebrowser action */
 $modx->log(modX::LOG_LEVEL_INFO,'Adding filebrowser action.');
-$browserAction= $modx->newObject('modAction');
-$browserAction->fromArray(array(
-    'id' => 1,
-    'namespace' => 'newspublisher',
-    'controller' => 'filebrowser',
-    'haslayout' => false,
-    'parent' => 0,
-    'lang_topics' => '',
-    'assets' => '',            
-), '', true, true);
+$browserAction = include $sources['data'].'transport.browseraction.php';
 $vehicle= $builder->createVehicle($browserAction,array (
     xPDOTransport::PRESERVE_KEYS => false,
     xPDOTransport::UPDATE_OBJECT => true,
@@ -137,18 +127,33 @@ $vehicle= $builder->createVehicle($browserAction,array (
 ));
 $builder->putVehicle($vehicle);
 
+/* NewsPublisher access policy template */
+$modx->log(modX::LOG_LEVEL_INFO,'Adding access policy template.');
+$template = include $sources['data'].'transport.accesspolicytemplate.php';
+$vehicle= $builder->createVehicle($template,array (
+    xPDOTransport::PRESERVE_KEYS => false,
+    xPDOTransport::UPDATE_OBJECT => true,
+    xPDOTransport::UNIQUE_KEY => 'name',
+));
+$vehicle->resolve('php',array(
+    'source' => $sources['resolvers'] . 'accesspolicytemplate.resolver.php',
+));
+$builder->putVehicle($vehicle);
+
 /* NewsPublisher access policy */
 $modx->log(modX::LOG_LEVEL_INFO,'Adding access policy.');
-$policies = include $sources['data'].'transport.accesspolicies.php';
-foreach ($policies as $policy) {
-    $vehicle= $builder->createVehicle($policy,array (
-        xPDOTransport::PRESERVE_KEYS => false,
-        xPDOTransport::UPDATE_OBJECT => true,
-        xPDOTransport::UNIQUE_KEY => 'name',
-    ));
-    $builder->putVehicle($vehicle);
-}
-if ($vehicle) unset($vehicle);
+$policy = include $sources['data'].'transport.accesspolicy.php';
+$vehicle= $builder->createVehicle($policy,array (
+    xPDOTransport::PRESERVE_KEYS => false,
+    xPDOTransport::UPDATE_OBJECT => true,
+    xPDOTransport::UNIQUE_KEY => 'name',
+));
+$vehicle->resolve('php',array(
+    'source' => $sources['resolvers'] . 'accesspolicy.resolver.php',
+));
+$builder->putVehicle($vehicle);
+
+unset($vehicle,$template,$policy,$browserAction);
 
 
 /* now pack in the license file, readme.txt and setup options */
