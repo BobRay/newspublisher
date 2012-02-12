@@ -942,7 +942,6 @@ class Newspublisher {
                     if (!empty($value)) {
                         $openTo = $source->getOpenTo($value,$params);
                     }
-                    $tv->set('relativeValue',$value);
 
                 } else { /* MODx versions below 2.20 */
 
@@ -988,11 +987,6 @@ class Newspublisher {
                         $params['baseUrl'] = ltrim(str_replace($modxBaseUrl,'',$params['baseUrl']),'/');
                     }
 
-                    if (!empty($params['baseUrl']) && !empty($value)) {
-                        $relativeValue = $params['baseUrl'].ltrim($value,'/');
-                    } else {
-                        $relativeValue = $value;
-                    }
                     if (!empty($value) && strpos($value,'/') !== false) {
                         $openTo = pathinfo($value,PATHINFO_DIRNAME);
                         $openTo = rtrim($openTo,'/').'/';
