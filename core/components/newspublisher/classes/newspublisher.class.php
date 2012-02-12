@@ -313,7 +313,7 @@ class Newspublisher {
                  $this->parentId = !empty($this->props['parentid']) ? intval($this->props['parentid']):$this->modx->resource->get('id');
 
                  $this->aliasTitle = $this->props['aliastitle']? true : false;
-                 $this->clearcache = isset($_POST['clearcache'])? $_POST['clearcache'] : $this->props['clearcache'] ? true: false;
+                 $this->clearcache = isset($_POST['clearcache'])? $_POST['clearcache'] : $this->props['clearcache'];
 
                  $this->hideMenu = isset($_POST['hidemenu'])? $_POST['hidemenu'] : $this->_setDefault('hidemenu',$this->parentId);
                  $this->resource->set('hidemenu', $this->hideMenu);
@@ -1439,20 +1439,7 @@ class Newspublisher {
             if (empty($postId)) {
                 $postId = $this->existing? $this->existing : $this->resource->get('id');
             }
-            /* clear cache on new resource */
-            /* @var $cacheManager modCacheManager */
-            /* ToDo: clearCache is deprecated */
-            if (! $this->existing) {
-               $cacheManager = $this->modx->getCacheManager();
-               $cacheManager->clearCache(array (
-                    "{$this->resource->context_key}/",
-                ),
-                array(
-                    'objects' => array('modResource', 'modContext', 'modTemplateVarResource'),
-                    'publishing' => true
-                    )
-                );
-            }
+            /* Assume that the processor cleared the cache */
 
             $_SESSION['np_resource_id'] = $this->resource->get('id');
             $goToUrl = $this->modx->makeUrl($postId);
