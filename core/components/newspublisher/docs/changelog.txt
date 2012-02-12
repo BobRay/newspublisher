@@ -2,6 +2,7 @@ Changelog for NewsPublisher
 
 NewsPublisher 1.3.0-rc1
 -----------------------
+Implemented custom captions property
 Implemented Markus Schlegel's improvements
 Fixed bug with multiple RTE areas (thanks Markus)
 Now handles both file and image TVs

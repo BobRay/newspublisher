@@ -88,6 +88,14 @@ $properties = array(
         'lexicon' => 'newspublisher:properties',
     ),
     array(
+        'name' => 'captions',
+        'desc' => 'np_captions_desc',
+        'type' => 'textfield',
+        'options' => '',
+        'value' => '',
+        'lexicon' => 'newspublisher:properties',
+    ),
+    array(
         'name' => 'clearcache',
         'desc' => 'np_clearcache_desc',
         'type' => 'combo-boolean',

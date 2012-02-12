@@ -171,6 +171,10 @@ class Newspublisher {
      * @var int Max length for text input fields
      */
     protected $textMaxlength;
+    /**
+     * var $captions array (associative) of fieldnames:fieldcaptions
+     */
+    protected $captions;
 
 
     /** NewsPublisher constructor
@@ -219,7 +223,7 @@ class Newspublisher {
 
         public function init($context) {
             $this->context = $context;
-            
+
             $language = !empty($this->props['language'])
                     ? $this->props['language']
                     : $this->modx->getOption('cultureKey',null,$this->modx->getOption('manager_language',null,'en'));
@@ -558,9 +562,18 @@ class Newspublisher {
         /* get the resource field names */
         $resourceFieldNames = array_keys($this->modx->getFields('modResource'));
 
+        /* set captions from properties (if any) */
+        $captionSettings = explode(',',$this->props['captions']);
+        if (!empty($captionSettings)) {
+            foreach ($captionSettings as $captionSetting) {
+                $pair = explode(':', $captionSetting, 2);
+                $this->captions[trim($pair[0])] = trim($pair[1]);
+            }
+        }
+
         foreach($fields as $field) {
             $field = trim($field);
-            
+
             if (in_array($field,$resourceFieldNames)) {
                 /* regular resource field */
                 $inner .= $this->_displayField($field);
@@ -590,8 +603,12 @@ class Newspublisher {
         /* @var $template modTemplateVar */
         $replace = array();
         $inner = '';
+        /* set hover help unless user has turned it off */
         $replace['[[+npx.help]]'] = $this->props['hoverhelp'] ? '[[%resource_' . $field . '_help:notags]]' : '';
-        $replace['[[+npx.caption]]'] = '[[%resource_' . $field . ']]';
+
+        /* if set use 1) caption from properties, 2) MODX field captions */
+        $caption =  !empty($this->captions[$field]) ? $this->captions[$field] : '[[%resource_' . $field . ']]';
+        $replace['[[+npx.caption]]'] = $caption;
         $fieldType = $this->resource->_fieldMeta[$field]['phptype'];
 
         if ($field == 'id') {
@@ -741,8 +758,8 @@ class Newspublisher {
         $name = $fields['name'];
 
         $params = $tv->get('input_properties');
-        /* use TV's name as caption if caption is empty */
-        $caption = empty($fields['caption'])? $name : $fields['caption'];
+        /* if set, use 1) caption from properties, 2) field caption, 3) field name */
+        $caption = !empty ($this->captions[$name]) ? $this->captions[$name] : (empty($fields['caption'])? $name : $fields['caption']);
 
         /* Build TV input code dynamically based on type */
         $tvType = $tv->get('type');

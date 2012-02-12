@@ -67,13 +67,19 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 <h3>Configuring NewsPublisher</h3>
 <p>NewsPublisher has many options. You can see the list by editing the NewsPublisher snippet and clicking on the Properties tab. Unlock the default properties by clicking on the &quot;Default Properties Locked&quot; button. Then, click the little plus sign next to a property to see what it does. It is <b>strongly</b> recommended that you not change the default properties. Either put properties in the snippet tag to override them, or create a property set by clicking on the &quot;Add Property Set&quot; button and specify it in the snippet tag like this:</p>
 
-<p><fixdepre>[[!NewsPublisher@PropertySetName]]</fixedpre></p>
+<p><fixedpre>[[!NewsPublisher@PropertySetName]]</fixedpre></p>
 
 <p>Here are some of the most commonly used properties -- all are optional, but a few are necessary for certain other options:</p>
 
 <pre>
 &amp;show - Comma-separated list of fields to show.
+
     Example: &amp;show=`pagetitle,longtitle,pub_date,unpub_date,content,MyTv1,MyTv3`
+
+&amp;captions - Comma-separated list of fieldnames:fieldcaptions. You may use colons
+    in the custom caption. All standard resource fields are in all lowercase.
+
+    Example: &amp;captions=`introtext:Summary,content:Enter Your Post`
 
 &amp;aliastitle (0/1) - Use this if you want an automatic alias for your resources 
     (a hyphenated, lowercase version of the pagetitle)
