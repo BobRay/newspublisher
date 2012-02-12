@@ -833,7 +833,6 @@ class Newspublisher {
 
                 /* code adapted from core/model/modx/processors/element/tv/renders/mgr/input/resourcelist.php */
 
-                $parents = $tv->get('elements');
                 $bindingsResult = $tv->processBindings($tv->get('elements'), $this->modx->resource->get('id'));
                 $parents = $tv->parseInputOptions($bindingsResult);
                 $parents = !empty($params['parents']) || $params['parents'] === '0' ? explode(',',$params['parents']) : $parents;
@@ -881,6 +880,7 @@ class Newspublisher {
 
                 /* iterate */
                 $options = array();
+                $selected = array();
                 foreach ($resources as $resource) {
                     $id = $resource->get('id');
                     $options[$id] = $resource->get('pagetitle'); //.' ('.$resource->get('id').')',
