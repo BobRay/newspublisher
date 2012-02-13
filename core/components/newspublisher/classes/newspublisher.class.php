@@ -1279,6 +1279,11 @@ class Newspublisher {
 
     public function saveResource() {
 
+        if (!$this->modx->hasPermission('save_document') || !$resource->checkPolicy('save')) {
+            $this->setError($this->modx->lexicon('np_save_permission_denied'));
+            return '';
+        }
+
         if (!$this->modx->hasPermission('allow_modx_tags')) {
             $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
             foreach ($_POST as $k => $v)
