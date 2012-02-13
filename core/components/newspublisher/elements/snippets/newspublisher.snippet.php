@@ -139,7 +139,10 @@ $modx->toPlaceholder('cancel_url', $cancelUrl, $np_prefix);
 $errorHeaderPresubmit = $modx->lexicon('np_error_presubmit');
 $errorHeaderSubmit = $modx->lexicon('np_error_submit');
 
+$formTpl .= $np->displayForm($scriptProperties['show']);
+
 /* handle pre-submission errors (no form shown) */
+
 $errors = $np->getErrors();
 
 if (!empty($errors)) {
@@ -152,7 +155,7 @@ if (!empty($errors)) {
     return '<div class="newspublisher">' . $errorHeaderPresubmit . $errorMessage . '</div>';
 }
 
-$formTpl .= $np->displayForm($scriptProperties['show']);
+
 
 // get postback status
 $isPostBack = $np->getPostBack();
