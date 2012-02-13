@@ -46,6 +46,21 @@ When you preview the document, you should see a basic resource editing form. If 
 
 <p>In addition, users (including you) will not be able to edit resources containing MODx tags without a custom permission: allow_modx_tags, which must be added to the Context Access policy for users in the front end.</p>
 
+<h3>NewsPublisher Editor Policy</h3>
+
+<p>As of NewsPublisher 1.3.0, the package includes an Access Policy called &quot;NewsPublisher Editor&quot;. This policy enables the basic permissions necessary to operate NewsPublisher in the front end without giving the user any dangerous permissions. Create a Context Access ACL policy for the web context for any users who will be using NewsPublisher. As always, flush permissions and sessions on the Security menu after making any changes.</p>
+
+<p>To use File and Image TVs in your form, you must perform two more steps, because the file and image browsers require Manager access. First, include <fixedpre>&contexts=`web,mgr`</fixedpre> in the Login snippet tag or the user will have to login a second time when trying to set the value of any File or Image TVs. Second, create a second Context Access ACL entry (just like the one above) for any groups who will use the form, with a context of 'mgr'. These steps are only necessary if you show File and/or Image TVs in the form. One word of warning: The users will then be able to access a very minimal version of the Manager if they can figure out how, but they will only be able to do four things:</p>
+
+<ul>
+    <li>View the TVs attached to the default template (and their default values)</li>
+    <li>View the schedule of upcoming documents to be published (if any)</li>
+    <li>Edit their own profile</li>
+    <li>Follow the links on the &quot;Support&quot; menu</li>
+</ul>
+
+<p>They will not be able to create documents in the Manager, or change anything at all other than their own profiles.</p>
+
 <h3>Editing Existing Resources</h3>
 
 <p>To edit existing resources, simply place a tag for the NpEditThisButton snippet anywhere in the &lt;body&gt; section of your template(s). The button is positioned absolutely in the lower right section of the page. The &amp;right property controls the distance from the right side of the page and the &amp;bottom property controls the distance from the bottom. The default for these properties is `20%`. Like NewsPublisher, the button also responds to security permissions and is not shown on pages the user has no right to edit or save. It also does not show on the NewsPublisher page or the home page. If there are other pages where you would like to hide it, you can include a comma-delimited list of their IDs in the &amp;noShow property.</p>
@@ -76,8 +91,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
     Example: &amp;show=`pagetitle,longtitle,pub_date,unpub_date,content,MyTv1,MyTv3`
 
-&amp;captions - Comma-separated list of fieldnames:fieldcaptions. You may use colons
-    in the custom caption. All standard resource fields are in all lowercase.
+&amp;captions - Comma-separated list of fieldnames:fieldcaptions. All standard resource fields are in all lowercase.
 
     Example: &amp;captions=`introtext:Summary,content:Enter Your Post`
 
@@ -113,6 +127,9 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 &amp;cacheable
 &amp;searchable
 &amp;richtext
+
+&amp;template - (mixed) The name or ID of the template to be assigned to new docs. Can also be set to 'Parent' to
+    assign the parent's template; default: default_template System Setting.
 
 &amp;prefix - (string) a custom prefix to use for placeholders; default: `np`.
     This property is only necessary if the placeholders conflict with
