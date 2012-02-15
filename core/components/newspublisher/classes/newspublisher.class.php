@@ -349,7 +349,7 @@ class Newspublisher {
              }
 
            $this->modx->lexicon->load('core:resource');
-           $this->template = $this->_getTemplate();
+           $this->template = (integer) $this->_getTemplate();
            if($this->props['initdatepicker']) {
                 $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
                 $this->modx->regClientStartupHTMLBlock('<script type=text/javascript src="' . $this->assetsUrl . 'datepicker/js/datepicker.packed.js">{"lang":"' . $language . '"}</script>');
@@ -1580,7 +1580,7 @@ class Newspublisher {
 
 
             if (is_numeric($this->props['template'])) { /* user sent a number */
-                $t = $this->modx->getObject('modTemplate', $this->props['template']);
+                $t = $this->modx->getObject('modTemplate', (integer) $this->props['template']);
                 /* make sure it exists */
                 if (! $t) {
                     $this->SetError($this->modx->lexicon('np_no_template_id') . $this->props['template']);
