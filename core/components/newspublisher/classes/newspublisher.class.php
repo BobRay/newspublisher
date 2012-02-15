@@ -729,7 +729,7 @@ class Newspublisher {
         /* @var $resource modResource */
 
         if (is_numeric($tvNameOrId)) {
-           $tvObj = $this->modx->getObject('modTemplateVar',$tvNameOrId);
+           $tvObj = $this->modx->getObject('modTemplateVar', (integer) $tvNameOrId);
         } else {
            $tvObj = $this->modx->getObject('modTemplateVar',array('name' => $tvNameOrId));
         }
@@ -1510,7 +1510,7 @@ class Newspublisher {
             /* @var $groupObj modResourceGroup */
             $group = trim($group);
             if (is_numeric($group)) {
-                $groupObj = $this->modx->getObject('modResourceGroup', $group);
+                $groupObj = $this->modx->getObject('modResourceGroup', (integer) $group);
             } else {
                 $groupObj = $this->modx->getObject('modResourceGroup', array('name' => $group));
             }
