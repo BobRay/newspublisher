@@ -1279,7 +1279,8 @@ class Newspublisher {
 
     public function saveResource() {
 
-        if (!$this->modx->hasPermission('save_document') || !$this->resource->checkPolicy('save')) {
+        /* user needs both permissions to save a document */
+        if (! ($this->modx->hasPermission('save_document') && $this->resource->checkPolicy('save'))) {
             $this->setError($this->modx->lexicon('np_save_permission_denied'));
             return '';
         }
