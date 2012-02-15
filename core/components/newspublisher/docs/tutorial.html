@@ -27,6 +27,8 @@ Go to System | Package Management on the main menu in the MODx Manager and click
     <li>Install from the Package Manager Grid</li>
 </ul>
 
+<p>In order to create Context Access ACL entries using the NewsPublisherEditor Policy, you have to flush both permissions and sessions before the new policy will show up in the list.</p>
+
 <h3>Using NewsPublisher</h3>
 
 <p>If you are used to using NewsPublisher in MODx Evolution, this version will take a little getting used to. Many of the properties are different, but you will have much more control over the content and style of your form. Each type of field has its own Tpl chunk (as does the form itself) and every individual field has a separate ID so they can be styled using CSS.
@@ -50,7 +52,7 @@ When you preview the document, you should see a basic resource editing form. If 
 
 <p>As of NewsPublisher 1.3.0, the package includes an Access Policy called &quot;NewsPublisher Editor&quot;. This policy enables the basic permissions necessary to operate NewsPublisher in the front end without giving the user any dangerous permissions. Create a Context Access ACL policy for the web context for any users who will be using NewsPublisher. As always, flush permissions and sessions on the Security menu after making any changes.</p>
 
-<p>To use File and Image TVs in your form, you must perform two more steps, because the file and image browsers require Manager access. First, include <fixedpre>&contexts=`web,mgr`</fixedpre> in the Login snippet tag or the user will have to login a second time when trying to set the value of any File or Image TVs. Second, create a second Context Access ACL entry (just like the one above) for any groups who will use the form, with a context of 'mgr'. These steps are only necessary if you show File and/or Image TVs in the form. One word of warning: The users will then be able to access a very minimal version of the Manager if they can figure out how, but they will only be able to do four things:</p>
+<p>To use File and Image TVs in your form, or the file/image browser in the rich text editor you must perform two more steps, because the file and image browsers require Manager access. First, include <fixedpre>&contexts=`web,mgr`</fixedpre> in the Login snippet tag or the user will have to login a second time when trying to set the value of any File or Image TVs. Second, create a second Context Access ACL entry (just like the one above) for any groups who will use the form, with a context of 'mgr'. These steps are only necessary if you show File and/or Image TVs in the form or if your users will be using the rich text editor to insert images or upload files. One word of warning: The users will then be able to access a very minimal version of the Manager if they can figure out how, but they will only be able to do four things:</p>
 
 <ul>
     <li>View the TVs attached to the default template (and their default values)</li>
