@@ -6,13 +6,26 @@
  */
 
 
+/* @var $modx modX */
+/* @var $modx modX */
+/* @var $policy modAccessPolicy */
+/* @var $options array */
+/* @var $object array */
+/* @var $template modAccessPolicyTemplate */
+/* @var $group modAccessPolicyTemplateGroup */
+/* @var $adminTemplate modAccessPolicyTemplate */
+/* @var $permission modAccessPermission */
+/* @var $newPerm modAccessPermission */
+
+
 $modx =& $object->xpdo;
 $success = false;
 $policyName = 'NewsPublisherEditor';
-$templateName = 'NewsPublisherAdminAcessPolicyTemplate';
+$templateName = 'NewsPublisherPolicyTemplate';
 
 
 switch($options[xPDOTransport::PACKAGE_ACTION]) {
+
     case xPDOTransport::ACTION_INSTALL:
     case xPDOTransport::ACTION_UPGRADE:
         $template = $modx->getObject('modAccessPolicyTemplate', array('name' => $templateName));

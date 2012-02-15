@@ -5,6 +5,8 @@
  * @package newspublisher
  */
 
+/* @var $modx modX */
+/* @var $policy modAccessPolicy */
 $policy = $modx->newObject('modAccessPolicy');
 $policy->fromArray(array(
   'id' => 1,

@@ -5,11 +5,16 @@
  * @package newspublisher
  */
 
+/* @var $modx modX */
+/* @var $policy modAccessPolicy */
+/* @var $options array */
+/* @var $object array */
+/* @var $template modAccessPolicyTemplate */
 
 $modx =& $object->xpdo;
 $success = false;
 $policyName = 'NewsPublisherEditor';
-$templateName = 'NewsPublisherAdminAcessPolicyTemplate';
+$templateName = 'NewsPublisherPolicyTemplate';
 
 
 switch($options[xPDOTransport::PACKAGE_ACTION]) {
