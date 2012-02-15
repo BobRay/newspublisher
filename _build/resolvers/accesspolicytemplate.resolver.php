@@ -16,11 +16,11 @@
 /* @var $adminTemplate modAccessPolicyTemplate */
 /* @var $permission modAccessPermission */
 /* @var $newPerm modAccessPermission */
+/* @var $existingPermissions array */
 
 
 $modx =& $object->xpdo;
 $success = false;
-$policyName = 'NewsPublisherEditor';
 $templateName = 'NewsPublisherPolicyTemplate';
 
 
@@ -40,26 +40,28 @@ switch($options[xPDOTransport::PACKAGE_ACTION]) {
         }
         $template->set('template_group', $group->get('id'));
 
-        // TODO: how best identify the Admin Template?
-        $adminTemplate = $modx->getObject('modAccessPolicyTemplate', array('id' => 1)); 
-        if (!$adminTemplate) {
-            $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the AdministratorTemplate modAccessPolicyTemplate');
-            break;
-        }
-        
-        $permissions = $adminTemplate->getMany('Permissions');
-        $modx->lexicon->load('newspublisher:permissions');
-        $permissions[] = $modx->newObject('modAccessPermission',array(
-            'name' => 'allow_modx_tags',
-            'description' => $modx->lexicon('np_allow_modx_tags_desc'),
-            'value' => true,
-        ));
-        if (!empty($permissions)) {
-            foreach ($permissions as $permission) {
-                $newPerm = $modx->newObject('modAccessPermission');
-                $newPerm->fromArray($permission->toArray());
-                $newPerm->set('template',$template->get('id'));
-                $newPerm->save();
+        /* Copy all permissions from the AdministratorTemplate (not necessary if upgrading, they will already exist)  */
+        $existingPermissions = $template->getMany('Permissions');
+        if (empty($existingPermissions)) {
+            $adminTemplate = $modx->getObject('modAccessPolicyTemplate', array('id' => 1)); 
+            if (!$adminTemplate) {
+                $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the AdministratorTemplate modAccessPolicyTemplate');
+                break;
+            }
+            $permissions = $adminTemplate->getMany('Permissions');
+            $modx->lexicon->load('newspublisher:permissions');
+            $permissions[] = $modx->newObject('modAccessPermission',array(
+                'name' => 'allow_modx_tags',
+                'description' => $modx->lexicon('np_allow_modx_tags_desc'),
+                'value' => true,
+            ));
+            if (!empty($permissions)) {
+                foreach ($permissions as $permission) {
+                    $newPerm = $modx->newObject('modAccessPermission');
+                    $newPerm->fromArray($permission->toArray());
+                    $newPerm->set('template',$template->get('id'));
+                    $newPerm->save();
+                }
             }
         }
         $success = $template->save();
