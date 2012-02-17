@@ -1,5 +1,5 @@
 <p>
-This snippet is for use with MODx Revolution. NewsPublisher is a front-end resource creation and editing tool. It allows users to create new documents and edit existing documents in the front end of your site. Editing existing documents involves placing a tag for the NpEditThisButton snippet in your page template. Clicking on the button produced by the snippet launches NewsPublisher for that resource. You do not have to create *any* form fields. NewsPublisher creates them based on the field or TV type and its current or default value (if any).</p>
+This snippet is for use with MODX Revolution. NewsPublisher is a front-end resource creation and editing tool. It allows users to create new documents and edit existing documents in the front end of your site. Editing existing documents involves placing a tag for the NpEditThisButton snippet in your page template. Clicking on the button produced by the snippet launches NewsPublisher for that resource. You do not have to create *any* form fields. NewsPublisher creates them based on the field or TV type and its current or default value (if any).</p>
 
 <p><i>Note: Earlier versions of TinyMCE do not work correctly in the front end. Be sure you're using the current version.</i>
 </p>
@@ -12,26 +12,26 @@ This snippet is for use with MODx Revolution. NewsPublisher is a front-end resou
     &contexts=`web,mgr`
 </fixedpre></pre>
 
-<h3>Installing NewsPublisher for MODx Revolution</h3>
+<h3>Installing NewsPublisher for MODX Revolution</h3>
 <p>
-Go to System | Package Management on the main menu in the MODx Manager and click on the "Download Extras" button. That will take you to the Revolution Repository (AKA Web Transport Facility). Put NewsPublisher in the search box and press Enter. Click on the "Download" button, and when it changes to "Downloaded," click on the "Finish" button. That should bring you back to your Package Management grid. Click on the "Install" button next to NewsPublisher in the grid. The NewsPublisher snippet should now be installed.</p>
+Go to System | Package Management on the main menu in the MODX Manager and click on the "Download Extras" button. That will take you to the Revolution Repository (AKA Web Transport Facility). Put NewsPublisher in the search box and press Enter. Click on the "Download" button, and when it changes to "Downloaded," click on the "Finish" button. That should bring you back to your Package Management grid. Click on the "Install" button next to NewsPublisher in the grid. The NewsPublisher snippet should now be installed.</p>
 
 <p>If NewsPublisher doesn't show up using the process above, here's another way to get it.</p>
 
 <ul>
     <li>Go to the <a href="https://github.com/BobRay/newspublisher">GitHub NewsPublisher Page</a></li>
     <li>Click on the &quot;Downloads&quot; button</li>
-    <li>Download the latest version to your MODx core/packages directory</li>
+    <li>Download the latest version to your MODX core/packages directory</li>
     <li>Go to Package Manager</li>
     <li>Click on &quot;Add Package&quot;, then &quot;Search Locally for Packages.&quot;</li>
     <li>Install from the Package Manager Grid</li>
 </ul>
 
-<p>In order to create Context Access ACL entries using the NewsPublisherEditor Policy, you have to flush both permissions and sessions before the new policy will show up in the list.</p>
+<p>In order to create Context Access ACL entries using the NewsPublisherEditor Policy, you may have to flush both permissions and sessions before the new policy will show up in the list.</p>
 
 <h3>Using NewsPublisher</h3>
 
-<p>If you are used to using NewsPublisher in MODx Evolution, this version will take a little getting used to. Many of the properties are different, but you will have much more control over the content and style of your form. Each type of field has its own Tpl chunk (as does the form itself) and every individual field has a separate ID so they can be styled using CSS.
+<p>If you are used to using NewsPublisher in MODX Evolution, this version will take a little getting used to. Many of the properties are different, but you will have much more control over the content and style of your form. Each type of field has its own Tpl chunk (as does the form itself) and every individual field has a separate ID so they can be styled using CSS.
 </p>
 
 <p>
@@ -41,18 +41,43 @@ Setting up a basic form is very simple. Create a document called &quot;NewsPubli
 <p><fixedpre>[[!NewsPublisher]]</fixedpre></p>
 
 <p>
-When you preview the document, you should see a basic resource editing form. If you fill it in and click on the "Submit" button, the resource should be created. The basic form shows several standard fields, but you can change that with the &amp;show property. It should contain a comma-delimited list (no spaces) of the fields you would like to display in the form. It can include TV fields listed by name or by ID (shown in the Elements tree next to the TV's name). The fields will appear in the form in the order you list them in the property. You can create multiple NewsPublisher pages showing different sets of fields for different users.
+When you preview the document, you should see a basic resource editing form. If you fill it in and click on the "Submit" button, the resource should be created. The basic form shows several standard fields, but you can change that with the <fixedpre>&show</fixedpre> property. It should contain a comma-delimited list (no spaces) of the fields you would like to display in the form. It can include TV fields listed by name or by ID (shown in the Elements tree next to the TV's name). The fields will appear in the form in the order you list them in the property. You can create multiple NewsPublisher pages showing different sets of fields for different users.
 </p>
 
-<p>NewsPublisher responds to the MODx security permission system, so users can only create resources if they have permission to do so. As the admin Super User, you'll have full rights (unless you've done something that takes them away) to create and edit any document in the front end. Other users, however, will have to be granted permission before they can do either and their ability to edit existing resources will depend on the resource group settings.</p>
+<p>The form is highly flexible and you can show any fields or TVs in any order. Some fields will require you to set certain properties. For example, if you have any rich text fields, you'll need to set the <fixedpre>&initrte</fixedpre> property. If you show any date fields, you'll need the <fixedpre>&initdatepicker</fixedpre> property. The <fixedpre>&rtcontent</fixedpre> and <fixedpre>&rtsummary</fixedpre> properties control whether those fields will have rich text editing. See the list below for more information on the available properties. The properties can be in any order. Here's an example:</p>
 
-<p>In addition, users (including you) will not be able to edit resources containing MODx tags without a custom permission: allow_modx_tags, which must be added to the Context Access policy for users in the front end.</p>
+<pre><fixedpre>
+    [[!NewsPublisher?
+        &show=`pagetitle,description,pub_date,summary,TV1,TV2`
+        &initrte=`1`
+        &initdatepicker=`1`
+        &rtcontent=`1`
+        &rtsummary=`1`
+        &parentid=`12`
+        &published=`1`
+        &captions=`content:introtext:Summary,description:Give a brief description`
+    ]]
+
+</fixedpre></pre>
+<p>&nbsp;</p>
+<p>The example above will show the fields in the <fixedpre>&show</fixedpre> property in the order they appear in that property. The new resource will be published and both the content and introtext (summary) fields will have rich text editing. The pub_date field will display a datepicker widget.</p>
+
+<p>The captions field is optional, so try the form and see if the default captions will work for you. If not, add the <fixedpre>&captions</fixedpre> property. If your captions are long, you may have to adjust the CSS to keep them from wrapping.</p>
+
+<h3>Security</h3>
+<p>NewsPublisher responds to the MODX security permission system, so users can only create resources if they have permission to do so. As the admin Super User, you'll have full rights (unless you've done something that takes them away) to create and edit any document in the front end. Other users, however, will have to be granted permission before they can do either and their ability to edit existing resources will depend on the resource group settings.</p>
+
+<p>In addition, users (including you) will not be able to edit resources containing MODX tags without the <fixedpre>allow_modx_tags</fixedpre> permission. As of NewsPublisher 1.3.0, this permission is included in the NewsPublisherEditor Policy but is unchecked by default. You must check the Permission and save the NewsPublisherEditor Policy if you want to allow users to edit or create documents with MODX tags in them.</p>
+
+<p>Be aware that if you upgrade or reinstall NewsPublisher, the <fixedpre>allow_modx_tags</fixedpre> permission may be unchecked during the process unless you have duplicated the NewsPublisherEditor Policy and are using the duplicate.</p>
 
 <h3>NewsPublisher Editor Policy</h3>
 
-<p>As of NewsPublisher 1.3.0, the package includes an Access Policy called &quot;NewsPublisher Editor&quot;. This policy enables the basic permissions necessary to operate NewsPublisher in the front end without giving the user any dangerous permissions. Create a Context Access ACL policy for the web context for any users who will be using NewsPublisher. As always, flush permissions and sessions on the Security menu after making any changes.</p>
+<p>As of NewsPublisher 1.3.0, the package includes an Access Policy called &quot;NewsPublisherEditor&quot;. This Policy enables the basic permissions necessary to operate NewsPublisher in the front end without giving the user any dangerous permissions. Create a Context Access ACL policy for the web context for any users who will be using NewsPublisher. As always, flush permissions and sessions on the Security menu after making any changes.</p>
 
-<p>To use File and Image TVs in your form, or the file/image browser in the rich text editor you must perform two more steps, because the file and image browsers require Manager access. First, include <fixedpre>&contexts=`web,mgr`</fixedpre> in the Login snippet tag or the user will have to login a second time when trying to set the value of any File or Image TVs. Second, create a second Context Access ACL entry (just like the one above) for any groups who will use the form, with a context of 'mgr'. These steps are only necessary if you show File and/or Image TVs in the form or if your users will be using the rich text editor to insert images or upload files. One word of warning: The users will then be able to access a very minimal version of the Manager if they can figure out how, but they will only be able to do four things:</p>
+<p>The NewsPublisherEditor Policy is based on the NewsPublisherPolicyTemplate, which in turn is based on the Administratror Policy Template but with the addition of the <fixedpre>allow_modx_tags</fixedpre> permission. Both the Policy and the Policy Template should be installed automatically when you install the NewsPublisher Package.</p>
+
+<p>To use File and Image TVs in your form, or the file/image browser in the rich text editor you must perform two more steps, because the file and image browsers require Manager access. First, include <fixedpre>&contexts=`web,mgr`</fixedpre> in the Login snippet tag or the user will have to login a second time when trying to use the File or Image browser. Second, create a second Context Access ACL entry (just like the one above) for any groups who will use the form, with a context of 'mgr'. These steps are only necessary if you show File and/or Image TVs in the form or if your users will be using the rich text editor to insert images or upload files. One word of warning: The users will then be able to access a very minimal version of the Manager if they can figure out how, but they will only be able to do four things:</p>
 
 <ul>
     <li>View the TVs attached to the default template (and their default values)</li>
@@ -61,11 +86,11 @@ When you preview the document, you should see a basic resource editing form. If 
     <li>Follow the links on the &quot;Support&quot; menu</li>
 </ul>
 
-<p>They will not be able to create documents in the Manager, or change anything at all other than their own profiles.</p>
+<p>They will not be able to create documents in the Manager, or change anything at all (unless you've given them the permissions necessary to do so) other than their own profiles.</p>
 
 <h3>Editing Existing Resources</h3>
 
-<p>To edit existing resources, simply place a tag for the NpEditThisButton snippet anywhere in the &lt;body&gt; section of your template(s). The button is positioned absolutely in the lower right section of the page. The &amp;right property controls the distance from the right side of the page and the &amp;bottom property controls the distance from the bottom. The default for these properties is `20%`. Like NewsPublisher, the button also responds to security permissions and is not shown on pages the user has no right to edit or save. It also does not show on the NewsPublisher page or the home page. If there are other pages where you would like to hide it, you can include a comma-delimited list of their IDs in the &amp;noShow property.</p>
+<p>To edit existing resources, simply place a tag for the NpEditThisButton snippet anywhere in the <fixedpre><body></fixedpre> section of your template(s). The button is positioned absolutely in the lower right section of the page. The <fixedpre>&right</fixedpre> property controls the distance from the right side of the page and the <fixedpre>&bottom</fixedpre> property controls the distance from the bottom. The default for these properties is `20%`. Like NewsPublisher, the button also responds to security permissions and is not shown on pages the user has no right to edit or save. It also does not show on the NewsPublisher page or the home page. If there are other pages where you would like to hide it, you can include a comma-delimited list of their IDs in the <fixedpre>&noShow</fixedpre> property.</p>
 
 <p>Because the button will be hidden until you get the permissions correct, it's recommended that you start with the button tag like this:</p>
 <p><fixedpre>[[!NpEditThisButton? &debug=`1`]]</fixedpre></p>
@@ -76,115 +101,113 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <h3>Altering the Form</h3>
 
-<p>You can make many changes to the look of the form using CSS rules for styling. You can find the CSS form at assets/components/newspublisher/css/newspublisher.css. Using CSS, you can change the text color, background color, size, and/or position of any field, though the control of richtext fields is limited. You can put fields side-by-side by using &quot;display:inline;&quot; for the appropriate field(s). If you plan to make changes, it's recommended that you make a copy of the CSS file and put the path to your new file in the &amp;cssfile property.</p>
+<p>You can make many changes to the look of the form using CSS rules for styling. You can find the CSS form at assets/components/newspublisher/css/newspublisher.css. Using CSS, you can change the text color, background color, size, and/or position of any field, though the control of richtext fields is limited. You can put fields side-by-side by using &quot;display:inline;&quot; for the appropriate field(s). If you plan to make changes, it's recommended that you make a copy of the CSS file and put the path to your new file in the <fixedpre>&cssfile</fixedpre> property.</p>
 
 <p>If you feel you must, you can alter the Tpl chunks for any of the field types. Again, you should duplicate the existing chunk and put the name of your duplicate in the appropriate property. Be careful not to change the prefixes of any of the placeholders, even if you specify a custom prefix for the form as a property. The prefixes will be altered automatically by the snippet. Note that there are both np. and npx. prefixes. The npx. prefixes are used internally by the snippet, the np. prefixes are usually in the value field of the element and will be set via placeholders.
 </p>
 
 <h3>Configuring NewsPublisher</h3>
-<p>NewsPublisher has many options. You can see the list by editing the NewsPublisher snippet and clicking on the Properties tab. Unlock the default properties by clicking on the &quot;Default Properties Locked&quot; button. Then, click the little plus sign next to a property to see what it does. It is <b>strongly</b> recommended that you not change the default properties. Either put properties in the snippet tag to override them, or create a property set by clicking on the &quot;Add Property Set&quot; button and specify it in the snippet tag like this:</p>
+<p>NewsPublisher has many options, but almost all of them are optional. You can see the list by editing the NewsPublisher snippet and clicking on the Properties tab. Unlock the default properties by clicking on the &quot;Default Properties Locked&quot; button. Then, click the little plus sign next to a property to see what it does. It is <b>strongly</b> recommended that you not change the default properties. Either put properties in the snippet tag to override them, or create a property set by clicking on the &quot;Add Property Set&quot; button and specify it in the snippet tag like this:</p>
 
 <p><fixedpre>[[!NewsPublisher@PropertySetName]]</fixedpre></p>
 
-<p>Here are some of the most commonly used properties -- all are optional, but a few are necessary for certain other options:</p>
 
-<pre>
-&amp;show - Comma-separated list of fields to show.
+<h3>Common Properties</h3>
+<p>Here are some of the most commonly used properties &mdash; all are optional, but a few are necessary if other options are set:</p>
 
-    Example: &amp;show=`pagetitle,longtitle,pub_date,unpub_date,content,MyTv1,MyTv3`
 
-&amp;captions - Comma-separated list of fieldnames:fieldcaptions. All standard resource fields are in all lowercase.
+<p><fixedpre>&show</fixedpre> &mdash; (string) Comma-separated list of fields to show.
 
-    Example: &amp;captions=`introtext:Summary,content:Enter Your Post`
+<p>Example: <fixedpre>&show=`pagetitle,longtitle,pub_date,unpub_date,content,MyTv1,MyTv3`</fixedpre></p>
 
-&amp;aliastitle (0/1) - Use this if you want an automatic alias for your resources 
-    (a hyphenated, lowercase version of the pagetitle)
+<p><fixedpre>&captions</fixedpre> &mdash; (string) Comma-separated list of fieldnames:fieldcaptions. All standard resource fields are in all lowercase.</p>
 
-&amp;aliasprefix (string) - prefix for aliases, used only if alias is empty. Alias
-    will be prefix + raw unix timestamp, unless &amp;aliasdatesuffix is set.
+<p>Example: <fixedpre>&captions=`introtext:Summary,content:Enter Your Post`</fixedpre></p>
 
-&amp;aliasdateformat (string) - Format for alias timestamp. If alias is empty
+<p><fixedpre>&aliastitle</fixedpre> &mdash; (0/1) Use this if you want an automatic alias for your resources
+    (a hyphenated, lowercase version of the pagetitle).</p>
+
+<p><fixedpre>&aliasprefix</fixedpre> &mdash; (string) prefix for aliases, used only if alias is empty. Alias
+    will be prefix + raw unix timestamp, unless <fixedpre>&aliasdatesuffix</fixedpre> is set.</p>
+
+<p><fixedpre>&aliasdateformat</fixedpre> &mdash; (string) Format for alias timestamp. If alias is empty
     and this is set, the alias will be the prefix (if any) + a formatted date/time.
     It's strongly recommended to include minutes and seconds in this to avoid
-    duplicate aliases.
+    duplicate aliases.</p>
 
-&amp;initrte - (0/1) - Use this if you will be showing any rich text fields. 
+<p><fixedpre>&initrte</fixedpre> &mdash; (0/1) Use this if you will be showing any rich text fields.</p>
 
-&amp;rtcontent - (0/1) - Use this if you want richtext editing for the content field.
+<p><fixedpre>&rtcontent</fixedpre> &mdash; (0/1) Use this if you want richtext editing for the content field.</p>
 
-&amp;rtsummary - (0/1) - Use this if you want richtext editing for the summary field.
+<p><fixedpre>&rtsummary</fixedpre>  &mdash; (0/1) Use this if you want richtext editing for the summary field.</p>
 
-&amp;initdatepicker (0/1) - This is required if you will be showing any date fields or TVs.
+<p><fixedpre>&initdatepicker</fixedpre> &mdash; (0/1) This is required if you will be showing any date fields or TVs.</p>
 
-&amp;parentid (integer) - ID of the parent for new pages; default to NewsPublisher page.
-    (must be set if any other property is set to `Parent`.</pre>
+<p><fixedpre>&parentid</fixedpre> &mdash; (integer) ID of the parent for new pages; default to NewsPublisher page.
+    (must be set if any other property is set to `Parent`.</p>
+<h3>Page Settings for New Documents</h3>
+<p>The next five properties control the standard page settings of the resource being created (whether you show them or not). They can each be set to `1`, `0`, `Parent`, or `System Default` (the default setting). If set to Parent, the settings of the resource's parent will be used (and the <fixedpre>&parentid</fixedpre> property must be set). If left unset, the MODX System Settings will be used for each one. Note that the published setting may be overridden if you show <fixedpre>pub_date</fixedpre> or <fixedpre>unpub_date</fixedpre> in the form and the user sets them.
 
-<p>&nbsp;</p>
+<pre><fixedpre>
+&published
+&hidemenu
+&cacheable
+&searchable
+&richtext</fixedpre></pre>
 
-<p>The next five properties control the standard page settings of the resource being created (whether you show them or not). They can each be set to `1`, `0`, `Parent`, or `System Default` (the default setting). If set to Parent, the settings of the resource's parent will be used (and the &amp;parentid property must be set). If left unset,the MODx System Settings will be used for each one. Note that the published setting may be overridden if you set pub_date or unpub_date.</p>
+<h3>Less Common Properties</h3>
+<p><fixedpre>&template</fixedpre> &mdash; (mixed) The name or ID of the template to be assigned to new docs. Can also be set to 'Parent' to assign the parent's template; default: default_template System Setting.</p>
 
-<pre>
-&amp;published
-&amp;hidemenu
-&amp;cacheable
-&amp;searchable
-&amp;richtext
-
-&amp;template - (mixed) The name or ID of the template to be assigned to new docs. Can also be set to 'Parent' to
-    assign the parent's template; default: default_template System Setting.
-
-&amp;prefix - (string) a custom prefix to use for placeholders; default: `np`.
+<p><fixedpre>&prefix</fixedpre> &mdash; (string) a custom prefix to use for placeholders; default: `np`.
     This property is only necessary if the placeholders conflict with
     other placeholders on the page.
-    Important: Do not include a dot in your custom prefix.
+    Important: Do not include a dot in your custom prefix.</p>
 
-&amp;cssfile - (string) Path to a custom CSS file. 
+<p><fixedpre>&cssfile</fixedpre> &mdash; (string) Path to a custom CSS file.</p>
 
-&amp;groups - (string) A comma-separated list of resource groups to 
+<p><fixedpre>&groups</fixedpre> &mdash; (string) A comma-separated list of resource groups to
     assign new pages to. Can also be set to `Parent` to use the
-    parent's groups.
+    parent's groups.</p>
 
-&amp;tinyheight - (string) Height of the RTE window; defaults to 400px.
+<p><fixedpre>&tinyheight</fixedpre> &mdash; (string) Height of the RTE window; defaults to 400px.</p>
 
-&amp;tinyWidth - (string) Width of the RTE window; defaults to 95%.
+<p><fixedpre>&tinyWidth</fixedpre> &mdash; (string) Width of the RTE window; defaults to 95%.</p>
 
-&amp;required - Comma-separated list of required field names or TVs.
+<p><fixedpre>&required</fixedpre> &mdash; (string) Comma-separated list of required field names or TVs.
     Important: Do not set this for Checkbox, list, or radio TVs or
-    for boolean (0/1) resource fields (like the five above).
+    for boolean (0/1) resource fields (like the five above).</p>
 
-&amp;cancelid - ID of the page the user will be forwarded to on cancel.
-    If you don't want a cancel button, just remove it from the 
-    npOuterTpl chunk.
+<p><fixedpre>&cancelid</fixedpre> &mdash; (integer) ID of the page the user will be forwarded to on cancel.
+    If you don't want a cancel button, just remove it from the
+    npOuterTpl chunk.</p>
 
-&amp;badwords - Comma-separated list of words to be filtered from fields.
+<p><fixedpre>&badwords</fixedpre> &mdash; (string) Comma-separated list of words to be filtered from fields.</p>
 
-&amp;listboxmax - maximum size of listboxes. Overflow will scroll; default: 8.
+<p><fixedpre>&listboxmax</fixedpre> &mdash; (integer) maximum size of listboxes. Overflow will scroll; default: 8.</p>
 
-&amp;readonly - Comma-separated list of readonly fields. Does not work with
-    listbox, checkbox, radio, or richtext fields. ID is always readonly.
+<p><fixedpre>&readonly</fixedpre> &mdash; (string) Comma-separated list of readonly fields. Does not work with
+    listbox, checkbox, radio, or richtext fields. The <fixedpre>id</fixedpre> field is always readonly.
 
-&amp;intmaxlength - Max length for integer input fields; default: 10
+<p><fixedpre>&intmaxlength</fixedpre> &mdash; (integer) Max length for integer input fields; default: 10.</p>
 
-&amp;textmaxlength - Max length for text input fields; default: 60
+<p><fixedpre>&textmaxlength</fixedpre> &mdash; (integer) Max length for text input fields; default: 60.</p>
 
-&amp;hoverhelp - Show help when hovering over field caption (but not the
-    field itself); default: `1`. The MODx help strings are shown for
-    resource fields. For TVs, the TV description is shown.
+<p><fixedpre>&hoverhelp</fixedpre> &mdash; (0/1) Show help when hovering over field caption (but not the
+    field itself); default: `1`. The MODX help strings are shown for
+    resource fields. For TVs, the TV description is shown.</p>
 
-&amp;language - language to use for form; defaults to Manager language.
-</pre>
-
+<p><fixedpre>&language</fixedpre> &mdash; (string) language to use for form; defaults to Manager language.</p>
 
 
 <h3>Multiple NewsPublisher Pages</h3>
 
-<p>If you would like to have different NewsPublisher pages with different fields and settings, create a separate page for each one with a different snippet tag on each page. The NpEditThisButton, by default launches the page specified in its &amp;np_id property. If you use the following snippet tag for the button, you can have it launch the appropriate NewsPublisher page by creating a TV for each page called NpId and setting the correct NewsPublisher page ID in it:</p>
+<p>If you would like to have different NewsPublisher pages with different fields and settings, create a separate page for each one with a different snippet tag on each page. The NpEditThisButton, by default launches the page specified in its <fixedpre>&np_id</fixedpre> property. If you use the following snippet tag for the button, you can have it launch the appropriate NewsPublisher page by creating a TV for each page called NpId and setting the correct NewsPublisher page ID in it:</p>
 
 <p><fixedpre>[[!NpEditThisButton? &np_id=`[[*NpId]]`</fixedpre></p>
 
 <h3>NewsPublisher and getResources</h3>
 
-<p>As of NewsPublisher 1.2.0, you can now put the edit button tag in the getResources Tpl chunk and have and edit button for each resource retrieved using the np_edit_id property. You can also hard-code a page with multiple NpEditThisButton tags. To use this technique with getResources, remove any NpEditThisButton tags from the page template and create a Tpl chunk something like this:</p>
+<p>As of NewsPublisher 1.2.0, you can put the edit button tag in the getResources Tpl chunk and have and edit button for each resource retrieved using the np_edit_id property. You can also hard-code a page with multiple NpEditThisButton tags. To use this technique with getResources, remove any NpEditThisButton tags from the page template and create a Tpl chunk something like this:</p>
 
 <pre><fixedpre>
 <div class="MyItem">
@@ -198,5 +221,5 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 <p>Bugs and feature requests should be reported here: <a href="https://github.com/BobRay/newspublisher">GitHub NewsPublisher Page</a> (on the &quot;issues&quot; tab).</p>
 
 <p>
-Questions should be posted in the NewsPublisher topic at <a href="http://modxcms.com/forums">MODx Forums</a>.</p>
+Questions should be posted in the NewsPublisher topic at <a href="http://modxcms.com/forums">MODX Forums</a>.</p>
 <p>&nbsp;</p>
