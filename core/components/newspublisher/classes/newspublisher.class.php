@@ -280,7 +280,12 @@ class Newspublisher {
                 if ($this->resource) {
 
                     if (! ($this->modx->hasPermission('view_document') && $this->resource->checkPolicy('view')) ) {
-                        $this->setError($this->modx->lexicon('np_view_permission_denied'));
+                        if (!$this->modx->hasPermission('view_document')) {
+                            $this->setError($this->modx->lexicon('np_view_permission_denied'));
+                        }
+                        if (!$this->resource->checkPolicy('view')) {
+                            $this->setError($this->modx->lexicon('np_view_this_permission_denied'));
+                        }
                         return;
                     }
                     if (! $this->isPostBack) {
@@ -1283,7 +1288,12 @@ class Newspublisher {
 
         /* user needs both permissions to save a document */
         if (! ($this->modx->hasPermission('save_document') && $this->resource->checkPolicy('save'))) {
-            $this->setError($this->modx->lexicon('np_save_permission_denied'));
+            if (! $this->modx->hasPermission('save_document') ) {
+                $this->setError($this->modx->lexicon('np_save_permission_denied'));
+            }
+            if (!$this->resource->checkPolicy('save') ) {
+                $this->setError($this->modx->lexicon('np_save_this_permission_denied'));
+            }
             return '';
         }
 
