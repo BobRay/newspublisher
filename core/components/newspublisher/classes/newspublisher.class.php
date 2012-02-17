@@ -279,8 +279,9 @@ class Newspublisher {
                 $this->resource = $this->modx->getObject('modResource', $this->existing);
                 if ($this->resource) {
 
-                    if (!$this->modx->hasPermission('view_document') || !$this->resource->checkPolicy('view') ) {
+                    if (! ($this->modx->hasPermission('view_document') && $this->resource->checkPolicy('view')) ) {
                         $this->setError($this->modx->lexicon('np_view_permission_denied'));
+                        return;
                     }
                     if (! $this->isPostBack) {
                         $ph = $this->resource->toArray();
@@ -310,6 +311,7 @@ class Newspublisher {
                 /* new document */
                 if (!$this->modx->hasPermission('new_document')) {
                     $this->setError($this->modx->lexicon('np_create_permission_denied'));
+                    return;
                 }
                 $this->resource = $this->modx->newObject('modResource');
                 /* get folder id where we should store articles
