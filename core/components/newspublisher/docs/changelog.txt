@@ -2,10 +2,14 @@ Changelog for NewsPublisher
 
 NewsPublisher 1.3.0-rc1
 -----------------------
-Implemented custom captions property
-Implemented Markus Schlegel's improvements
-Fixed bug with multiple RTE areas (thanks Markus)
+Better error messages
+Improved security
+Fixed critical bug with multiple RTE areas (thanks Markus)
 Now handles both file and image TVs
+Implemented custom 'captions' property
+Added 'aliasdatesuffix' property for formatting the date suffix
+Support for ResourceList TVs
+Implemented Markus Schlegel's improvements
 Change Button Text for image/file TVs
 Only loads required Tpl chunks
 Small changes to _displayList
@@ -19,11 +23,10 @@ Scrollbars disabled in file browser
 Corrected Symlink and Weblink captions and help
 Field error messages for lists
 Removed hasimagetv, imagetvwidth, and imagetvheight properties
-Added 'aliasdatesuffix' property for formatting the date suffix
 Preview for selected images
-Support for ResourceList TVs
 Internationalization of invalid date message
 Datepicker language setting more reliable
+Many bug fixes
 
 
 NewsPublisher 1.2.1-pl
