@@ -4,31 +4,20 @@ NewsPublisher 1.3.0-rc1
 -----------------------
 Better error messages
 Improved security
-Added NewsPublisher policy and policy template
 Fixed critical bug with multiple RTE areas (thanks Markus)
-Now handles both file and image TVs
-Implemented custom 'captions' property
-Added 'aliasdatesuffix' property for formatting the date suffix
+Added NewsPublisher policy and policy template
+Now handles both file and image TVs; preview for selected images
+Updates for MODX 2.2
+Implemented custom captions property
 Support for ResourceList TVs
-Implemented Markus Schlegel's improvements
-Change Button Text for image/file TVs
-Only loads required Tpl chunks
-Small changes to _displayList
-Improvements in code generation functions
-Always sets 'phpthumbBaseUrl' placeholder
-Removed deprecated dropdown list type
-Improvements to datepicker JS
-Code simplification and cleanup
-Faster popup loading and resizing
-Scrollbars disabled in file browser
-Corrected Symlink and Weblink captions and help
-Field error messages for lists
+Added 'aliasdateformat' property for formatting the date suffix
 Removed hasimagetv, imagetvwidth, and imagetvheight properties
-Preview for selected images
+Display some fields as lists (template, class_key, content_dispo)
+Datepicker TV: now supports date ranges, disabled dates and disabled days
 Internationalization of invalid date message
-Datepicker language setting more reliable
-Many bug fixes
-
+Tweaks to template chunks to allow consistent CSS styling
+Only loads required Tpl chunks
+Many bug fixes, code simplification, and cleanup
 
 NewsPublisher 1.2.1-pl
 ----------------------
