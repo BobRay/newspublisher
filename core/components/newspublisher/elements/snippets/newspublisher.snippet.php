@@ -120,12 +120,22 @@ $np_prefix = $scriptProperties['prefix'];
 $np = new Newspublisher($modx, $scriptProperties);
 $np->init($modx->context->get('key'));
 
-/* get error Tpl chunk */
-//$errorTpl = str_replace('[[+prefix]]', $np_prefix, $np->getTpl('errorTpl'));
-//$fieldErrorTpl = str_replace('[[+prefix]]', $np_prefix, $np->getTpl('fieldErrorTpl'));
-
 $errorTpl =  $np->getTpl('ErrorTpl');
 $fieldErrorTpl = $np->getTpl('FieldErrorTpl');
+$errorHeaderPresubmit = $modx->lexicon('np_error_presubmit');
+$errorHeaderSubmit = $modx->lexicon('np_error_submit');
+
+/* Handle errors in init() */
+$errors = $np->getErrors();
+if (!empty($errors)) {
+
+    $modx->toPlaceholder('error_header', $errorHeaderPresubmit, $np_prefix);
+    foreach ($errors as $error) {
+        $errorMessage .= str_replace('[[+' . $np_prefix . '.error]]', $error, $errorTpl);
+    }
+    $modx->toPlaceholder('errors_presubmit', $errorMessage, $np_prefix);
+    return '<div class="newspublisher">' . $errorHeaderPresubmit . $errorMessage . '</div>';
+}
 
 /* add Cancel button only if requested */
 if (!empty ($scriptProperties['cancelid'])) {
@@ -135,9 +145,6 @@ if (!empty ($scriptProperties['cancelid'])) {
             ? $_SERVER['HTTP_REFERER'] : $modx->resource->get('id');
 }
 $modx->toPlaceholder('cancel_url', $cancelUrl, $np_prefix);
-
-$errorHeaderPresubmit = $modx->lexicon('np_error_presubmit');
-$errorHeaderSubmit = $modx->lexicon('np_error_submit');
 
 $formTpl .= $np->displayForm($scriptProperties['show']);
 
