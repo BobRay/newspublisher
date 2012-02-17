@@ -27,6 +27,7 @@ switch($options[xPDOTransport::PACKAGE_ACTION]) {
                 $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the '.$policyName);
                 break;
             }
+            $modx->log(xPDO::LOG_LEVEL_INFO,'Setting template field for '. $policyName . ' policy');
             $policy->set('template', $template->get('id'));
             $success = $policy->save();
         }

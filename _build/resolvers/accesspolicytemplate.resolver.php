@@ -33,21 +33,23 @@ switch($options[xPDOTransport::PACKAGE_ACTION]) {
             $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the '.$templateName);
             break;
         }
+
         $group = $modx->getObject('modAccessPolicyTemplateGroup', array('name' => 'Admin'));
         if (!$group) {
-            $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the admin access policy template group'.$templateName);
+            $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the admin access policy template group'. $templateName);
             break;
         }
         $template->set('template_group', $group->get('id'));
-
+        $modx->log(xPDO::LOG_LEVEL_INFO,'Setting template_group for '. $templateName);
         /* Copy all permissions from the AdministratorTemplate (not necessary if upgrading, they will already exist)  */
         $existingPermissions = $template->getMany('Permissions');
         if (empty($existingPermissions)) {
-            $adminTemplate = $modx->getObject('modAccessPolicyTemplate', array('id' => 1)); 
+            $adminTemplate = $modx->getObject('modAccessPolicyTemplate', array('id' => 1));
             if (!$adminTemplate) {
                 $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the AdministratorTemplate modAccessPolicyTemplate');
                 break;
             }
+            $modx->log(xPDO::LOG_LEVEL_INFO,'Setting permissions for '. $templateName);
             $permissions = $adminTemplate->getMany('Permissions');
             $modx->lexicon->load('newspublisher:permissions');
             $permissions[] = $modx->newObject('modAccessPermission',array(
