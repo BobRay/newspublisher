@@ -1125,7 +1125,7 @@ class Newspublisher {
 
     protected function _displayFileInput($name, $tplName, $sourceOptions = array(), $openTo = '') {
         /* @var $browserAction modAction */
-        $browserAction = $this->modx->getObject('modAction',array('namespace'  => 'newspublisher'));
+        $browserAction = $this->modx->getObject('modAction', array('namespace' => 'newspublisher', 'controller' => 'filebrowser'));
         $browserUrl = $browserAction ? $this->modx->getOption('manager_url',null,MODX_MANAGER_URL).'index.php?a='.$browserAction->get('id') : null;
 
         if ($browserUrl) {

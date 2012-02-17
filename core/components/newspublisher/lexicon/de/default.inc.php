@@ -20,7 +20,7 @@
  * @package newspublisher
  */
 /**
- * Default Lexicon Topic (German translation by mschlegal)
+ * Default Lexicon Topic (German translation by mschlegel)
  *
  * @package newspublisher
  * @subpackage lexicon
@@ -51,9 +51,11 @@ $_lang['np_date_hint'] = '(T.M.J)';
 $_lang['np_time_hint'] = '(Zeit - irgendein Format)';
 $_lang['np_date_format'] = 'd-dt-m-dt-Y';
 $_lang['np_invalid_date'] = 'Datum ungültig!';
-$_lang['np_view_permission_denied'] = 'Sie besitzen nicht die nötigen Zugriffsrechte, um dieses Dokument anzuzeigen';
+$_lang['np_view_permission_denied'] = 'Sie besitzen nicht die nötigen Zugriffsrechte, um Dokumente anzuzeigen';
+$_lang['np_view_this_permission_denied'] = 'Sie besitzen nicht die nötigen Zugriffsrechte, um dieses Dokument anzuzeigen';
 $_lang['np_create_permission_denied'] = 'Sie besitzen nicht die nötigen Zugriffsrechte, um ein Dokument zu erstellen';
-$_lang['np_save_permission_denied'] = 'Sie besitzen nicht die nötigen Zugriffsrechte, um dieses Dokument zu speichern';
+$_lang['np_save_permission_denied'] = 'Sie besitzen nicht die nötigen Zugriffsrechte, um Dokumente zu speichern';
+$_lang['np_save_this_permission_denied'] = 'Sie besitzen nicht die nötigen Zugriffsrechte, um dieses Dokument zu speichern';
 $_lang['np_no_edit_self'] = 'Sie können die Newspublisher-Seite nicht bearbeiten.';
 $_lang['np_no_parent'] = 'Für die Eigenschaft wurde `parent` angegeben, aber die Ressource hat keine definier Elternressource: ';
 $_lang['np_post_save_no_resource'] = 'Konnte Ressource nach dem Speichern nicht aufrufen';
@@ -70,6 +72,10 @@ $_lang['np_no_rte'] = 'Der Parameter &amp;initrte wurde nicht gesetzt, obwohl Si
 $_lang['np_no_datepicker'] = 'Der Parameter &amp;initdatepicker wurde nicht gesetzt, obwohl Sie dieses Datums-Feld anzeigen möchten: ';
 $_lang['np_launch_image_browser'] = 'Bild auswählen';
 $_lang['np_launch_file_browser'] = 'Datei auswählen';
+$_lang['np_no_action_found'] = "Konnte die Aktion 'filebrowser' nicht finden. Möglicherweise wurde sie gelöscht. Bitte installieren Sie NewsPublisher neu.";
+$_lang['np_media_source_access_denied'] = 'Sie besitzen nicht die nötigen Zugriffsrechte, um die mit folgender Template-Variable verknüpfte Medienquelle anzuzeigen:';
+$_lang['np_source_error'] = 'Mit dieser Template-Variable ist keine Medienquelle verknüpft: ';
+$_lang['np_source_wctx_error'] = 'Konnte den Kontext der Medienquelle für diese Template-Variable nicht ermitteln: ';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Veröffentlichen am';
