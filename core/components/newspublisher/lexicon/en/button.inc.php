@@ -30,6 +30,7 @@
 /* NewsPublisher EditThisButton strings */
 $_lang['np_edit'] = 'Edit';
 $_lang['np_no_edit_document_permission'] = 'No edit_document permission';
+$_lang['np_no_edit_this_document_permission'] = 'No edit permission for this document';
 $_lang['np_no_context_save_document_permission'] = 'No context save_document permission';
 $_lang['np_no_resource_save_document_permission'] = 'No Resource save permission on this document';
 $_lang['np_no_edit_home_page'] = 'Can not edit home page';
