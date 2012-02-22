@@ -30,6 +30,7 @@
 /* NewsPublisher EditThisButton strings */
 $_lang['np_edit'] = 'Bearbeiten';
 $_lang['np_no_edit_document_permission'] = 'Keine Rechte, Dokumente zu bearbeiten';
+$_lang['np_no_edit_this_document_permission'] = 'Keine Rechte, dieses Dokument zu bearbeiten';
 $_lang['np_no_context_save_document_permission'] = 'Keine Rechte, Dokumente in diesem Kontext zu speichern';
 $_lang['np_no_resource_save_document_permission'] = 'Keine Rechte, dieses Dokument zu speichern';
 $_lang['np_no_edit_home_page'] = 'Kann Startseite nicht bearbeiten';
