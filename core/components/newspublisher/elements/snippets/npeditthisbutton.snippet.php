@@ -117,7 +117,7 @@ if (empty($npId)) {
 $modx->setPlaceholder('np_id', $npId);
 
 /* check permissions on current page */
-if (! ($modx->hasPermission('edit_document') && $this->resource->checkPolicy('edit') ) ) {
+if (! ($modx->hasPermission('edit_document') && $modx->resource->checkPolicy('edit') ) ) {
     if (! $modx->hasPermission('edit_document') ){
         $defaultButtonCaption = $modx->lexicon('np_no_edit_document_permission');
     } else {
