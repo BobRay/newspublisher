@@ -1290,7 +1290,7 @@ class Newspublisher {
         if (! ($this->modx->hasPermission('save_document') && $this->resource->checkPolicy('save'))) {
             if (! $this->modx->hasPermission('save_document') ) {
                 $this->setError($this->modx->lexicon('np_save_permission_denied'));
-            }
+            } else {}
             if (!$this->resource->checkPolicy('save') ) {
                 $this->setError($this->modx->lexicon('np_save_this_permission_denied'));
             }
