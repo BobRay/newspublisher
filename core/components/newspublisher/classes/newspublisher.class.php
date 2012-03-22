@@ -1271,7 +1271,7 @@ class Newspublisher {
         } else {
             $PHs['[[+npx.class]]'] = $noRTE_class;
         }
-        return $this->strReplaceAssoc($PHs, $this->getTpl('TextareaTpl'));
+        return $this->strReplaceAssoc($PHs, $this->getTpl('TextAreaTpl'));
     }
 
 

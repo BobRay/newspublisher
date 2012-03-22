@@ -1,5 +1,9 @@
 Changelog for NewsPublisher
 
+NewsPublisher 1.3.0-rc2
+-----------------------
+Fixed bug with name of TextArea Tpl chunk
+
 NewsPublisher 1.3.0-rc1
 -----------------------
 Better error messages
