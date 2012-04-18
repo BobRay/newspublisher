@@ -30,7 +30,7 @@
  *
  * @property np_id (int) - ID of newspublisher page (set automatically on first run).
  * @property np_edit_id (int) - ID of resource to be edited
- * @property noShow (string)- Comma-separated list of IDs of documents
+ * @property noShow (string) - Comma-separated list of IDs of documents
  *      on which the button should not be displayed. Defaults to
  *      home page, and NewsPublisher page.
  * @property bottom (optional) - distance from bottom of window to place
@@ -117,7 +117,7 @@ if (empty($npId)) {
 $modx->setPlaceholder('np_id', $npId);
 
 /* check permissions on current page */
-if (! ($modx->hasPermission('edit_document') ) ) {
+if (!$modx->hasPermission('edit_document')) {
     $defaultButtonCaption = $modx->lexicon('np_no_edit_document_permission');
 }
 

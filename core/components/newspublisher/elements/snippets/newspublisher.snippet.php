@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NewsPublisher
  * Copyright 2011 Bob Ray
@@ -216,4 +217,3 @@ if ($isPostBack) {
 } else { /* just return the form */
     return $formTpl;
 }
-?>

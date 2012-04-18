@@ -3,7 +3,7 @@
 /**
  * NewsPublisher
  *
- * Copyright 2011 Bob Ray
+ * Copyright 2012 Bob Ray
  *
  * @author Bob Ray <http://bobsguides.com>
  * @author Raymond Irving
