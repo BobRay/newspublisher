@@ -570,11 +570,13 @@ class Newspublisher {
         $resourceFieldNames = array_keys($this->modx->getFields('modResource'));
 
         /* set captions from properties (if any) */
-        $captionSettings = explode(',',$this->props['captions']);
-        if (!empty($captionSettings)) {
-            foreach ($captionSettings as $captionSetting) {
-                $pair = explode(':', $captionSetting, 2);
-                $this->captions[trim($pair[0])] = trim($pair[1]);
+        if (! empty($this->props['captions'])) {
+            $captionSettings = explode(',',$this->props['captions']);
+            if (!empty($captionSettings)) {
+                foreach ($captionSettings as $captionSetting) {
+                    $pair = explode(':', $captionSetting, 2);
+                    $this->captions[trim($pair[0])] = trim($pair[1]);
+                }
             }
         }
 
@@ -1008,7 +1010,7 @@ class Newspublisher {
         $formTpl = $this->strReplaceAssoc($replace, $formTpl);
 
         /* Add TV to required fields if blank values are not allowed */
-        if ($params['allowBlank'] == 'false') $this->props['required'] .= ',' . $name;
+        if (isset($params['allowBlank']) && ($params['allowBlank'] == 'false')) $this->props['required'] .= ',' . $name;
         
         return $formTpl;
     }
@@ -1060,40 +1062,40 @@ class Newspublisher {
               $s = '';
             }
             $this->modx->toPlaceholder($name, $s, $this->prefix);
-          }
+        }
           
-          /* Set disabled dates */
-          
-          $disabled = '';
-          if ($options['disabledDates']) {
-              $disabled .= 'disabledDates:{';
-              foreach (explode(',', $options['disabledDates']) as $d) {
-                  $disabled .= '"';
-                  $d = str_replace('-', '', $d);
-                  $d = str_replace('.', '*', $d);
-                  if (! (strpos($d, '^') === false)) {
-                      $d = str_replace('^',  str_repeat('*', 9 - strlen($d)), $d);
-                  }
-                  $disabled .= $d . '":1,';
+      /* Set disabled dates */
+
+      $disabled = '';
+      if (isset($options['disabledDates']) && $options['disabledDates']) {
+          $disabled .= 'disabledDates:{';
+          foreach (explode(',', $options['disabledDates']) as $d) {
+              $disabled .= '"';
+              $d = str_replace('-', '', $d);
+              $d = str_replace('.', '*', $d);
+              if (! (strpos($d, '^') === false)) {
+                  $d = str_replace('^',  str_repeat('*', 9 - strlen($d)), $d);
               }
-              $disabled .= '},';
+              $disabled .= $d . '":1,';
           }
-          if ($options['disabledDays']) {
-              $disabled .= 'disabledDays:[';
-              $days = explode(',', $options['disabledDays']);
-              for ($day = 1; $day <= 7; $day++) {
-                  $disabled .= (in_array($day, $days) ? 1 : 0) . ',';
-              }
-              $disabled .= '],';
+          $disabled .= '},';
+      }
+      if (isset($options['disabledDays']) && $options['disabledDays']) {
+          $disabled .= 'disabledDays:[';
+          $days = explode(',', $options['disabledDays']);
+          for ($day = 1; $day <= 7; $day++) {
+              $disabled .= (in_array($day, $days) ? 1 : 0) . ',';
           }
-          if ($options['minDateValue']) {
-              $disabled .= 'rangeLow:"' . str_replace('-', '', $options['minDateValue']) . '",';
-          }
-          if ($options['maxDateValue']) {
-              $disabled .= 'rangeHigh:"' . str_replace('-', '', $options['maxDateValue']) . '",';
-          }
-          
-          $PHs = array('[[+npx.disabledDates]]' => $disabled);
+          $disabled .= '],';
+      }
+      if (isset($options['minDateValue']) && $options['minDateValue']) {
+          $disabled .= 'rangeLow:"' . str_replace('-', '', $options['minDateValue']) . '",';
+      }
+      if (isset($options['maxDateValue']) && $options['maxDateValue']) {
+          $disabled .= 'rangeHigh:"' . str_replace('-', '', $options['maxDateValue']) . '",';
+      }
+
+      $PHs = array('[[+npx.disabledDates]]' => $disabled);
 
         return $this->strReplaceAssoc($PHs, $this->getTpl('DateTpl'));
     }

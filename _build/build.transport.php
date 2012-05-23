@@ -33,6 +33,11 @@ $mtime = $mtime[1] + $mtime[0];
 $tstart = $mtime;
 set_time_limit(0);
 
+define('MODX_BASE_URL','http://localhost/addons/');
+define('MODX_MANAGER_URL','http://localhost/addons/manager/');
+define('MODX_ASSETS_URL','http://localhost/addons/assets/');
+define('MODX_CONNECTORS_URL','http://localhost/addons/connectors/');
+
 /* define sources */
 $root = dirname(dirname(__FILE__)) . '/';
 $sources= array (
@@ -68,6 +73,7 @@ $builder->registerNamespace('newspublisher',false,true,'{core_path}components/ne
 /* create snippet objects */
 
 /* create category */
+/* @var $category modCategory */
 $category= $modx->newObject('modCategory');
 $category->set('id',1);
 $category->set('category','NewsPublisher');
