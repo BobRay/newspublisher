@@ -1318,7 +1318,7 @@ class Newspublisher {
 
         /* correct timestamp resource fields */
         foreach ($_POST as $field => $val) {
-            if ($this->resource->_fieldMeta[$field]['phptype'] == 'timestamp') {
+            if (isset($this->resource->_fieldMeta[$field]) && $this->resource->_fieldMeta[$field]['phptype'] == 'timestamp') {
                 if (empty($_POST[$field])) {
                     unset($_POST[$field]);
                 } else {
