@@ -4,10 +4,14 @@ div.newspublisher {
     padding: 2em 10em 4em 10em;
     background-color:#eeeeee;
 }
-
+/* keeps Tiny toolbar from getting messed up */
+table {
+ margin: 0 !important;
+ padding: 0 !important;
+}
 div.newspublisher form {
     margin: 0;
-    padding:20px 0px 10px 0px;
+    padding:20px 0 10px 0;
 }
 textarea#np-content {
     width:95%;
@@ -22,7 +26,7 @@ textarea#np-introtext {
 div.newspublisher label.fieldlabel {
     width: 10em;
     text-align: left;
-    margin: 12px 5px 3px 0px;
+    margin: 12px 5px 3px 0;
     padding:0;
     display: block;
     font-weight: bold;
@@ -38,12 +42,12 @@ div.np-date-hints {
     padding:0;
 }
 span.np-date-hint {
-    margin: 1px 0px 3px 0px !important;
-    padding: 0px;
+    margin: 1px 0 3px 0 !important;
+    padding: 0;
 }
 span.np-time-hint {
     margin: 1px 120px 3px 110px !important;
-    padding: 0px;
+    padding: 0;
 }
 
 div.newspublisher textarea.textarea {
@@ -103,7 +107,7 @@ div.newspublisher span.option {
 }
 div.newspublisher legend {
    font-weight: bold;
-   padding:0px 6px 0px 6px;
+   padding:0 6px 0 6px;
 }
 div.newspublisher input {
     font-family: arial, sans-serif;
@@ -120,14 +124,14 @@ span.errormessage {
     color:red;
     font-weight: bold;
     display:block;
-    margin:5px 0px 5px 0px;
+    margin:5px 0 5px 0;
     padding:0;
 }
 span.fielderrormessage {
     color:red;
     font-weight: bold;
     display:block;
-    margin:20px 0px 0px 0px;
+    margin:20px 0 0 0;
     padding:0;
 }
 div.newspublisher input.submit {
@@ -161,7 +165,7 @@ div.newspublisher input.radio {
 div.newspublisher fieldset {
      display: block;
     padding:5px 5px 10px 10px;
-    margin:10px 0px 0px 0px;
+    margin:10px 0 0 0;
     background-color:white;
 }
 div.newspublisher fieldset p {
