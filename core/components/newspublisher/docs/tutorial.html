@@ -55,7 +55,7 @@ When you preview the document, you should see a basic resource editing form. If 
         &rtsummary=`1`
         &parentid=`12`
         &published=`1`
-        &captions=`content:introtext:Summary,description:Give a brief description`
+        &captions=`content:Enter Post,introtext:Summary,description:Give a brief description`
     ]]
 
 </fixedpre></pre>
@@ -90,7 +90,7 @@ When you preview the document, you should see a basic resource editing form. If 
 
 <h3>Editing Existing Resources</h3>
 
-<p>To edit existing resources, simply place a tag for the NpEditThisButton snippet anywhere in the <fixedpre><body></fixedpre> section of your template(s). The button is positioned absolutely in the lower right section of the page. The <fixedpre>&right</fixedpre> property controls the distance from the right side of the page and the <fixedpre>&bottom</fixedpre> property controls the distance from the bottom. The default for these properties is `20%`. Like NewsPublisher, the button also responds to security permissions and is not shown on pages the user has no right to edit or save. It also does not show on the NewsPublisher page or the home page. If there are other pages where you would like to hide it, you can include a comma-delimited list of their IDs in the <fixedpre>&noShow</fixedpre> property.</p>
+<p>To edit existing resources, simply place a tag for the NpEditThisButton snippet anywhere in the <fixedpre><body></fixedpre> section of your template(s) or in the Resource Content field of a Resource. The button is positioned absolutely in the lower right section of the page. The <fixedpre>&right</fixedpre> property controls the distance from the right side of the page and the <fixedpre>&bottom</fixedpre> property controls the distance from the bottom. The default for these properties is `20%`. Like NewsPublisher, the button also responds to security permissions and is not shown on pages the user has no right to edit or save. It also does not show on the NewsPublisher page or the home page. If there are other pages where you would like to hide it, you can include a comma-delimited list of their IDs in the <fixedpre>&noShow</fixedpre> property.</p>
 
 <p>Because the button will be hidden until you get the permissions correct, it's recommended that you start with the button tag like this:</p>
 <p><fixedpre>[[!NpEditThisButton? &debug=`1`]]</fixedpre></p>
