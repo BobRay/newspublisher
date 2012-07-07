@@ -292,7 +292,7 @@ class Newspublisher {
                         $ph = $this->resource->toArray();
                         $fs = array();
                         foreach($ph as $k=>$v) {
-                            if (strstr($v, '[[') && ! $this->modx->hasPermission('allow_modx_tags')) {
+                            if (! is_array($v) && strstr($v, '[[') && ! $this->modx->hasPermission('allow_modx_tags')) {
                                 $this->setError($this->modx->lexicon('np_no_modx_tags'));
                                 return;
                             }
@@ -393,7 +393,7 @@ class Newspublisher {
                     $tinyproperties['cleanup'] = true; /* prevents "bogus" bug */
                     $tinyproperties['width'] = empty ($this->props['tinywidth'] )? '95%' : $this->props['tinywidth'];
                     $tinyproperties['height'] = empty ($this->props['tinyheight'])? '400px' : $this->props['tinyheight'];
-
+                    
                     $tiny->setProperties($tinyproperties);
                     $tiny->initialize();
 
@@ -641,6 +641,7 @@ class Newspublisher {
                 else $class_key = isset($_POST['class_key']) ? $_POST['class_key'] : 'modDocument';
 
                 switch ($class_key) {
+                    case 'Article':
                     case 'modDocument':
                         $rows =  ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
                         $cols =  ! empty($this->props['contentcols'])? $this->props['contentcols'] : '60';
@@ -680,7 +681,7 @@ class Newspublisher {
 
             case 'class_key':
                 $options = array();
-                $classes = array('modDocument' => 'document', 'modSymLink' => 'symlink', 'modWebLink' => 'weblink', 'modStaticResource' => 'static_resource');
+                $classes = array('modDocument' => 'document', 'Article' => 'Article', 'modSymLink' => 'symlink', 'modWebLink' => 'weblink', 'modStaticResource' => 'static_resource');
                 foreach ($classes as $k => $v) $options[$k] = $this->modx->lexicon($v);
                 $inner .= $this->_displayList($field, 'listbox', $options, $this->resource->get('class_key'));
                 break;
