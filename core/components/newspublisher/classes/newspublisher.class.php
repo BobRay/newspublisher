@@ -393,7 +393,7 @@ class Newspublisher {
                     $tinyproperties['cleanup'] = true; /* prevents "bogus" bug */
                     $tinyproperties['width'] = empty ($this->props['tinywidth'] )? '95%' : $this->props['tinywidth'];
                     $tinyproperties['height'] = empty ($this->props['tinyheight'])? '400px' : $this->props['tinyheight'];
-                    
+                   $tinyproperties['resource'] = $this->resource;
                     $tiny->setProperties($tinyproperties);
                     $tiny->initialize();
 
