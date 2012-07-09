@@ -201,6 +201,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p><fixedpre>&language</fixedpre> &mdash; (string) language to use for form; defaults to Manager language.</p>
 
+<p><fixedpre>&classkey</fixedpre> &mdash; (string) Class key for new documents; only necessary if you have subclasses the resource object for a custom resource class or are editing Articles blog posts.</p>
 
 <h3>Multiple NewsPublisher Pages</h3>
 
@@ -218,6 +219,23 @@ In debug mode, the button will always show, and if it would normally be hidden, 
    [[+introtext]] . . . [[!NpEditThisButton? &np_edit_id=`[[+id]]`]]
 </div>
 </fixedpre></pre>
+
+
+<h3>NewsPublisher and Articles</h3>
+
+<p>As of version 1.4.0, NewsPublisher can be used to edit Articles blog posts in the front end. You can put the <fixedpre>[[!NpEditThisButton]]</fixedpre> tag in your blog post template and the <fixedpre>Edit</fixedpre> button will show up on the blog page. You will not be able to edit comments in NewsPublisher.</p>
+
+<p>Important: If you will be using NewsPublisher for Articles, be sure to set all of the following properties in the NewsPublisher tag:</p>
+<ul>
+    <li><fixedpre>&parentid</fixedpre> &mdash; The ID of the Articles container</li>
+    <li><fixedpre>&template</fixedpre> &mdash; The ID of the blog post template</li>
+    <li><fixedpre>&classkey</fixedpre> &mdash; `Articles`</li>
+    <li><fixedpre>&hidemenu</fixedpre> &mdash; `1`</li>
+</ul>
+
+<p>Remember that all the resources you create with this NewsPublisher tag will be blog posts. If you want to also create regular resources, you'll need another NewsPublisher page with its own tag and you'll need to use a different <fixedpre>&np_id</fixedpre> value in the NpEditThisButton tag in the different templates so the button will redirect to the correct NewsPublisher page.</p>
+
+<p>NewsPublisher should also work with other Custom Resource Classes as long as they are implemented properly, but I haven't had an opportunity to test it with anything but Articles.</p>
 
 <h3>Bugs, Feature Requests, and Questions</h3>
 
