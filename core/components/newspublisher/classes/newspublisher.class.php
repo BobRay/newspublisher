@@ -686,7 +686,7 @@ class Newspublisher {
             case 'class_key':
                 $options = array();
                 $classes = ($this->classKey != 'modDocument')? array($this->classKey => $this->classKey) : array();
-                $classes = array_merge($classes, array('modDocument' => 'document', 'Article' => 'Article', 'modSymLink' => 'symlink', 'modWebLink' => 'weblink', 'modStaticResource' => 'static_resource'));
+                $classes = array_merge($classes, array('modDocument' => 'document', 'modSymLink' => 'symlink', 'modWebLink' => 'weblink', 'modStaticResource' => 'static_resource'));
 
                 foreach ($classes as $k => $v) $options[$k] = $this->modx->lexicon($v);
                 $inner .= $this->_displayList($field, 'listbox', $options, $this->resource->get('class_key'));
