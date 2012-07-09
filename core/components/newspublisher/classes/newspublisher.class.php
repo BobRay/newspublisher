@@ -66,6 +66,8 @@ class Newspublisher {
      * @var $resource modResource The current resource
      */
     protected $resource;
+    /** @var $classKey string class of the resource */
+    protected $classKey;
     /**
      * @var int ID of the resource's parent
      */
@@ -235,6 +237,8 @@ class Newspublisher {
                     $this->modx->lexicon->load($language . ':newspublisher:default');
                     break;
             }
+            $this->classKey = (! isset($this->props['classkey'])) || empty($this->props['classkey'])? 'modDocument' : $this->props['classkey'];
+
                        /* inject NP CSS file */
            /* Empty but sent parameter means use no CSS file at all */
 
@@ -318,7 +322,7 @@ class Newspublisher {
                     $this->setError($this->modx->lexicon('np_create_permission_denied'));
                     return;
                 }
-                $this->resource = $this->modx->newObject('modResource');
+                $this->resource = $this->modx->newObject($this->classKey);
                 /* get folder id where we should store articles
                  else store under current document */
                  $this->parentId = !empty($this->props['parentid']) ? intval($this->props['parentid']):$this->modx->resource->get('id');
@@ -567,7 +571,7 @@ class Newspublisher {
         }
 
         /* get the resource field names */
-        $resourceFieldNames = array_keys($this->modx->getFields('modResource'));
+        $resourceFieldNames = array_keys($this->modx->getFields($this->classKey));
 
         /* set captions from properties (if any) */
         if (! empty($this->props['captions'])) {
@@ -641,7 +645,7 @@ class Newspublisher {
                 else $class_key = isset($_POST['class_key']) ? $_POST['class_key'] : 'modDocument';
 
                 switch ($class_key) {
-                    case 'Article':
+                    default:
                     case 'modDocument':
                         $rows =  ! empty($this->props['contentrows'])? $this->props['contentrows'] : '10';
                         $cols =  ! empty($this->props['contentcols'])? $this->props['contentcols'] : '60';
@@ -681,7 +685,9 @@ class Newspublisher {
 
             case 'class_key':
                 $options = array();
-                $classes = array('modDocument' => 'document', 'Article' => 'Article', 'modSymLink' => 'symlink', 'modWebLink' => 'weblink', 'modStaticResource' => 'static_resource');
+                $classes = ($this->classKey != 'modDocument')? array($this->classKey => $this->classKey) : array();
+                $classes = array_merge($classes, array('modDocument' => 'document', 'Article' => 'Article', 'modSymLink' => 'symlink', 'modWebLink' => 'weblink', 'modStaticResource' => 'static_resource'));
+
                 foreach ($classes as $k => $v) $options[$k] = $this->modx->lexicon($v);
                 $inner .= $this->_displayList($field, 'listbox', $options, $this->resource->get('class_key'));
                 break;
@@ -696,7 +702,7 @@ class Newspublisher {
             case 'uri_override': /* correct schema errors */
             case 'hidemenu':
                 $fieldType = 'boolean';
-                
+            /* intentional fall through */
             default:
                 switch($fieldType) {
                     case 'string':
@@ -1432,7 +1438,7 @@ class Newspublisher {
         if ($this->existing) {
             $response = $this->modx->runProcessor('resource/update', $fields);
         } else {
-            $response = $this->modx->runProcessor('resource/create', $fields);
+                $response = $this->modx->runProcessor('resource/create', $fields);
         }
         /* @var $response modProcessorResponse */
         if ($response->isError()) {
