@@ -4,7 +4,7 @@
         [[!+np.errors_presubmit:ifnotempty=`[[!+np.errors_presubmit]]`]]
         [[!+np.errors_submit:ifnotempty=`[[!+np.errors_submit]]`]]
         [[!+np.errors:ifnotempty=`[[!+np.errors]]`]]
-  <form action="[[~[[*id]]]]" method="post">
+  <form id = "newspublisher" action="[[~[[*id]]]]" method="post">
             <input name="hidSubmit" type="hidden" id="hidSubmit" value="true" />
         [[+npx.insert]]
          <span class = "buttons">

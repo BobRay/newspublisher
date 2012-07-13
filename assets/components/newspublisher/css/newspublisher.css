@@ -203,3 +203,86 @@ fieldset.np-textbox {
 fieldset.np-email {
    width:10em;
 }
+/* NewsPublisher Tabs CSS */
+
+.hidden{
+  display:none !important;
+}
+
+#options {
+    padding-bottom: 2em !important;
+}
+#options h3 {
+    font-size: 15px;
+    margin-bottom: 0.2em;
+}
+#options h4 {
+    font-weight: bold;
+}
+#options ul {
+    list-style: none outside none;
+    margin: 0;
+}
+#options ul ul {
+    margin-left: 1.5em;
+}
+#options li {
+    float: left;
+    margin-bottom: 0.2em;
+}
+#options li a {
+    background-color: #DDDDDD;
+    background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+    color: #222222;
+    display: block;
+    font-weight: bold;
+    padding: 0.4em 0.5em;
+    text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+}
+#options li a:hover, #options li a.filterSelected {
+    background-color: #55BBFF;
+}
+#options li a:active {
+    background-color: #3399DD;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) inset;
+}
+#options li a {
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+#options li:first-child a {
+    border-left: medium none;
+    border-radius: 7px 0 0 7px;
+}
+#options li:last-child a {
+    border-radius: 0 7px 7px 0;
+}
+#options li a.selected {
+    background-color: #1133FF;
+    color: white;
+    text-shadow: none;
+}
+#options .option-combo {
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+}
+#options .option-combo ul {
+    display: inline-block;
+    margin-right: 20px;
+}
+#options .option-combo h2, #options .option-combo h4 {
+    display: inline-block;
+    line-height: 34px;
+    margin-bottom: 0;
+    margin-right: 5px;
+    vertical-align: top;
+}
+
+#options a {
+  text-decoration: none;
+  font-size: 13px;
+}
+#options li {
+  margin-left: 0;
+}
