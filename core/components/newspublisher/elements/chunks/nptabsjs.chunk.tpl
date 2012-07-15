@@ -1,27 +1,22 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-    /* code by Gregor Šekoranja */
-   /* ****************************************
-    this could be wrapped into jquery plugin..
-   ******************************************* */
+    /* Original code by Gregor Šekoranja */
 
-  //chunk properties
-  var activeButton = '[[+activeButton]]'.toLowerCase();
+    /*chunk properties */
+    var activeButton = '[[+activeButton]]'.toLowerCase();
 
-  try {
-    var buttonsJsonStr = JSON.stringify([[+buttonsJson]]); //single or double quotes are allowed in buttonsJson property
+    /* JSON is validated in snippet */
+    var buttonsJsonStr = JSON.stringify([[+buttonsJson]]);
     var buttonsJson = (buttonsJsonStr) ? $.parseJSON(buttonsJsonStr) : null;
-  } catch (exception) {
-    buttonsJson = null;
-  }
 
 
-  //CONTINUE if JSON IS not null and IS object
+
+  /* CONTINUE if JSON IS not null and IS object */
   if ( (buttonsJson != null) && (typeof buttonsJson == 'object') ){
 
 
-    //html for filter buttons
+    /* html for filter buttons */
     var htmlButtons = '';
 
 
@@ -29,14 +24,14 @@ $(document).ready(function(){
      CLASSES AND IDS
     ************** */
 
-    //id for container of filter buttons
+    /* id for container of filter buttons */
     var filterId = 'filters';
 
-    //buttons classes
+    /* buttons classes */
     var buttonPrefixClass = 'btn-';
     var filterSelected = 'filterSelected';
 
-    //items classes
+    /* items classes */
     var filterItemClass = 'filter-item'; //items (having this class) to be shown or hide on filter button click
     var hiddenClass = 'hidden'; //hidden class
 
@@ -53,26 +48,26 @@ $(document).ready(function(){
 
 
     /* *************
-     the code :)
+     the code
     ************** */
 
-    //by default no filter button is selected
-    var jsonFieldsCount = 0; // used to determine if "Other" option is shown
+    /* by default no filter button is selected */
+    var jsonFieldsCount = 0; /* used to determine if "Other" option is shown */
     var hasFilterSelected = false;
 
     $.each(buttonsJson, function(buttonName, aFields) {
-       var buttonClass = buttonPrefixClass + buttonName; //this class is criteria for filtering items
+       var buttonClass = buttonPrefixClass + buttonName; /* criterion for filtering items */
        var aClass = '';
-       if (activeButton==buttonName.toLowerCase()){ //if button label matches to activeButton property :)
+       if (activeButton==buttonName.toLowerCase()){ /* if button label matches to activeButton property */
          aClass = filterSelected;
          hasFilterSelected = true;
        }
        htmlButtons += '<li style="padding:0;margin:0;"><a class="' +  aClass  + '" data-filter=".' + buttonClass + '" href="#">' + buttonName + '</a></li>';
        $.each(aFields, function(index, fieldName) {
-        //find that element by name (name can be fieldName or fieldName[])
+        /* find that element by name (name can be fieldName or fieldName[]) */
         var field = $('[name^="' + fieldName + '"]:last');
         if (field.length > 0){
-          //OK, got it
+          /* OK, got it */
           var parent = field;
           while ( parent.parent().get(0).nodeName.toLowerCase() != 'form') {
             parent = parent.parent();
@@ -81,17 +76,15 @@ $(document).ready(function(){
           jsonFieldsCount++;
           parent.addClass(filterItemClass);
           parent.addClass(buttonClass);
-          //console.log('class added to: ' + parent.attr('id'));
+          /* console.log('class added to: ' + parent.attr('id')); */
         } else {
-          //give up :( log it to console
-          //console.log('could not find the field with name: ' + fieldName);
+          /* warn user */
           alert('[[%np_could_not_find_tab_field]]' + fieldName);
         }
 
        });
     });
 
-    //we could use chunks here...:)
     htmlButtons =   '<section id="options" class="clearfix" style="padding:0;margin:0;">' +
                        '<ul id="' + filterId + '" style="padding:0px;margin:0px; margin-top:10px;">' +
                           htmlButtons +
@@ -104,7 +97,7 @@ $(document).ready(function(){
     /* insert filter buttons
     /******************************/
 
-    //insert filter buttons after insertAfterElement alement
+    /* insert filter buttons after insertAfterElement element */
     $(htmlButtons).insertAfter(insertAfterElement);
 
     /* ****************************
@@ -112,24 +105,25 @@ $(document).ready(function(){
     /******************************/
 
     var filterItems = form.find('.' + filterItemClass);
-    //console.log('filter-items length: ' + filterItems.length);
-    //console.log(filterItems);
+    /* console.log('filter-items length: ' + filterItems.length);
+    console.log(filterItems); */
 
-    var formChildren = form.children().not(excludeItems); //all form children (buttonJson might not have all from elements included)
+    /* all form children (tabs property might not have all from elements included) */
+    var formChildren = form.children().not(excludeItems);
 
     var filters_a = $('#' + filterId + ' a');
     filters_a.click(function(){
       var selector = $(this).data('filter');
       console.log(selector);
 
-      if (selector == '*') { //show all
+      if (selector == '*') { /* Show All */
           formChildren.removeClass('hidden');
       }
-      else if (selector == '!*') { //uncategorized/other
+      else if (selector == '!*') { /* uncategorized/other tab */
         formChildren.addClass(hiddenClass);
         formChildren.not('.' + filterItemClass).removeClass(hiddenClass);
       }
-      else { //custom button /class
+      else { /* custom button /class */
         formChildren.addClass(hiddenClass);
         formChildren.filter(selector).removeClass(hiddenClass);
       }
@@ -138,12 +132,12 @@ $(document).ready(function(){
       $(this).addClass(filterSelected);
       return false;
     });
-    //hide "Other" btn if no need to show it
-    //alert ('Children: ' + formChildren.length + ' --- FieldsCount: '  + jsonFieldsCount);
+    /* hide "Other" btn if no need to show it */
+    /* alert ('Children: ' + formChildren.length + ' --- FieldsCount: '  + jsonFieldsCount); */
      if (formChildren.length == jsonFieldsCount){
         $('#other-filter').addClass('hidden');
 }
-    //trigger click on active button
+    /* trigger click on active button */
     if (hasFilterSelected){
       filters_a.filter('.' + filterSelected).eq(0).trigger('click');
     }
@@ -155,4 +149,3 @@ $(document).ready(function(){
 
 });
 </script>
-
