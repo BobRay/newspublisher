@@ -109,6 +109,38 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 <p>If you feel you must, you can alter the Tpl chunks for any of the field types. Again, you should duplicate the existing chunk and put the name of your duplicate in the appropriate property. Be careful not to change the prefixes of any of the placeholders, even if you specify a custom prefix for the form as a property. The prefixes will be altered automatically by the snippet. Note that there are both np. and npx. prefixes. The npx. prefixes are used internally by the snippet, the np. prefixes are usually in the value field of the element and will be set via placeholders.
 </p>
 
+<h3>NewsPublisher Tabs</h3>
+<p>As of NewsPublisher 1.5.0, you can show the Resource fields on separate tabs like in the Manager. The tabs and fields can be in any order and any field can go on any tab. You can have as many tabs as you want.</p>
+
+<p>Set <fixedpre>&usetabs=`1`</fixedpre> in the NewsPublisher snippet tag and include a <fixedpre>&tabs</fixedpre> property in the following form:</p>
+
+<pre><fixedpre>
+&tabs=`{
+    "Main" :    ["pagetitle","introtext","content"],
+    "Dates" :   ["pub_date", "unpub_date"],
+    "Publish" : ["publish"],
+    "TVs" :     ["MyTv1","MyTv2"]
+}`
+</fixedpre></pre>
+
+<p>Be very careful when entering the tabs. The whitespace is ignored (it could be all on one line), but the format is very particular. You will get an error message if the format is wrong. Here are some guidelines:</p>
+<ul>
+    <li>You must use double quotes</li>
+    <li>The tab names go on the left</li>
+    <li>The fields to show on each tab go on the right</li>
+    <li>The tab names and field names must be separated by a colon</li>
+    <li>All the field names must be in the <fixedpre>&show</fixedpre> property</li>
+    <li>Every tab name and field name must be enclosed in double quotes</li>
+    <li>The field list must be enclosed in square brackets</li>
+    <li>The Field names must be separated by commas (but no comma inside the brackets at the end of the list)</li>
+    <li>All the tab lines <b>except</b> the last one must end with a comma</li>
+    <li>The whole list must be surrounded by curly braces inside of back-ticks (<fixedpre>`{ }`</fixedpre>)</li>
+
+
+</ul>
+
+<p>The Tab names are on the left and you can use any names you like and as many or as few tabs as you need. Newspublisher will add a &quot;Show All&quot; button that will show all fields at once. If you include a field that is not in the <fixedpre>&show</fixedpre> property, you'll see an error message telling you that the tab field can't be found. If there is a field in the <fixedpre>&show</fixedpre> property that is not in your <fixedpre>&tabs</fixedpre> list, it will go on the &quot;Other&quot; tab (which will not be shown if all the fields are accounted for).</p>
+
 <h3>Configuring NewsPublisher</h3>
 <p>NewsPublisher has many options, but almost all of them are optional. You can see the list by editing the NewsPublisher snippet and clicking on the Properties tab. Unlock the default properties by clicking on the &quot;Default Properties Locked&quot; button. Then, click the little plus sign next to a property to see what it does. It is <b>strongly</b> recommended that you not change the default properties. Either put properties in the snippet tag to override them, or create a property set by clicking on the &quot;Add Property Set&quot; button and specify it in the snippet tag like this:</p>
 
@@ -203,6 +235,14 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p><fixedpre>&classkey</fixedpre> &mdash; (string) Class key for new documents; only necessary if you have subclasses the resource object for a custom resource class or are editing Articles blog posts.</p>
 
+<p><fixedpre>&usetabs</fixedpre> &mdash; (0/1) If set, displays the fields on separate tabs.</p>
+<p><fixedpre>&tabs</fixedpre> &mdash; (JSON string - required if <fixedpre>&usetabs</fixedpre> is set) JSON string specifying which fields go on which tabs. Unlisted fields will go on the &quot;Other&quot; tab; See the example above.</p>
+
+<p><fixedpre>&activetabs</fixedpre> &mdash; (string - optional) If set, determines the tab shown when the form is loaded; if left out, all tabs are shown.</p>
+
+
+
+
 <h3>Multiple NewsPublisher Pages</h3>
 
 <p>If you would like to have different NewsPublisher pages with different fields and settings, create a separate page for each one with a different snippet tag on each page. The NpEditThisButton, by default launches the page specified in its <fixedpre>&np_id</fixedpre> property. If you use the following snippet tag for the button, you can have it launch the appropriate NewsPublisher page by creating a TV for each page called NpId and setting the correct NewsPublisher page ID in it:</p>
@@ -211,7 +251,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <h3>NewsPublisher and getResources</h3>
 
-<p>As of NewsPublisher 1.2.0, you can put the edit button tag in the getResources Tpl chunk and have and edit button for each resource retrieved using the np_edit_id property. You can also hard-code a page with multiple NpEditThisButton tags. To use this technique with getResources, remove any NpEditThisButton tags from the page template and create a Tpl chunk something like this:</p>
+<p>As of NewsPublisher 1.2.0, you can put the edit button tag in the getResources Tpl chunk and have an edit button for each resource retrieved using the np_edit_id property. You can also hard-code a page with multiple NpEditThisButton tags. To use this technique with getResources, remove any NpEditThisButton tags from the page template and create a Tpl chunk something like this:</p>
 
 <pre><fixedpre>
 <div class="MyItem">
@@ -220,6 +260,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 </div>
 </fixedpre></pre>
 
+<p>This is handy if you'd like to present a list of resources that the user might want to edit with NewsPublisher.</p>
 
 <h3>NewsPublisher and Articles</h3>
 
