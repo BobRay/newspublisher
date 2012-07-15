@@ -30,7 +30,7 @@
  * /
 
 /*
-  @version Version 1.3.0-rc1
+
   Modified: July 10, 2011
 
    NOTE: You may need the latest version of TinyMCE for rich text editing.
@@ -93,6 +93,9 @@
     @property intmaxlength- (optional) Max length for integer input fields; default: 10
     @property textmaxlength- (optional) Max length for text input fields; default 60
     @property hoverhelp    - (optional) Show help when hovering over field caption: default `1`
+    @property usetabs  - (optional) show the fields on separate tabs
+    @property tabs - (required if usetabs is set); JSON string with the tab specifications
+    @property activetab - (optional) Tab to display when form is shown; if missing, all tabs will show
 
 */
 
