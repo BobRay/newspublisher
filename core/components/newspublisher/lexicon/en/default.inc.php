@@ -122,3 +122,7 @@ $_lang['resource_privateweb'] =  'Private Web';
 $_lang['resource_privateweb_help'] =  'Deprecated.';
 $_lang['resource_privatemgr'] =  'Private Manager';
 $_lang['resource_privatemgr_help'] =  'Deprecated.';
+
+/* error messages for NP tabs */
+$_lang['np_could_not_find_tab_field'] = 'Could not find tab field: ';
+$_lang['np_invalid_tabs'] = 'npTabs property is invalid or empty, NewsPublisher tabs will not be generated!';

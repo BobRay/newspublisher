@@ -587,7 +587,7 @@ class Newspublisher {
         }
         if ($this->useTabs) {
             if (! json_decode($this->tabs)) {
-                $this->setError('np_bad_json');
+                $this->setError($this->modx->lexicon('np_invalid_tabs'));
                 return $this->getTpl('OuterTpl');
 
             } else {

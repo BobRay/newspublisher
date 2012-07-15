@@ -16,7 +16,7 @@ $(document).ready(function(){
     buttonsJson = null;
   }
 
-  // console.log(buttonsJson, 'buttonsJson');
+
   //CONTINUE if JSON IS not null and IS object
   if ( (buttonsJson != null) && (typeof buttonsJson == 'object') ){
 
@@ -85,7 +85,7 @@ $(document).ready(function(){
         } else {
           //give up :( log it to console
           //console.log('could not find the field with name: ' + fieldName);
-          alert('Could not find the field with name: ' + fieldName);
+          alert('[[%np_could_not_find_tab_field]]' + fieldName);
         }
 
        });
@@ -150,8 +150,7 @@ $(document).ready(function(){
     }
 
   } else {
-      alert('buttonsJson is invalid or null, NewsPublisher tabs will not be generated!');
-      //console.log('buttonsJson is invalid or null, filter buttons will not be generated!');
+      alert('[[%np_invalid_tabs]]');
   }
 
 
