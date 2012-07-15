@@ -3,7 +3,6 @@ $(document).ready(function(){
 
     /* Original code by Gregor Šekoranja */
 
-    /*chunk properties */
     var activeButton = '[[+activeButton]]'.toLowerCase();
 
     /* JSON is validated in snippet */
@@ -31,9 +30,10 @@ $(document).ready(function(){
     var buttonPrefixClass = 'btn-';
     var filterSelected = 'filterSelected';
 
-    /* items classes */
-    var filterItemClass = 'filter-item'; //items (having this class) to be shown or hide on filter button click
-    var hiddenClass = 'hidden'; //hidden class
+    /* items classes
+       items (having this class) to be shown or hide on filter button click */
+    var filterItemClass = 'filter-item';
+    var hiddenClass = 'hidden'; /* hidden class */
 
 
     /* *************
