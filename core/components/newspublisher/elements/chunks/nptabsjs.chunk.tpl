@@ -95,9 +95,8 @@ $(document).ready(function(){
     htmlButtons =   '<section id="options" class="clearfix" style="padding:0;margin:0;">' +
                        '<ul id="' + filterId + '" style="padding:0px;margin:0px; margin-top:10px;">' +
                           htmlButtons +
-                    '<li id="other-filter" style="padding:0px;margin:0px;"><a data-filter="!*" href="#">Other</a></li>' +
-                          /*'<li style="padding:0;margin:0;"><a data-filter="!*" href="#">Other</a></li>' +*/
-                          '<li style="padding:0;margin:0;"><a data-filter="*" href="#" class="' + (hasFilterSelected ? '' : filterSelected) + '">Show All</a></li>' +
+                    '<li id="other-filter" style="padding:0px;margin:0px;"><a data-filter="!*" href="#">[[%np_tabs_other]]</a></li>' +
+                    '<li style="padding:0;margin:0;"><a data-filter="*" href="#" class="' + (hasFilterSelected ? '' : filterSelected) + '">[[%np_tabs_show_all]]</a></li>' +
                         '</ul>' +
                     '</section>';
 
