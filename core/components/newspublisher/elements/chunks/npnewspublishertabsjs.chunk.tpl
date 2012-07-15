@@ -1,6 +1,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
+    /* code by Gregor Šekoranja */
    /* ****************************************
     this could be wrapped into jquery plugin..
    ******************************************* */
@@ -15,7 +16,7 @@ $(document).ready(function(){
     buttonsJson = null;
   }
 
-  console.log(buttonsJson, 'buttonsJson');
+  // console.log(buttonsJson, 'buttonsJson');
   //CONTINUE if JSON IS not null and IS object
   if ( (buttonsJson != null) && (typeof buttonsJson == 'object') ){
 
@@ -43,10 +44,12 @@ $(document).ready(function(){
     /* *************
      JQ SELECTORS
     ************** */
-
-    var form = $('form#newspublisher'); //the main container - the NewsPublisher form
-    var excludeItems = $('.buttons'); //put selector here to exclude form hiding/showing elements
-    var insertAfterElement = $('h2').eq(0); //element after which buttons will be inserted
+    /* ignore NewsPublisher's own form inputs */
+    var excludeItems = $('.buttons, [name="np_existing"], [name="np_doc_id"], #hidSubmit');
+    /* the main container - the NewsPublisher form */
+    var form = $('form#newspublisherForm');
+     /* element after which buttons will be inserted */
+    var insertAfterElement = $('h2#newspublisherHeader').eq(0);
 
 
     /* *************
@@ -54,6 +57,7 @@ $(document).ready(function(){
     ************** */
 
     //by default no filter button is selected
+    var jsonFieldsCount = 0; // used to determine if "Other" option is shown
     var hasFilterSelected = false;
 
     $.each(buttonsJson, function(buttonName, aFields) {
@@ -72,13 +76,16 @@ $(document).ready(function(){
           var parent = field;
           while ( parent.parent().get(0).nodeName.toLowerCase() != 'form') {
             parent = parent.parent();
+
           }
+          jsonFieldsCount++;
           parent.addClass(filterItemClass);
           parent.addClass(buttonClass);
-          console.log('class added to: ' + parent.attr('id'));
-        }else{
+          //console.log('class added to: ' + parent.attr('id'));
+        } else {
           //give up :( log it to console
-          console.log('could not find the field with name: ' + fieldName);
+          //console.log('could not find the field with name: ' + fieldName);
+          alert('Could not find the field with name: ' + fieldName);
         }
 
        });
@@ -88,8 +95,9 @@ $(document).ready(function(){
     htmlButtons =   '<section id="options" class="clearfix" style="padding:0;margin:0;">' +
                        '<ul id="' + filterId + '" style="padding:0px;margin:0px; margin-top:10px;">' +
                           htmlButtons +
-                          '<li style="padding:0;margin:0;"><a data-filter="!*" href="#">OTHER</a></li>' +
-                          '<li style="padding:0;margin:0;"><a data-filter="*" href="#" class="' + (hasFilterSelected ? '' : filterSelected) + '">SHOW ALL</a></li>' +
+                    '<li id="other-filter" style="padding:0px;margin:0px;"><a data-filter="!*" href="#">Other</a></li>' +
+                          /*'<li style="padding:0;margin:0;"><a data-filter="!*" href="#">Other</a></li>' +*/
+                          '<li style="padding:0;margin:0;"><a data-filter="*" href="#" class="' + (hasFilterSelected ? '' : filterSelected) + '">Show All</a></li>' +
                         '</ul>' +
                     '</section>';
 
@@ -131,14 +139,19 @@ $(document).ready(function(){
       $(this).addClass(filterSelected);
       return false;
     });
-
+    //hide "Other" btn if no need to show it
+    //alert ('Children: ' + formChildren.length + ' --- FieldsCount: '  + jsonFieldsCount);
+     if (formChildren.length == jsonFieldsCount){
+        $('#other-filter').addClass('hidden');
+}
     //trigger click on active button
     if (hasFilterSelected){
       filters_a.filter('.' + filterSelected).eq(0).trigger('click');
     }
 
   } else {
-      console.log('buttonsJson is invalid or null, filter buttons will not be generated!');
+      alert('buttonsJson is invalid or null, NewsPublisher tabs will not be generated!');
+      //console.log('buttonsJson is invalid or null, filter buttons will not be generated!');
   }
 
 

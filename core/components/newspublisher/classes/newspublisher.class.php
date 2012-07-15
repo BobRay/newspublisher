@@ -174,9 +174,15 @@ class Newspublisher {
      */
     protected $textMaxlength;
     /**
-     * var $captions array (associative) of fieldnames:fieldcaptions
+     * @var $captions array (associative) array of fieldnames:fieldcaptions
      */
     protected $captions;
+    /** @var $useTabs boolean - create separate tabs */
+    protected $useTabs;
+    /** @var $tabs string - tab specification JSON string */
+        protected $tabs;
+    /** @var $activeTab string - tab to start on */
+        protected $activeTab;
 
 
     /** NewsPublisher constructor
@@ -237,6 +243,16 @@ class Newspublisher {
                     $this->modx->lexicon->load($language . ':newspublisher:default');
                     break;
             }
+
+            /* set tab properties */
+            $this->useTabs = isset($this->props['usetabs'])? ! empty($this->props['usetabs']) : false;
+            $this->tabs = isset($this->props['tabs'])? $this->props['tabs'] : null;
+            $this->activeTab = isset($this->props['activetab']) && !empty($this->props['activetab'])
+                ? $this->props['activetab']
+                : '';
+
+
+
             $this->classKey = (! isset($this->props['classkey'])) || empty($this->props['classkey'])? 'modDocument' : $this->props['classkey'];
 
                        /* inject NP CSS file */
@@ -555,10 +571,10 @@ class Newspublisher {
      * the necessary Tpls and calling _displayTv() for any TVs.
      *
      * @access public
-     * @param (string) $show - comma-separated list of fields and TVs
+     * @param $show string - comma-separated list of fields and TVs
      * (name or ID) to include in the form
      *
-     * @return (string) returns the finished form
+     * @return string -  returns the finished form
      */
     public function displayForm($show) {
 
@@ -569,6 +585,24 @@ class Newspublisher {
             $this->setError($this->modx->lexicon('np_no_resource'));
             return $this->getTpl('OuterTpl');
         }
+        if ($this->useTabs) {
+            if (! json_decode($this->tabs)) {
+                $this->setError('np_bad_json');
+                return $this->getTpl('OuterTpl');
+
+            } else {
+                $tabsJs = $this->modx->getChunk('npTabsJs', array(
+                    'activeButton' => $this->activeTab,
+                    'buttonsJson' => $this->tabs,
+                ));
+                $this->modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript');
+                $this->modx->regClientStartupScript($tabsJs);
+                unset($tabsJs);
+                //$this->setError('json_passed');
+            }
+
+        }
+
 
         /* get the resource field names */
         $resourceFieldNames = array_keys($this->modx->getFields($this->classKey));
