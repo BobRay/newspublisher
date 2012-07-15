@@ -155,5 +155,13 @@ $chunks[14]->fromArray(array(
     'properties' => '',
 ),'',true,true);
 
+$chunks[15]= $modx->newObject('modChunk');
+$chunks[15]->fromArray(array(
+    'id' => 15,
+    'name' => 'npTabsJsTpl',
+    'description' => 'Tpl chunk with JavaScript for NewsPublisher Tabs',
+    'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/nptabsjs.chunk.tpl'),
+    'properties' => '',
+),'',true,true);
 
 return $chunks;
