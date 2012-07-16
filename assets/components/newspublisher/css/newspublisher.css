@@ -210,7 +210,10 @@ fieldset.np-email {
 }
 
 #options {
-    padding-bottom: 2em !important;
+
+    margin:0;
+    padding:0 0 2em 0;
+
 }
 #options h3 {
     font-size: 15px;
@@ -221,18 +224,24 @@ fieldset.np-email {
 }
 #options ul {
     list-style: none outside none;
-    margin: 0;
+    margin: 10px 0 0 0;
+    padding: 0;
+
 }
-#options ul ul {
+/*#options ul ul {
     margin-left: 1.5em;
-}
+}*/
 #options li {
+    margin:0;
+    padding:0;
     float: left;
-    margin-bottom: 0.2em;
+    /* margin-bottom: 0.2em; */
 }
 #options li a {
     background-color: #DDDDDD;
-    background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+    /* background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0)); */
+    background-image: url("menubar-tall.png");
+    background-repeat: repeat-x;
     color: #222222;
     display: block;
     font-weight: bold;
@@ -281,8 +290,6 @@ fieldset.np-email {
 
 #options a {
   text-decoration: none;
-  font-size: 13px;
+  font-size: 18px;
 }
-#options li {
-  margin-left: 0;
-}
+

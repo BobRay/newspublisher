@@ -62,7 +62,7 @@ $(document).ready(function(){
          aClass = filterSelected;
          hasFilterSelected = true;
        }
-       htmlButtons += '<li style="padding:0;margin:0;"><a class="' +  aClass  + '" data-filter=".' + buttonClass + '" href="#">' + buttonName + '</a></li>';
+       htmlButtons += '<li id="np-buttons"><a class="' +  aClass  + '" data-filter=".' + buttonClass + '" href="#">' + buttonName + '</a></li>';
        $.each(aFields, function(index, fieldName) {
         /* find that element by name (name can be fieldName or fieldName[]) */
         var field = $('[name^="' + fieldName + '"]:last');
@@ -85,11 +85,11 @@ $(document).ready(function(){
        });
     });
 
-    htmlButtons =   '<section id="options" class="clearfix" style="padding:0;margin:0;">' +
-                       '<ul id="' + filterId + '" style="padding:0px;margin:0px; margin-top:10px;">' +
+    htmlButtons =   '<section id="options" class="clearfix">' +
+                       '<ul id="' + filterId + '">' +
                           htmlButtons +
-                    '<li id="other-filter" style="padding:0px;margin:0px;"><a data-filter="!*" href="#">[[%np_tabs_other]]</a></li>' +
-                    '<li style="padding:0;margin:0;"><a data-filter="*" href="#" class="' + (hasFilterSelected ? '' : filterSelected) + '">[[%np_tabs_show_all]]</a></li>' +
+                    '<li id="other-filter"><a data-filter="!*" href="#">[[%np_tabs_other]]</a></li>' +
+                    '<li class="data-filter"><a data-filter="*" href="#" class="' + (hasFilterSelected ? '' : filterSelected) + '">[[%np_tabs_show_all]]</a></li>' +
                         '</ul>' +
                     '</section>';
 
