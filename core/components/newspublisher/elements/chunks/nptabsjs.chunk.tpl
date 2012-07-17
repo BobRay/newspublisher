@@ -85,7 +85,7 @@ $(document).ready(function(){
        });
     });
 
-    htmlButtons =   '<section id="options" class="clearfix">' +
+    htmlButtons =   '<section id="np-tabs" class="clearfix">' +
                        '<ul id="' + filterId + '">' +
                           htmlButtons +
                     '<li id="other-filter"><a data-filter="!*" href="#">[[%np_tabs_other]]</a></li>' +

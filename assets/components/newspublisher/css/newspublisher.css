@@ -210,25 +210,25 @@ fieldset.np-email {
   display:none !important;
 }
 
-#options {
+#np-tabs {
     margin:0;
     padding:0 0 2em 0;
 }
 
-#options ul {
+#np-tabs ul {
     list-style: none outside none;
     margin: 10px 0 0 0;
     padding: 0;
 
 }
 
-#options li {
+#np-tabs li {
     margin:0;
     padding:0;
     float: left;
     /* margin-bottom: 0.2em; */
 }
-#options li a {
+#np-tabs li a {
     background-color: #DDDDDD;
     background-image: url("tab-background.png");
     background-repeat: repeat-x;
@@ -238,32 +238,32 @@ fieldset.np-email {
     font-weight: bold;
     padding: 0.4em 0.5em;
 }
-#options li a:hover, #options li a.filterSelected {
+#np-tabs li a:hover, #np-tabs li a.filterSelected {
     background-color: #55BBFF;
     color: #222222;
     background-image: url("tab-background-hover.png") ;
     background-repeat: repeat-x;
 }
-#options li a:active {
+#np-tabs li a:active {
     background-color: #3399DD;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) inset;
 }
-#options li a {
+#np-tabs li a {
     border-left: 1px solid rgba(255, 255, 255, 0.3);
     border-right: 1px solid rgba(0, 0, 0, 0.2);
     padding: 10px 15px;
 }
-#options li:first-child a {
+#np-tabs li:first-child a {
    border-left: medium none;
     border-top-left-radius: 20px;
     padding-left: 20px;
 }
-#options li:last-child a {
+#np-tabs li:last-child a {
     border-top-right-radius: 20px;
     padding-right: 20px;
 }
 
-#options a {
+#np-tabs a {
   text-decoration: none;
   font-size: 18px;
 }
