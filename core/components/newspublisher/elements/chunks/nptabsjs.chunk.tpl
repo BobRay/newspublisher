@@ -33,7 +33,7 @@ $(document).ready(function(){
     /* items classes
        items (having this class) to be shown or hide on filter button click */
     var filterItemClass = 'filter-item';
-    var hiddenClass = 'hidden'; /* hidden class */
+    var npHiddenClass = 'np-hidden'; /* hidden class */
 
 
     /* *************
@@ -117,15 +117,15 @@ $(document).ready(function(){
       console.log(selector);
 
       if (selector == '*') { /* Show All */
-          formChildren.removeClass('hidden');
+          formChildren.removeClass('np-hidden');
       }
       else if (selector == '!*') { /* uncategorized/other tab */
-        formChildren.addClass(hiddenClass);
-        formChildren.not('.' + filterItemClass).removeClass(hiddenClass);
+        formChildren.addClass(npHiddenClass);
+        formChildren.not('.' + filterItemClass).removeClass(npHiddenClass);
       }
       else { /* custom button /class */
-        formChildren.addClass(hiddenClass);
-        formChildren.filter(selector).removeClass(hiddenClass);
+        formChildren.addClass(npHiddenClass);
+        formChildren.filter(selector).removeClass(npHiddenClass);
       }
 
       $('#' + filterId + ' a.' + filterSelected).removeClass(filterSelected);
@@ -135,7 +135,7 @@ $(document).ready(function(){
     /* hide "Other" btn if no need to show it */
     /* alert ('Children: ' + formChildren.length + ' --- FieldsCount: '  + jsonFieldsCount); */
      if (formChildren.length == jsonFieldsCount){
-        $('#other-filter').addClass('hidden');
+        $('#other-filter').addClass('np-hidden');
 }
     /* trigger click on active button */
     if (hasFilterSelected){

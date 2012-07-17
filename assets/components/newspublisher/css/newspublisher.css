@@ -206,7 +206,7 @@ fieldset.np-email {
 }
 /* NewsPublisher Tabs CSS */
 
-.hidden{
+.np-hidden{
   display:none !important;
 }
 
