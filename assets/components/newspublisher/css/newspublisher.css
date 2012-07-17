@@ -138,6 +138,7 @@ div.newspublisher input.submit {
     display:inline;
     margin: 30px;
     padding:0;
+    /* width:8em; */
     width:8em;
 }
 div.newspublisher input.int {
@@ -210,27 +211,17 @@ fieldset.np-email {
 }
 
 #options {
-
     margin:0;
     padding:0 0 2em 0;
+}
 
-}
-#options h3 {
-    font-size: 15px;
-    margin-bottom: 0.2em;
-}
-#options h4 {
-    font-weight: bold;
-}
 #options ul {
     list-style: none outside none;
     margin: 10px 0 0 0;
     padding: 0;
 
 }
-/*#options ul ul {
-    margin-left: 1.5em;
-}*/
+
 #options li {
     margin:0;
     padding:0;
@@ -239,7 +230,6 @@ fieldset.np-email {
 }
 #options li a {
     background-color: #DDDDDD;
-    /* background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0)); */
     background-image: url("tab-background.png");
     background-repeat: repeat-x;
     color: #444444;
@@ -247,15 +237,12 @@ fieldset.np-email {
     display: block;
     font-weight: bold;
     padding: 0.4em 0.5em;
-    /* text-shadow: 0 1px rgba(255, 255, 255, 0.5); */
 }
 #options li a:hover, #options li a.filterSelected {
     background-color: #55BBFF;
     color: #222222;
     background-image: url("tab-background-hover.png") ;
     background-repeat: repeat-x;
-   /*  background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.5), rgba(255, 255, 255,  0)) ; */
-
 }
 #options li a:active {
     background-color: #3399DD;
@@ -268,34 +255,12 @@ fieldset.np-email {
 }
 #options li:first-child a {
    border-left: medium none;
-   /*  border-radius: 7px 0 0 7px;*/
     border-top-left-radius: 20px;
     padding-left: 20px;
 }
 #options li:last-child a {
     border-top-right-radius: 20px;
     padding-right: 20px;
-}
-/*#options li a.selected {
-    background-color: #1133FF;
-    color: white;
-    text-shadow: none;
-}*/
-#options .option-combo {
-    display: inline-block;
-    float: left;
-    margin-right: 10px;
-}
-#options .option-combo ul {
-    display: inline-block;
-    margin-right: 20px;
-}
-#options .option-combo h2, #options .option-combo h4 {
-    display: inline-block;
-    line-height: 34px;
-    margin-bottom: 0;
-    margin-right: 5px;
-    vertical-align: top;
 }
 
 #options a {
