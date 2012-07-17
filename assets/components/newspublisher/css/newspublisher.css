@@ -242,7 +242,7 @@ fieldset.np-email {
     /* background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0)); */
     background-image: url("tab-background.png");
     background-repeat: repeat-x;
-    color: #777777;
+    color: #444444;
 
     display: block;
     font-weight: bold;
@@ -252,9 +252,9 @@ fieldset.np-email {
 #options li a:hover, #options li a.filterSelected {
     background-color: #55BBFF;
     color: #222222;
-    background-image: url("tab-background-hover.png") ; /*necessary for chrome */
+    background-image: url("tab-background-hover.png") ;
     background-repeat: repeat-x;
-    background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0)) ;
+   /*  background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.5), rgba(255, 255, 255,  0)) ; */
 
 }
 #options li a:active {
@@ -276,11 +276,11 @@ fieldset.np-email {
     border-top-right-radius: 20px;
     padding-right: 20px;
 }
-#options li a.selected {
+/*#options li a.selected {
     background-color: #1133FF;
     color: white;
     text-shadow: none;
-}
+}*/
 #options .option-combo {
     display: inline-block;
     float: left;
