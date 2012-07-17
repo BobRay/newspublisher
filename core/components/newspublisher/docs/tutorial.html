@@ -104,13 +104,13 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <h3>Altering the Form</h3>
 
-<p>You can make many changes to the look of the form using CSS rules for styling. You can find the CSS form at assets/components/newspublisher/css/newspublisher.css. Using CSS, you can change the text color, background color, size, and/or position of any field, though the control of richtext fields is limited. You can put fields side-by-side by using &quot;display:inline;&quot; for the appropriate field(s). If you plan to make changes, it's recommended that you make a copy of the CSS file and put the path to your new file in the <fixedpre>&cssfile</fixedpre> property.</p>
+<p>You can make many changes to the look of the form using CSS rules for styling. You can find the CSS form at assets/components/newspublisher/css/newspublisher.css. Using CSS, you can change the text color, background color, size, and/or position of any field, though the control of richtext fields is limited. You can put fields side-by-side by using &quot;display:inline;&quot; for the appropriate field(s). If you plan to make changes, it's recommended that you make a copy of the CSS file, the <fixedpre>assets/components/newspublisher/css</fixedpre> directory and put the name of your new file in the <fixedpre>&cssfile</fixedpre> property.</p>
 
 <p>If you feel you must, you can alter the Tpl chunks for any of the field types. Again, you should duplicate the existing chunk and put the name of your duplicate in the appropriate property. Be careful not to change the prefixes of any of the placeholders, even if you specify a custom prefix for the form as a property. The prefixes will be altered automatically by the snippet. Note that there are both np. and npx. prefixes. The npx. prefixes are used internally by the snippet, the np. prefixes are usually in the value field of the element and will be set via placeholders.
 </p>
 
 <h3>NewsPublisher Tabs</h3>
-<p>As of NewsPublisher 1.5.0, you can show the Resource fields on separate tabs like in the Manager. The tabs and fields can be in any order and any field can go on any tab. You can have as many tabs as you want.</p>
+<p>As of NewsPublisher 1.5.0, you can show the Resource fields on separate tabs like in the Manager. The tabs and fields can be in any order and any field can go on any tab. You can have as many tabs as you want. The names of the tabs are arbitrary. Whatever names you use will be displayed in the tab menu on the form.</p>
 
 <p>Set <fixedpre>&usetabs=`1`</fixedpre> in the NewsPublisher snippet tag and include a <fixedpre>&tabs</fixedpre> property in the following form:</p>
 
