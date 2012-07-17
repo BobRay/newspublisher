@@ -240,16 +240,22 @@ fieldset.np-email {
 #options li a {
     background-color: #DDDDDD;
     /* background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0)); */
-    background-image: url("menubar-tall.png");
+    background-image: url("tab-background.png");
     background-repeat: repeat-x;
-    color: #222222;
+    color: #777777;
+
     display: block;
     font-weight: bold;
     padding: 0.4em 0.5em;
-    text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+    /* text-shadow: 0 1px rgba(255, 255, 255, 0.5); */
 }
 #options li a:hover, #options li a.filterSelected {
     background-color: #55BBFF;
+    color: #222222;
+    background-image: url("tab-background-hover.png") ; /*necessary for chrome */
+    background-repeat: repeat-x;
+    background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0)) ;
+
 }
 #options li a:active {
     background-color: #3399DD;
@@ -258,13 +264,17 @@ fieldset.np-email {
 #options li a {
     border-left: 1px solid rgba(255, 255, 255, 0.3);
     border-right: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 10px 15px;
 }
 #options li:first-child a {
-    border-left: medium none;
-    border-radius: 7px 0 0 7px;
+   border-left: medium none;
+   /*  border-radius: 7px 0 0 7px;*/
+    border-top-left-radius: 20px;
+    padding-left: 20px;
 }
 #options li:last-child a {
-    border-radius: 0 7px 7px 0;
+    border-top-right-radius: 20px;
+    padding-right: 20px;
 }
 #options li a.selected {
     background-color: #1133FF;
