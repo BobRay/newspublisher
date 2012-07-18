@@ -157,6 +157,11 @@ $vehicle= $builder->createVehicle($policy,array (
 $vehicle->resolve('php',array(
     'source' => $sources['resolvers'] . 'accesspolicy.resolver.php',
 ));
+
+$vehicle->resolve('php',array(
+    'source' => $sources['resolvers'] . 'filemove.resolver.php',
+));
+
 $builder->putVehicle($vehicle);
 
 unset($vehicle,$template,$policy,$browserAction);
