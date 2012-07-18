@@ -101,14 +101,19 @@
 
     /* @var $modx modX */
 
-require_once $modx->getOption('np.core_path', null, $modx->getOption('core_path') . 'components/newspublisher/') . 'classes/newspublisher.class.php';
-
-/* Let &require override &required (it's a common mistake to use &require)
-   this will only happen if the user explicitly sets &require in the tag */
-
 $errorMessage = '';
 $formTpl = '';
 
+
+$classPath = $modx->getOption('np.core_path', null, $modx->getOption('core_path') . 'components/newspublisher/') . 'model/newspublisher/';
+
+if (! $modx->loadClass('Newspublisher',$classPath, true, true)) {
+    return '<h3>Could not load Newspublisher Class</h3><p>Path: ' . $classPath . '</p>';
+}
+
+
+/* Let &require override &required (it's a common mistake to use &require)
+   this will only happen if the user explicitly sets &require in the tag */
 if (isset($scriptProperties['require'])) {
     $scriptProperties['required'] = $scriptProperties['require'];
 }
