@@ -394,6 +394,7 @@ class Newspublisher {
                $whichEditor = $this->modx->getOption('which_editor',null,'');
 
                if ($whichEditor == 'TinyMCE' ) {
+                    $_REQUEST['a'] = '';  /* fixes E_NOTICE bug in TinyMCE */
                     $plugin=$this->modx->getObject('modPlugin',array('name'=>'TinyMCE'));
 
                     /* set rich text content placeholders and includes necessary js files */
