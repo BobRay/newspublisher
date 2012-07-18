@@ -2,9 +2,9 @@
 /**
  * Utility snippet for NewsPublisher development
  *
- * Copyright 2011 Bob Ray
+ * Copyright 2011-2012 Bob Ray
  * @author Bob Ray <http://bobsguides.com>
- * 1/15/11
+ * created 1/15/11
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free

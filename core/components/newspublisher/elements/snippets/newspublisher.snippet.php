@@ -2,7 +2,7 @@
 
 /**
  * NewsPublisher
- * Copyright 2011 Bob Ray
+ * Copyright 2011-2012 Bob Ray
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -30,8 +30,6 @@
  * /
 
 /*
-
-  Modified: July 10, 2011
 
    NOTE: You may need the latest version of TinyMCE for rich text editing.
 
