@@ -24,6 +24,9 @@
  * @package newspublisher
  * @subpackage lexicon
  */
+include_once(dirname(dirname(__FILE__)).'/en/default.inc.php'); // fallback for missing defaults or new additions
+
+
 $_lang['np_no_error_tpl'] = 'Impossible de trouver &amp;errortpl: [[+tpl]]';
 $_lang['np_main_header'] = 'Créer/éditer une ressource';
 $_lang['np_error_presubmit'] = 'Désolé… il y a eu un (ou plusieurs) problème(s) à la création du formulaire:';

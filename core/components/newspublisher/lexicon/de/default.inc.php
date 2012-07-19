@@ -25,6 +25,8 @@
  * @package newspublisher
  * @subpackage lexicon
  */
+include_once(dirname(dirname(__FILE__)).'/en/default.inc.php'); // fallback for missing defaults or new additions
+
 
 /* newspublisher strings */
 $_lang['np_not_in_group'] = 'Sie gehören zu keiner der autorisierten Benutzergruppen.';

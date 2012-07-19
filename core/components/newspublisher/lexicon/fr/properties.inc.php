@@ -26,6 +26,7 @@
  * @package newspublisher
  * @subpackage lexicon
  */
+include_once(dirname(dirname(__FILE__)).'/en/properties.inc.php'); // fallback for missing defaults or new additions
 
 /* NewsPublisher Property Description strings */
 $_lang['np_aliastitle_desc'] = "(optional) Set to Yes to use lowercase, hyphenated, page title as alias. default: Yes - If set to No, 'article-(date created)' is used.  Ignored if alias is filled in form.";

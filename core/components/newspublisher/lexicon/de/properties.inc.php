@@ -26,6 +26,7 @@
  * @package newspublisher
  * @subpackage lexicon
  */
+include_once(dirname(dirname(__FILE__)).'/en/properties.inc.php'); // fallback for missing defaults or new additions
 
 /* NewsPublisher Property Description strings */
 $_lang['np_aliastitle_desc'] = "(optional) Auf Ja setzen, um den Seitentitel in Kleinbuchstaben mit Bindestrichen als Alias zu benutzen. Standardeinstellung: Ja - Wenn Nein angegeben, wird 'article-Erstellungsdatum' benutzt.  Ignoriert, wenn im Formular ein Alias angegeben wurde.";

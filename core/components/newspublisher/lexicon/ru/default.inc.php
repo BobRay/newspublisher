@@ -26,6 +26,9 @@
  * @subpackage lexicon
  */
 
+include_once(dirname(dirname(__FILE__)).'/en/default.inc.php'); // fallback for missing defaults or new additions
+
+
 /* newspublisher strings */
 $_lang['np_not_in_group'] = 'Вы не в одной из авторизированых групп пользователей.';
 $_lang['np_not_logged_in'] = 'Вы должны авторизоваться, чтобы публиковать сообщения.';

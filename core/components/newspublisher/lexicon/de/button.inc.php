@@ -26,6 +26,8 @@
  * @subpackage lexicon
  */
 
+include_once(dirname(dirname(__FILE__)).'/en/button.inc.php'); // fallback for missing defaults or new additions
+
 
 /* NewsPublisher EditThisButton strings */
 $_lang['np_edit'] = 'Bearbeiten';

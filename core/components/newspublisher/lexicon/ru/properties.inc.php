@@ -26,6 +26,9 @@
  * @subpackage lexicon
  */
 
+include_once(dirname(dirname(__FILE__)).'/en/properties.inc.php'); // fallback for missing defaults or new additions
+
+
 /* NewsPublisher Property Description strings */
 $_lang['np_aliastitle_desc'] = "(опционное) Установите Yes для нижнего регистра, тире и заглавия страници в качестве альяса(alias). По умолчанию: Yes - если установлено No, тогда будет использовано 'article-(date created)'. Игнорируется если будет использовано поле 'alias'.";
 $_lang['np_badwords_desc'] = '(опционное) Список зрещенных слов разделенный запятыми.';
