@@ -17,6 +17,7 @@ $properties = array(
         'options' => '',
         'value' => '1',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Resource Field Settings',
     ),
      array(
         'name' => 'aliasprefix',
@@ -25,6 +26,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+         'area' => 'Resource Field Settings',
     ),
     array(
         'name' => 'badwords',
@@ -33,6 +35,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'booltpl',
@@ -41,6 +44,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Tpls',
     ),
     array(
         'name' => 'cacheable',
@@ -70,6 +74,7 @@ $properties = array(
         ),
         'value' => 'System Default',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Resource Field Settings',
     ),
     array(
         'name' => 'cancelid',
@@ -78,6 +83,7 @@ $properties = array(
         'options' => '',
         'value' => '0',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'captions',
@@ -86,6 +92,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'clearcache',
@@ -94,6 +101,7 @@ $properties = array(
         'options' => '',
         'value' => '1',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'tinywidth',
@@ -102,6 +110,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'tinyheight',
@@ -110,6 +119,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'cssfile',
@@ -118,6 +128,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'datetpl',
@@ -126,6 +137,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Tpls',
     ),
     array(
         'name' => 'errortpl',
@@ -134,6 +146,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Tpls',
     ),
     array(
         'name' => 'fielderrortpl',
@@ -142,6 +155,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Tpls',
     ),
     array(
         'name' => 'footertpl',
@@ -150,6 +164,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Tpls',
     ),
     array(
         'name' => 'groups',
@@ -158,6 +173,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'headertpl',
@@ -166,6 +182,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Tpls',
     ),
     array(
         'name' => 'hidemenu',
@@ -195,6 +212,7 @@ $properties = array(
         ),
         'value' => 'System Default',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Resource Field Settings',
     ),
     array(
         'name' => 'initdatepicker',
@@ -203,6 +221,7 @@ $properties = array(
         'options' => '',
         'value' => '1',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'initrte',
@@ -211,6 +230,7 @@ $properties = array(
         'options' => '',
         'value' => '0',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'inttpl',
@@ -219,6 +239,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Tpls',
     ),
     array(
         'name' => 'language',
@@ -227,6 +248,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'listboxmax',
@@ -235,6 +257,7 @@ $properties = array(
         'options' => '',
         'value' => '8',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'listoptiontpl',
@@ -243,6 +266,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Tpls',
     ),
     array(
         'name' => 'multiplelistboxmax',
@@ -251,6 +275,7 @@ $properties = array(
         'options' => '',
         'value' => '20',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'optionoutertpl',
@@ -259,6 +284,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Tpls',
     ),
     array(
         'name' => 'optiontpl',
@@ -267,6 +293,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Tpls',
     ),
     array(
         'name' => 'outertpl',
@@ -275,6 +302,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Tpls',
     ),
     array(
         'name' => 'parentid',
@@ -283,6 +311,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Resource Field Settings',
     ),
     array(
         'name' => 'postid',
@@ -291,6 +320,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'prefix',
@@ -299,6 +329,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'published',
@@ -328,6 +359,7 @@ $properties = array(
         ),
         'value' => 'System Default',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Resource Field Settings',
     ),
     array(
         'name' => 'required',
@@ -336,6 +368,7 @@ $properties = array(
         'options' => '',
         'value' => 'pagetitle,content',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'richtext',
@@ -365,6 +398,7 @@ $properties = array(
         ),
         'value' => 'System Default',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Resource Field Settings',
     ),
     array(
         'name' => 'rtcontent',
@@ -373,6 +407,7 @@ $properties = array(
         'options' => '',
         'value' => '0',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'rtsummary',
@@ -381,6 +416,7 @@ $properties = array(
         'options' => '',
         'value' => '0',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'searchable',
@@ -410,6 +446,7 @@ $properties = array(
         ),
         'value' => 'System Default',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Resource Field Settings',
     ),
     array(
         'name' => 'show',
@@ -418,6 +455,7 @@ $properties = array(
         'options' => '',
         'value' => 'pagetitle,longtitle,hidemenu,published,description,menutitle,pub_date,unpub_date,introtext,content',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'readonly',
@@ -426,6 +464,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     
     array(
@@ -435,6 +474,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Resource Field Settings',
     ),
     array(
         'name' => 'texttpl',
@@ -443,6 +483,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'Tpls',
     ),
     array(
         'name' => 'textmaxlength',
@@ -451,6 +492,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'intmaxlength',
@@ -459,6 +501,7 @@ $properties = array(
         'options' => '',
         'value' => '',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
         'name' => 'hoverhelp',
@@ -467,95 +510,96 @@ $properties = array(
         'options' => '',
         'value' => '1',
         'lexicon' => 'newspublisher:properties',
+        'area' => 'NewsPublisher Control Settings',
     ),
     array(
            'name' => 'usetabs',
-           'desc' => 'np_usetabs_desc',
+           'desc' => 'np_usetabs_desc~~(optional) Show tabbed display; default: No',
            'type' => 'combo-boolean',
            'options' => '',
            'value' => '0',
            'lexicon' => 'newspublisher:properties',
-           'area' => '',
+           'area' => 'NewsPublisher Control Settings',
        ),
 
        array(
            'name' => 'tabs',
-           'desc' => 'np_tabs_desc',
+           'desc' => 'np_tabs_desc~~(required only if usetabs is set) Specification for tabs (see tutorial)',
            'type' => 'textfield',
            'options' => '',
            'value' => '',
            'lexicon' => 'newspublisher:properties',
-           'area' => '',
+           'area' => 'NewsPublisher Control Settings',
        ),
 
        array(
            'name' => 'activetab',
-           'desc' => 'np_activetab_desc',
+           'desc' => 'np_activetab_desc~~(optional) Tab to show when form is loaded',
            'type' => 'textfield',
            'options' => '',
            'value' => '',
            'lexicon' => 'newspublisher:properties',
-           'area' => '',
+           'area' => 'NewsPublisher Control Settings',
        ),
 
        array(
            'name' => 'classkey',
-           'desc' => 'np_classkey_desc',
+           'desc' => 'np_classkey_desc~~(optional) Class key for new resources; use only if you have subclassed resource or are using this for Articles (set to Article); default: modDocument',
            'type' => 'textfield',
            'options' => '',
            'value' => '',
            'lexicon' => 'newspublisher:properties',
-           'area' => '',
+           'area' => 'Resource Field Settings',
        ),
 
        array(
            'name' => 'contentrows',
-           'desc' => 'np_contentrows_desc',
+           'desc' => 'np_contentrows_desc~~(optional)Rows to show in Content field; default: 10',
            'type' => 'textfield',
            'options' => '',
            'value' => '10',
            'lexicon' => 'newspublisher:properties',
-           'area' => '',
+           'area' => 'NewsPublisher Control Settings',
        ),
 
        array(
            'name' => 'contentcols',
-           'desc' => 'np_contentcols_desc',
+           'desc' => 'np_contentcols_desc~~(optional)Columns to show in Content field; default: 60',
            'type' => 'textfield',
            'options' => '',
            'value' => '60',
            'lexicon' => 'newspublisher:properties',
-           'area' => '',
+           'area' => 'NewsPublisher Control Settings',
        ),
 
        array(
            'name' => 'summaryrows',
-           'desc' => 'np_summaryrows_desc',
+           'desc' => 'np_summaryrows_desc~~(optional)Rows to show in summary (introtext) Field; default;10',
            'type' => 'textfield',
            'options' => '',
            'value' => '10',
            'lexicon' => 'newspublisher:properties',
-           'area' => '',
+           'area' => 'NewsPublisher Control Settings',
        ),
 
        array(
            'name' => 'summarycols',
-           'desc' => 'np_summarycols_desc',
+           'desc' => 'np_summarycols_desc~~(optional)Columns to show in summary (introtext) Field; default: 60',
            'type' => 'textfield',
            'options' => '',
            'value' => '60',
            'lexicon' => 'newspublisher:properties',
-           'area' => '',
+           'area' => 'NewsPublisher Control Settings',
        ),
 
        array(
            'name' => 'aliasdateformat',
-           'desc' => 'np_aliasdateformat_desc',
+           'desc' => 'np_aliasdateformat_desc~~(optional)Format string for auto date alias (see tutorial)',
            'type' => 'textfield',
            'options' => '',
            'value' => '',
            'lexicon' => 'newspublisher:properties',
-           'area' => '',
+           'area' => 'Resource Field Settings',
        ),
 
 );
