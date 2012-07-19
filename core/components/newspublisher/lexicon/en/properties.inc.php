@@ -33,7 +33,7 @@ $_lang['np_cacheable_desc'] = "(optional) Sets the flag to as to whether or not 
 $_lang['np_cancelid_desc'] = '(optional) Document id to load on cancel; default: http_referer.';
 $_lang['np_captions_desc'] = '(optional) Custom captions -- Comma-separated list of FieldNames:FieldCaptions.
    Example: &captions=`introtext:Summary,content:Enter Your Post`';
-$_lang['np_clearcache_desc'] = '(optional) When set to Yes, the cache will be cleared after saving the resource; default: Yes.';
+$_lang['np_clearcache_desc'] = '(optional) When set to Yes, NewsPublisher will clear the site cache after saving the resource; default: Yes.';
 $_lang['np_cssfile_desc'] = '(optional) Name of CSS file to use, or `` for no CSS file; default: newspublisher.css. File should be in assets/newspublisher/css/ directory';
 $_lang['np_errortpl_desc'] = '(optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.';
 $_lang['np_fielderrortpl_desc'] = '(optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.';
@@ -70,11 +70,17 @@ $_lang['np_booltpl_desc'] = '(optional) Tpl used for Yes/No resource fields (e.g
  $_lang['np_optionoutertpl_desc'] = '(optional) Tpl used for as a shell for checkbox, list, and radio option TVs.';
 $_lang['np_optiontpl_desc'] = '(optional) Tpl used for each option of checkbox and radio option TVs.';
 $_lang['np_listoptiontpl_desc'] = '(optional) Tpl used for each option of listbox TVs.';
-$_lang['np_aliasprefix_desc'] = '(optional) Prefix to be prepended to alias for new documents with an empty alias; alias will be aliasprefix - timestamp';
+$_lang['np_aliasprefix_desc'] = '(optional) Prefix to be prepended to alias for new documents with an empty alias; alias will be aliasprefix - timestamp; default (empty)';
 $_lang['np_intmaxlength_desc'] = '(optional) Max length for integer input fields; default: 10.';
 $_lang['np_textmaxlength_desc'] = '(optional) Max length for text input fields; default: 60.';
 $_lang['np_hoverhelp_desc'] = '(optional) Show help when hovering over field caption; default: Yes.';
-
+$_lang['np_usetabs_desc'] = '(optional) Show tabbed display; default: No';
+$_lang['np_tabs_desc'] = '(required only if usetabs is set) Specification for tabs (see tutorial)';
+$_lang['np_activetab_desc'] = '(optional) Tab to show when form is loaded';
+$_lang['np_classkey_desc'] = '(optional) Class key for new resources; use only if you have subclassed resource or are using this for Articles (set to Article); default: modDocument';
+$_lang['np_contentrows_desc'] = '(optional)Rows to show in Content field; default: 10';
+$_lang['np_contentcols_desc'] = '(optional)Columns to show in Content field; default: 60';
+$_lang['np_aliasdateformat_desc'] = '(optional)Format string for auto date alias (see tutorial)';
 
 
 

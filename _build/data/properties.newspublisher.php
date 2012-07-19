@@ -23,7 +23,7 @@ $properties = array(
         'desc' => 'np_aliasprefix_desc',
         'type' => 'textfield',
         'options' => '',
-        'value' => '1',
+        'value' => '',
         'lexicon' => 'newspublisher:properties',
     ),
     array(
@@ -213,7 +213,7 @@ $properties = array(
         'lexicon' => 'newspublisher:properties',
     ),
     array(
-        'name' => 'intpl',
+        'name' => 'inttpl',
         'desc' => 'np_inttpl_desc',
         'type' => 'textfield',
         'options' => '',
@@ -364,7 +364,7 @@ $properties = array(
             ),
         ),
         'value' => 'System Default',
-        'lexicon' => 'newpublisher:properties',
+        'lexicon' => 'newspublisher:properties',
     ),
     array(
         'name' => 'rtcontent',
@@ -468,6 +468,96 @@ $properties = array(
         'value' => '1',
         'lexicon' => 'newspublisher:properties',
     ),
+    array(
+           'name' => 'usetabs',
+           'desc' => 'np_usetabs_desc',
+           'type' => 'combo-boolean',
+           'options' => '',
+           'value' => '0',
+           'lexicon' => 'newspublisher:properties',
+           'area' => '',
+       ),
+
+       array(
+           'name' => 'tabs',
+           'desc' => 'np_tabs_desc',
+           'type' => 'textfield',
+           'options' => '',
+           'value' => '',
+           'lexicon' => 'newspublisher:properties',
+           'area' => '',
+       ),
+
+       array(
+           'name' => 'activetab',
+           'desc' => 'np_activetab_desc',
+           'type' => 'textfield',
+           'options' => '',
+           'value' => '',
+           'lexicon' => 'newspublisher:properties',
+           'area' => '',
+       ),
+
+       array(
+           'name' => 'classkey',
+           'desc' => 'np_classkey_desc',
+           'type' => 'textfield',
+           'options' => '',
+           'value' => '',
+           'lexicon' => 'newspublisher:properties',
+           'area' => '',
+       ),
+
+       array(
+           'name' => 'contentrows',
+           'desc' => 'np_contentrows_desc',
+           'type' => 'textfield',
+           'options' => '',
+           'value' => '10',
+           'lexicon' => 'newspublisher:properties',
+           'area' => '',
+       ),
+
+       array(
+           'name' => 'contentcols',
+           'desc' => 'np_contentcols_desc',
+           'type' => 'textfield',
+           'options' => '',
+           'value' => '60',
+           'lexicon' => 'newspublisher:properties',
+           'area' => '',
+       ),
+
+       array(
+           'name' => 'summaryrows',
+           'desc' => 'np_summaryrows_desc',
+           'type' => 'textfield',
+           'options' => '',
+           'value' => '10',
+           'lexicon' => 'newspublisher:properties',
+           'area' => '',
+       ),
+
+       array(
+           'name' => 'summarycols',
+           'desc' => 'np_summarycols_desc',
+           'type' => 'textfield',
+           'options' => '',
+           'value' => '60',
+           'lexicon' => 'newspublisher:properties',
+           'area' => '',
+       ),
+
+       array(
+           'name' => 'aliasdateformat',
+           'desc' => 'np_aliasdateformat_desc',
+           'type' => 'textfield',
+           'options' => '',
+           'value' => '',
+           'lexicon' => 'newspublisher:properties',
+           'area' => '',
+       ),
+
 );
 
 return $properties;
