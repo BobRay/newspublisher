@@ -1,9 +1,14 @@
 Changelog for NewsPublisher
 
-NewsPublisher 1.4.0-rc
+NewsPublisher 1.4.1-rc
 ----------------------
-Fixed E_NOTICE bug with TinyMCE
+Displays form with Tabs (thanks to Gregor Šekoranja)
+Fixed E_NOTICE bugs with TinyMCE
 Now Works with Articles
+Added some missing snippet properties
+Properties displayed in areas
+Updates to tutorial and CSS
+Misc. bug fixes
 
 NewsPublisher 1.3.0-rc2
 -----------------------
