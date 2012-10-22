@@ -832,6 +832,7 @@ class Newspublisher {
                 
             } else {
 
+                $ph = str_replace(array('[',']'), array('&#91;','&#93;'), $ph);
                 $this->modx->toPlaceholder($name, $ph, $this->prefix );
             }
         }
