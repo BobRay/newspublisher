@@ -1,5 +1,10 @@
 Changelog for NewsPublisher
 
+
+NewsPublisher 1.4.2-pl
+----------------------
+Bug fix for misnamed tabs Tpl
+
 NewsPublisher 1.4.1-rc
 ----------------------
 Displays form with Tabs (thanks to Gregor Šekoranja)

@@ -592,7 +592,7 @@ class Newspublisher {
                 return $this->getTpl('OuterTpl');
 
             } else {
-                $tabsJs = $this->modx->getChunk('npTabsJs', array(
+                $tabsJs = $this->modx->getChunk('npTabsJsTpl', array(
                     'activeButton' => $this->activeTab,
                     'buttonsJson' => $this->tabs,
                 ));
