@@ -1435,14 +1435,20 @@ class Newspublisher {
                 unset($t_resourceTVs,$t_resourceId,$t_tvId,$t_value);
             }
 
-
+           /* if ((!$this->existing) && isset($_POST['tb_send_date']) && isset($_POST['tb_send_shortname'])) {
+                $dVal = strtotime($_POST['tb_send_date']);
+                $dString = strftime("%y%m%d", $dVal);
+                $fields['pagetitle'] = $dString . '_' . $_POST['tb_send_shortname'];
+                $fields['alias'] = $dString . '-' . $_POST['tb_send_shortname'];
+                unset($dVal, $dString);
+            } */
 
             /* ****************************************** */
             $fields['tvs'] = true;
             foreach ($this->allTvs as $tv) {
                 /* @var $tv modtemplateVar */
                 $name = $tv->get('name');
-                
+
                 if ($tv->get('type') == 'date') {
                     $fields['tv' . $tv->get('id')] = $_POST[$name] . ' ' . $_POST[$name . '_time'];
                 } else {
