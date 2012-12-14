@@ -1098,7 +1098,7 @@ class Newspublisher {
               $format = $this->modx->lexicon('np_date_format');
               $format = str_replace( array('-','sp','dt','sl','ds','cc'),
                                      array( '', ' ', '.', '/', '-', ','), $format);
-              $timestamp = mktime(0, 0, 0, substr($timeString,5,2), substr($timeString,8,2), substr($timeString,0,4));
+              $timestamp = mktime(0, 0, 0, (int) substr($timeString,5,2), (int) substr($timeString,8,2), (int) substr($timeString,0,4));
               $s = date($format, $timestamp);
             } else {
               $s = '';
