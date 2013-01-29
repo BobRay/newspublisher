@@ -57,7 +57,7 @@ class Newspublisher {
     /**
      * @var $allTvs array Array of all TVs
      */
-    protected $allTvs;
+    protected $allTvs = array();
     /**
      * @var array Array of error messages
      */
