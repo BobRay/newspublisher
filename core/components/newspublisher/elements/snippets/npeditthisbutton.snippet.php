@@ -131,11 +131,15 @@ if (!$modx->resource->checkPolicy('save')) {
 
 $npEditId = $modx->getOption('np_edit_id',$props,'');
 $resourceToEdit = empty($npEditId)? $modx->resource->get('id') : $npEditId;
+$editHome = $modx->getOption('editHome', $props, false);
 
 /* Don't show if current page is in the noShow list */
 $noShow = $modx->getOption('noShow', $props, '');
 if (empty($noShow)) {
-    $noShow = $npId . ',' . $modx->getOption('site_start');
+    $noShow = (string) $npId;
+    if (! $editHome) {
+        $noShow .= ',' . (string) $modx->getOption('site_start');
+    }
 }
 $hidden = explode(',', $noShow);
 $hidden[] = $npId;
@@ -143,11 +147,11 @@ if (in_array($resourceToEdit, $hidden)) {
     $defaultButtonCaption = 'In noShow list';
 }
 
-
-
-/* Don't show on the the home page */
-if ($npEditId == $modx->getOption('site_start')) {
-    $defaultButtonCaption = $modx->lexicon('np_no_edit_home_page');
+/* Don't show on the the home page unless &editHome is set to 1 */
+if (! $editHome) {
+    if ($npEditId == $modx->getOption('site_start')) {
+        $defaultButtonCaption = $modx->lexicon('np_no_edit_home_page');
+    }
 }
 
 
