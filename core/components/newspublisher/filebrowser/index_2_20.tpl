@@ -4,8 +4,16 @@
 <title>MODX :: {$_lang.modx_resource_browser}</title>
 <meta http-equiv="Content-Type" content="text/html; charset={$_config.modx_charset}" />
 
-<link rel="stylesheet" type="text/css" href="{$_config.manager_url}min/?f={$_config.manager_url}assets/ext3/resources/css/ext-all-notheme-min.css,{$_config.manager_url}templates/{$_config.manager_theme}/css/xtheme-modx.css,{$_config.manager_url}templates/{$_config.manager_theme}/css/index.css" />
-<script src="{$_config.manager_url}min/?f={$_config.manager_url}assets/ext3/adapter/ext/ext-base.js,{$_config.manager_url}assets/ext3/ext-all.js,{$_config.manager_url}assets/modext/core/modx.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="{$_config.manager_url}assets/ext3/resources/css/ext-all-notheme-min.css"/>
+<link rel="stylesheet" type="text/css" href="{$_config.manager_url}templates/{$_config.manager_theme}/css/xtheme-modx.css"/>
+<link rel="stylesheet" type="text/css" href="{$_config.manager_url}templates/{$_config.manager_theme}/css/index.css"/>
+
+
+<script src="{$_config.manager_url}assets/ext3/adapter/ext/ext-base.js" type="text/javascript"></script>
+<script src="{$_config.manager_url}assets/ext3/ext-all.js" type="text/javascript"></script>
+<script src="{$_config.manager_url}assets/modext/core/modx.js" type="text/javascript"></script>
+
+
 <script src="{$_config.connectors_url}lang.js.php?ctx=mgr&topic=category,file,resource&action={$smarty.get.a|strip_tags}" type="text/javascript"></script>
 <script src="{$_config.connectors_url}layout/modx.config.js.php?action={$smarty.get.a|strip_tags}{if $wctx}&wctx={$wctx}{/if}" type="text/javascript"></script>
 
