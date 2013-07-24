@@ -1361,11 +1361,8 @@ class Newspublisher {
         /* correct timestamp resource fields */
         foreach ($_POST as $field => $val) {
             if (isset($this->resource->_fieldMeta[$field]) && $this->resource->_fieldMeta[$field]['phptype'] == 'timestamp') {
-                if (empty($_POST[$field])) {
-                    unset($_POST[$field]);
-                } else {
-                    $_POST[$field] = $val . ' ' . $_POST[$field . '_time'];
-                }
+                $postTime = isset($_POST[$field . '_time'])? $_POST[$field . '_time'] : '';
+                $_POST[$field] = $val . ' ' . $postTime;
             }
         }
         $fields = array_merge($oldFields, $_POST);
@@ -1521,8 +1518,10 @@ class Newspublisher {
             /* Assume that the processor cleared the cache */
 
             $_SESSION['np_resource_id'] = $this->resource->get('id');
-            $goToUrl = $this->modx->makeUrl($postId);
-
+            $goToUrl = $this->modx->makeUrl($postId, "", "", "full");
+            /* might need this:
+                 $goToUrl = $this->modx->makeUrl($postId, $this->resource->get('context_key'), "", "full");
+            */
             /* redirect to post id */
 
             /* ToDo: The next two lines can probably be removed once makeUrl() and sendRedirect() are updated */
