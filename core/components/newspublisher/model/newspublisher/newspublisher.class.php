@@ -213,7 +213,7 @@ class Newspublisher {
      * postback status.
      *
      * @access public
-     * @return (bool) true if set, false if not
+     * @return bool - true if set, false if not
      */
 
     public function getPostBack() {
@@ -226,7 +226,7 @@ class Newspublisher {
      *  Sets errors on failure.
      *
      *  @access public
-     *  @param (string) $context - current context key
+     *  @param string $context - current context key
      */
 
         public function init($context) {
@@ -436,10 +436,10 @@ class Newspublisher {
      *
      * @access protected
      *
-     * @param (string) $field - name of resource field
-     * @param (int) $parentId - ID of parent resource
+     * @param string - $field - name of resource field
+     * @param int - $parentId - ID of parent resource
      *
-     * @return (mixed) returns boolean option, JSON string for
+     * @return mixed - returns boolean option, JSON string for
      * groups, and null on failure
      */
 
@@ -458,7 +458,7 @@ class Newspublisher {
             }
         }
         $prop = (string) $prop; // convert booleans
-        $prop == 'Yes'? '1': $prop;
+        $prop = $prop == 'Yes'? '1': $prop;
         $prop = $prop == 'No'? '0' :$prop;
 
         if ($prop != 'System Default') {
@@ -522,9 +522,9 @@ class Newspublisher {
 /** return a specified tpl
  *
  * @access public
- * @param (string) tpl name
+ * @param $tpl string - tpl name
  *
- * @return (string) tpl content
+ * @return string - tpl content
  *  */
 
     public function getTpl($tpl) {
@@ -643,8 +643,8 @@ class Newspublisher {
 
     /** displays an individual field
      * @access protected
-     * @param $field (string) name of the field
-     * @return (string) returns the HTML code for the field.
+     * @param $field string - name of the field
+     * @return string - returns the HTML code for the field.
      */
 
     protected function _displayField($field) {
@@ -768,9 +768,9 @@ class Newspublisher {
     /** displays an individual TV
      *
      * @access protected
-     * @param $tvNameOrId (string) name or ID of TV to process.
+     * @param $tvNameOrId string - name or ID of TV to process.
      *
-     * @return (string) returns the HTML code for the TV.
+     * @return string - returns the HTML code for the TV.
      */
 
     protected function _displayTv($tvNameOrId) {
@@ -1059,9 +1059,9 @@ class Newspublisher {
 
     /** Uses an associative array for string replacement
      *
-     * @param $replace - (array) associative array of keys and values
-     * @param &$subject - (string) string to do replacements in
-     * @return (string) - modified subject */
+     * @param $replace array - associative array of keys and values
+     * @param &$subject string - string to do replacements in
+     * @return string - modified subject */
 
     public function strReplaceAssoc(array $replace, $subject) {
        return str_replace(array_keys($replace), array_values($replace), $subject);
@@ -1073,10 +1073,10 @@ class Newspublisher {
      * placeholders for each of them
      *
      * @access protected
-     * @param $name - (string) name of the field/TV
-     * @param $timestring - (string) date-time string in the format "2011-04-01 13:20:01"
-     * @ param $options - (array) Associative array of options. Accepts 'disabledDates', 'disabledDays', 'minDateValue' and 'maxDateValue' (in the format used for the corresponding TV input options)
-     * @return (string) - date field/TV HTML code */
+     * @param $name string - name of the field/TV
+     * @param $timeString string - date-time string in the format "2011-04-01 13:20:01"
+     * @param $options array - Associative array of options. Accepts 'disabledDates', 'disabledDays', 'minDateValue' and 'maxDateValue' (in the format used for the corresponding TV input options)
+     * @return string - date field/TV HTML code */
     
     protected function _displayDateInput($name, $timeString, $options = array()) {
 
@@ -1145,10 +1145,10 @@ class Newspublisher {
     /** Produces the HTML code for simple text fields/TVs
      * 
      * @access protected
-     * @param $name - (string) name of the field/TV
-     * @param $tplName - (string) name of the template chunk that should be used
-     * @param $maxLength - (int) Max length for the input field (in characters)
-     * @return (string) - field/TV HTML code */
+     * @param $name string - name of the field/TV
+     * @param $tplName string - name of the template chunk that should be used
+     * @param $maxLength int - Max length for the input field (in characters)
+     * @return string - field/TV HTML code */
 
     protected function _displaySimple($name, $tplName, $maxLength = 10) {
         $PHs = array('[[+npx.maxlength]]' => $maxLength);
@@ -1159,13 +1159,13 @@ class Newspublisher {
     /** Produces the HTML code for file/image TVs
      * 
      * @access protected
-     * @param $name - (string) name of the TV
-     * @param $tplName - (string) name of the template chunk that should be used
-     * @param $sourceOptions - (array) Associative array of options. Accepts all file/image TV input options.
+     * @param $name string - name of the TV
+     * @param $tplName string - name of the template chunk that should be used
+     * @param $sourceOptions array - Associative array of options. Accepts all file/image TV input options.
      *       Possible options: all (processed) TV input options (Revo versions below 2.20), respectively the media source.
      *       'wctx' doesn't seem to have an effect (?)
-     * @param $openTo - (string) Path for the directory to open to
-     * @return (string) - HTML code */
+     * @param $openTo string - Path for the directory to open to
+     * @return string - HTML code */
 
     protected function _displayFileInput($name, $tplName, $sourceOptions = array(), $openTo = '') {
         /* @var $browserAction modAction */
@@ -1201,29 +1201,30 @@ class Newspublisher {
     /** Produces the HTML code for boolean (checkbox) fields/TVs
      * 
      * @access protected
-     * @param $name - (string) name of the field/TV
-     * @param $checked - (bool) Is the Checkbox activated?  (ignored on postback)
-     * @return (string) - field/TV HTML code */
+     * @param $name string - name of the field/TV
+     * @param $checked bool - Is the Checkbox activated?  (ignored on postback)
+     * @return string - field/TV HTML code */
 
     protected function _displayBoolean($name, $checked) {
         if ($this->isPostBack) {
             $checked = $_POST[$name];
         }
         $PHs = array('[[+npx.checked]]' => $checked? 'checked="checked"' : '');
-        
-        return $this->strReplaceAssoc($PHs, $this->getTpl('boolTpl'));
+
+        return $this->strReplaceAssoc($PHs, $this->getTpl('BoolTpl'));
     }
 
     
     /** Produces the HTML code for list fields/TVs
      * 
      * @access protected
-     * @param $name - (string) name of the field/TV
-     * @param $options - (array) associative array of list entries in the form array('value' => 'text to display').
-     * @param $selected - (mixed) List entry or array of (mutiple) list entries ($options values) that are currently selected
+     * @param $name string  - name of the field/TV
+     * @param $type string  - type of list (checkbox, listbox, listbox-multiple)
+     * @param $options array -  associative array of list entries in the form array('value' => 'text to display').
+     * @param $selected mixed - List entry or array of (mutiple) list entries ($options values) that are currently selected
      *                            (this option is ignored on postback)
-     * @param $showNone - (bool) If true, the first option will be 'empty' (represented by a '-')
-     * @return (string) - field/TV HTML code */
+     * @param $showNone bool - If true, the first option will be 'empty' (represented by a '-')
+     * @return string - field/TV HTML code */
 
     protected function _displayList($name, $type, $options, $selected = null, $showNone = false) {
 
@@ -1290,12 +1291,12 @@ class Newspublisher {
     /** Produces the HTML code for textarea fields/TVs
      * 
      * @access protected
-     * @param $name - (string) name of the field/TV
-     * @param $RichText - (bool) Is this a Richtext field?
-     * @param $noRTE_class - (string) class name for non-Richtext textareas
-     * @param $rows - (int) number of rows in the textarea
-     * @param $columns - (int) width (number of columns) of the textarea
-     * @return (string) - field/TV HTML code */
+     * @param $name string - name of the field/TV
+     * @param $RichText bool - Is this a Richtext field?
+     * @param $noRTE_class string - class name for non-Richtext textareas
+     * @param $rows int - number of rows in the textarea
+     * @param $columns int - width (number of columns) of the textarea
+     * @return string - field/TV HTML code */
 
     protected function _displayTextarea($name, $RichText, $noRTE_class, $rows = 20, $columns = 60) {
         $PHs = array(
@@ -1322,7 +1323,7 @@ class Newspublisher {
     /** Saves the resource to the database.
      *
      * @access public
-     * @return - (int) returns the ID of the created or edited resource,
+     * @return int - returns the ID of the created or edited resource,
      * or empty string on error.
      * Used by snippet to forward the user.
      *
@@ -1508,7 +1509,7 @@ class Newspublisher {
         /** Forward user to another page (default is edited page)
          *
          *  @access public
-         *  @param (int) $postId - ID of page to forward to
+         *  @param $postId int - ID of page to forward to
          *  */
 
         public function forward($postId) {
@@ -1535,15 +1536,15 @@ class Newspublisher {
      * for resource/update or resource/create processors.
      *
      * @access protected
-     * @param string $resourceGroups - a comma-separated list of
+     * @param $resourceGroups string - a comma-separated list of
      * resource groups names or IDs (or both mixed) to assign a
      * document to.
+     * @param $parentObj modResource - parent object
      *
-     * @return (string) (JSON encoded array)
+     * @return string -  JSON encoded array
      */
 
     protected function _setGroups($resourceGroups, $parentObj = null) {
-        /* @var $parentObj modResource */
         $values = array();
         if ($resourceGroups == 'parent') {
 
@@ -1602,21 +1603,21 @@ class Newspublisher {
     }*/
 
     /** return any errors set in the class
-     * @return (array) array of error strings
+     * @return array - array of error strings
      */
     public function getErrors() {
         return $this->errors;
     }
 
     /** add error to error array
-     * @param (string) $msg - error message
+     * @param $msg string - error message
      */
     public function setError($msg) {
         $this->errors[] = $msg;
     }
 
     /** Gets template ID of resource
-     * @return (int) returns the template ID
+     * @return int - returns the template ID
      */
     protected function _getTemplate() {
         if ($this->existing) {
@@ -1710,8 +1711,8 @@ class Newspublisher {
     }
 
 /** Sets placeholder for field error messages
- * @param (string) $fieldName - name of field
- * @param (string) $msg - lexicon error message string
+ * @param $fieldName string - name of field
+ * @param $msg string - lexicon error message string
  *
  */
     /* ToDo: Change [[+name]] to [[+npx.something]]?, or ditch it (or not)*/
