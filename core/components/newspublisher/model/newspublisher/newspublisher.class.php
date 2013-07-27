@@ -956,8 +956,8 @@ class Newspublisher {
                 }
 
                 /* If the list is empty do not require selecting something */
-                if (!$options) $params['allowBlank'] = 'true';
-                $formTpl .= $this->_displayList($name, 'listbox', $options, $selected, $params['showNone']!='false');
+                if (empty($options)) $params['allowBlank'] = 'true';
+                $formTpl .= $this->_displayList($name, 'listbox', $options, $selected, $params['allowBlank']!='false');
                 break;
 
                 
