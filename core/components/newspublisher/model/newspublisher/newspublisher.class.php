@@ -1259,7 +1259,9 @@ class Newspublisher {
         $PHs = array('[[+npx.name]]' => $name . $postfix);
 
         // if postback -> use selection from $_POST
-        if ($this->isPostBack) $selected = $_POST[$name];
+        if ($this->isPostBack && isset($_POST[$name])) {
+            $selected = $_POST[$name];
+        }
         if (!is_array($selected)) $selected = array($selected);
 
         /* Set HTML code to use for selected options */
@@ -1693,7 +1695,7 @@ class Newspublisher {
         foreach ($this->allTvs as $tv) {
             /* @var $tv modTemplateVar */
             $name = $tv->get('name');
-            $value = $_POST[$name];
+            $value = isset($_POST[$name])? $_POST[$name] : '';
             if (is_array($value)) $value = implode('', $value);
             if (isset($_POST[$name . '_time'])) $value .= $_POST[$name . '_time'];
 
