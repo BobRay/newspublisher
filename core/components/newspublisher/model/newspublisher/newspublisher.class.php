@@ -267,7 +267,7 @@ class Newspublisher {
            }
 
            if ($css !== false) {
-               $this->modx->regClientCSS($css);
+               $this->modx->regClientCSS($css . '?v=1.4.3-pl');
            }
 
             $this->prefix =  empty($this->props['prefix']) ? 'np' : $this->props['prefix'];
