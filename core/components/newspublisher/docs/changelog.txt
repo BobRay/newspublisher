@@ -1,5 +1,12 @@
 Changelog for NewsPublisher
 
+NewsPublisher 1.4.3-pl
+----------------------
+Allow user to edit home page
+Fixed bug with dash in Resource List TV
+Fixed more E_NOTICE bugs
+Corrected Lexicon strings
+Added Italian lexicon files -- Thanks to Alberto Ramacciotti (obert2k11)
 
 NewsPublisher 1.4.2-pl
 ----------------------
