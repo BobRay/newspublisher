@@ -1345,7 +1345,7 @@ class Newspublisher {
         }
 
         if (!$this->modx->hasPermission('allow_modx_tags')) {
-            $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd>';
+            $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd><object><blockquote><code>';
             foreach ($_POST as $k => $v)
                 if (!is_array($v)) { /* leave checkboxes, etc. alone */
                     $_POST[$k] = $this->modx->stripTags($v, $allowedTags);
