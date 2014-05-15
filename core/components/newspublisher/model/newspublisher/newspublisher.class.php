@@ -391,7 +391,7 @@ class Newspublisher {
             /* new code from Markus Schlegel */
             if ($this->props['initrte']) {
 
-               $whichEditor = $this->modx->getOption('which_editor',null,'');
+               $whichEditor = $this->modx->getOption('which_editor', $this->props,'');
 
                if ($whichEditor == 'TinyMCE' ) {
                     $_REQUEST['a'] = '';  /* fixes E_NOTICE bug in TinyMCE */
