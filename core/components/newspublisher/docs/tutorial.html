@@ -51,7 +51,7 @@ When you preview the document, you should see a basic resource editing form. If 
 
 <pre><fixedpre>
     [[!NewsPublisher?
-        &show=`pagetitle,description,pub_date,summary,TV1,TV2`
+        &show=`pagetitle,description,pub_date,introtext,TV1,TV2`
         &initrte=`1`
         &initdatepicker=`1`
         &rtcontent=`1`
@@ -184,11 +184,11 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 <p>The next five properties control the standard page settings of the resource being created (whether you show them or not). They can each be set to `1`, `0`, `Parent`, or `System Default` (the default setting). If set to Parent, the settings of the resource's parent will be used (and the <fixedpre>&parentid</fixedpre> property must be set). If left unset, the MODX System Settings will be used for each one. Note that the published setting may be overridden if you show <fixedpre>pub_date</fixedpre> or <fixedpre>unpub_date</fixedpre> in the form and the user sets them.
 
 <pre><fixedpre>
-&published
-&hidemenu
-&cacheable
-&searchable
-&richtext</fixedpre></pre>
+&published_default
+&hidemenu_default
+&cacheable_default
+&searchable_default
+&richtext_default</fixedpre></pre>
 
 
 <h3>Tpl Properties</h3>
