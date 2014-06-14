@@ -1733,16 +1733,19 @@ class Newspublisher {
             /* Assume that the processor cleared the cache */
 
             $_SESSION['np_resource_id'] = $this->resource->get('id');
-            $goToUrl = $this->modx->makeUrl($postId, "", "", "full");
-            /* might need this:
-                 $goToUrl = $this->modx->makeUrl($postId, $this->resource->get('context_key'), "", "full");
-            */
+            $ctx = $this->resource->get('context_key');
+            $ctx = empty($ctx) ? '' : $ctx;
+            if (! $this->existing) {
+                $this->modx->reloadContext();
+            }
+            $goToUrl = $this->modx->makeUrl($postId, $ctx, "", "full");
+
             /* redirect to post id */
 
-            /* ToDo: The next two lines can probably be removed once makeUrl() and sendRedirect() are updated */
-            $controller = $this->modx->getOption('request_controller',
+            /* The following code is necessary in older versions of MODX */
+            /*$controller = $this->modx->getOption('request_controller',
                 null,'index.php');
-            $goToUrl = $controller . '?id=' . $postId;
+            $goToUrl = $controller . '?id=' . $postId;*/
 
             $this->modx->sendRedirect($goToUrl);
         }
