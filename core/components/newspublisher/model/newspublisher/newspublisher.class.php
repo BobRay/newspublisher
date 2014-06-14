@@ -180,9 +180,11 @@ class Newspublisher {
     /** @var $useTabs boolean - create separate tabs */
     protected $useTabs;
     /** @var $tabs string - tab specification JSON string */
-        protected $tabs;
+    protected $tabs;
     /** @var $activeTab string - tab to start on */
-        protected $activeTab;
+    protected $activeTab;
+    /** @var $stopOnBadTv boolean - abort if &show contains a TV not attached to template  */
+    protected $stopOnBadTv;
 
 
     /** NewsPublisher constructor
@@ -374,6 +376,8 @@ class Newspublisher {
                  $this->badwords = str_replace(' ','', $this->props['badwords']);
                  $this->badwords = "/".str_replace(',','|', $this->badwords)."/i";
              }
+
+            $this->stopOnBadTv = $this->modx->getOption('stopOnBadTv', $this->props, true);
 
            $this->modx->lexicon->load('core:resource');
            $this->template = (integer) $this->_getTemplate();
@@ -792,8 +796,12 @@ class Newspublisher {
             $tvId = $tvObj->get('id');
             $found = $this->modx->getCount('modTemplateVarTemplate', array('templateid' => $this->template, 'tmplvarid' => $tvId));
             if (! $found) {
-                $this->setError($this->modx->lexicon('np_not_our_tv') . ' Template: ' . $this->template . '  ----    TV: ' . $tvNameOrId);
-                return null;
+                /* No error if stopOnBadTv is false  */
+                if ($this->stopOnBadTv) {
+                    $this->setError($this->modx->lexicon('np_not_our_tv') . ' Template: ' . $this->template . '  ----    TV: ' . $tvNameOrId);
+                    return null;
+                }
+
             } else {
                 $this->allTvs[] = $tvObj;
             }
