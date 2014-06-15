@@ -189,6 +189,8 @@ class Newspublisher {
     protected $templates;
     /** @var $parents array - comma-separated list of parents to display as options */
     protected $parents;
+    /** @var $allowedTags string - allowed HTML tags */
+    protected $allowedTags;
 
 
 
@@ -271,6 +273,8 @@ class Newspublisher {
                 empty($this->props['classkey'])
             ? 'modDocument'
             : $this->props['classkey'];
+
+        $this->allowedTags = $this->modx->getOption('allowedtags', $this->props, '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd><object><blockquote><code>');
 
         /* inject NP CSS file */
         /* Empty but sent parameter means use no CSS file at all */
@@ -1585,12 +1589,14 @@ class Newspublisher {
         }
 
         if (!$this->modx->hasPermission('allow_modx_tags')) {
-            $allowedTags = '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd><object><blockquote><code>';
+
             foreach ($_POST as $k => $v)
                 if (!is_array($v)) { /* leave checkboxes, etc. alone */
-                    $_POST[$k] = $this->modx->stripTags($v, $allowedTags);
+                    $_POST[$k] = $this->modx->stripTags($v, $this->allowedTags);
                 }
-        }
+        } 
+
+
         $oldFields = $this->resource->toArray();
 
         if (!empty($this->badwords)) {
