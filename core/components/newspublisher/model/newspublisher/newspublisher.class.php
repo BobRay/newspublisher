@@ -926,6 +926,8 @@ class Newspublisher {
                         ' Template: ' . $this->template . '  ----    TV: ' .
                         $tvNameOrId);
                     return null;
+                } else {
+                    return '';
                 }
 
             } else {
