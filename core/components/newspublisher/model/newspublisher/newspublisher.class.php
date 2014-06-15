@@ -187,6 +187,8 @@ class Newspublisher {
     protected $stopOnBadTv;
     /** @var $templates array - comma-separated list of templates to display as options */
     protected $templates;
+    /** @var $parents array - comma-separated list of parents to display as options */
+    protected $parents;
 
 
 
@@ -424,6 +426,10 @@ class Newspublisher {
         $this->template = (integer) $this->_getTemplate();
         $temp = $this->modx->getOption('templates', $this->props, '');
         $this->templates = empty($temp)
+            ? array()
+            : explode(',', $temp);
+        $temp = $this->modx->getOption('parents', $this->props, '');
+        $this->parents = empty($temp)
             ? array()
             : explode(',', $temp);
 
@@ -806,6 +812,7 @@ class Newspublisher {
             case 'template':
                 $options = array();
                 $c = $this->modx->newQuery('modTemplate');
+                $c->sortby('templatename', 'ASC');
                 if (! empty($this->templates)) {
                     $c->where(array(
                         'id:IN' => $this->templates,
@@ -822,6 +829,29 @@ class Newspublisher {
                 $inner .= $this->_displayList($field, 'listbox', $options,
                     $this->template);
                 break;
+
+            case 'parent':
+                $options = array();
+                $c = $this->modx->newQuery('modResource');
+                $c->sortby('pagetitle', 'ASC');
+                if (!empty($this->parents)) {
+                    $c->where(array(
+                        'id:IN' => $this->parents,
+                    ));
+                }
+
+                $parents = $this->modx->getCollection('modResource', $c);
+                foreach ($parents as $parent) {
+                    /** @var $parent modResource */
+                    if ($parent->checkPolicy('list')) {
+                        $options[$parent->get('id')] = $parent->get('pagetitle');
+                    }
+                }
+
+                $inner .= $this->_displayList($field, 'listbox', $options,
+                    $this->parentId);
+                break;
+
 
             case 'class_key':
                 $options = array();
