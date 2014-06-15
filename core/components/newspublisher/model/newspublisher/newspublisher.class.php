@@ -185,6 +185,9 @@ class Newspublisher {
     protected $activeTab;
     /** @var $stopOnBadTv boolean - abort if &show contains a TV not attached to template  */
     protected $stopOnBadTv;
+    /** @var $templates array - comma-separated list of templates to display as options */
+    protected $templates;
+
 
 
     /** NewsPublisher constructor
@@ -362,90 +365,95 @@ class Newspublisher {
             $this->resource = $this->modx->newObject($this->classKey);
             /* get folder id where we should store articles
              else store under current document */
-             $this->parentId = !empty($this->props['parentid'])
-                 ? intval($this->props['parentid'])
-                 :$this->modx->resource->get('id');
+            $this->parentId = !empty($this->props['parentid'])
+                ? intval($this->props['parentid'])
+                :$this->modx->resource->get('id');
 
-             $this->aliasTitle = $this->props['aliastitle']
-                 ? true
-                 : false;
-             $this->clearcache = isset($_POST['clearcache'])
-                 ? $_POST['clearcache']
-                 : $this->props['clearcache'];
+            $this->aliasTitle = $this->props['aliastitle']
+                ? true
+                : false;
+            $this->clearcache = isset($_POST['clearcache'])
+                ? $_POST['clearcache']
+                : $this->props['clearcache'];
 
-             $this->hideMenu = isset($_POST['hidemenu'])
-                 ? $_POST['hidemenu']
-                 : $this->_setDefault('hidemenu',$this->parentId);
-             $this->resource->set('hidemenu', $this->hideMenu);
+            $this->hideMenu = isset($_POST['hidemenu'])
+                ? $_POST['hidemenu']
+                : $this->_setDefault('hidemenu',$this->parentId);
+            $this->resource->set('hidemenu', $this->hideMenu);
 
-             $this->cacheable = isset($_POST['cacheable'])
-                 ? $_POST['cacheable']
-                 : $this->_setDefault('cacheable',$this->parentId);
+            $this->cacheable = isset($_POST['cacheable'])
+                ? $_POST['cacheable']
+                : $this->_setDefault('cacheable',$this->parentId);
 
-             $this->resource->set('cacheable', $this->cacheable);
+            $this->resource->set('cacheable', $this->cacheable);
 
-             $this->searchable = isset($_POST['searchable'])
-                 ? $_POST['searchable']
-                 : $this->_setDefault('searchable',$this->parentId);
-             $this->resource->set('searchable', $this->searchable);
+            $this->searchable = isset($_POST['searchable'])
+                ? $_POST['searchable']
+                : $this->_setDefault('searchable',$this->parentId);
+            $this->resource->set('searchable', $this->searchable);
 
-             $this->published = isset($_POST['published'])
-                 ? $_POST['published']
-                 : $this->_setDefault('published',$this->parentId);
-             $this->resource->set('published', $this->published);
+            $this->published = isset($_POST['published'])
+                ? $_POST['published']
+                : $this->_setDefault('published',$this->parentId);
+            $this->resource->set('published', $this->published);
 
-             $this->richtext = isset($_POST['richtext'])
-                 ? $_POST['richtext']
-                 : $this->_setDefault('richtext',$this->parentId);
-             $this->resource->set('richtext', $this->richtext);
+            $this->richtext = isset($_POST['richtext'])
+                ? $_POST['richtext']
+                : $this->_setDefault('richtext',$this->parentId);
+            $this->resource->set('richtext', $this->richtext);
 
-             if (! empty($this->props['groups'])) {
+            if (! empty($this->props['groups'])) {
                 $this->groups = $this->_setDefault('groups',$this->parentId);
-             }
-             $this->header = !empty($this->props['headertpl'])
-                 ? $this->modx->getChunk($this->props['headertpl'])
-                 : '';
-             $this->footer = !empty($this->props['footertpl'])
-                 ? $this->modx->getChunk($this->props['footertpl'])
-                 :'';
+            }
+            $this->header = !empty($this->props['headertpl'])
+                ? $this->modx->getChunk($this->props['headertpl'])
+                : '';
+            $this->footer = !empty($this->props['footertpl'])
+                ? $this->modx->getChunk($this->props['footertpl'])
+                :'';
         }
 
-         if( !empty($this->props['badwords'])) {
-             $this->badwords = str_replace(' ','', $this->props['badwords']);
-             $this->badwords = "/".str_replace(',','|', $this->badwords)."/i";
-         }
+        if( !empty($this->props['badwords'])) {
+            $this->badwords = str_replace(' ','', $this->props['badwords']);
+            $this->badwords = "/".str_replace(',','|', $this->badwords)."/i";
+        }
 
         $this->stopOnBadTv = $this->modx->getOption('stopOnBadTv', $this->props, true);
 
-       $this->modx->lexicon->load('core:resource');
-       $this->template = (integer) $this->_getTemplate();
-       if($this->props['initdatepicker']) {
+        $this->modx->lexicon->load('core:resource');
+        $this->template = (integer) $this->_getTemplate();
+        $temp = $this->modx->getOption('templates', $this->props, '');
+        $this->templates = empty($temp)
+            ? array()
+            : explode(',', $temp);
+
+        if($this->props['initdatepicker']) {
             $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
             $this->modx->regClientStartupHTMLBlock('<script type=text/javascript src="' .
                 $this->assetsUrl . 'datepicker/js/datepicker.packed.js">{"lang":"' .
                 $language . '"}</script>');
-       }
+        }
 
-       $this->listboxMax = $this->props['listboxmax']
-           ? $this->props['listboxmax']
-           : 8;
-       $this->multipleListboxMax = $this->props['multiplelistboxmax']
-           ? $this->props['multiplelistboxmax']
-           : 8;
+        $this->listboxMax = $this->props['listboxmax']
+            ? $this->props['listboxmax']
+            : 8;
+        $this->multipleListboxMax = $this->props['multiplelistboxmax']
+            ? $this->props['multiplelistboxmax']
+            : 8;
 
-       $this->intMaxlength = !empty($this->props['intmaxlength'])
-           ? $this->props['intmaxlength']
-           : 10;
-       $this->textMaxlength = !empty($this->props['textmaxlength'])
-           ? $this->props['textmaxlength']
-           : 60;
+        $this->intMaxlength = !empty($this->props['intmaxlength'])
+            ? $this->props['intmaxlength']
+            : 10;
+        $this->textMaxlength = !empty($this->props['textmaxlength'])
+            ? $this->props['textmaxlength']
+            : 60;
 
-       /* new code from Markus Schlegel */
-       if ($this->props['initrte']) {
+        /* new code from Markus Schlegel */
+        if ($this->props['initrte']) {
 
-           $whichEditor = $this->modx->getOption('which_editor', $this->props,'');
+            $whichEditor = $this->modx->getOption('which_editor', $this->props,'');
 
-           if ($whichEditor == 'TinyMCE' ) {
+            if ($whichEditor == 'TinyMCE' ) {
                 $_REQUEST['a'] = '';  /* fixes E_NOTICE bug in TinyMCE */
                 $plugin=$this->modx->getObject('modPlugin',array('name'=>'TinyMCE'));
 
@@ -487,9 +495,9 @@ class Newspublisher {
                     });
                 </script>');
 
-           } /* end if ($whichEditor == 'TinyMCE') */
+            } /* end if ($whichEditor == 'TinyMCE') */
 
-       } /* end if ($richtext) */
+        } /* end if ($richtext) */
 
     } /* end init */
 
@@ -797,14 +805,22 @@ class Newspublisher {
 
             case 'template':
                 $options = array();
-                $templates = $this->modx->getCollection('modTemplate');
+                $c = $this->modx->newQuery('modTemplate');
+                if (! empty($this->templates)) {
+                    $c->where(array(
+                        'id:IN' => $this->templates,
+                    ));
+                }
+
+                $templates = $this->modx->getCollection('modTemplate', $c);
                 foreach ($templates as $template) {
                     if ($template->checkPolicy('list')) {
                         $options[$template->get('id')] = $template->get('templatename');
                     }
                 }
+
                 $inner .= $this->_displayList($field, 'listbox', $options,
-                    $this->resource->get('template'));
+                    $this->template);
                 break;
 
             case 'class_key':
