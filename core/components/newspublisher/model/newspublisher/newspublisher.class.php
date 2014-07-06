@@ -308,23 +308,25 @@ class Newspublisher {
             $_POST['hidSubmit'] == 'true');
 
         if ($this->isPostBack) {
-            $fs = array();
+            /* $fs = array(); */
             foreach($_POST as $k => $v) {
                 /* Don't use arrays for HTML select/radio fields with a single element.
                  * The nested arrays cause problems when saving fields */
-                if (is_array($v) && count($v)==1) $_POST[$k] = reset($v);
+                if (is_array($v) && count($v)==1) {
+                    $_POST[$k] = reset($v);
+                }
 
                 /* str_replace to prevent rendering of placeholders */
-                $fs[$k] = str_replace(array('[',']'),array('&#91;','&#93;'),$v);
+                /* unneeded if allow_tags_in_post is off */
+                /* $fs[$k] = str_replace(array('[[',']]'),array('{{','}}'),$v); */
             }
-            $this->modx->toPlaceholders($fs,$this->prefix);
+            $this->modx->toPlaceholders($_POST,$this->prefix);
         }
 
         if($this->existing) {
 
             $this->resource = $this->modx->getObject('modResource', $this->existing);
             if ($this->resource) {
-
                 if (! ($this->modx->hasPermission('view_document') &&
                     $this->resource->checkPolicy('view')) ) {
                     if (!$this->modx->hasPermission('view_document')) {
@@ -337,17 +339,20 @@ class Newspublisher {
                 }
                 if (! $this->isPostBack) {
                     $ph = $this->resource->toArray();
-                    $fs = array();
-                    foreach($ph as $k=>$v) {
-                        if (! is_array($v) && strstr($v, '[[') &&
-                                ! $this->modx->hasPermission('allow_modx_tags')) {
+
+                    if ($this->hasToken($ph)) {
+                        echo '<br />HAS Token';
+                        if ($this->modx->hasPermission('xallow_modx_tags')) {
+                            echo '<br />HAS Permission';
+                            $ph = $this->convertTags($ph);
+                        } else {
+                            echo '<br />No Permission';
+                        /* return error if there are any MODX tags */
                             $this->setError($this->modx->lexicon('np_no_modx_tags'));
                             return;
                         }
-                        $fs[$k] = str_replace(array('[',']'),
-                            array('&#91;','&#93;'),$v);
                     }
-                    $ph = $fs;
+                    
                     $this->modx->toPlaceholders($ph,$this->prefix);
                     unset($ph);
                 }
@@ -836,6 +841,16 @@ class Newspublisher {
 
             case 'parent':
                 $options = array();
+                $pid = $this->resource->get('parent');
+                $pobj = $this->modx->getObject('modResource', $pid);
+                if ($pobj) {
+                    $pptitle = $pobj->get('pagetitle');
+                } else {
+                    $pptitle = $this->resource->get('context_key');
+
+                }
+                $options[$pid] = $pptitle;
+
                 $c = $this->modx->newQuery('modResource');
                 $c->sortby('pagetitle', 'ASC');
                 if (!empty($this->parents)) {
@@ -853,7 +868,7 @@ class Newspublisher {
                 }
 
                 $inner .= $this->_displayList($field, 'listbox', $options,
-                    $this->parentId);
+                    $pid);
                 break;
 
 
@@ -917,7 +932,7 @@ class Newspublisher {
         }
 
         $inner = $this->strReplaceAssoc($replace, $inner);
-        
+
         return $inner;
     }
     
@@ -976,6 +991,7 @@ class Newspublisher {
         $formTpl = '';
         $tv = $tvObj;
         $fields = $tv->toArray();
+        
         $name = $fields['name'];
 
         $params = $tv->get('input_properties');
@@ -985,6 +1001,15 @@ class Newspublisher {
             : (empty($fields['caption'])
                 ? $name
                 : $fields['caption']);
+
+        if ($this->hasToken($caption)) {
+            if ($this->modx->hasPermission('allow_modx_tags')) {
+                $caption = $this->convertTags($caption);
+            } else {
+                $this->setError($this->modx->lexicon('np_no_modx_tags') . ': ' . $caption);
+                return '';
+            }
+        }
 
         /* Build TV input code dynamically based on type */
         $tvType = $tv->get('type');
@@ -1000,6 +1025,30 @@ class Newspublisher {
             if (empty($ph)) {
                 $ph = $fields['default_text'];
             }
+
+            /*$find = array('[[', ']]');
+            $replace = array('{{', '}}');
+        
+            if (is_string($ph) && (! empty($ph))) {
+                if (strpos($ph, '[[') !== false) {
+                    if ($this->modx->hasPermission('allow_modx_tags')) {
+                        $ph = str_replace($find, $replace, $ph);
+                    } else {
+                        $this->setError('np_no_modx_tags');
+                        return '';
+                    } 
+                }
+            }*/
+            if ($this->hasToken($ph)) {
+                if ($this->modx->hasPermission('allow_modx_tags')) {
+                    $ph = $this->convertTags($ph);
+                } else  {
+                    $this->setError($this->modx->lexicon('np_no_modx_tags') . ': ' . $tv->get('name'));
+                    return NULL;
+                }
+            }
+
+        
             if (stristr($ph,'@EVAL')) {
                 $this->setError($this->modx->lexicon('np_no_evals') .
                     $tv->get('name'));
@@ -1587,15 +1636,30 @@ class Newspublisher {
             }
             return '';
         }
+        
+        /*$find = array('{{','}}');
+        $replace = array('[[',']]');
 
-        if (!$this->modx->hasPermission('allow_modx_tags')) {
-
-            foreach ($_POST as $k => $v)
-                if (!is_array($v)) { /* leave checkboxes, etc. alone */
+        foreach ($_POST as $k => $v) {
+            if (!is_array($v)) {
+                if (!$this->modx->hasPermission('allow_modx_tags')) {
                     $_POST[$k] = $this->modx->stripTags($v, $this->allowedTags);
+                } else {
+                    $_POST[$k] = str_replace($find, $replace, $v);
                 }
-        } 
+            }
+        }*/
 
+        /* strip any unwanted tags */
+        foreach ($_POST as $k => $v) {
+            if (!is_array($v)) {
+                $_POST[$k] = $this->modx->stripTags($v, $this->allowedTags);
+            }
+        }
+
+        if ($this->modx->hasPermission('allow_modx_tags')) {
+            $_POST = $this->convertTags($_POST, 'toSquare', '{{');
+        }
 
         $oldFields = $this->resource->toArray();
 
@@ -2009,6 +2073,45 @@ class Newspublisher {
         $this->modx->toPlaceholder($ph, $msg, $this->prefix);
     }
 
+    /**
+     * @param $ar mixed - string or array to convert
+     * @param string $direction - 'toSquare' or 'toCurly'
+     * @param string $token - string to search for ('[[' or '}}'
+     *     non-strings and strings without the token are left alone
+     *
+     * @return mixed - returns converted string or array
+     */
+    public function convertTags($ar, $direction = 'toCurly', $token = '[[') {
+        $find = $direction == 'toSquare'? array('{{', '}}') : array('[[', ']]');
+        $replace = $direction == 'toSquare'? array('[[', ']]') : array('{{', '}}');
+
+        if (! is_array($ar)) {
+            if (is_string ($ar) && (strpos($ar, $token) !== false)) {
+                $ar = str_replace($find, $replace, $ar);
+            }
+        } else {
+
+            foreach ($ar as $key => $value) {
+                $ar[$key] = $this->convertTags($value, $direction, $token);
+            }
+        }
+        return $ar;
+    }
+
+    public function hasToken($subject, $token = '[[') {
+        $tokenFound = false;
+        if (!is_array($subject)) {
+            return strpos($subject, $token) !== false;
+        } else {
+            foreach ($subject as $key => $value) {
+                if ($this->hasToken($value, $token)) {
+                    return true;
+                }
+            }
+        }
+        return $tokenFound;
+    }
+
 public function my_debug($message, $clear = false) {
     /* @var $chunk modChunk */
     global $modx;
@@ -2028,5 +2131,7 @@ public function my_debug($message, $clear = false) {
     $chunk->setContent($content);
     $chunk->save();
 }
+
+
 
 } /* end class */
