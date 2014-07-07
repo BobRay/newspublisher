@@ -1024,19 +1024,6 @@ class Newspublisher {
                 $ph = $fields['default_text'];
             }
 
-            /*$find = array('[[', ']]');
-            $replace = array('{{', '}}');
-        
-            if (is_string($ph) && (! empty($ph))) {
-                if (strpos($ph, '[[') !== false) {
-                    if ($this->modx->hasPermission('allow_modx_tags')) {
-                        $ph = str_replace($find, $replace, $ph);
-                    } else {
-                        $this->setError('np_no_modx_tags');
-                        return '';
-                    } 
-                }
-            }*/
             if ($this->hasToken($ph)) {
                 if ($this->modx->hasPermission('allow_modx_tags')) {
                     $ph = $this->convertTags($ph);
@@ -1635,19 +1622,6 @@ class Newspublisher {
             return '';
         }
         
-        /*$find = array('{{','}}');
-        $replace = array('[[',']]');
-
-        foreach ($_POST as $k => $v) {
-            if (!is_array($v)) {
-                if (!$this->modx->hasPermission('allow_modx_tags')) {
-                    $_POST[$k] = $this->modx->stripTags($v, $this->allowedTags);
-                } else {
-                    $_POST[$k] = str_replace($find, $replace, $v);
-                }
-            }
-        }*/
-
         /* strip any unwanted tags */
         foreach ($_POST as $k => $v) {
             if (!is_array($v)) {
