@@ -315,11 +315,11 @@ class Newspublisher {
                 if (is_array($v) && count($v)==1) {
                     $_POST[$k] = reset($v);
                 }
-
-                /* str_replace to prevent rendering of placeholders */
-                /* unneeded if allow_tags_in_post is off */
-                /* $fs[$k] = str_replace(array('[[',']]'),array('{{','}}'),$v); */
             }
+
+            /* No need to convert tags here. MODX will have removed them
+               if allow_tags_in_post System Setting is off */
+
             $this->modx->toPlaceholders($_POST,$this->prefix);
         }
 
@@ -341,9 +341,7 @@ class Newspublisher {
                     $ph = $this->resource->toArray();
 
                     if ($this->hasToken($ph)) {
-                        echo '<br />HAS Token';
-                        if ($this->modx->hasPermission('xallow_modx_tags')) {
-                            echo '<br />HAS Permission';
+                        if ($this->modx->hasPermission('allow_modx_tags')) {
                             $ph = $this->convertTags($ph);
                         } else {
                             echo '<br />No Permission';
