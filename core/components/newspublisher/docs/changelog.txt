@@ -1,8 +1,18 @@
 Changelog for NewsPublisher
 
-NewsPublisher 1.4.3-pl
+NewsPublisher 2.0.0-pl
 ----------------------
-Allow user to edit home page
+
+Allow editing MODX tags with allow_tags_in_post off
+Added &stopOnBadTv property to prevent error when a TV is not attached to current template
+Allow users to unset pub_date
+Fix bug with filebrowser/image TVs
+Fix bug with Articles class_key
+Added &allowedtags property
+Added missing tags to allowed tags
+Allow users to edit Home page with &editHome property
+Cachebust CSS file
+Many bug fixes and corrections
 Fixed bug with dash in Resource List TV
 Fixed more E_NOTICE bugs
 Corrected Lexicon strings

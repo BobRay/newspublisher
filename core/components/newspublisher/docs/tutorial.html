@@ -74,9 +74,13 @@ When you preview the document, you should see a basic resource editing form. If 
 
 <p>Be aware that if you upgrade or reinstall NewsPublisher, the <fixedpre>allow_modx_tags</fixedpre> permission may be unchecked during the process and any other permissions you changed may be reverted unless you have duplicated the NewsPublisherEditor Policy and are using the duplicate.</p>
 
-<h3>NewsPublisher Editor Policy</h3>
+<h3>MODX Tags</h3>
 
-<p>As of NewsPublisher 1.3.0, the package includes an Access Policy called &quot;NewsPublisherEditor&quot;. This Policy enables the basic permissions necessary to operate NewsPublisher in the front end without giving the user any dangerous permissions. Create a Context Access ACL policy for the web context for any users who will be using NewsPublisher. As always, flush permissions and sessions on the Security menu after making any changes.</p>
+<p>Recent versions of MODX include the <fixedpre>allow_tags_in_post</fixedpre> System Setting. This makes MODX front-end forms much more secure, but it kills the option to edit resources or TVs containing MODX tags in the front end unless that setting is on (which poses significant security risks). As of NewsPublisher 2.0, there is a workaround for this. It's not ideal, but it works. MODX tags are now represented in NewsPublisher in the form <fixedpre>{{...}}</fixedpre> instead of <fixedpre>[[ ... ]]</fixedpre>. This allows users with the required permission to edit MODX tags in NewsPublisher without turning on the System Setting.</p>
+
+<p>For security reasons, it's <b>strongly recommended</b> that you leave the MODX <fixedpre>allow_tags_in_post</fixedpre> System Setting at its default setting of 'No'. If you want users to be able to edit MODX tags, put a check next to the <fixedpre>allow_modx_tags</fixedpre> permission in the NewsPublisherEditor Policy and save the Policy. For any users who will be using NewsPublisher, create a Context Access ACL entry for their User Group with a Context of 'web' and NewsPublisherEditor for the Policy. That will give them the <fixedpre>allow_modx_tags</fixedpre> permission. As always, flush permissions and sessions on the Security menu after making any changes.</p>
+
+<p>NewsPublisher users will see all MODX tags in this form: <fixedpre>{{ ... }}</fixedpre> and will need to use the curly braces for any new tags they enter. All MODX tags are allowed and nested tags work fine in all my tests. The tags will be converted to standard MODX tags when the Resource is saved. <b>Important</b>: Note that if there are any tags in the form <fixedpre>[[ ... ]]</fixedpre> in any field of the NewsPublisher form, MODX will remove them when the form is posted.</p>
 
 <p>The NewsPublisherEditor Policy is based on the NewsPublisherPolicyTemplate, which in turn is based on the Administrator Policy Template but with the addition of the <fixedpre>allow_modx_tags</fixedpre> permission. Both the Policy and the Policy Template should be installed automatically when you install the NewsPublisher Package.</p>
 
@@ -110,7 +114,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 </p>
 
 <h3>NewsPublisher Tabs</h3>
-<p>As of NewsPublisher 1.4.1, you can show the Resource fields on separate tabs like in the Manager ((thanks to Gregor Šekoranja). The tabs and fields can be in any order and any field can go on any tab. You can have as many tabs as you want. The names of the tabs are arbitrary. Whatever names you use will be displayed in the tab menu on the form.</p>
+<p>As of NewsPublisher 1.4.1, you can show the Resource fields on separate tabs like in the Manager (thanks to Gregor Šekoranja). The tabs and fields can be in any order and any field can go on any tab. You can have as many tabs as you want. The names of the tabs are arbitrary. Whatever names you use will be displayed in the tab menu on the form.</p>
 
 <p>Set <fixedpre>&usetabs=`1`</fixedpre> in the NewsPublisher snippet tag and include a <fixedpre>&tabs</fixedpre> property in the following form:</p>
 
@@ -139,10 +143,10 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 </ul>
 
-<p>The Tab names are on the left and you can use any names you like and as many or as few tabs as you need. Newspublisher will add a &quot;Show All&quot; button that will show all fields at once. If you include a field that is not in the <fixedpre>&show</fixedpre> property, you'll see an error message telling you that the tab field can't be found. If there is a field in the <fixedpre>&show</fixedpre> property that is not in your <fixedpre>&tabs</fixedpre> list, it will go on the &quot;Other&quot; tab (which will not be shown if all the fields are accounted for).</p>
+<p>The Tab names are on the left and you can use any names you like and as many or as few tabs as you need. NewsPublisher will add a &quot;Show All&quot; button that will show all fields at once. If you include a field that is not in the <fixedpre>&show</fixedpre> property, you'll see an error message telling you that the tab field can't be found. If there is a field in the <fixedpre>&show</fixedpre> property that is not in your <fixedpre>&tabs</fixedpre> list, it will go on the &quot;Other&quot; tab (which will not be shown if all the fields are accounted for).</p>
 
 <h3>Configuring NewsPublisher</h3>
-<p>NewsPublisher has many options, but almost all of them are optional. You can see the list by editing the NewsPublisher snippet and clicking on the Properties tab. Unlock the default properties by clicking on the &quot;Default Properties Locked&quot; button. Then, click the little plus sign next to a property to see what it does. It is <b>strongly</b> recommended that you not change the default properties. Either put properties in the snippet tag to override them, or create a property set by clicking on the &quot;Add Property Set&quot; button and specify it in the snippet tag like this:</p>
+<p>NewsPublisher has many options, but almost all of them are optional. You can see the list by editing the NewsPublisher snippet and clicking on the Properties tab. Unlock the default properties by clicking on the &quot;Default Properties Locked&quot; button. Then, click the little plus sign next to a property to see what it does. It is <b>strongly</b> recommended that you not change the default properties on the Properties tab of the snippet. Either put properties in the snippet tag to override them, or create a property set by clicking on the &quot;Add Property Set&quot; button and specify it in the snippet tag like this:</p>
 
 <p><fixedpre>[[!NewsPublisher@PropertySetName]]</fixedpre></p>
 
@@ -178,10 +182,10 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p><fixedpre>&initdatepicker</fixedpre> &mdash; (0/1) This is required if you will be showing any date fields or TVs.</p>
 
-<p><fixedpre>&parentid</fixedpre> &mdash; (integer) ID of the parent for new pages; default to NewsPublisher page.
+<p><fixedpre>&parentid</fixedpre> &mdash; (integer) ID of the parent for new pages; defaults to NewsPublisher page.
     (must be set if any other property is set to `Parent`.</p>
 
-<p><fixedpre>&parents</fixedpre> &mdash; comma-separated list of parent IDs (must be IDs!) of parents for user to select from; default: (empty -
+<p><fixedpre>&parents</fixedpre> &mdash; comma-separated list of possible parent IDs (must be IDs!) of parents for user to select from; default: (empty -
 shows all Resources)</p>
 
 
@@ -255,8 +259,7 @@ shows all Templates)</p>
     Important: Do not set this for Checkbox, list, or radio TVs or
     for boolean (0/1) resource fields (like the five above).</p>
 
-<p><fixedpre>&cancelid</fixedpre> &mdash; (integer) ID of the page the user will be forwarded to on cancel.
-    If you don't want a cancel button, just remove it from the
+<p><fixedpre>&cancelid</fixedpre> &mdash; (integer) ID of the page the user will be forwarded to on cancel. If you don't want a cancel button, just remove it from the
     npOuterTpl chunk.</p>
 
 <p><fixedpre>&badwords</fixedpre> &mdash; (string) Comma-separated list of words to be filtered from fields.</p>
