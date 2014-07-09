@@ -1735,15 +1735,6 @@ class Newspublisher {
                 unset($t_resourceTVs,$t_resourceId,$t_tvId,$t_value);
             }
 
-            /* if ((!$this->existing) && isset($_POST['tb_send_date']) && isset
-            ($_POST['tb_send_shortname'])) {
-                 $dVal = strtotime($_POST['tb_send_date']);
-                 $dString = strftime("%y%m%d", $dVal);
-                 $fields['pagetitle'] = $dString . '_' . $_POST['tb_send_shortname'];
-                 $fields['alias'] = $dString . '-' . $_POST['tb_send_shortname'];
-                 unset($dVal, $dString);
-             } */
-
             /* ****************************************** */
             $fields['tvs'] = true;
             foreach ($this->allTvs as $tv) {
@@ -1859,7 +1850,7 @@ class Newspublisher {
             $resourceGroups = (array) $parentObj->getMany('ResourceGroupResources');
 
             if (!empty($resourceGroups)) {
-                /* parent belongs to at lease one resource group */
+                /* parent belongs to at least one resource group */
                 /* build $resourceGroups string from parent's groups */
                 $groupNumbers = array();
                 foreach ($resourceGroups as $resourceGroup) {
