@@ -9,7 +9,7 @@ Allow users to unset pub_date
 Fix bug with filebrowser/image TVs
 Fix bug with Articles class_key
 Added &allowedtags property
-Added missing tags to allowed tags
+Added missing tags to default allowed tags
 Allow users to edit Home page with &editHome property
 Cachebust CSS file
 Many bug fixes and corrections
