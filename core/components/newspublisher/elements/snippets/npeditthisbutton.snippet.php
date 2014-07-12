@@ -1,5 +1,4 @@
 <?php
-
 /**
  * NpEditThisButton
  * Copyright 2011-2012 Bob Ray
