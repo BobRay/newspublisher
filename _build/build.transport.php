@@ -141,6 +141,7 @@ $vehicle= $builder->createVehicle($template,array (
     xPDOTransport::UPDATE_OBJECT => true,
     xPDOTransport::UNIQUE_KEY => 'name',
 ));
+$modx->log(modX::LOG_LEVEL_INFO, 'Adding access policy template resolver.');
 $vehicle->resolve('php',array(
     'source' => $sources['resolvers'] . 'accesspolicytemplate.resolver.php',
 ));
@@ -154,10 +155,12 @@ $vehicle= $builder->createVehicle($policy,array (
     xPDOTransport::UPDATE_OBJECT => true,
     xPDOTransport::UNIQUE_KEY => 'name',
 ));
+$modx->log(modX::LOG_LEVEL_INFO, 'Adding access policy resolver.');
 $vehicle->resolve('php',array(
     'source' => $sources['resolvers'] . 'accesspolicy.resolver.php',
 ));
 
+$modx->log(modX::LOG_LEVEL_INFO, 'Adding filemove resolver.');
 $vehicle->resolve('php',array(
     'source' => $sources['resolvers'] . 'filemove.resolver.php',
 ));
