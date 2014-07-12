@@ -40,6 +40,10 @@
  * operation.
  */
 
+/* For Lexicon Helper
+   $modx->lexicon->load('newspublisher:default');
+*/
+
 class Newspublisher {
 
    /**
@@ -1004,7 +1008,8 @@ class Newspublisher {
             if ($this->modx->hasPermission('allow_modx_tags')) {
                 $caption = $this->convertTags($caption);
             } else {
-                $this->setError($this->modx->lexicon('np_no_modx_tags') . ': ' . $caption);
+                $this->setError($this->modx->lexicon('np_no_modx_tags')
+                    . ': ' . $caption);
                 return '';
             }
         }
@@ -1028,7 +1033,8 @@ class Newspublisher {
                 if ($this->modx->hasPermission('allow_modx_tags')) {
                     $ph = $this->convertTags($ph);
                 } else  {
-                    $this->setError($this->modx->lexicon('np_no_modx_tags') . ': ' . $tv->get('name'));
+                    $this->setError($this->modx->lexicon('np_no_modx_tags')
+                        . ': ' . $tv->get('name'));
                     return NULL;
                 }
             }
@@ -1859,7 +1865,7 @@ class Newspublisher {
                 }
                 $resourceGroups = implode(',', $groupNumbers);
             } else { /* parent not in any groups */
-                //$this->setError($this->modx->lexicon('np_no_parent_groups'));
+                //$this->setError($this->modx->leXicon('np_no_parent_groups'));
                 return '';
             }
 
@@ -1950,7 +1956,7 @@ class Newspublisher {
                     (integer) $this->props['template']);
                 /* make sure it exists */
                 if (! $t) {
-                    $this->SetError($this->modx->lexicon('np_no_template_id') .
+                    $this->SetError($this->modx->lexicon('np_no_template_name') .
                         $this->props['template']);
                 }
             } else { /* user sent a template name */

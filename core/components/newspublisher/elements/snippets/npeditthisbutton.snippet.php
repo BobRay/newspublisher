@@ -47,6 +47,10 @@
  *
  */
 
+
+/* For LexiconHelper
+  $modx->lexicon->load('newspublisher:button') */
+
 /* @var $modx modX */
 /* ToDo: Internationalize button caption debug messages */
 $props =& $scriptProperties;
