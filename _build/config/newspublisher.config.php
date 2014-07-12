@@ -446,7 +446,7 @@ $components = array(
     /* ******************** LEXICON HELPER SETTINGS ***************** */
     /* These settings are used by LexiconHelper */
     'rewriteCodeFiles' => false,  /* remove ~~descriptions */
-    'rewriteLexiconFiles' => true, /* automatically add missing strings to lexicon files */
+    'rewriteLexiconFiles' => false, /* automatically add missing strings to lexicon files */
     /* ******************************************* */
 
     /* Array of aliases used in code for the properties array.
