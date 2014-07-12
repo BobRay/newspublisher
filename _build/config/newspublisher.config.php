@@ -300,10 +300,13 @@ $components = array(
        (no trailing slash on directory)
        if 'createCmpFiles is true, these will be ignored.
     */
-    $jsFiles = array(
+    'jsFiles' => array(
       /*    'newspublisher.js', */
     ),
 
+    'cssFiles' => array(
+         'newspublisher.css'
+    ),
 
     /* ********************************************* */
     /* Define basic directories and files to be created in project*/
