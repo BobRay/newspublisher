@@ -28,17 +28,29 @@ $snippets = array();
 $snippets[1] = $modx->newObject('modSnippet');
 $snippets[1]->fromArray(array (
   'id' => 1,
-  'description' => 'NewsPublisher main snippet',
+  'property_preprocess' => false,
   'name' => 'NewsPublisher',
+  'description' => 'Front-end resource creation/editing snippet.',
 ), '', true, true);
 $snippets[1]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/newspublisher.snippet.php'));
+
+
+$properties = include $sources['data'].'properties/properties.newspublisher.snippet.php';
+$snippets[1]->setProperties($properties);
+unset($properties);
 
 $snippets[2] = $modx->newObject('modSnippet');
 $snippets[2]->fromArray(array (
   'id' => 2,
-  'description' => 'Snippet to display Edit button for NewsPublisher',
+  'property_preprocess' => false,
   'name' => 'NpEditThisButton',
+  'description' => 'Displays a button to edit the current resource with NewsPublisher.',
 ), '', true, true);
 $snippets[2]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/npeditthisbutton.snippet.php'));
+
+
+$properties = include $sources['data'].'properties/properties.npeditthisbutton.snippet.php';
+$snippets[2]->setProperties($properties);
+unset($properties);
 
 return $snippets;
