@@ -61,7 +61,7 @@ $modx->setLogTarget(XPDO_CLI_MODE ? 'ECHO' : 'HTML');
 
 /* set package info */
 define('PKG_NAME','newspublisher');
-define('PKG_VERSION','1.4.2');
+define('PKG_VERSION','1.4.3');
 define('PKG_RELEASE','pl');
 
 /* load builder */
@@ -80,14 +80,14 @@ $category->set('category','NewsPublisher');
 
 /* add snippets */
 $modx->log(modX::LOG_LEVEL_INFO,'Adding in snippets.');
-$snippets = include $sources['data'].'transport.snippets.php';
+$snippets = include $sources['data'].'newspublisher/transport.snippets.php';
 if (is_array($snippets)) {
     $category->addMany($snippets);
 } else { $modx->log(modX::LOG_LEVEL_FATAL,'Adding snippets failed.'); }
 
 /* add chunks  */
 $modx->log(modX::LOG_LEVEL_INFO,'Adding in chunks.');
-$chunks = include $sources['data'].'transport.chunks.php';
+$chunks = include $sources['data'].'newspublisher/transport.chunks.php';
 if (is_array($chunks)) {
     $category->addMany($chunks);
 } else { $modx->log(modX::LOG_LEVEL_FATAL,'Adding chunks failed.'); }
