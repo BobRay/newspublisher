@@ -30,7 +30,7 @@ $chunks[1]->fromArray(array (
   'id' => 1,
   'property_preprocess' => false,
   'name' => 'npFieldErrorTpl',
-  'description' => 'Tpl chunk display above each NewsPublisher field',
+  'description' => 'Tpl chunk used to display field-specific errors above each NewsPublisher field',
   'properties' => NULL,
 ), '', true, true);
 $chunks[1]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/npfielderrortpl.chunk.tpl'));
@@ -50,7 +50,7 @@ $chunks[3]->fromArray(array (
   'id' => 3,
   'property_preprocess' => false,
   'name' => 'npErrorTpl',
-  'description' => 'Tpl chunk for use in the NewsPublisher error header',
+  'description' => 'Tpl chunk for use in displaying errors listed at the top of the NewsPublisher form.',
   'properties' => NULL,
 ), '', true, true);
 $chunks[3]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/nperrortpl.chunk.tpl'));
@@ -140,7 +140,7 @@ $chunks[12]->fromArray(array (
   'id' => 12,
   'property_preprocess' => false,
   'name' => 'npBoolTpl',
-  'description' => 'Tpl chunk for NewsPublisher boolean fields',
+  'description' => 'Tpl chunk for NewsPublisher boolean (Yes/No) fields',
   'properties' => NULL,
 ), '', true, true);
 $chunks[12]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/npbooltpl.chunk.tpl'));
