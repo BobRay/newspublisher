@@ -47,10 +47,6 @@
  *
  */
 
-
-/* For LexiconHelper
-  $modx->lexicon->load('newspublisher:button') */
-
 /* @var $modx modX */
 /* ToDo: Internationalize button caption debug messages */
 $props =& $scriptProperties;
@@ -58,6 +54,8 @@ $props =& $scriptProperties;
 $language = $modx->getOption('language', $props, null);
 $language = $language ? $language . ':' : '';
 $modx->lexicon->load($language . 'newspublisher:button');
+/* For lexicon helper
+$modx->lexicon->load('newspublisher:button'); */
 
 /* Caption for edit button  */
 $debug = $modx->getOption('debug', $props, false);

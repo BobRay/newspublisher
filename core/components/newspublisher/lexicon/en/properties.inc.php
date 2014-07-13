@@ -81,11 +81,8 @@ $_lang['np_classkey_desc'] = '(optional) Class key for new resources; use only i
 $_lang['np_contentrows_desc'] = '(optional)Rows to show in Content field; default: 10';
 $_lang['np_contentcols_desc'] = '(optional)Columns to show in Content field; default: 60';
 $_lang['np_aliasdateformat_desc'] = '(optional)Format string for auto date alias (see tutorial)';
-
-
-
-
-
-
-
-
+$_lang['np_allowedtags_desc'] = '(optional) tags allowed in text fields';
+$_lang['np_stopOnBadTv_desc'] = '(optional) If set to No, &show can contain TVs not attached to the current template without an error; default: Yes';
+$_lang['np_templates_desc'] = '(optional) Comma-separated list of template IDs for user to select from (must be IDs); if empty, all templates are shown; to force a template, set &template and do not show the template field; default: empty';
+$_lang['np_parents_desc'] = 'Comma-separated list of parent IDs for user to select from (must be IDs); if empty, all parents are shown; to force a parent, set &parent and do not show the parent field; default: empty';
+$_lang['np_which_editor_desc'] = 'Rich-text editor to use; at present, TinyMCE is the only value that will work';
