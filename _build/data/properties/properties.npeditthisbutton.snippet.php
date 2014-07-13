@@ -97,6 +97,16 @@ $properties = array (
     'lexicon' => 'newspublisher:button',
     'area' => '',
   ),
+  'editHome' => 
+  array (
+    'name' => 'editHome',
+    'desc' => 'editHome_desc',
+    'type' => 'combo-boolean',
+    'options' => '',
+    'value' => false,
+    'lexicon' => 'newspublisher:properties',
+    'area' => '',
+  ),
 );
 
 return $properties;

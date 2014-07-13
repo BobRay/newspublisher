@@ -586,7 +586,7 @@ $properties = array (
   'usetabs' => 
   array (
     'name' => 'usetabs',
-    'desc' => 'np_usetabs_desc~~(optional) Show tabbed display; default: No',
+    'desc' => 'np_usetabs_desc',
     'type' => 'combo-boolean',
     'options' => '',
     'value' => false,
@@ -596,7 +596,7 @@ $properties = array (
   'tabs' => 
   array (
     'name' => 'tabs',
-    'desc' => 'np_tabs_desc~~(required only if usetabs is set) Specification for tabs (see tutorial)',
+    'desc' => 'np_tabs_desc',
     'type' => 'textfield',
     'options' => '',
     'value' => '',
@@ -606,7 +606,7 @@ $properties = array (
   'activetab' => 
   array (
     'name' => 'activetab',
-    'desc' => 'np_activetab_desc~~(optional) Tab to show when form is loaded',
+    'desc' => 'np_activetab_desc',
     'type' => 'textfield',
     'options' => '',
     'value' => '',
@@ -616,7 +616,7 @@ $properties = array (
   'classkey' => 
   array (
     'name' => 'classkey',
-    'desc' => 'np_classkey_desc~~(optional) Class key for new resources; use only if you have subclassed resource or are using this for Articles (set to Article); default: modDocument',
+    'desc' => 'np_classkey_desc',
     'type' => 'textfield',
     'options' => '',
     'value' => '',
@@ -626,7 +626,7 @@ $properties = array (
   'contentrows' => 
   array (
     'name' => 'contentrows',
-    'desc' => 'np_contentrows_desc~~(optional)Rows to show in Content field; default: 10',
+    'desc' => 'np_contentrows_desc',
     'type' => 'textfield',
     'options' => '',
     'value' => '10',
@@ -636,7 +636,7 @@ $properties = array (
   'contentcols' => 
   array (
     'name' => 'contentcols',
-    'desc' => 'np_contentcols_desc~~(optional)Columns to show in Content field; default: 60',
+    'desc' => 'np_contentcols_desc',
     'type' => 'textfield',
     'options' => '',
     'value' => '60',
@@ -646,7 +646,7 @@ $properties = array (
   'summaryrows' => 
   array (
     'name' => 'summaryrows',
-    'desc' => 'np_summaryrows_desc~~(optional)Rows to show in summary (introtext) Field; default;10',
+    'desc' => 'np_summaryrows_desc',
     'type' => 'textfield',
     'options' => '',
     'value' => '10',
@@ -656,7 +656,7 @@ $properties = array (
   'summarycols' => 
   array (
     'name' => 'summarycols',
-    'desc' => 'np_summarycols_desc~~(optional)Columns to show in summary (introtext) Field; default: 60',
+    'desc' => 'np_summarycols_desc',
     'type' => 'textfield',
     'options' => '',
     'value' => '60',
@@ -666,12 +666,62 @@ $properties = array (
   'aliasdateformat' => 
   array (
     'name' => 'aliasdateformat',
-    'desc' => 'np_aliasdateformat_desc~~(optional)Format string for auto date alias (see tutorial)',
+    'desc' => 'np_aliasdateformat_desc',
     'type' => 'textfield',
     'options' => '',
     'value' => '',
     'lexicon' => 'newspublisher:properties',
     'area' => 'Resource Field Settings',
+  ),
+  'allowedtags' => 
+  array (
+    'name' => 'allowedtags',
+    'desc' => 'np_allowedtags_desc',
+    'type' => 'textfield',
+    'options' => '',
+    'value' => '<p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd><object><blockquote><code>',
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'NewsPublisher Control Settings',
+  ),
+  'stopOnBadTv' => 
+  array (
+    'name' => 'stopOnBadTv',
+    'desc' => 'np_stopOnBadTv_desc',
+    'type' => 'combo-boolean',
+    'options' => '',
+    'value' => true,
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'NewsPublisher Control Settings',
+  ),
+  'templates' => 
+  array (
+    'name' => 'templates',
+    'desc' => 'np_templates_desc',
+    'type' => 'textfield',
+    'options' => '',
+    'value' => '',
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'NewsPublisher Control Settings',
+  ),
+  'parents' => 
+  array (
+    'name' => 'parents',
+    'desc' => 'np_parents_desc',
+    'type' => 'textfield',
+    'options' => '',
+    'value' => '',
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'NewsPublisher Control Settings',
+  ),
+  'which_editor' => 
+  array (
+    'name' => 'which_editor',
+    'desc' => 'np_which_editor_desc',
+    'type' => 'textfield',
+    'options' => '',
+    'value' => 'TinyMCE',
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'NewsPublisher Control Settings',
   ),
 );
 
