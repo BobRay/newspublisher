@@ -21,7 +21,7 @@ $properties = array (
     'options' => 
     array (
     ),
-    'value' => '',
+    'value' => '20%',
     'lexicon' => 'newspublisher:button',
     'area' => '',
   ),
@@ -34,6 +34,18 @@ $properties = array (
     array (
     ),
     'value' => '',
+    'lexicon' => 'newspublisher:button',
+    'area' => '',
+  ),
+  'editHome' => 
+  array (
+    'name' => 'editHome',
+    'desc' => 'editHome_desc',
+    'type' => 'combo-boolean',
+    'options' => 
+    array (
+    ),
+    'value' => false,
     'lexicon' => 'newspublisher:button',
     'area' => '',
   ),
@@ -81,7 +93,7 @@ $properties = array (
     'options' => 
     array (
     ),
-    'value' => 22,
+    'value' => '',
     'lexicon' => 'newspublisher:button',
     'area' => '',
   ),
@@ -93,18 +105,8 @@ $properties = array (
     'options' => 
     array (
     ),
-    'value' => '',
+    'value' => '20%',
     'lexicon' => 'newspublisher:button',
-    'area' => '',
-  ),
-  'editHome' => 
-  array (
-    'name' => 'editHome',
-    'desc' => 'editHome_desc',
-    'type' => 'combo-boolean',
-    'options' => '',
-    'value' => false,
-    'lexicon' => 'newspublisher:properties',
     'area' => '',
   ),
 );
