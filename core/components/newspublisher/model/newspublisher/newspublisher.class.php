@@ -46,6 +46,8 @@
 
 class Newspublisher {
 
+   /** @var $version string current version */
+    protected $version = '2.0.0-pl';
    /**
     * @var modx object Reference pointer to modx object
     */
@@ -292,7 +294,7 @@ class Newspublisher {
         }
 
         if ($css !== false) {
-            $this->modx->regClientCSS($css . '?v=1.4.3-pl');
+            $this->modx->regClientCSS($css . '?v=' . $this->version);
         }
 
         $this->prefix =  empty($this->props['prefix'])
