@@ -185,10 +185,9 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p><code>&initdatepicker</code> &mdash; (0/1) This is required if you will be showing any date fields or TVs.</p>
 
-<p><code>&parentid</code> &mdash; (integer) ID of the parent for new pages; defaults to NewsPublisher page.
-    (must be set if any other property is set to `Parent`.</p>
+<p><code>&parentid</code> &mdash; (integer) ID of the parent for new pages; defaults to NewsPublisher page.</p>
 
-<p><code>&parents</code> &mdash; comma-separated list of possible parent IDs (must be IDs!) of parents for user to select from; default: (empty -
+<p><code>&parents</code> &mdash; comma-separated list of possible parent IDs (must be IDs!) of parents for user to select from; use 0 for root of context (new_document_in_root permission will be necessary for new resources); default: (empty -
 shows all Resources)</p>
 
 
@@ -423,7 +422,7 @@ shows all Templates)</p>
     </tr>
     <tr>
         <td>parents</td>
-        <td>Comma-separated list of parent IDs for user to select from (must be IDs); if empty, all parents are shown; to force a parent, set &parent and do not show the parent field</td>
+        <td>Comma-separated list of parent IDs for user to select from (must be IDs); if empty, all parents are shown; to force a parent, set &parent and do not show the parent field; use 0 for root of context (new_document_in_root permission will be necessary for new resources)</td>
         <td>(empty)</td>
     </tr>
     <tr>
@@ -543,7 +542,7 @@ shows all Templates)</p>
     </tr>
     <tr>
         <td>parentid</td>
-        <td>(optional) Folder ID where new documents are stored</td>
+        <td>(optional) Folder ID where new documents are to be stored</td>
         <td>NewsPublisher folder</td>
     </tr>
     <tr>
