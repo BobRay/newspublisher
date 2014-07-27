@@ -378,11 +378,12 @@ class Newspublisher {
                 return;
             }
             $this->resource = $this->modx->newObject($this->classKey);
-            /* get folder id where we should store articles
+            /* get folder id where we should store the new resource,
              else store under current document */
             $this->parentId = !empty($this->props['parentid'])
                 ? intval($this->props['parentid'])
                 :$this->modx->resource->get('id');
+            $this->resource->set('parent', $this->parentId);
 
             $this->aliasTitle = $this->props['aliastitle']
                 ? true
@@ -543,9 +544,7 @@ class Newspublisher {
                     $this->parentId);
             }
             if (! $this->parentObj) {
-                $this->setError('&amp;' .
-                    $this->modx->lexicon('np_no_parent'));
-                return $retVal;
+                $prop = 'System Default';
             }
         }
         $prop = (string) $prop; // convert booleans
@@ -556,7 +555,7 @@ class Newspublisher {
             if ($prop === '1' || $prop === '0') {
                 $retVal = $prop;
 
-            } elseif ($prop == 'parent' || $prop === 'Parent') {
+            } elseif ($prop == 'parent' || $prop == 'Parent') {
                 if ($field == 'groups') {
                     $groupString = $this->_setGroups($prop, $this->parentObj);
                     $retVal = $groupString;
@@ -846,30 +845,81 @@ class Newspublisher {
             case 'parent':
                 $options = array();
                 $pid = $this->resource->get('parent');
-                $pobj = $this->modx->getObject('modResource', $pid);
-                if ($pobj) {
-                    $pptitle = $pobj->get('pagetitle');
-                } else {
+                $pptitle = null;
+                /* resource at root */
+                if ((int) $pid === 0) {
                     $pptitle = $this->resource->get('context_key');
-
-                }
-                $options[$pid] = $pptitle;
-
-                $c = $this->modx->newQuery('modResource');
-                $c->sortby('pagetitle', 'ASC');
-                if (!empty($this->parents)) {
-                    $c->where(array(
-                        'id:IN' => $this->parents,
-                    ));
-                }
-
-                $parents = $this->modx->getCollection('modResource', $c);
-                foreach ($parents as $parent) {
-                    /** @var $parent modResource */
-                    if ($parent->checkPolicy('list')) {
-                        $options[$parent->get('id')] = $parent->get('pagetitle');
+                    if (empty($pptitle)) {
+                        $pptitle = $this->modx->context->get('key');
+                    }
+                } else {
+                    $pobj = $this->modx->getObject('modResource', $pid);
+                    if ($pobj) {
+                        $pptitle = $pobj->get('pagetitle');
+                    } else {
+                        $pptitle = 'Unknown parent';
                     }
                 }
+
+                if (empty($this->parents)) {
+                    /* Just use current parent */
+                    $options[$pid] = $pptitle;
+                } else {
+                    $nakedParents = array();
+                    /* remove plus signs */
+                    foreach($this->parents as $key => $value) {
+                        if (strpos($value, '+') !== 0) {
+                            $value = str_replace('+', '', $value);
+                        }
+                        $nakedParents[$key] = $value;
+                    }
+                    if ($this->existing) {
+                        /* Add current parent if not in parents array */
+                        if (! in_array($pid, $nakedParents)) {
+                            $options[$pid] = $pptitle;
+                        }
+                    }
+                    $c = $this->modx->newQuery('modResource');
+                    $c->sortby('menuindex', 'ASC');
+
+                    $c->where(array(
+                        'id:IN' => $nakedParents,
+                    ));
+                    $parents = $this->modx->getCollection('modResource', $c);
+                    //echo print_r($this->parents, true);
+                    //echo "<br />Naked: " . print_r($nakedParents, true);
+                    foreach ($parents as $parent) {
+                        /** @var $parent modResource */
+                        if ($parent->checkPolicy('list')) {
+                            $parentId = $parent->get('id');
+                            $x = array_search($parentId, $nakedParents);
+                            if (strpos($this->parents[$x], '+') === false ) {
+                                $options[$parent->get('id')] = $parent->get('pagetitle');
+                            }
+
+                            $k = array_search($parentId, $nakedParents);
+                            /* If there's a +, add kids to array */
+
+                            if (strpos($this->parents[$k], '+') !== 0) {
+                                $kids = $this->modx->getChildIds($nakedParents[$k]);
+                                echo "<Br />Kids: " . print_r($kids, true);
+                                $q = $this->modx->newQuery('modResource');
+                                $q->sortby('menuindex', 'ASC');
+                                $q->where(array(
+                                    'id:IN' => $kids,
+                                ));
+
+                                $kidObjs = $this->modx->getCollection('modResource', $q);
+                                foreach ($kidObjs as $kid) {
+                                    /** @var $kid modResource */
+                                    $options[$kid->get('id')] = $kid->get('pagetitle');
+                                }
+                            }
+                        }
+                    }
+
+                }
+
 
                 $inner .= $this->_displayList($field, 'listbox', $options,
                     $pid);
