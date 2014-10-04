@@ -57,6 +57,7 @@ $modx->lexicon->load($language . 'newspublisher:button');
 /* For lexicon helper
 $modx->lexicon->load('newspublisher:button'); */
 
+
 /* Caption for edit button  */
 $debug = $modx->getOption('debug', $props, false);
 $buttonCaption = empty($props['buttonCaption'])? $modx->lexicon('np_edit') : $props['buttonCaption'];
@@ -115,6 +116,11 @@ if (empty($npId)) {
         $debug = true;
     }
 }
+
+/* Don't execute on NewsPublisher Page */
+if ($modx->resource->get('id') == $npId) {
+    return '';
+}
 $modx->setPlaceholder('np_id', $npId);
 
 /* check permissions on current page */
@@ -130,7 +136,7 @@ if (!$modx->resource->checkPolicy('save')) {
     $defaultButtonCaption = $modx->lexicon('np_no_resource_save_document_permission');
 }
 
-// $npEditId = $modx->getOption('np_edit_id',$props,'');
+$npEditId = $modx->getOption('np_edit_id',$props,'');
 $resourceToEdit = empty($npEditId)? $modx->resource->get('id') : $npEditId;
 $editHome = $modx->getOption('editHome', $props, false);
 
@@ -155,6 +161,7 @@ if (! $editHome) {
     }
 }
 /* protect against forged edit ID */
+
 $_SESSION['np_doc_to_edit'] = $resourceToEdit;
 
 /* create and return the form */
