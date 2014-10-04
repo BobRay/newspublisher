@@ -141,7 +141,9 @@ $chunks[12]->fromArray(array (
   'property_preprocess' => false,
   'name' => 'npBoolTpl',
   'description' => 'Tpl chunk for NewsPublisher boolean (Yes/No) fields',
-  'properties' => NULL,
+  'properties' => 
+  array (
+  ),
 ), '', true, true);
 $chunks[12]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/npbooltpl.chunk.tpl'));
 
