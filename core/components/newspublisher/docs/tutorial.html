@@ -20,20 +20,7 @@ browser for file and image TVs, support for resource-list TVs and custom field c
 
 <h3>Installing NewsPublisher for MODX Revolution</h3>
 <p>
-Go to System | Package Management on the main menu in the MODX Manager and click on the "Download Extras" button. That will take you to the Revolution Repository (AKA Web Transport Facility). Put NewsPublisher in the search box and press Enter. Click on the "Download" button, and when it changes to "Downloaded," click on the "Finish" button. That should bring you back to your Package Management grid. Click on the "Install" button next to NewsPublisher in the grid. The NewsPublisher snippet should now be installed.</p>
-
-<p>If NewsPublisher doesn't show up using the process above, here's another way to get it.</p>
-
-<ul>
-    <li>Go to the <a href="https://github.com/BobRay/newspublisher">GitHub NewsPublisher Page</a></li>
-    <li>Click on the &quot;Downloads&quot; button</li>
-    <li>Download the latest version to your MODX core/packages directory</li>
-    <li>Go to Package Manager</li>
-    <li>Click on &quot;Add Package&quot;, then &quot;Search Locally for Packages.&quot;</li>
-    <li>Install from the Package Manager Grid</li>
-</ul>
-
-<p>In order to create Context Access ACL entries using the NewsPublisherEditor Policy, you may have to flush both permissions and sessions before the new policy will show up in the list.</p>
+Go to System | Package Management on the main menu in the MODX Manager and click on the "Download Extras" button. That will take you to the Revolution Repository (AKA Web Transport Facility). Put NewsPublisher in the search box and press Enter. Click on the "Download" button. When the download has finished, click on the "Back to Package Manager" button. That should bring you back to your Package Management grid. Click on the "Install" button next to NewsPublisher in the grid. The NewsPublisher snippet should now be installed.</p>
 
 <h3>Using NewsPublisher</h3>
 
@@ -74,6 +61,8 @@ When you preview the document, you should see a basic resource editing form. If 
 <p>NewsPublisher responds to the MODX security permission system, so users can only create resources if they have permission to do so. As the admin Super User, you'll have full rights (unless you've done something that takes them away) to create and edit any document in the front end. Other users, however, will have to be granted permission before they can do either and their ability to edit existing resources will depend on the resource group settings.</p>
 
 <p>In addition, users (including you) will not be able to edit resources containing MODX tags without the <code>allow_modx_tags</code> permission. As of NewsPublisher 1.3.0, this permission is included in the NewsPublisherEditor Policy but is unchecked by default. You must check the Permission and save the NewsPublisherEditor Policy if you want to allow users to edit or create documents with MODX tags in them.</p>
+
+<p>In order to create Context Access ACL entries using the NewsPublisherEditor Policy, you may have to flush both permissions and sessions before the new policy will show up in the list.</p>
 
 <p>Be aware that if you upgrade or reinstall NewsPublisher, the <code>allow_modx_tags</code> permission may be unchecked during the process and any other permissions you changed may be reverted unless you have duplicated the NewsPublisherEditor Policy and are using the duplicate.</p>
 
@@ -148,6 +137,15 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p>The Tab names are on the left and you can use any names you like and as many or as few tabs as you need. NewsPublisher will add a &quot;Show All&quot; button that will show all fields at once. If you include a field that is not in the <code>&show</code> property, you'll see an error message telling you that the tab field can't be found. If there is a field in the <code>&show</code> property that is not in your <code>&tabs</code> list, it will go on the &quot;Other&quot; tab (which will not be shown if all the fields are accounted for).</p>
 
+<h3>Plugins with NewsPublisher</h3>
+
+<p>NewsPublisher calls either the <code>resource/create</code> processor (for new docs) or the <code>resource/update</code> processor (for existing ones). Those processors fire the <code>OnBeforeDocFormSave</code> event just before saving the resource and the <code>OnDocFormSave</code> event just after a successful save of the resource.</p>
+
+<p>You can attach plugins to either event to perform any extra processing you need. Any existing plugins attached to those events will also execute when the resource is saved. </p>
+
+<p>The usual variables are available in the plugin (<code>$id</code>, <code>$resource</code>, and <code>$mode</code>). The <code>$resource</code> variable is a reference to the resource object itself, so you can check its fields and modify it at will. If the plugin is attached to <code>OnDocFormSave</code>, remember to save the Reource object again after making any changes to it.</p>
+
+
 <h3>Configuring NewsPublisher</h3>
 <p>NewsPublisher has many options, but almost all of them are optional. You can see the list by editing the NewsPublisher snippet and clicking on the Properties tab. Unlock the default properties by clicking on the &quot;Default Properties Locked&quot; button. Then, click the little plus sign next to a property to see what it does. It is <b>strongly</b> recommended that you not change the default properties on the Properties tab of the snippet. Either put properties in the snippet tag to override them, or create a property set by clicking on the &quot;Add Property Set&quot; button and specify it in the snippet tag like this:</p>
 
@@ -187,17 +185,14 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p><code>&parentid</code> &mdash; (integer) ID of the parent for new pages; defaults to NewsPublisher page.</p>
 
-<p><code>&parents</code> &mdash; comma-separated list of possible parent IDs (must be IDs!) of parents for user to select from; use 0 for root of context (new_document_in_root permission will be necessary for new resources); default: (empty -
-shows all Resources)</p>
+<p><code>&parents</code> &mdash; comma-separated list of possible parent IDs (must be IDs!) of parents for user to select from; use 0 for root of context, e.g. 'web'; (<code>new_document_in_root</code> permission will be necessary for new resources); default: (empty). If <code>&parentid</code> is set, it will be selected in the list.</p>
 
 
 <p>
-<code>&template</code> &mdash; (mixed) The name or ID of the template to be assigned to new docs. Can also be set to 'Parent' to
-assign the parent's template; default: default_template System Setting.</p>
+<code>&template</code> &mdash; (mixed) The name or ID of the template to be assigned to new docs. Can also be set to 'Parent' to assign the parent's template; default: default_template System Setting.</p>
 
 <p>
-<code>&templates</code> &mdash; comma-separated list of IDs (must be IDs!) of Templates for user to select from; default: (empty -
-shows all Templates)</p>
+<code>&templates</code> &mdash; comma-separated list of IDs (must be IDs!) of Templates for user to select from; default: (empty - shows all Templates). If <code>&template</code> is also set, it will be selected in the list. $</p>
 
 <h3>Page Settings for New Documents</h3>
 <p>The next five properties control the standard page settings of the resource being created (whether you show them or not). They can each be set to `1`, `0`, `Parent`, or `System Default` (the default setting). If set to Parent, the settings of the resource's parent will be used (and the <code>&parentid</code> property must be set). If left unset, the MODX System Settings will be used for each one. Note that the published setting may be overridden if you show <code>pub_date</code> or <code>unpub_date</code> in the form and the user sets them.
@@ -422,7 +417,7 @@ shows all Templates)</p>
     </tr>
     <tr>
         <td>parents</td>
-        <td>Comma-separated list of parent IDs for user to select from (must be IDs); if empty, all parents are shown; to force a parent, set &parent and do not show the parent field; use 0 for root of context (new_document_in_root permission will be necessary for new resources)</td>
+        <td>Comma-separated list of parent IDs for user to select from (must be IDs); if empty, all parents are shown; to force a parent, set &parent and do not show the parent field; use + to show children; use 0 for root of context (new_document_in_root permission will be necessary for new resources)</td>
         <td>(empty)</td>
     </tr>
     <tr>
