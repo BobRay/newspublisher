@@ -350,7 +350,6 @@ class Newspublisher {
                         if ($this->modx->hasPermission('allow_modx_tags')) {
                             $ph = $this->convertTags($ph);
                         } else {
-                            echo '<br />No Permission';
                         /* return error if there are any MODX tags */
                             $this->setError($this->modx->lexicon('np_no_modx_tags'));
                             return;
@@ -442,11 +441,8 @@ class Newspublisher {
         $this->templates = empty($temp)
             ? array()
             : explode(',', $temp);
-        $temp = $this->modx->getOption('parents', $this->props, '');
-        $this->parents = empty($temp)
-            ? array()
-            : explode(',', $temp);
-
+        $this->parents = $this->getParents();
+        // echo "<br />$this->parents init: " . print_r($this->parents, true). '<br />';
         if($this->props['initdatepicker']) {
             $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
             $this->modx->regClientStartupHTMLBlock('<script type=text/javascript src="' .
@@ -731,7 +727,7 @@ class Newspublisher {
         }
         $formTpl = str_replace('[[+npx.insert]]',$inner,$this->getTpl('OuterTpl'));
         //die ('<pre>' . print_r($formTpl,true));
-        // die ('$_POST<br /><pre>' . print_r($_POST,true));
+        /*echo '$_POST<br /><pre>'  . print_r($this->resource->toArray(), true) . '</pre>';*/
         return $formTpl;
     } /* end displayForm */
 
@@ -845,79 +841,85 @@ class Newspublisher {
             case 'parent':
                 $options = array();
                 $pid = $this->resource->get('parent');
+
+                /*echo "PID: " . $pid;
+                echo "<br />" . $this->parentId;
+                echo "<br />" . print_r($this->parents, true);
+                echo "<br />POST: " . print_r($_POST, true);*/
                 $pptitle = null;
                 /* resource at root */
-                if ((int) $pid === 0) {
-                    $pptitle = $this->resource->get('context_key');
-                    if (empty($pptitle)) {
-                        $pptitle = $this->modx->context->get('key');
-                    }
+
+                $pobj = $this->modx->getObject('modResource', $pid);
+                if ($pobj) {
+                    $pptitle = $pobj->get('pagetitle');
                 } else {
-                    $pobj = $this->modx->getObject('modResource', $pid);
-                    if ($pobj) {
-                        $pptitle = $pobj->get('pagetitle');
-                    } else {
-                        $pptitle = 'Unknown parent';
-                    }
+                    $pptitle = 'Unknown parent';
                 }
 
-                if (empty($this->parents)) {
-                    /* Just use current parent */
-                    $options[$pid] = $pptitle;
-                } else {
-                    $nakedParents = array();
-                    /* remove plus signs */
-                    foreach($this->parents as $key => $value) {
-                        if (strpos($value, '+') !== 0) {
-                            $value = str_replace('+', '', $value);
-                        }
-                        $nakedParents[$key] = $value;
-                    }
-                    if ($this->existing) {
-                        /* Add current parent if not in parents array */
-                        if (! in_array($pid, $nakedParents)) {
-                            $options[$pid] = $pptitle;
-                        }
-                    }
-                    $c = $this->modx->newQuery('modResource');
-                    $c->sortby('menuindex', 'ASC');
+                $options = $this->parents;
 
-                    $c->where(array(
-                        'id:IN' => $nakedParents,
-                    ));
-                    $parents = $this->modx->getCollection('modResource', $c);
-                    //echo print_r($this->parents, true);
-                    //echo "<br />Naked: " . print_r($nakedParents, true);
-                    foreach ($parents as $parent) {
-                        /** @var $parent modResource */
-                        if ($parent->checkPolicy('list')) {
-                            $parentId = $parent->get('id');
-                            $x = array_search($parentId, $nakedParents);
-                            if (strpos($this->parents[$x], '+') === false ) {
-                                $options[$parent->get('id')] = $parent->get('pagetitle');
+                if (false) {
+                    if (empty($this->parents)) {
+                        /* Just use current parent */
+                        $options[$pid] = $pptitle;
+                    } else {
+                        $nakedParents = array();
+                        /* remove plus signs */
+                        foreach ($this->parents as $key => $value) {
+                            if (strpos($value, '+') !== 0) {
+                                $value = str_replace('+', '', $value);
                             }
+                            $nakedParents[$key] = $value;
+                        }
+                        if ($this->existing) {
+                            /* Add current parent if not in parents array */
+                            if (!in_array($pid, $nakedParents)) {
+                                $options[$pid] = $pptitle;
+                            }
+                        }
 
-                            $k = array_search($parentId, $nakedParents);
-                            /* If there's a +, add kids to array */
+                        $c = $this->modx->newQuery('modResource');
+                        $c->sortby('menuindex', 'ASC');
 
-                            if (strpos($this->parents[$k], '+') !== 0) {
-                                $kids = $this->modx->getChildIds($nakedParents[$k]);
-                                echo "<Br />Kids: " . print_r($kids, true);
-                                $q = $this->modx->newQuery('modResource');
-                                $q->sortby('menuindex', 'ASC');
-                                $q->where(array(
-                                    'id:IN' => $kids,
-                                ));
-
-                                $kidObjs = $this->modx->getCollection('modResource', $q);
-                                foreach ($kidObjs as $kid) {
-                                    /** @var $kid modResource */
-                                    $options[$kid->get('id')] = $kid->get('pagetitle');
+                        $c->where(array(
+                            'id:IN' => $nakedParents,
+                        ));
+                        $parents = $this->modx->getCollection('modResource', $c);
+                        /*echo '<br />Parents: ' . print_r($this->parents, true);
+                        echo "<br />Naked: " . print_r($nakedParents, true);*/
+                        foreach ($parents as $parent) {
+                            /** @var $parent modResource */
+                            if ($parent->checkPolicy('list')) {
+                                $parentId = $parent->get('id');
+                                $x = array_search($parentId, $nakedParents);
+                                if (strpos($this->parents[$x], '+') === false) {
+                                    $options[$parent->get('id')] = $parent->get('pagetitle');
                                 }
+
+                                $k = array_search($parentId, $nakedParents);
+                                /* If there's a +, add kids to array */
+
+                                if (strpos($this->parents[$k], '+') !== false) {
+                                    $kids = $this->modx->getChildIds($nakedParents[$k]);
+                                    /*echo "<Br />Kids: " . print_r($kids, true);*/
+                                    $q = $this->modx->newQuery('modResource');
+                                    $q->sortby('menuindex', 'ASC');
+                                    $q->where(array(
+                                        'id:IN' => $kids,
+                                    ));
+
+                                    $kidObjs = $this->modx->getCollection('modResource', $q);
+                                    foreach ($kidObjs as $kid) {
+                                        /** @var $kid modResource */
+                                        $options[$kid->get('id')] = $kid->get('pagetitle');
+                                    }
+                                }
+                            } else {
+                                /*echo "<br>No List";*/
                             }
                         }
-                    }
 
+                    }
                 }
 
 
@@ -1019,14 +1021,14 @@ class Newspublisher {
             /* make sure requested TV is attached to this template*/
             $tvId = $tvObj->get('id');
             $found = $this->modx->getCount('modTemplateVarTemplate', array(
-                'templateid' => $this->template,
+                'templateid' => $this->modx->resource->get('template'),
                 'tmplvarid' => $tvId,
             ));
             if (! $found) {
                 /* No error if stopOnBadTv is false  */
                 if ($this->stopOnBadTv) {
                     $this->setError($this->modx->lexicon('np_not_our_tv') .
-                        ' Template: ' . $this->template . '  ----    TV: ' .
+                        ' Template: ' . $this->modx->resource->get('template') . '  ----    TV: ' .
                         $tvNameOrId);
                     return null;
                 } else {
@@ -1399,7 +1401,7 @@ class Newspublisher {
         }
         
         if (! $this->isPostBack) {
-            $s = substr($timeString,11,5);
+            $s = $timeString? $s = substr($timeString, 11, 5):'';
             $this->modx->toPlaceholder($name . '_time' , $s, $this->prefix);
 
             /* format date string according to np_date_format lexicon entry
@@ -1615,7 +1617,7 @@ class Newspublisher {
                 ? $selectedCode
                 : '';
             $PHs['[[+npx.text]]'] = $text;
-            $inner .= $this->strReplaceAssoc($PHs,$optionTpl);
+            $inner .= $this->strReplaceAssoc($PHs,"\n" .$optionTpl);
             $idx++;
         }
 
@@ -1737,6 +1739,11 @@ class Newspublisher {
                 }
                 $fields['alias'] = $alias;
             }
+
+            if (empty($fields['uri'])) {
+                $fields['uri'] = $this->resource->getAliasPath($alias);
+            }
+
             /* set fields for new object */
 
             /* set editedon and editedby for existing docs */
@@ -1744,18 +1751,36 @@ class Newspublisher {
             $fields['editedby'] = '0';
 
             /* these *might* be in the $_POST array. Set them if not */
-            $fields['published'] = isset($_POST['published'])
-                ? $_POST['published']
-                : $this->published;
+
+            if (isset($_POST['published'])) {
+                $fields['published'] = $_POST['published'];
+            } else {
+                $fields['published'] = $this->published;
+            }
+
             $fields['hidemenu'] = isset($_POST['hidemenu'])
                 ? $_POST['hidemenu']
                 : $this->hideMenu;
             $fields['template'] = isset ($_POST['template'])
                 ? $_POST['template']
                 : $this->template;
-            $fields['parent'] = isset ($_POST['parent'])
-                ? $_POST['parent']
-                : $this->parentId;
+
+            if (! isset($_POST['parent'])) {
+                if (is_numeric($this->parentId)) {
+                    $fields['parent'] = $this->parentId;
+                } else {
+                    $fields['parent'] = 0;
+                }
+            } elseif (is_numeric($_POST['parent'])) {
+                // echo "<br>Numeric POST-Parent: " . $_POST['parent'];
+                $fields['parent'] = $_POST['parent'];
+            } else {
+                /* It's a context */
+                $fields['context_key'] = $_POST['parent'];
+                $fields['parent'] = 0;
+                $this->resource->set('context_key', $_POST['parent']);
+            }
+
             $fields['searchable'] = isset ($_POST['searchable'])
                 ? $_POST['searchable']
                 : $this->searchable;
@@ -1767,7 +1792,10 @@ class Newspublisher {
                 : $this->richtext;
             $fields['createdby'] = $this->modx->user->get('id');
             $fields['content']  = $this->header . $fields['content'] . $this->footer;
-            $fields['context_key'] = $this->modx->context->get('key');
+            $fields['context_key'] = isset ($fields['context_key'])
+                ? $fields['context_key']
+                : $this->modx->context->get('key');
+
 
         }
 
@@ -1826,12 +1854,24 @@ class Newspublisher {
         if ($this->props['clearcache']) {
             $fields['syncsite'] = true;
         }
+        unset($fields['pub_date_time'], $fields['Submit'],
+            $fields['unpub_date_time'], $fields['hidSubmit'],
+            $fields['syncsite']);
+
+        /*echo "<br>Post<pre> " . print_r($_POST, true);
+        echo "<br>Fields<pre> " . print_r($fields, true);
+        die();*/
+
+        // xxx
         /* call the appropriate processor to save resource and TVs */
+
+
         if ($this->existing) {
             $response = $this->modx->runProcessor('resource/update', $fields);
         } else {
                 $response = $this->modx->runProcessor('resource/create', $fields);
         }
+
         /* @var $response modProcessorResponse */
         if ($response->isError()) {
             if ($response->hasFieldErrors()) {
@@ -1875,8 +1915,12 @@ class Newspublisher {
             $ctx = $this->resource->get('context_key');
             $ctx = empty($ctx) ? '' : $ctx;
             if (! $this->existing) {
-                $this->modx->reloadContext();
+                $this->modx->reloadContext($ctx);
             }
+            if (!empty($ctx) && ($ctx != $this->modx->context->get('key'))) {
+                $this->modx->switchContext($ctx, true);
+            }
+            $url = $this->modx->makeUrl($postId, $ctx, "", "full");
             $goToUrl = $this->modx->makeUrl($postId, $ctx, "", "full");
 
             /* redirect to post id */
@@ -2151,6 +2195,37 @@ public function my_debug($message, $clear = false) {
     $content .= $message;
     $chunk->setContent($content);
     $chunk->save();
+}
+
+public function getParents() {
+    $parentArray = array();
+    $temp = $this->modx->getOption('parents', $this->props, '');
+    if (!empty($temp)) {
+        $parents = explode(',', $temp);
+        foreach($parents as $parent) {
+            if (is_numeric($parent)) {
+                $obj = $this->modx->getObject('modResource', (int) $parent);
+                if ($obj) {
+                    $parentArray[$obj->get('id')] = $obj->get('pagetitle');
+                } else {
+                    $this->setError($this->modx->lexicon(
+                        'np_parent_resource_nf~~Parent Resource Not Found')
+                    . ': '  . $parent);
+                }
+            } else {
+                if ($this->modx->getObject('modContext', $parent)) {
+                    $parentArray[$parent] = $parent;
+                } else {
+                    $this->setError($this->modx->lexicon(
+                        'np_parent_context_nf~~Parent Context Not Found')
+                        . ': ' . $parent);
+                }
+            }
+        }
+
+    }
+    return $parentArray;
+
 }
 
 
