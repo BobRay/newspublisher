@@ -130,7 +130,7 @@ if (!$modx->resource->checkPolicy('save')) {
     $defaultButtonCaption = $modx->lexicon('np_no_resource_save_document_permission');
 }
 
-$npEditId = $modx->getOption('np_edit_id',$props,'');
+// $npEditId = $modx->getOption('np_edit_id',$props,'');
 $resourceToEdit = empty($npEditId)? $modx->resource->get('id') : $npEditId;
 $editHome = $modx->getOption('editHome', $props, false);
 
@@ -154,14 +154,17 @@ if (! $editHome) {
         $defaultButtonCaption = $modx->lexicon('np_no_edit_home_page');
     }
 }
-
-
+/* protect against forged edit ID */
+$_SESSION['np_doc_to_edit'] = $resourceToEdit;
 
 /* create and return the form */
 if ($npEditId) {
-$output = '<form action="[[~[[+np_id]]]]" method="post" class="np_button_form">';
+    $output = '<form action="[[~[[+np_id]]]]" method="post"
+    class="np_button_form">';
 } else {
-$output = '<form action="[[~[[+np_id]]]]" method="post" class="np_button_form" style="position:fixed;bottom:' . $bottom . ';right:' . $right . '">';
+    $output = '<form action="[[~[[+np_id]]]]" method="post"
+        class="np_button_form" style="position:fixed;bottom:' .
+        $bottom . ';right:' . $right . '">';
 }
 $output .= "\n" . '<input type = "hidden" name="np_existing" value="true" />';
 $output .= "\n" . '<input type = "hidden" name="np_doc_id" value="' . $resourceToEdit . '"/>';

@@ -103,6 +103,15 @@
 $errorMessage = '';
 $formTpl = '';
 
+$modx->lexicon->load($language . ':newspublisher:default');
+
+/* Protect against forged np_doc_id from npEditThisButton */
+if (isset($_POST['np_doc_id'])) {
+    if ( (!isset($_SESSION['np_doc_to_edit']))
+        || ($_SESSION['np_doc_to_edit'] != $_POST['np_doc_id'] )) {
+        return($modx->lexicon('np_unauthorized_document~~Unauthorized document'));
+    }
+}
 
 $classPath = $modx->getOption('np.core_path', null, $modx->getOption('core_path') . 'components/newspublisher/') . 'model/newspublisher/';
 
