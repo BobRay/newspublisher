@@ -75,6 +75,9 @@ $_lang['np_no_action_found'] = "The 'filebrowser' action could not be found. You
 $_lang['np_media_source_access_denied'] = "You don't have the permission to access the media source associated with the TV: ";
 $_lang['np_no_media_source'] = 'No media source is associated with the TV: ';
 $_lang['np_source_wctx_error'] = 'The working context of the media source could not be retrieved for the TV: ';
+$_lang['np_unauthorized_document'] = 'Unauthorized document';
+$_lang['np_parent_resource_nf'] = 'Parent Resource not found';
+$_lang['np_parent_context_nf'] = 'Parent Context not found';
 
 
 /* missing resource field lexicon strings */

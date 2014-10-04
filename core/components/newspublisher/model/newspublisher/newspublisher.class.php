@@ -824,7 +824,8 @@ class Newspublisher {
                 $cols =  ! empty($this->props['summarycols'])
                     ? $this->props['summarycols']
                     : '60';
-                $inner .= $this->_displayTextarea($field, $this->props['rtsummary'],
+                $inner .= $this->_displayTextarea($field,
+                    $this->props['rtsummary'],
                     'np-introtext', $rows, $cols);
                 break;
 
@@ -844,7 +845,8 @@ class Newspublisher {
                 $templates = $this->modx->getCollection('modTemplate', $c);
                 foreach ($templates as $template) {
                     if ($template->checkPolicy('list')) {
-                        $options[$template->get('id')] = $template->get('templatename');
+                        $options[$template->get('id')] =
+                            $template->get('templatename');
                     }
                 }
 
@@ -1830,7 +1832,9 @@ class Newspublisher {
 
         public function forward($postId) {
             if (empty($postId)) {
-                $postId = $this->existing? $this->existing : $this->resource->get('id');
+                $postId = $this->existing
+                    ? $this->existing
+                    : $this->resource->get('id');
             }
             /* Assume that the processor cleared the cache */
 
@@ -1843,7 +1847,7 @@ class Newspublisher {
             if (!empty($ctx) && ($ctx != $this->modx->context->get('key'))) {
                 $this->modx->switchContext($ctx, true);
             }
-            $url = $this->modx->makeUrl($postId, $ctx, "", "full");
+
             $goToUrl = $this->modx->makeUrl($postId, $ctx, "", "full");
 
             /* redirect to post id */
@@ -2134,16 +2138,16 @@ public function getParents() {
                 if ($obj) {
                     $parentArray[$obj->get('id')] = $obj->get('pagetitle');
                 } else {
-                    $this->setError($this->modx->lexicon(
-                        'np_parent_resource_nf~~Parent Resource Not Found')
+                    $this->setError(
+                        $this->modx->lexicon('np_parent_resource_nf')
                     . ': '  . $parent);
                 }
             } else {
                 if ($this->modx->getCount('modContext', $parent)) {
                     $parentArray[$parent] = $parent;
                 } else {
-                    $this->setError($this->modx->lexicon(
-                        'np_parent_context_nf~~Parent Context Not Found')
+                    $this->setError(
+                        $this->modx->lexicon('np_parent_context_nf')
                         . ': ' . $parent);
                 }
             }
