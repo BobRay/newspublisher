@@ -50,6 +50,7 @@
 /* @var $modx modX */
 /* ToDo: Internationalize button caption debug messages */
 $props =& $scriptProperties;
+$thisId = $modx->resource->get('id');
 /* let user &language property override default language */
 $language = $modx->getOption('language', $props, null);
 $language = $language ? $language . ':' : '';
@@ -118,7 +119,7 @@ if (empty($npId)) {
 }
 
 /* Don't execute on NewsPublisher Page */
-if ($modx->resource->get('id') == $npId) {
+if ($thisId == $npId) {
     return '';
 }
 $modx->setPlaceholder('np_id', $npId);
@@ -137,31 +138,27 @@ if (!$modx->resource->checkPolicy('save')) {
 }
 
 $npEditId = $modx->getOption('np_edit_id',$props,'');
-$resourceToEdit = empty($npEditId)? $modx->resource->get('id') : $npEditId;
+$resourceToEdit = empty($npEditId)? $thisId : $npEditId;
 $editHome = $modx->getOption('editHome', $props, false);
-
-/* Don't show if current page is in the noShow list */
-$noShow = $modx->getOption('noShow', $props, '');
-if (empty($noShow)) {
-    $noShow = (string) $npId;
-    if (! $editHome) {
-        $noShow .= ',' . (string) $modx->getOption('site_start');
-    }
-}
-$hidden = explode(',', $noShow);
-$hidden[] = $npId;
-if (in_array($resourceToEdit, $hidden)) {
-    $defaultButtonCaption = 'In noShow list';
-}
 
 /* Don't show on the the home page unless &editHome is set to 1 */
 if (! $editHome) {
-    if ($npEditId == $modx->getOption('site_start')) {
-        $defaultButtonCaption = $modx->lexicon('np_no_edit_home_page');
+    if ($thisId == $modx->getOption('site_start')) {
+        if ($resourceToEdit == $modx->getOption('site_start')) {
+            $defaultButtonCaption = $modx->lexicon('np_no_edit_home_page');
+        }
     }
 }
-/* protect against forged edit ID */
+/* Don't show if current page is in the noShow list */
+$noShow = $modx->getOption('noShow', $props, '');
+if (!empty($noShow)) {
+    $hidden = explode(',', $noShow);
+    if (in_array($resourceToEdit, $hidden)) {
+        $defaultButtonCaption = 'In noShow list';
+    }
+}
 
+/* protect against forged edit ID */
 $_SESSION['np_doc_to_edit'] = $resourceToEdit;
 
 /* create and return the form */
