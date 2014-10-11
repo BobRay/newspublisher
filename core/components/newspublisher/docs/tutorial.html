@@ -195,7 +195,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 <code>&templates</code> &mdash; comma-separated list of IDs (must be IDs!) of Templates for user to select from; default: empty. If <code>&template</code> is also set, it will be selected in the list. $</p>
 
 <h3>Page Settings for New Documents</h3>
-<p>The next five properties control the standard page settings of the resource being created (whether you show them or not). They can each be set to `1`, `0`, `Parent`, or `System Default` (the default setting). If set to Parent, the settings of the resource's parent will be used (and the <code>&parentid</code> property must be set). If left unset, the MODX System Settings will be used for each one. Note that the published setting may be overridden if you show <code>pub_date</code> or <code>unpub_date</code> in the form and the user sets them.
+<p>The next five properties control the standard page settings of the resource being created (whether you show them or not). They can each be set to `1`, `0`, `Parent`, or `System Default` (the default setting). If set to `Parent`, the settings of the resource's parent will be used (and the <code>&parentid</code> property must be set). If left unset, the MODX System Settings will be used for each one. Note that the published setting may be overridden if you show <code>pub_date</code> or <code>unpub_date</code> in the form and the user sets them.
 
 <pre><fixedpre>
 &published_default
@@ -243,8 +243,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p><code>&cssfile</code> &mdash; (string) Path to a custom CSS file. Set to `0` for no CSS file.</p>
 
-<p><code>&groups</code> &mdash; (string) A comma-separated list of resource groups to
-    assign new pages to. Can also be set to `Parent` to use the
+<p><code>&groups</code> &mdash; (string) A comma-separated list of resource groups to assign new pages to. Can also be set to `Parent` to use the
     parent's groups.</p>
 
 <p><code>&tinyheight</code> &mdash; (string) Height of the RTE window; defaults to 400px.</p>
