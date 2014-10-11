@@ -50,6 +50,10 @@ MODx.NpBrowser = function(config) {
     });
 
     var map = new Ext.KeyMap(Ext.getBody(), [{
+        key: Ext.EventObject.ENTER
+        ,scope: this
+        ,fn: this.onSelect
+     }, {
         key: Ext.EventObject.ESC
         ,scope: this
         ,fn: this.hide
