@@ -14,7 +14,10 @@ if (!$modx->hasPermission('file_manager') || !isset($_SESSION['newspublisher']['
 
 
 $modx->regClientStartupScript($modx->getOption('manager_url').'assets/modext/core/modx.view.js');
-$modx->regClientStartupScript($modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/').'js/widgets/modx.np.browser.js');
+$modx->regClientStartupScript(
+	$modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/').
+	'js/widgets/modx.np.browser-2.0-2.2.js'
+);
 
 foreach ($_SESSION['newspublisher']['filebrowser'][$_GET['field']] as $opt => $val) {
     $modx->smarty->assign($opt, $val);
@@ -31,4 +34,4 @@ MODx.ctx = "'.$ctx.'";
 </script>');
 
 $modx->response->registerCssJs(false);
-return $modx->smarty->fetch('filebrowser/index.tpl');
+return $modx->smarty->fetch('filebrowser/index_2.0-2.1.tpl');

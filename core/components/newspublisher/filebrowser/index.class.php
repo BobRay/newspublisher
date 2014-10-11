@@ -13,6 +13,10 @@ class FilebrowserManagerController extends modManagerController {
     public $loadHeader = false;
     public $loadFooter = false;
 
+	public function initialize() {
+		$this->gteRevo_2_3 = (boolean)version_compare($modx->version['full_version'],'2.3.0-rc1','');
+	}
+
     /**
      * Check for any permissions or requirements to load page
      * @return bool
@@ -28,7 +32,11 @@ class FilebrowserManagerController extends modManagerController {
      * @return void
      */
     public function loadCustomCssJs() {
-        $this->modx->regClientStartupScript($this->modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/').'js/widgets/modx.np.browser.js');
+		$ver = $this->gteRevo_2_3 ? '' : '-2.0-2.2';
+        $this->modx->regClientStartupScript(
+			$this->modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/').
+			'js/widgets/modx.np.browser'.$ver.'.js'
+		);
     }
 
     /**
@@ -37,7 +45,6 @@ class FilebrowserManagerController extends modManagerController {
      * @return mixed
      */
     public function process(array $scriptProperties = array()) {
-
         return $_SESSION['newspublisher']['filebrowser'][$_GET['field']];
     }
 
@@ -55,7 +62,8 @@ class FilebrowserManagerController extends modManagerController {
      * @return string
      */
     public function getTemplateFile() {
-        return $this->modx->getOption('core_path').'components/newspublisher/filebrowser/index_2_20.tpl';
+        $ver = $this->gteRevo_2_3 ? '' : '_2.2';
+        return $this->modx->getOption('core_path').'components/newspublisher/filebrowser/index'.$ver.'.tpl';
     }
 
     /**
