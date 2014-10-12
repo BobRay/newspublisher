@@ -33,18 +33,18 @@ MODx.NpBrowser = function(config) {
             ,region: 'south'
             ,split: false
             ,border: false
-            ,tbar: ['->',{
-                id: this.ident+'-ok-btn'
-                ,text: _('ok')
-                ,style: 'color: white; background-color: green;'
-                ,handler: this.onSelect
-                ,scope: this
-                ,width: 200
-            },{
+            ,tbar: ['->', {
                 text: _('cancel')
                 ,handler: this.hide
                 ,scope: this
-                ,width: 200
+                ,width: 150
+            }, {
+                id: this.ident+'-ok-btn'
+                ,text: _('ok')
+                ,cls: 'primary-button'
+                ,handler: this.onSelect
+                ,scope: this
+                ,width: 150
             }]
         }]
     });
