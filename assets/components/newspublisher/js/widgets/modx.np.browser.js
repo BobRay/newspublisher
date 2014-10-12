@@ -15,6 +15,7 @@ MODx.NpBrowser = function(config) {
 
     this.browser = MODx.load({
         xtype: 'modx-media-view'
+        ,hideSourceCombo: true
         ,onSelect: {fn: this.onSelect, scope: this}
     });
 
