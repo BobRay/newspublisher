@@ -21,7 +21,7 @@
  */
 /**
  * Properties (German property descriptions) Lexicon Topic
- * (German translation by mschlegal)
+ * (German translation by mschlegel)
  *
  * @package newspublisher
  * @subpackage lexicon
@@ -33,13 +33,12 @@ $_lang['np_aliastitle_desc'] = "(optional) Auf Ja setzen, um den Seitentitel in 
 $_lang['np_badwords_desc'] = '(optional) Komma-separierte Liste von Wörtern, die im Dokument nicht erlaubt sind.';
 $_lang['np_cacheable_desc'] = "(optional) Soll die Ressource in den Cache übernommen werden oder nicht? Standardeinstellung: Wert der Systemeinstellung 'cache_default' (für neue Ressourcen); Geben Sie `Parent` an, um die Einstellung der Elternressource zu verwenden.";
 $_lang['np_cancelid_desc'] = '(optional) Dokument-ID, die geladen werden soll, wenn abgebrochen wurde. Standardeinstellung: http_referer.';
+$_lang['np_captions_desc'] = '(optional) Eigene Beschriftungen -- Komma-getrennte Liste in der Form Name:Beschriftung. Beispiel: &captions=`introtext:Zusammenfassung,content:Ihr Beitrag`; Standardwert: (leer).';
 $_lang['np_clearcache_desc'] = '(optional) Wenn auf Ja gesetzt, wird der Cache nach dem Speichern der Ressource gelöscht. Standardeinstellung: Ja.';
 $_lang['np_cssfile_desc'] = '(optional) Name der zu benutzenden CSS-Datei oder ``, um gar keine CSS-Datei zu benutzen; Standardeinstellung: newspublisher.css. Die Datei sollte im Ordner assets/newspublisher/css/ sein';
 $_lang['np_errortpl_desc'] = '(optional) Name des Template-Chunks zur Anzeige von Fehlermeldungen für die einzelnen Felder. Muss den Platzhalter [[+np.error]] enthalten.';
 $_lang['np_fielderrortpl_desc'] = '(optional) Name des Template-Chunks zur Darstellung von Fehlermeldungen für die einzelnen Felder. Muss den Platzhalter [[+np.error]] enthalten.';
-$_lang['np_footertpl_desc'] = '(optional) Template-Chunk (Name) zur Darstellung eines Fußbereiches am Ende jedes neuen Dokumentes.';
 $_lang['np_groups_desc'] = "(optional) Ressourcen-Gruppe, zu welcher das neue Dokument gehören soll (hat keinen Effekt auf die existierenden Dokumente); Auf `parent` setzen, um die Gruppe der Elternressource zu verwenden.";
-$_lang['np_headertpl_desc'] = '(optional)  Template-Chunk (Name) zur Darstellung eines Kopfbereiches am Anfang jedes neuen Dokumentes.';
 $_lang['np_hidemenu_desc'] = "(optional) Wenn auf 'Ja' gesetzt, wird die neue Seite nicht in Seiten-Menüs angezeigt; Standardeinstellung: hidemenu_default System-Einstellung für neue Ressourcen; Geben Sie `Parent` an, um die Einstellung der Elternressource zu verwenden.";
 $_lang['np_initrte_desc'] = '(optional) Rich-Text-Editor initialisieren. Setzen, wenn Rich-Text-Eingabefelder vorhanden sind. Standardeinstellung: Nein';
 $_lang['np_initdatepicker_desc'] = '(optional) Kalender initialisieren. Setzen, wenn Eingabefelder für ein Datum vorhanden sind. Standardeinstellung: Ja';
@@ -74,3 +73,15 @@ $_lang['np_aliasprefix_desc'] = "(optional) Präfix, das vor dem Alias von neuen
 $_lang['np_intmaxlength_desc'] = '(optional) Maximale Länge für Ganzzahl-Eingabefelder; Standardeinstellung: 10.';
 $_lang['np_textmaxlength_desc'] = '(optional) Maximale Länge für Text-Eingabefelder; Standardeinstellung: 60.';
 $_lang['np_hoverhelp_desc'] = '(optional) Hilfe anzeigen, wenn die Maus über die Feld-Überschrift fährt. Standardeinstellung: Ja.';
+$_lang['np_usetabs_desc'] = '(optional) Tab-Anzeige einschalten; Standardwert: Nein';
+$_lang['np_tabs_desc'] = '(nur nötig wenn usetabs aktiviert) Tab-Spezifikation (siehe Anleitung); Standardwert: (leer)';
+$_lang['np_activetab_desc'] = '(optional) Tab, der beim laden des Formulars angezeigt werden soll; Standardwert: (leer)';
+$_lang['np_classkey_desc'] = "(optional) 'Class key' für neue Ressourcen; nur benutzen wenn Sie eine Unterklasse von 'Resource' oder die 'Article'-Klasse vom Articles-Addon verwenden; Standardwert: modDocument";
+$_lang['np_contentrows_desc'] = '(optional) Höhe des Inhaltsfeldes (Anzahl Zeilen); Standardwert: 10';
+$_lang['np_contentcols_desc'] = '(optional) Breite des Inhaltsfeldes (Anzahl Zeichen); Standardwert: 60';
+$_lang['np_aliasdateformat_desc'] = '(optional) Format für Alias -- siehe Anleitung; Standardwert: Datums-/Zeitformat von PHP';
+$_lang['np_allowedtags_desc'] = '(optional) Erlaubte HTML-Tags in Textfeldern; Standardwert: siehe Anleitung';
+$_lang['np_stopOnBadTv_desc'] = '(optional) Wenn ausgeschaltet gibt es keinen Fehler, wenn &show Template-Variablen enthält, die nicht mit dem aktuellen Template verknüpft sind; Standardwert: Ja';
+$_lang['np_templates_desc'] = '(optional) Kommagetrennte Liste von Templates, die der Benutzer auswählen kann (IDs angeben); wenn &template gesetzt ist, wird das entsprechende Template ausgewählt; Standardwert: (leer)';
+$_lang['np_parents_desc'] = "Kommagetrennte Liste von Elterndokumenten, die der der Benutzer auswählen kann (IDs oder Kontext-Keys angeben); Wen &parentid angegeben ist, wird das entsprechende Dokument ausgewählt. Achtung: Die Berechtigung 'new_document_in_root' ist evtl. notwendig); Standardwert: (leer)";
+$_lang['np_which_editor_desc'] = 'Zu benutzender Rich-Text-Editor. Momentan kann nur TinyMCE eingestellt werden; Standardwert: TinyMCE';
