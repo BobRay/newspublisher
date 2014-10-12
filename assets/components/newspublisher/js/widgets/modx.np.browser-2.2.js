@@ -6,14 +6,7 @@ MODx.browser.NP = function(config) {
     this.view = MODx.load({
         xtype: 'modx-browser-view'
         ,onSelect: {fn: this.onSelect, scope: this}
-        ,prependPath: config.prependPath || null
-        ,prependUrl: config.prependUrl || null
-        ,basePath: config.basePath || ''
-        ,basePathRelative: config.basePathRelative || null
-        ,baseUrl: config.baseUrl || ''
-        ,baseUrlRelative: config.baseUrlRelative || null
         ,source: config.source || MODx.config.default_media_source
-        ,allowedFileTypes: config.allowedFileTypes || ''
         ,wctx: config.wctx || 'web'
         ,openTo: config.openTo || ''
         ,ident: this.ident
@@ -22,13 +15,7 @@ MODx.browser.NP = function(config) {
         xtype: 'modx-tree-directory'
         ,onUpload: function() { this.view.run(); }
         ,scope: this
-        ,prependPath: config.prependPath || null
-        ,basePath: config.basePath || ''
-        ,basePathRelative: config.basePathRelative || null
-        ,baseUrl: config.baseUrl || ''
-        ,baseUrlRelative: config.baseUrlRelative || null
         ,source: config.source || MODx.config.default_media_source
-        ,hideFiles: config.hideFiles || false
         ,openTo: config.openTo || ''
         ,ident: this.ident
         ,rootId: '/'
@@ -136,12 +123,7 @@ Ext.extend(MODx.browser.NP,Ext.Viewport,{
         dir = dir || (Ext.isEmpty(this.config.openTo) ? '' : this.config.openTo);
         this.view.run({
             dir: dir
-            ,basePath: this.config.basePath || ''
-            ,basePathRelative: this.config.basePathRelative || null
-            ,baseUrl: this.config.baseUrl || ''
-            ,baseUrlRelative: this.config.baseUrlRelative || null
             ,source: this.config.source
-            ,allowedFileTypes: this.config.allowedFileTypes || ''
             ,wctx: this.config.wctx || 'web'
         });
     }
