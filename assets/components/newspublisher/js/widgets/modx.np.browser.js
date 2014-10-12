@@ -9,8 +9,8 @@ MODx.NpBrowser = function(config) {
         this.fireEvent('select', this.browser.view.lookup[selnode.id]);
     }
 
-    this.hide = function() {
-        this.fireEvent('hide');
+    this.onCancel = function() {
+        this.fireEvent('cancel');
     }
 
     this.browser = MODx.load({
@@ -39,12 +39,11 @@ MODx.NpBrowser = function(config) {
             ,border: false
             ,tbar: ['->', {
                 text: _('cancel')
-                ,handler: this.hide
+                ,handler: this.onCancel
                 ,scope: this
                 ,width: 150
             }, {
-                id: this.ident+'-ok-btn'
-                ,text: _('ok')
+                text: _('ok')
                 ,cls: 'primary-button'
                 ,handler: this.onSelect
                 ,scope: this
@@ -60,8 +59,8 @@ MODx.NpBrowser = function(config) {
      }, {
         key: Ext.EventObject.ESC
         ,scope: this
-        ,fn: this.hide
-     }]);    
+        ,fn: this.onCancel
+     }]);
     
     MODx.NpBrowser.superclass.constructor.call(this, config);
     this.config = config;

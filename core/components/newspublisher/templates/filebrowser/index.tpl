@@ -49,7 +49,7 @@ Ext.onReady(function() {
         ,source: '{/literal}{$source}{literal}'
         ,openTo: '{/literal}{$openTo}{literal}' || ''
         ,listeners: {
-            hide: {fn: function() { window.close(); }, scope: this}
+            cancel: {fn: function() { window.close(); }, scope: this}
             ,select: {fn: function(data) {
                 // add file url to text field
                 var target = window.opener.browserPathInput
