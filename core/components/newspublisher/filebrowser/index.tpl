@@ -10,7 +10,7 @@
 <style>
 /* overrides interferring MODx style */
 .container {
-  margin-top: 0;    
+  margin: 0;
 }
 </style>
 

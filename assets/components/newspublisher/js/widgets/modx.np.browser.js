@@ -31,7 +31,7 @@ MODx.NpBrowser = function(config) {
             id: this.ident+'-south'
             ,cls: 'modx-pb-buttons'
             ,region: 'south'
-            ,split: false
+            ,style: 'padding: 1px 10px'
             ,border: false
             ,tbar: ['->', {
                 text: _('cancel')
