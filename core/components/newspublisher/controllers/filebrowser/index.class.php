@@ -63,7 +63,7 @@ class FilebrowserManagerController extends modManagerController {
      */
     public function getTemplateFile() {
         $ver = $this->gteRevo_2_3 ? '' : '_2.2';
-        return $this->modx->getOption('core_path').'components/newspublisher/filebrowser/index'.$ver.'.tpl';
+        return $this->modx->getOption('core_path').'components/newspublisher/templates/filebrowser/index'.$ver.'.tpl';
     }
 
     /**

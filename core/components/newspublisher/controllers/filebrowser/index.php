@@ -34,4 +34,4 @@ MODx.ctx = "'.$ctx.'";
 </script>');
 
 $modx->response->registerCssJs(false);
-return $modx->smarty->fetch('filebrowser/index_2.0-2.1.tpl');
+return $modx->smarty->fetch('templates/filebrowser/index_2.0-2.1.tpl');

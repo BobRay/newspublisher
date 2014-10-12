@@ -9,7 +9,7 @@ $browserAction= $modx->newObject('modAction');
 $browserAction->fromArray(array(
     'id' => 1,
     'namespace' => 'newspublisher',
-    'controller' => 'filebrowser',
+    'controller' => 'controllers/filebrowser',
     'haslayout' => false,
     'parent' => 0,
     'lang_topics' => '',
