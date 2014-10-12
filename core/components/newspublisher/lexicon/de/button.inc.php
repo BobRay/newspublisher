@@ -42,5 +42,5 @@ $_lang['np_noShow_desc'] = 'Komma-separierte liste von IDs von Dokumenten, bei w
 $_lang['np_bottom_desc'] = '(optional) - Abstand des Knopfes vom unteren Rand des Fensters. Jedes in CSS zulässige Maß kann angegeben werden. Standardwert: `20%`.';
 $_lang['np_right_desc'] = '(optional) - Abstand des Knopfes vom rechten Rand des Fensters. Jedes in CSS zulässige Maß kann angegeben werden. Standardwert: `20%`.';
 $_lang['np_language_desc'] = '(optional) - Für Fehlermeldungen zu verwendende Sprache.';
-$_lang['np_debug_desc'] = '(optional) - Wenn auf `1` gesetzt, wird immer ein bearbeiten-Knopf angezeigt, entweder mit der normalen Beschriftung oder mit einer Meldung, die erklärt, warum der Knopf normalerweise nicht angezeigt wird.';
-$_lang['editHome_desc'] = "(optional) Wenn auf Ja gesetzt, wird der Bearbeitungsknopf auf der Hauptseite ('Home') angezeigt; Standardwert: Nein";
+$_lang['np_debug_desc'] = "(optional) - Wenn auf Ja gesetzt, wird immer ein 'bearbeiten'-Knopf angezeigt, entweder mit der normalen Beschriftung oder mit einer Meldung, die erklärt, warum der Knopf normalerweise nicht angezeigt wird.";
+$_lang['editHome_desc'] = "(optional) Wenn auf Ja gesetzt, wird der Bearbeitungsknopf auf der Startseite angezeigt; Standardwert: Nein";
