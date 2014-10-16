@@ -18,6 +18,7 @@ MODx.browser.NP = function(config) {
         ,source: config.source || MODx.config.default_media_source
         ,openTo: config.openTo || ''
         ,ident: this.ident
+        ,hideSourceCombo: true
         ,rootId: '/'
         ,rootName: _('files')
         ,rootVisible: true
@@ -86,26 +87,33 @@ MODx.browser.NP = function(config) {
                 ,text: _('ok')
                 ,handler: this.onSelect
                 ,scope: this
-                ,width: 200
+                ,width: 150
             },{
                 text: _('cancel')
                 ,handler: this.hide
                 ,scope: this
-                ,width: 200
+                ,width: 150
             }]
         }]
-        ,keys: {
-            key: 27
-            ,handler: this.hide
-            ,scope: this
-        }
     });
+
+    var map = new Ext.KeyMap(Ext.getBody(), [{
+        key: Ext.EventObject.ENTER
+        ,scope: this
+        ,fn: this.onSelect
+     }, {
+        key: Ext.EventObject.ESC
+        ,scope: this
+        ,fn: this.hide
+     }]);
+
     MODx.browser.NP.superclass.constructor.call(this,config);
     this.config = config;
     this.addEvents({
         'select': true
     });
 };
+
 Ext.extend(MODx.browser.NP,Ext.Viewport,{
     returnEl: null
     
@@ -202,4 +210,5 @@ Ext.extend(MODx.browser.NP,Ext.Viewport,{
         Ext.get(this.returnEl).dom.value = unescape(data.url);
     }
 });
+
 Ext.reg('modx-browser-np',MODx.browser.NP);
