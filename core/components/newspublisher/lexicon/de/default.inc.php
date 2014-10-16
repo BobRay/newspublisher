@@ -41,7 +41,6 @@ $_lang['np_missing_field'] = 'Nicht ausgefüllt: [[+name]].';
 $_lang['np_no_resource_group'] = 'Konnte Ressourcen-Gruppe nicht finden: ';
 $_lang['np_no_resource'] = 'Ressource nicht gefunden: ';
 $_lang['np_no_template_name'] = 'Template nicht gefunden: [[+name]].';
-$_lang['np_no_tvs'] = 'Sie wollten TVs anzeigen, aber dieses Template hat keine.';
 $_lang['np_no_tv'] = 'Sie wollten eine Template-Variable anzeigen, die nicht zu diesem Template gehört oder nicht existiert: ';
 $_lang['np_unauthorized'] = 'Sie besitzen nicht die nötigen Rechte, um Beiträge zu publizieren.';
 $_lang['np_parent_not_sent'] = 'Sie haben das als Template &amp; `parent` angegeben, aber den `parentid-Parameter nicht angegeben.';
@@ -78,6 +77,10 @@ $_lang['np_no_action_found'] = "Konnte die Aktion 'filebrowser' nicht finden. M�
 $_lang['np_media_source_access_denied'] = 'Sie besitzen nicht die nötigen Zugriffsrechte, um die mit folgender Template-Variable verknüpfte Medienquelle anzuzeigen:';
 $_lang['np_source_error'] = 'Mit dieser Template-Variable ist keine Medienquelle verknüpft: ';
 $_lang['np_source_wctx_error'] = 'Konnte den Kontext der Medienquelle für diese Template-Variable nicht ermitteln: ';
+$_lang['np_unauthorized_document'] = 'Keine Berechtigung für dieses Dokument';
+$_lang['np_parent_resource_nf'] = 'Eltern-Dokument nicht gefunden';
+$_lang['np_parent_context_nf'] = 'Eltern-Kontext nicht gefunden';
+
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Veröffentlichen am';
@@ -125,7 +128,7 @@ $_lang['resource_privatemgr'] =  'Private Manager';
 $_lang['resource_privatemgr_help'] =  'Veraltet.';
 
 /* messages for NP tabs */
-$_lang['np_could_not_find_tab_field'] = 'Could not find tab field: ';
-$_lang['np_invalid_tabs'] = 'npTabs property is invalid or empty';
-$_lang['np_tabs_other'] = 'Other';
-$_lang['np_tabs_show_all'] = "Show All";
+$_lang['np_could_not_find_tab_field'] = 'Konnte Tab-Feld nicht finden: ';
+$_lang['np_invalid_tabs'] = "Wert für 'npTabs' leer/ungültig";
+$_lang['np_tabs_other'] = 'Anderes';
+$_lang['np_tabs_show_all'] = 'Alles anzeigen';
