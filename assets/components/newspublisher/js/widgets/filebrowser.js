@@ -1,5 +1,5 @@
 
-MODx.NpBrowser = function(config) {
+MODx.NpFileBrowser = function(config) {
     config = config || {};
 
     this.ident = config.ident || Ext.id();
@@ -23,7 +23,7 @@ MODx.NpBrowser = function(config) {
     });
 
     Ext.applyIf(config, {
-        cls: 'np-browser'
+        cls: 'np-filebrowser'
         ,layout: 'border'
         ,items: [{
             region: 'center'
@@ -62,11 +62,11 @@ MODx.NpBrowser = function(config) {
         ,fn: this.onCancel
      }]);
     
-    MODx.NpBrowser.superclass.constructor.call(this, config);
+    MODx.NpFileBrowser.superclass.constructor.call(this, config);
     this.config = config;
 }
 
 
-Ext.extend(MODx.NpBrowser, Ext.Viewport);
+Ext.extend(MODx.NpFileBrowser, Ext.Viewport);
 
-Ext.reg('modx-browser-np', MODx.NpBrowser);
+Ext.reg('modx-np-filebrowser', MODx.NpFileBrowser);

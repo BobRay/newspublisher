@@ -36,7 +36,7 @@ Ext.onReady(function() {
     Ext.QuickTips.init();
     Ext.BLANK_IMAGE_URL = MODx.config.manager_url+'assets/ext3/resources/images/default/s.gif';
     browser = MODx.load({
-        xtype: 'modx-browser-np'
+        xtype: 'modx-np-filebrowser'
         ,hideFiles: true
         ,wctx: '{/literal}{$wctx}{literal}' || 'web'
         ,source: '{/literal}{$source}{literal}'

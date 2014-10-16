@@ -1,5 +1,5 @@
 
-MODx.browser.NP = function(config) {
+MODx.NpFileBrowser = function(config) {
     config = config || {};
     MODx.browserOpen = true; // Hide the button for opening another browser
     this.ident = Ext.id();
@@ -107,14 +107,14 @@ MODx.browser.NP = function(config) {
         ,fn: this.hide
      }]);
 
-    MODx.browser.NP.superclass.constructor.call(this,config);
+    MODx.NpFileBrowser.superclass.constructor.call(this,config);
     this.config = config;
     this.addEvents({
         'select': true
     });
 };
 
-Ext.extend(MODx.browser.NP,Ext.Viewport,{
+Ext.extend(MODx.NpFileBrowser, Ext.Viewport, {
     returnEl: null
     
     ,filter : function(){
@@ -211,4 +211,4 @@ Ext.extend(MODx.browser.NP,Ext.Viewport,{
     }
 });
 
-Ext.reg('modx-browser-np',MODx.browser.NP);
+Ext.reg('modx-np-filebrowser', MODx.NpFileBrowser);

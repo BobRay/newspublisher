@@ -34,7 +34,7 @@ class FilebrowserManagerController extends modManagerController {
         $ver = $this->is_Revo_2_2 ? '-2.2' : '';
         $this->modx->regClientStartupScript(
             $this->modx->getOption('np.assets_url', null, MODX_ASSETS_URL.'components/newspublisher/').
-            'js/widgets/modx.np.browser'.$ver.'.js'
+            'js/widgets/filebrowser'.$ver.'.js'
         );
     }
 
