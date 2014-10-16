@@ -38,7 +38,7 @@ $_lang['np_error_required'] = 'The [[+name]] field is required.';
 $_lang['np_missing_field'] = 'Missing field: [[+name]].';
 $_lang['np_no_resource_group'] = 'Could not find resource group: ';
 $_lang['np_no_resource'] = 'Failed to get resource: ';
-$_lang['np_no_template_name'] = 'Failed to get template: [[+name]].';
+$_lang['np_no_template_name'] = 'Failed to get template: ';
 $_lang['np_no_tv'] = "Unknown field in show property: ";
 $_lang['np_unauthorized'] = 'You are not allowed to publish articles.';
 $_lang['np_parent_not_sent'] = 'You set &amp;template to parent but did not include the parentid parameter.';
@@ -73,8 +73,11 @@ $_lang['np_launch_image_browser'] = 'Select an image';
 $_lang['np_launch_file_browser'] = 'Select a file';
 $_lang['np_no_action_found'] = "The 'filebrowser' action could not be found. You may have deleted it accidentally. Please reinstall NewsPublisher.";
 $_lang['np_media_source_access_denied'] = "You don't have the permission to access the media source associated with the TV: ";
-$_lang['np_source_error'] = 'No media source is associated with the TV: ';
+$_lang['np_no_media_source'] = 'No media source is associated with the TV: ';
 $_lang['np_source_wctx_error'] = 'The working context of the media source could not be retrieved for the TV: ';
+$_lang['np_unauthorized_document'] = 'Unauthorized document';
+$_lang['np_parent_resource_nf'] = 'Parent Resource not found';
+$_lang['np_parent_context_nf'] = 'Parent Context not found';
 
 
 /* missing resource field lexicon strings */
@@ -126,4 +129,4 @@ $_lang['resource_privatemgr_help'] =  'Deprecated.';
 $_lang['np_could_not_find_tab_field'] = 'Could not find tab field: ';
 $_lang['np_invalid_tabs'] = 'npTabs property is invalid or empty';
 $_lang['np_tabs_other'] = 'Other';
-$_lang['np_tabs_show_all'] = "Show All";
+$_lang['np_tabs_show_all'] = 'Show All';

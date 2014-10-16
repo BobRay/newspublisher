@@ -1,26 +1,29 @@
 <?php
 /**
 * Loads the newspublisher filebrowser manager page
-* Revo 2.20 and above
+* MODx Revolution 2.3 and above
 *
 * @package modx
 * @subpackage newspublisher
 */
 
 class FilebrowserManagerController extends modManagerController {
-    public $ctx;
     public $loadBaseJavascript = true;
     public $loadHeader = false;
     public $loadFooter = false;
+
+    public function initialize() {
+        $this->is_Revo_2_2 = (boolean)version_compare($this->modx->version['full_version'], '2.3.0-rc1', '<');
+    }
 
     /**
      * Check for any permissions or requirements to load page
      * @return bool
      */
     public function checkPermissions() {
-
         // only allow access if the browser was launched from within the newspublisher page
-        return $this->modx->hasPermission('file_manager') && isset($_SESSION['newspublisher']['filebrowser'][$_GET['field']]);
+        return $this->modx->hasPermission('file_manager')
+               && isset($_SESSION['newspublisher']['filebrowser'][$_GET['field']]);
     }
 
     /**
@@ -28,7 +31,11 @@ class FilebrowserManagerController extends modManagerController {
      * @return void
      */
     public function loadCustomCssJs() {
-        $this->modx->regClientStartupScript($this->modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/').'js/widgets/modx.np.browser.js');
+        $ver = $this->is_Revo_2_2 ? '-2.2' : '';
+        $this->modx->regClientStartupScript(
+            $this->modx->getOption('np.assets_url', null, MODX_ASSETS_URL.'components/newspublisher/').
+            'js/widgets/filebrowser'.$ver.'.js'
+        );
     }
 
     /**
@@ -37,7 +44,6 @@ class FilebrowserManagerController extends modManagerController {
      * @return mixed
      */
     public function process(array $scriptProperties = array()) {
-
         return $_SESSION['newspublisher']['filebrowser'][$_GET['field']];
     }
 
@@ -55,7 +61,9 @@ class FilebrowserManagerController extends modManagerController {
      * @return string
      */
     public function getTemplateFile() {
-        return $this->modx->getOption('core_path').'components/newspublisher/filebrowser/index_2_20.tpl';
+        $ver = $this->is_Revo_2_2 ? '-2.2' : '';
+        return $this->modx->getOption('core_path').
+               'components/newspublisher/templates/filebrowser'.$ver.'.tpl';
     }
 
     /**

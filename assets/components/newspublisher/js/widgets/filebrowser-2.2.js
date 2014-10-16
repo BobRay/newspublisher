@@ -1,19 +1,12 @@
 
-MODx.browser.NP = function(config) {
+MODx.NpFileBrowser = function(config) {
     config = config || {};
     MODx.browserOpen = true; // Hide the button for opening another browser
     this.ident = Ext.id();
     this.view = MODx.load({
         xtype: 'modx-browser-view'
         ,onSelect: {fn: this.onSelect, scope: this}
-        ,prependPath: config.prependPath || null
-        ,prependUrl: config.prependUrl || null
-        ,basePath: config.basePath || ''
-        ,basePathRelative: config.basePathRelative || null
-        ,baseUrl: config.baseUrl || ''
-        ,baseUrlRelative: config.baseUrlRelative || null
         ,source: config.source || MODx.config.default_media_source
-        ,allowedFileTypes: config.allowedFileTypes || ''
         ,wctx: config.wctx || 'web'
         ,openTo: config.openTo || ''
         ,ident: this.ident
@@ -22,15 +15,10 @@ MODx.browser.NP = function(config) {
         xtype: 'modx-tree-directory'
         ,onUpload: function() { this.view.run(); }
         ,scope: this
-        ,prependPath: config.prependPath || null
-        ,basePath: config.basePath || ''
-        ,basePathRelative: config.basePathRelative || null
-        ,baseUrl: config.baseUrl || ''
-        ,baseUrlRelative: config.baseUrlRelative || null
         ,source: config.source || MODx.config.default_media_source
-        ,hideFiles: config.hideFiles || false
         ,openTo: config.openTo || ''
         ,ident: this.ident
+        ,hideSourceCombo: true
         ,rootId: '/'
         ,rootName: _('files')
         ,rootVisible: true
@@ -99,27 +87,34 @@ MODx.browser.NP = function(config) {
                 ,text: _('ok')
                 ,handler: this.onSelect
                 ,scope: this
-                ,width: 200
+                ,width: 150
             },{
                 text: _('cancel')
                 ,handler: this.hide
                 ,scope: this
-                ,width: 200
+                ,width: 150
             }]
         }]
-        ,keys: {
-            key: 27
-            ,handler: this.hide
-            ,scope: this
-        }
     });
-    MODx.browser.NP.superclass.constructor.call(this,config);
+
+    var map = new Ext.KeyMap(Ext.getBody(), [{
+        key: Ext.EventObject.ENTER
+        ,scope: this
+        ,fn: this.onSelect
+     }, {
+        key: Ext.EventObject.ESC
+        ,scope: this
+        ,fn: this.hide
+     }]);
+
+    MODx.NpFileBrowser.superclass.constructor.call(this,config);
     this.config = config;
     this.addEvents({
         'select': true
     });
 };
-Ext.extend(MODx.browser.NP,Ext.Viewport,{
+
+Ext.extend(MODx.NpFileBrowser, Ext.Viewport, {
     returnEl: null
     
     ,filter : function(){
@@ -136,12 +131,7 @@ Ext.extend(MODx.browser.NP,Ext.Viewport,{
         dir = dir || (Ext.isEmpty(this.config.openTo) ? '' : this.config.openTo);
         this.view.run({
             dir: dir
-            ,basePath: this.config.basePath || ''
-            ,basePathRelative: this.config.basePathRelative || null
-            ,baseUrl: this.config.baseUrl || ''
-            ,baseUrlRelative: this.config.baseUrlRelative || null
             ,source: this.config.source
-            ,allowedFileTypes: this.config.allowedFileTypes || ''
             ,wctx: this.config.wctx || 'web'
         });
     }
@@ -220,4 +210,5 @@ Ext.extend(MODx.browser.NP,Ext.Viewport,{
         Ext.get(this.returnEl).dom.value = unescape(data.url);
     }
 });
-Ext.reg('modx-browser-np',MODx.browser.NP);
+
+Ext.reg('modx-np-filebrowser', MODx.NpFileBrowser);

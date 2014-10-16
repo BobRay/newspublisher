@@ -20,7 +20,7 @@
  * @package newspublisher
  */
 /**
- * Button German Lexicon Topic (German translation by mschlegal)
+ * Button German Lexicon Topic (German translation by mschlegel)
  *
  * @package newspublisher
  * @subpackage lexicon
@@ -32,7 +32,6 @@ include_once(dirname(dirname(__FILE__)).'/en/button.inc.php'); // fallback for m
 /* NewsPublisher EditThisButton strings */
 $_lang['np_edit'] = 'Bearbeiten';
 $_lang['np_no_edit_document_permission'] = 'Keine Rechte, Dokumente zu bearbeiten';
-$_lang['np_no_edit_this_document_permission'] = 'Keine Rechte, dieses Dokument zu bearbeiten';
 $_lang['np_no_context_save_document_permission'] = 'Keine Rechte, Dokumente in diesem Kontext zu speichern';
 $_lang['np_no_resource_save_document_permission'] = 'Keine Rechte, dieses Dokument zu speichern';
 $_lang['np_no_edit_home_page'] = 'Kann Startseite nicht bearbeiten';
@@ -43,4 +42,5 @@ $_lang['np_noShow_desc'] = 'Komma-separierte liste von IDs von Dokumenten, bei w
 $_lang['np_bottom_desc'] = '(optional) - Abstand des Knopfes vom unteren Rand des Fensters. Jedes in CSS zulässige Maß kann angegeben werden. Standardwert: `20%`.';
 $_lang['np_right_desc'] = '(optional) - Abstand des Knopfes vom rechten Rand des Fensters. Jedes in CSS zulässige Maß kann angegeben werden. Standardwert: `20%`.';
 $_lang['np_language_desc'] = '(optional) - Für Fehlermeldungen zu verwendende Sprache.';
-$_lang['np_debug_desc'] = '(optional) - Wenn auf `1` gesetzt, wird immer ein bearbeiten-Knopf angezeigt, entweder mit der normalen Beschriftung oder mit einer Meldung, die erklärt, warum der Knopf normalerweise nicht angezeigt wird.';
+$_lang['np_debug_desc'] = "(optional) - Wenn auf Ja gesetzt, wird immer ein 'bearbeiten'-Knopf angezeigt, entweder mit der normalen Beschriftung oder mit einer Meldung, die erklärt, warum der Knopf normalerweise nicht angezeigt wird.";
+$_lang['editHome_desc'] = "(optional) Wenn auf Ja gesetzt, wird der Bearbeitungsknopf auf der Startseite angezeigt; Standardwert: Nein";

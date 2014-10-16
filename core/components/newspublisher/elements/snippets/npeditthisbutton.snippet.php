@@ -1,5 +1,4 @@
 <?php
-
 /**
  * NpEditThisButton
  * Copyright 2011-2012 Bob Ray
@@ -51,10 +50,14 @@
 /* @var $modx modX */
 /* ToDo: Internationalize button caption debug messages */
 $props =& $scriptProperties;
+$thisId = $modx->resource->get('id');
 /* let user &language property override default language */
 $language = $modx->getOption('language', $props, null);
 $language = $language ? $language . ':' : '';
 $modx->lexicon->load($language . 'newspublisher:button');
+/* For lexicon helper
+$modx->lexicon->load('newspublisher:button'); */
+
 
 /* Caption for edit button  */
 $debug = $modx->getOption('debug', $props, false);
@@ -114,6 +117,11 @@ if (empty($npId)) {
         $debug = true;
     }
 }
+
+/* Don't execute on NewsPublisher Page */
+if ($thisId == $npId) {
+    return '';
+}
 $modx->setPlaceholder('np_id', $npId);
 
 /* check permissions on current page */
@@ -130,37 +138,37 @@ if (!$modx->resource->checkPolicy('save')) {
 }
 
 $npEditId = $modx->getOption('np_edit_id',$props,'');
-$resourceToEdit = empty($npEditId)? $modx->resource->get('id') : $npEditId;
+$resourceToEdit = empty($npEditId)? $thisId : $npEditId;
 $editHome = $modx->getOption('editHome', $props, false);
-
-/* Don't show if current page is in the noShow list */
-$noShow = $modx->getOption('noShow', $props, '');
-if (empty($noShow)) {
-    $noShow = (string) $npId;
-    if (! $editHome) {
-        $noShow .= ',' . (string) $modx->getOption('site_start');
-    }
-}
-$hidden = explode(',', $noShow);
-$hidden[] = $npId;
-if (in_array($resourceToEdit, $hidden)) {
-    $defaultButtonCaption = 'In noShow list';
-}
 
 /* Don't show on the the home page unless &editHome is set to 1 */
 if (! $editHome) {
-    if ($npEditId == $modx->getOption('site_start')) {
-        $defaultButtonCaption = $modx->lexicon('np_no_edit_home_page');
+    if ($thisId == $modx->getOption('site_start')) {
+        if ($resourceToEdit == $modx->getOption('site_start')) {
+            $defaultButtonCaption = $modx->lexicon('np_no_edit_home_page');
+        }
+    }
+}
+/* Don't show if current page is in the noShow list */
+$noShow = $modx->getOption('noShow', $props, '');
+if (!empty($noShow)) {
+    $hidden = explode(',', $noShow);
+    if (in_array($resourceToEdit, $hidden)) {
+        $defaultButtonCaption = 'In noShow list';
     }
 }
 
-
+/* protect against forged edit ID */
+$_SESSION['np_doc_to_edit'] = $resourceToEdit;
 
 /* create and return the form */
 if ($npEditId) {
-$output = '<form action="[[~[[+np_id]]]]" method="post" class="np_button_form">';
+    $output = '<form action="[[~[[+np_id]]]]" method="post"
+    class="np_button_form">';
 } else {
-$output = '<form action="[[~[[+np_id]]]]" method="post" class="np_button_form" style="position:fixed;bottom:' . $bottom . ';right:' . $right . '">';
+    $output = '<form action="[[~[[+np_id]]]]" method="post"
+        class="np_button_form" style="position:fixed;bottom:' .
+        $bottom . ';right:' . $right . '">';
 }
 $output .= "\n" . '<input type = "hidden" name="np_existing" value="true" />';
 $output .= "\n" . '<input type = "hidden" name="np_doc_id" value="' . $resourceToEdit . '"/>';
