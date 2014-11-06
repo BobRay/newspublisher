@@ -129,6 +129,6 @@ $_lang['resource_privatemgr_help'] =  'Veraltet.';
 
 /* messages for NP tabs */
 $_lang['np_could_not_find_tab_field'] = 'Konnte Tab-Feld nicht finden: ';
-$_lang['np_invalid_tabs'] = "Wert für 'npTabs' leer/ungültig";
+$_lang['np_invalid_tabs'] = 'Wert für `npTabs` leer/ungültig';
 $_lang['np_tabs_other'] = 'Anderes';
 $_lang['np_tabs_show_all'] = 'Alles anzeigen';
