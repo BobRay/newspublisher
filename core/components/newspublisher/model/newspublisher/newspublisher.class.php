@@ -1191,99 +1191,27 @@ class Newspublisher {
                 $value = $tv->getValue($this->existing);
                 $openTo = '';
 
-                if (method_exists($tv, 'getSource')) { /* MODx version is 2.20 or higher */
-                    $source = $tv->getSource($this->context);
-                    if (!$source) {
-                        $this->setError($this->modx->lexicon('np_no_media_source') .
-                            $name);
-                        return null;
-                    }
-                    if (!$source->getWorkingContext()) {
-                        $this->setError($this->modx->lexicon('np_source_wctx_error') .
-                            $name);
-                    }
-                    $source->initialize();
-                    $params['source'] = $source->get('id');
-                    
-                    if (!$source->checkPolicy('view')) {
-                        $this->setError($this->modx->lexicon('np_media_source_access_denied')
-                            . $name);
-                        return null;
-                    }
+                $source = $tv->getSource($this->context);
+                if (!$source) {
+                    $this->setError($this->modx->lexicon('np_no_media_source') .
+                        $name);
+                    return null;
+                }
+                if (!$source->getWorkingContext()) {
+                    $this->setError($this->modx->lexicon('np_source_wctx_error') .
+                        $name);
+                }
+                $source->initialize();
+                $params['source'] = $source->get('id');
+                
+                if (!$source->checkPolicy('view')) {
+                    $this->setError($this->modx->lexicon('np_media_source_access_denied')
+                        . $name);
+                    return null;
+                }
 
-                    if (!empty($value)) {
-                        $openTo = $source->getOpenTo($value,$params);
-                    }
-
-                } else { /* MODx versions below 2.20 */
-
-                    $workingContext = $this->modx->getContext($this->context);
-                    $this->modx->fileHandler->context =& $workingContext;
-
-
-                    /* get base path based on either TV param or filemanager_path */
-                    $replacePaths = array(
-                        '[[++base_path]]' => $workingContext->getOption('base_path',null,
-                                MODX_BASE_PATH),
-                        '[[++core_path]]' => $workingContext->getOption('core_path',null,
-                                MODX_CORE_PATH),
-                        '[[++manager_path]]' => $workingContext->getOption('manager_path',
-                                null,MODX_MANAGER_PATH),
-                        '[[++assets_path]]' => $workingContext->getOption('assets_path',null,
-                                MODX_ASSETS_PATH),
-                        '[[++base_url]]' => $workingContext->getOption('base_url',null,
-                                MODX_BASE_URL),
-                        '[[++manager_url]]' => $workingContext->getOption('manager_url',null,
-                                MODX_MANAGER_URL),
-                        '[[++assets_url]]' => $workingContext->getOption('assets_url',null,
-                                MODX_ASSETS_URL),
-                    );
-                    $replaceKeys = array_keys($replacePaths);
-                    $replaceValues = array_values($replacePaths);
-
-                    if (empty($params['basePath'])) {
-                        $params['basePath'] = $this->modx->fileHandler->getBasePath();
-                        $params['basePath'] = str_replace($replaceKeys,$replaceValues,
-                            $params['basePath']);
-                        $params['basePathRelative'] =
-                            $workingContext->getOption('filemanager_path_relative',true)
-                                ? 1
-                                : 0;
-                    } else {
-                        $params['basePath'] =
-                            str_replace($replaceKeys,$replaceValues,$params['basePath']);
-                        $params['basePathRelative'] = !isset($params['basePathRelative'])
-                            || in_array($params['basePathRelative'],array('true',1,'1'));
-                    }
-                    if (empty($params['baseUrl'])) {
-                        $params['baseUrl'] = $this->modx->fileHandler->getBaseUrl();
-                        $params['baseUrl'] =
-                            str_replace($replaceKeys,$replaceValues,$params['baseUrl']);
-                        $params['baseUrlRelative'] =
-                            $workingContext->getOption('filemanager_url_relative',true)
-                                ? 1
-                                : 0;
-                    } else {
-                        $params['baseUrl'] = str_replace($replaceKeys,$replaceValues,
-                            $params['baseUrl']);
-                        $params['baseUrlRelative'] = !isset($params['baseUrlRelative']) ||
-                            in_array($params['baseUrlRelative'],array('true',1,'1'));
-                    }
-                    $modxBasePath = $this->modx->getOption('base_path',null,MODX_BASE_PATH);
-                    if ($params['basePathRelative'] && $modxBasePath != '/') {
-                        $params['basePath'] = ltrim(str_replace($modxBasePath,'',
-                            $params['basePath']),'/');
-                    }
-                    $modxBaseUrl = $this->modx->getOption('base_url',null,MODX_BASE_URL);
-                    if ($params['baseUrlRelative'] && $modxBaseUrl != '/') {
-                        $params['baseUrl'] = ltrim(str_replace($modxBaseUrl,'',
-                            $params['baseUrl']),'/');
-                    }
-
-                    if (!empty($value) && strpos($value,'/') !== false) {
-                        $openTo = pathinfo($value,PATHINFO_DIRNAME);
-                        $openTo = rtrim($openTo,'/').'/';
-                    }
+                if (!empty($value)) {
+                    $openTo = $source->getOpenTo($value,$params);
                 }
 
                 $formTpl .= $this->_displayFileInput($name, $tvType.'Tpl',
