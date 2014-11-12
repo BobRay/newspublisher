@@ -2,7 +2,7 @@
 /**
  * Properties file for NewsPublisher snippet
  *
- * Copyright 2013 by Bob Ray <http://bobsguides.com>
+ * Copyright 2013-2014 by Bob Ray <http://bobsguides.com>
  * Created on 07-11-2014
  *
  * @package newspublisher
