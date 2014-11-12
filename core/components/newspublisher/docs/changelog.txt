@@ -4,19 +4,27 @@ NewsPublisher 2.0.0-pl
 ----------------------
 
 Allow editing MODX tags with allow_tags_in_post off
+Mods for MODX 2.3 (thanks to Markus Schlegel)
+Remove support for MODX versions < 2.2
+Show parent and template as drop-down lists
 Added &stopOnBadTv property to prevent error when a TV is not attached to current template
 Allow users to unset pub_date
 Fix bug with filebrowser/image TVs
+Allow parent and templateid as property aliases
 Fix bug with Articles class_key
+Refactor noShow tests in NpEditThisButton
+Prevent NpEditThisButton from executing on NewsPublisher page
 Added &allowedtags property
 Added missing tags to default allowed tags
 Allow users to edit Home page with &editHome property
 Cachebust CSS file
-Many bug fixes and corrections
 Fixed bug with dash in Resource List TV
 Fixed more E_NOTICE bugs
 Corrected Lexicon strings
+Prevent switching of Media Source
 Added Italian lexicon files -- Thanks to Alberto Ramacciotti (obert2k11)
+Update German lexiconfiles -- thanks to Markus Schlegel
+Many bug fixes and corrections
 
 NewsPublisher 1.4.2-pl
 ----------------------
