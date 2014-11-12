@@ -1,18 +1,22 @@
 
 <p>This snippet is for use with MODX Revolution. NewsPublisher is a front-end resource creation and editing tool. It allows users to create new documents and edit existing documents in the front end of your site. Editing existing documents involves placing a tag for the NpEditThisButton snippet in your page template. Clicking on the button produced by the snippet launches NewsPublisher for that resource. You do not have to create *any* form fields. NewsPublisher creates them based on the field or TV type and its current or default value (if any).</p>
 
+<div class="box">
+    <p>NewsPublisher 2.0 now requires MODX 2.2 or higher. It is now fully functional in MODX 2.3.</p>
+
+</div>
+
 <p>(Jump to <a href="[[~[[*id]]]]#np_propertiesTable">NewsPublisher Snippet Properties Table</a>.)</p>
 <p>(Jump to <a href="[[~[[*id]]]]#npet_propertiesTable">NpEditThisButton Snippet Properties Table</a>.)</p>
 
-<p>There are many new features in NewsPublisher 1.3.0 and most are due to the excellent work of Markus Schlegel. NewsPublisher now has a fully functional
-browser for file and image TVs, support for resource-list TVs and custom field captions, an improved datepicker (with internationalized error messages) and a NewsPublisher Policy and Policy Template.</p>
+<p>Markus Schlegel, who developed the NewsPublisher browser for files and images, the NewsPublisherEditor Policy and Policy Template, and vastly improved the datepicker, was kind enough to step in and solve the many problems necessary to make the file browser work in MODX Version 2.3. and  now has a fully functional.</p>
 
-<p><i>Note: Earlier versions of TinyMCE do not work correctly in the front end. Be sure you're using the current version.</i>
+<p><i>Note: Earlier versions of TinyMCE may not work correctly in the front end. Be sure you're using the current version.</i>
 </p>
 
 <h3>Important Security Note</h3>
 
-<p>If you show a file or image TV on your NewsPublisher form, or want users to be able insert image and/or file links in a rich text field, your user will need to have Manager access in order to use the File/Image browser. If the user manually types in a Manager URL, he or she can access any part of the Manager. If you are going to include file or image link capability in your NewsPublisher form, it is *very* important that the user have a Context Access ACL entry for the mgr context that severely limits what the user can do in the Manager. <b>Do not use the Administrator Policy for this ACL entry!!!</b> If you do, the user can potentially do anything you can do in the Manager (including deleting you and becoming the admin Super User). In order for the Image or File TVs to work in NewsPublisher, the Login snippet must contain the following property setting:</p>
+<p>If you show a file or image TV on your NewsPublisher form, or want users to be able insert image and/or file links in a rich text field, your user will need to have Manager access in order to use the File/Image browser. If the user manually types in a Manager URL, he or she can access any part of the Manager, unless it is protected from them in some way. If you are going to include file or image link capability in your NewsPublisher form, it is *very* important that the user have a Context Access ACL entry for the mgr context that severely limits what the user can do in the Manager. <b>Do not use the Administrator Policy for this ACL entry!!!</b> If you do, the user can potentially do anything you can do in the Manager (including deleting you and becoming the admin Super User). In order for the Image or File TVs to work in NewsPublisher, the Login snippet must contain the following property setting:</p>
 
 <pre><fixedpre>
     &contexts=`web,mgr`
@@ -20,7 +24,7 @@ browser for file and image TVs, support for resource-list TVs and custom field c
 
 <h3>Installing NewsPublisher for MODX Revolution</h3>
 <p>
-Go to System | Package Management on the main menu in the MODX Manager and click on the "Download Extras" button. That will take you to the Revolution Repository (AKA Web Transport Facility). Put NewsPublisher in the search box and press Enter. Click on the "Download" button. When the download has finished, click on the "Back to Package Manager" button. That should bring you back to your Package Management grid. Click on the "Install" button next to NewsPublisher in the grid. The NewsPublisher snippet should now be installed.</p>
+Go to System | Package Management on the main menu in the MODX Manager and click on the "Download Extras" button. That will take you to the Revolution Repository. Put NewsPublisher in the search box and press Enter. Click on the "Download" button. When the download has finished, click on the "Back to Package Manager" button. That should bring you back to your Package Management grid. Click on the "Install" button next to NewsPublisher in the grid and follow the prompts. The NewsPublisher snippet should now be installed.</p>
 
 <h3>Using NewsPublisher</h3>
 
@@ -60,7 +64,7 @@ When you preview the document, you should see a basic resource editing form. If 
 <h3>Security</h3>
 <p>NewsPublisher responds to the MODX security permission system, so users can only create resources if they have permission to do so. As the admin Super User, you'll have full rights (unless you've done something that takes them away) to create and edit any document in the front end. Other users, however, will have to be granted permission before they can do either and their ability to edit existing resources will depend on the resource group settings.</p>
 
-<p>In addition, users (including you) will not be able to edit resources containing MODX tags without the <code>allow_modx_tags</code> permission. As of NewsPublisher 1.3.0, this permission is included in the NewsPublisherEditor Policy but is unchecked by default. You must check the Permission and save the NewsPublisherEditor Policy if you want to allow users to edit or create documents with MODX tags in them.</p>
+<p>In addition, users (including you) will not be able to edit resources containing MODX tags without the <code>allow_modx_tags</code> permission. As of NewsPublisher 1.3.0, this permission is included in the NewsPublisherEditor Policy but is unchecked by default. You must check the Permission and save the NewsPublisherEditor Policy if you want to allow users to edit or create documents with MODX tags in them. Be sure to see the section below on dealing with MODX tags.</p>
 
 <p>In order to create Context Access ACL entries using the NewsPublisherEditor Policy, you may have to flush both permissions and sessions before the new policy will show up in the list.</p>
 
@@ -68,7 +72,7 @@ When you preview the document, you should see a basic resource editing form. If 
 
 <h3>MODX Tags</h3>
 
-<p>Recent versions of MODX include the <code>allow_tags_in_post</code> System Setting. This makes MODX front-end forms much more secure because any MODX tags are removed from the <code>$_POST</code> array when a form is submitted. Unfortunately, it kills the option to edit resources or TVs containing MODX tags in the front end unless the <code>allow_modx_tags</code> System Setting is on (which poses significant security risks). As of NewsPublisher 2.0, there is a workaround for this. It's not ideal, but it works. MODX tags are now represented in NewsPublisher in the form <code>{{...}}</code> instead of <code>[[ ... ]]</code>. This allows users with the required permission to edit MODX tags in NewsPublisher without turning on the System Setting.</p>
+<p>Recent versions of MODX include the <code>allow_tags_in_post</code> System Setting (not to be confused with the <code>allow_modx_tags</code> permission mentioned above). This makes MODX front-end forms much more secure because any MODX tags are removed from the <code>$_POST</code> array when a form is submitted. Unfortunately, it kills the option to edit resources or TVs containing MODX tags in the front end unless the <code>allow_modx_tags</code> System Setting is on (which poses significant security risks). As of NewsPublisher 2.0, there is a workaround for this. It's not ideal, but it works. MODX tags are now represented in NewsPublisher in the form <code>{{...}}</code> instead of <code>[[ ... ]]</code>. This allows users with the required permission to edit MODX tags in NewsPublisher without turning on the System Setting.</p>
 
 <p>For security reasons, it's <b>strongly recommended</b> that you leave the MODX <code>allow_tags_in_post</code> System Setting at its default setting of 'No'. If you want users to be able to edit MODX tags in NewsPublisher, put a check next to the <code>allow_modx_tags</code> permission in the NewsPublisherEditor Policy and save the Policy. For any users who will be using NewsPublisher, create a Context Access ACL entry for their User Group with a Context of 'web' and NewsPublisherEditor for the Policy. That will give them the <code>allow_modx_tags</code> permission. As always, flush permissions and sessions on the Security menu after making any changes.</p>
 
@@ -102,7 +106,8 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p>You can make many changes to the look of the form using CSS rules for styling. You can find the CSS form at assets/components/newspublisher/css/newspublisher.css. Using CSS, you can change the text color, background color, size, and/or position of any field, though the control of richtext fields is limited. You can put fields side-by-side by using &quot;display:inline;&quot; for the appropriate field(s). If you plan to make changes, it's recommended that you make a copy of the CSS file, the <code>assets/components/newspublisher/css</code> directory and put the name of your new file in the <code>&cssfile</code> property.</p>
 
-<p>If you feel you must, you can alter the Tpl chunks for any of the field types. Again, you should duplicate the existing chunk and put the name of your duplicate in the appropriate property. Be careful not to change the prefixes of any of the placeholders, even if you specify a custom prefix for the form as a property. The prefixes will be altered automatically by the snippet. Note that there are both np. and npx. prefixes. The npx. prefixes are used internally by the snippet, the np. prefixes are usually in the value field of the element and will be set via placeholders.
+<p>If you feel you must, you can alter the Tpl chunks for any of the field types. Again, you should duplicate the existing chunk and put the name of your duplicate in the appropriate property. Be careful not to change the prefixes of any of the placeholders, even if you specify a custom prefix for the form as a property. The prefixes will be altered automatically by the snippet. Note that there are both
+<code>np.</code> and <code>npx.</code> prefixes. The <code>npx.</code> prefixes are used internally by the snippet, the <code>np.</code> prefixes are usually in the value field of the element and will be set via placeholders.
 </p>
 
 <h3>NewsPublisher Tabs</h3>
@@ -143,7 +148,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p>You can attach plugins to either event to perform any extra processing you need. Any existing plugins attached to those events will also execute when the resource is saved. </p>
 
-<p>The usual variables are available in the plugin (<code>$id</code>, <code>$resource</code>, and <code>$mode</code>). The <code>$resource</code> variable is a reference to the resource object itself, so you can check its fields and modify it at will. If the plugin is attached to <code>OnDocFormSave</code>, remember to save the Reource object again after making any changes to it.</p>
+<p>The usual variables are available in the plugin (<code>$id</code>, <code>$resource</code>, and <code>$mode</code>). The <code>$resource</code> variable is a reference to the resource object itself, so you can check its fields and modify it at will. If the plugin is attached to <code>OnDocFormSave</code>, remember to save the Resource object again after making any changes to it.</p>
 
 
 <h3>Configuring NewsPublisher</h3>
@@ -183,13 +188,13 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p><code>&initdatepicker</code> &mdash; (0/1) This is required if you will be showing any date fields or TVs.</p>
 
-<p><code>&parentid</code> &mdash; (integer) ID of the parent for new pages; defaults to NewsPublisher page.</p>
+<p><code>&parentid</code> &mdash; (integer) ID of the parent for new pages; defaults to NewsPublisher page. If you want to force a particular parent, set this and don't include the <code>parent</code> field in the <code>&show</code> property. (For backward compatibility, <code>&parent</code> will also work.)</p>
 
 <p><code>&parents</code> &mdash; comma-separated list of possible parent IDs (must be IDs or Context Keys!) of parents for user to select from; Note: <code>new_document_in_root</code> permission may be necessary for new resources; default: empty. If <code>&parentid</code> is set, it will be selected in the list.</p>
 
 
 <p>
-<code>&template</code> &mdash; (mixed) The name or ID of the template to be assigned to new docs. Can also be set to 'Parent' to assign the parent's template; default: default_template System Setting.</p>
+<code>&templateid</code> &mdash; (mixed) The name or ID of the template to be assigned to new docs. Can also be set to 'Parent' to assign the parent's template; default: default_template System Setting. To force a particular template, set this, and don't put the <code>template</code> field in the <code>&show</code> property. (For backward compatibility, <code>&template</code> will also work.)</p>
 
 <p>
 <code>&templates</code> &mdash; comma-separated list of IDs (must be IDs!) of Templates for user to select from; default: empty. If <code>&template</code> is also set, it will be selected in the list. $</p>
@@ -313,7 +318,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 <p>Important: If you will be using NewsPublisher for Articles, be sure to set all of the following properties in the NewsPublisher tag:</p>
 <ul>
     <li><code>&parentid</code> &mdash; The ID of the Articles container</li>
-    <li><code>&template</code> &mdash; The ID of the blog post template</li>
+    <li><code>&templateid</code> &mdash; The ID of the blog post template</li>
     <li><code>&classkey</code> &mdash; `Article`</li>
     <li><code>&hidemenu</code> &mdash; `1`</li>
 </ul>
@@ -335,6 +340,23 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>(empty)</td>
     </tr>
     <tr>
+        <td>aliasdateformat</td>
+        <td>(optional) Format string for auto date alias -- see tutorial</td>
+        <td>PHP date + time format</td>
+    </tr>
+    <tr>
+        <td>aliasprefix</td>
+        <td>(optional) Prefix to be prepended to alias for new documents with an empty alias; alias will be aliasprefix - timestamp</td>
+        <td>(empty)</td>
+    </tr>
+    <tr>
+        <td>aliastitle</td>
+        <td>(optional) Set to Yes to use lowercase, hyphenated, page title as alias. If set to No, 'article-(date created)' is used. Ignored
+            if alias is filled in form
+        </td>
+        <td>1</td>
+    </tr>
+    <tr>
         <td>allowedtags</td>
         <td>(optional) Tags allowed in text fields</td>
         <td><fixedpre><p><br><a><i><em><b><strong><pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd><object><blockquote><code></fixedpre></td>
@@ -345,6 +367,17 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>(empty)</td>
     </tr>
     <tr>
+        <td>booltpl</td>
+        <td>(optional) Tpl used for Yes/No resource fields (e.g., published, searchable, etc.)</td>
+        <td>npBoolTpl</td>
+    </tr>
+    <tr>
+        <td>cacheable</td>
+        <td>(optional) Sets the flag that determines whether or not the resource is cached; for new resources, set to `Parent` to use parent's setting</td>
+        <td>System Default</td>
+    </tr>
+
+    <tr>
         <td>cancelid</td>
         <td>(optional) Document ID to load on cancel</td>
         <td>http_referer</td>
@@ -353,6 +386,11 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>captions</td>
         <td>(optional) Custom captions -- Comma-separated list of FieldNames:FieldCaptions. Example: &captions=`introtext:Summary,content:Enter Your Post`</td>
         <td>(empty)</td>
+    </tr>
+    <tr>
+        <td>classkey</td>
+        <td>(optional) Class key for new resources; use only if you have subclassed resource or are using this for Articles (set to Article)</td>
+        <td>modDocument</td>
     </tr>
     <tr>
         <td>clearcache</td>
@@ -375,9 +413,29 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>newspublisher.css</td>
     </tr>
     <tr>
+        <td>datetpl</td>
+        <td>(optional) Tpl used for date resource fields and date TVs</td>
+        <td>npDateTpl</td>
+    </tr>
+    <tr>
+        <td>errortpl</td>
+        <td>(optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder</td>
+        <td>npErrorTpl</td>
+    </tr>
+    <tr>
+        <td>fielderrortpl</td>
+        <td>(optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder</td>
+        <td>npFieldErrorTpl</td>
+    </tr>
+    <tr>
         <td>groups</td>
         <td>(optional) Comma-separated list of resource groups to put new document in (no effect with existing docs); set to `parent` to use parent's groups</td>
         <td>(empty)</td>
+    </tr>
+    <tr>
+        <td>hidemenu</td>
+        <td>(optional) Sets the flag that determines whether or not the new page shows in the menu; for new resources, set to `Parent to use parent's setting</td>
+        <td>System Default</td>
     </tr>
     <tr>
         <td>hoverhelp</td>
@@ -400,6 +458,11 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>10</td>
     </tr>
     <tr>
+        <td>inttpl</td>
+        <td>(optional) Tpl used for integer resource fields</td>
+        <td>npIntTpl</td>
+    </tr>
+    <tr>
         <td>language</td>
         <td>(optional) Language to use in forms and error messages</td>
         <td>(empty)</td>
@@ -410,9 +473,30 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>8</td>
     </tr>
     <tr>
+        <td>listoptiontpl</td>
+        <td>(optional) Tpl used for each option of listbox TVs</td>
+        <td>npListOptionTpl</td>
+    </tr>
+
+    <tr>
         <td>multiplelistboxmax</td>
         <td>(optional) Maximum length for multi-select listboxes</td>
         <td>20</td>
+    </tr>
+    <tr>
+        <td>optionoutertpl</td>
+        <td>(optional) Tpl used for as a shell for checkbox, list, and radio option TVs</td>
+        <td>npOptionOuterTpl</td>
+    </tr>
+    <tr>
+        <td>optiontpl</td>
+        <td>(optional) Tpl used for each option of checkbox and radio option TVs</td>
+        <td>npOptionTpl</td>
+    </tr>
+    <tr>
+        <td>outertpl</td>
+        <td>(optional) Tpl used as a shell for the whole page</td>
+        <td>npOuterTpl</td>
     </tr>
     <tr>
         <td>parentid</td>
@@ -435,6 +519,14 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>np</td>
     </tr>
     <tr>
+        <td>published</td>
+        <td>(optional) Set new resource as published or not (will be overridden by publish and unpublish dates). Set to `parent` to match
+            parent's pub status
+        </td>
+        <td>System Default</td>
+    </tr>
+
+    <tr>
         <td>readonly</td>
         <td>(optional) Comma-separated list of fields that should be read only; does not work with option or textarea fields</td>
         <td>(empty)</td>
@@ -443,6 +535,13 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>required</td>
         <td>(optional) Comma separated list of fields/tvs to require</td>
         <td>pagetitle,content</td>
+    </tr>
+    <tr>
+        <td>richtext</td>
+        <td>(optional) Sets the flag that determines whether or Rich Text Editor is used to when editing the page content in the Manager;
+            for new resources, set to `Parent` to use parent's setting
+        </td>
+        <td>System Default</td>
     </tr>
     <tr>
         <td>rtcontent</td>
@@ -454,6 +553,14 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>(optional) Use rich text for the summary (introtext) form field</td>
         <td>0</td>
     </tr>
+    <tr>
+        <td>searchable</td>
+        <td>(optional) Sets the flag that determines whether or not the new page is included in site searches; for new resources, set to
+            `Parent` to us parent's setting
+        </td>
+        <td>System Default</td>
+    </tr>
+
     <tr>
         <td>show</td>
         <td>(optional) Comma separated list of fields/tvs to show</td>
@@ -479,15 +586,27 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>(required only if usetabs is set) Specification for tabs (see tutorial)</td>
         <td>(empty)</td>
     </tr>
+
     <tr>
         <td>templates</td>
-        <td>(optional) Comma-separated list of template IDs for user to select from (must be IDs); if empty, all templates are shown; to force a template, set &template and do not show the template field</td>
+        <td>(optional) Comma-separated list of template IDs for user to select from (must be IDs); if empty, all templates are shown; to force a template, set <code>&templateid</code> and do not show the template field; if <code>&templateid</code> is set, it will be selected.</td>
         <td>(empty)</td>
+    </tr>
+    <tr>
+        <td>templateid</td>
+        <td>(optional) Name of template to use for new document; for new resources, set to `parent` to use parent's template; for `parent`, <code>&parentid</code> must be set
+        </td>
+        <td>the default_template System Setting</td>
     </tr>
     <tr>
         <td>textmaxlength</td>
         <td>(optional) Max length for text input fields</td>
         <td>60</td>
+    </tr>
+    <tr>
+        <td>texttpl</td>
+        <td>(optional) Tpl used for text resource fields</td>
+        <td>npTextTpl</td>
     </tr>
     <tr>
         <td>tinyheight</td>
@@ -509,107 +628,6 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>Rich-text editor to use; at present, TinyMCE is the only value that will work</td>
         <td>TinyMCE</td>
     </tr>
-    <tr>
-        <td>aliasdateformat</td>
-        <td>(optional) Format string for auto date alias -- see tutorial</td>
-        <td>PHP date + time format</td>
-    </tr>
-    <tr>
-        <td>aliasprefix</td>
-        <td>(optional) Prefix to be prepended to alias for new documents with an empty alias; alias will be aliasprefix - timestamp</td>
-        <td>(empty)</td>
-    </tr>
-    <tr>
-        <td>aliastitle</td>
-        <td>(optional) Set to Yes to use lowercase, hyphenated, page title as alias. If set to No, 'article-(date created)' is used. Ignored if alias is filled in form</td>
-        <td>1</td>
-    </tr>
-    <tr>
-        <td>cacheable</td>
-        <td>(optional) Sets the flag that determines whether or not the resource is cached; for new resources, set to `Parent` to use parent's setting</td>
-        <td>System Default</td>
-    </tr>
-    <tr>
-        <td>classkey</td>
-        <td>(optional) Class key for new resources; use only if you have subclassed resource or are using this for Articles (set to Article)</td>
-        <td>modDocument</td>
-    </tr>
-    <tr>
-        <td>hidemenu</td>
-        <td>(optional) Sets the flag that determines whether or not the new page shows in the menu; for new resources, set to `Parent to use parent's setting</td>
-        <td>System Default</td>
-    </tr>
-
-    <tr>
-        <td>published</td>
-        <td>(optional) Set new resource as published or not (will be overridden by publish and unpublish dates). Set to `parent` to match parent's pub status</td>
-        <td>System Default</td>
-    </tr>
-    <tr>
-        <td>richtext</td>
-        <td>(optional) Sets the flag that determines whether or Rich Text Editor is used to when editing the page content in the Manager; for new resources, set to `Parent` to use parent's setting</td>
-        <td>System Default</td>
-    </tr>
-    <tr>
-        <td>searchable</td>
-        <td>(optional) Sets the flag that determines whether or not the new page is included in site searches; for new resources, set to `Parent` to us parent's setting</td>
-        <td>System Default</td>
-    </tr>
-    <tr>
-        <td>template</td>
-        <td>(optional) Name of template to use for new document; for new resources, set to `parent` to use parent's template; for `parent`, &parentid must be set</td>
-        <td>the default_template System Setting</td>
-    </tr>
-    <tr>
-        <td>booltpl</td>
-        <td>(optional) Tpl used for Yes/No resource fields (e.g., published, searchable, etc.)</td>
-        <td>npBoolTpl</td>
-    </tr>
-    <tr>
-        <td>datetpl</td>
-        <td>(optional) Tpl used for date resource fields and date TVs</td>
-        <td>npDateTpl</td>
-    </tr>
-    <tr>
-        <td>errortpl</td>
-        <td>(optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder</td>
-        <td>npErrorTpl</td>
-    </tr>
-    <tr>
-        <td>fielderrortpl</td>
-        <td>(optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder</td>
-        <td>npFieldErrorTpl</td>
-    </tr>
-    <tr>
-        <td>inttpl</td>
-        <td>(optional) Tpl used for integer resource fields</td>
-        <td>npIntTpl</td>
-    </tr>
-    <tr>
-        <td>listoptiontpl</td>
-        <td>(optional) Tpl used for each option of listbox TVs</td>
-        <td>npListOptionTpl</td>
-    </tr>
-    <tr>
-        <td>optionoutertpl</td>
-        <td>(optional) Tpl used for as a shell for checkbox, list, and radio option TVs</td>
-        <td>npOptionOuterTpl</td>
-    </tr>
-    <tr>
-        <td>optiontpl</td>
-        <td>(optional) Tpl used for each option of checkbox and radio option TVs</td>
-        <td>npOptionTpl</td>
-    </tr>
-    <tr>
-        <td>outertpl</td>
-        <td>(optional) Tpl used as a shell for the whole page</td>
-        <td>npOuterTpl</td>
-    </tr>
-    <tr>
-        <td>texttpl</td>
-        <td>(optional) Tpl used for text resource fields</td>
-        <td>npTextTpl</td>
-    </tr>
 </table>
 
 <a name="npet_propertiesTable"></a>
@@ -627,6 +645,11 @@ In debug mode, the button will always show, and if it would normally be hidden, 
     <tr>
         <td>debug</td>
         <td>(optional) - Displays the button on all pages with either the $buttonCaption, or a message explaining why it would not be shown</td>
+        <td>0</td>
+    </tr>
+        <tr>
+        <td>editHome</td>
+        <td>(optional) If set to Yes, edit button may be shown on the Home page</td>
         <td>0</td>
     </tr>
     <tr>
@@ -654,11 +677,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>(optional) - distance from right of window to place button. Can be in any legal CSS format</td>
         <td>20%</td>
     </tr>
-    <tr>
-        <td>editHome</td>
-        <td>(optional) If set to Yes, edit button may be shown on the Home page</td>
-        <td>0</td>
-    </tr>
+
 </table>
 
 
