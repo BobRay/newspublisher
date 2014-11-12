@@ -382,6 +382,10 @@ class Newspublisher {
             /* get folder id where we should store the new resource,
              else store under current document */
 
+            if (isset($this->props['parent'])) {
+                $this->props['parentid'] = $this->props['parent'];
+                unset($this->props['parent']);
+            }
             $temp = $this->props['parentid'];
             if (empty($temp)) {
                 $this->parentId = (int) $this->resource->get('id');
@@ -498,6 +502,15 @@ class Newspublisher {
                     'components/tinymce/';
                 /* @var $plugin modPlugin */
                 $tinyproperties=$plugin->getProperties();
+
+                /* Added by Markus for 2.3 */
+                $actionObj = $this->modx->getObject('modAction',
+                    array('namespace' => 'core', 'controller' => 'browser'));
+                $action = $actionObj ? $actionObj->get('id') : 'browser';
+                $tinyproperties["browserUrl"] = $this->modx->getOption('manager_url',
+                        null,MODX_MANAGER_URL).'index.php?a='.$action;
+                /* ************* */
+
                 require_once $tinyPath.'tinymce.class.php';
                 $tiny = new TinyMCE($this->modx, $tinyproperties);
 
@@ -1881,6 +1894,11 @@ class Newspublisher {
     protected function _getTemplate() {
         if ($this->existing) {
             return $this->resource->get('template');
+        }
+        /* Allow templateid as alias for template */
+        if (isset($this->props['templateid'])) {
+            $this->props['template'] = $this->props['templateid'];
+            unset($this->props['templateid']);
         }
         $template = $this->modx->getOption('default_template');
 
