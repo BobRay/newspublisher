@@ -386,9 +386,9 @@ class Newspublisher {
                 $this->props['parentid'] = $this->props['parent'];
                 unset($this->props['parent']);
             }
-            $temp = $this->props['parentid'];
+            $temp = $this->modx->getOption('parentid', '');
             if (empty($temp)) {
-                $this->parentId = (int) $this->resource->get('id');
+                $this->parentId = (int) $this->modx->resource->get('id');
             } else {
                 $this->parentId = is_numeric($temp)
                     ? (int) $temp
