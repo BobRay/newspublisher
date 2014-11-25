@@ -1726,8 +1726,7 @@ class Newspublisher {
             $fields['syncsite'] = true;
         }
         unset($fields['pub_date_time'], $fields['Submit'],
-            $fields['unpub_date_time'], $fields['hidSubmit'],
-            $fields['syncsite']);
+            $fields['unpub_date_time'], $fields['hidSubmit']);
 
         /*echo "<br>Post<pre> " . print_r($_POST, true);
         echo "<br>Fields<pre> " . print_r($fields, true);
