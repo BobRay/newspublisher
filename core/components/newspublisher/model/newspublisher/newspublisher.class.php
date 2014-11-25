@@ -386,7 +386,7 @@ class Newspublisher {
                 $this->props['parentid'] = $this->props['parent'];
                 unset($this->props['parent']);
             }
-            $temp = $this->modx->getOption('parentid', '');
+            $temp = $this->modx->getOption('parentid', $this->props, '');
             if (empty($temp)) {
                 $this->parentId = (int) $this->modx->resource->get('id');
             } else {
@@ -560,8 +560,13 @@ class Newspublisher {
         if ($prop == 'Parent' || $prop == 'parent') {
             /* get parent if we don't already have it */
             if (! $this->parentObj) {
-                $this->parentObj = $this->modx->getObject('modResource',
-                    $this->parentId);
+                if (is_numeric($this->parentId)) {
+                    $this->parentObj = $this->modx->getObject('modResource',
+                        $this->parentId);
+                } else {
+                    $this->parentObj = $this->modx->getObject('modResource',
+                        array('pagetitle' => $this->parentId));
+                }
             }
             if (! $this->parentObj) {
                 $prop = 'System Default';
@@ -1733,6 +1738,8 @@ class Newspublisher {
 
 
         if ($this->existing) {
+            /* @unlink(MODX_CORE_PATH  . 'cache/resource/web/resources/' .
+                $fields['id'] . 'cache.php'); */
             $response = $this->modx->runProcessor('resource/update', $fields);
         } else {
                 $response = $this->modx->runProcessor('resource/create', $fields);
