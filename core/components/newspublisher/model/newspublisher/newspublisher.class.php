@@ -1738,8 +1738,9 @@ class Newspublisher {
 
 
         if ($this->existing) {
-            /* @unlink(MODX_CORE_PATH  . 'cache/resource/web/resources/' .
-                $fields['id'] . 'cache.php'); */
+            /* Clear cache file for existing resource */
+            @unlink(MODX_CORE_PATH  . 'cache/resource/web/resources/' .
+                $fields['id'] . '.cache.php');
             $response = $this->modx->runProcessor('resource/update', $fields);
         } else {
                 $response = $this->modx->runProcessor('resource/create', $fields);
