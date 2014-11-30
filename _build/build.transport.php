@@ -2,7 +2,7 @@
 /**
  * NewsPublisher Build Script
  *
- * Copyright 2011-2012 Bob Ray
+ * Copyright 2011-2015 Bob Ray
 
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
