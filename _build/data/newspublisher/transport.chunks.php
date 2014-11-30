@@ -183,7 +183,9 @@ $chunks[16]->fromArray(array (
   'property_preprocess' => false,
   'name' => 'npOuterTpl',
   'description' => 'Outer Tpl chunk for entire NewsPublisher form',
-  'properties' => NULL,
+  'properties' => 
+  array (
+  ),
 ), '', true, true);
 $chunks[16]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/npoutertpl.chunk.tpl'));
 

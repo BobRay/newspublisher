@@ -197,7 +197,12 @@ class Newspublisher {
     protected $parents;
     /** @var $allowedTags string - allowed HTML tags */
     protected $allowedTags;
-
+    /** @var $launchNotify bool - If true, launch Notify after saving */
+    protected $launchNotify;
+    /** @var $showNotify bool - If true, show Launch Notify Checkbox */
+    protected $showNotify;
+    /** @var  $notifyChecked bool - If true, Notify checkbox is checked by default */
+    protected $notifyChecked;
 
 
     /** NewsPublisher constructor
@@ -312,6 +317,18 @@ class Newspublisher {
         /* see if it's a repost */
         $this->setPostback(isset($_POST['hidSubmit']) &&
             $_POST['hidSubmit'] == 'true');
+
+        $this->showNotify = (bool) $this->modx->getOption('showNotify', $this->props, false, true);
+        if ($this->showNotify) {
+            if ($this->isPostBack) {
+                $this->notifyChecked = $this->modx->getOption('np_launch_notify',
+                    $_POST, false);
+            } else {
+                $this->notifyChecked = $this->modx->getOption('notifyChecked',
+                    $this->props, false, true);
+            }
+            $this->launchNotify = $this->notifyChecked;
+        }
 
         if ($this->isPostBack) {
             /* $fs = array(); */
@@ -754,12 +771,69 @@ class Newspublisher {
                 }
             }
         }
+
+        if ($this->showNotify) {
+            $nf_text = $this->getNotifyText();
+            $inner .= $nf_text;
+        }
+
         $formTpl = str_replace('[[+npx.insert]]',$inner,$this->getTpl('OuterTpl'));
         //die ('<pre>' . print_r($formTpl,true));
         /*echo '$_POST<br /><pre>'  . print_r($this->resource->toArray(), true) . '</pre>';*/
         return $formTpl;
     } /* end displayForm */
 
+    function getNotifyText() {
+        $find = array(
+            '[[+npx.caption]]',
+            '[[+npx.fieldName]]',
+            '[[+npx.help]]',
+            '[[+npx.checked]]',
+            'class="np-checkbox"',
+        );
+        $replace = array(
+            $this->modx->lexicon('np_launch_notify~~Launch Notify'),
+            'np_launch_notify',
+            '',
+            $this->notifyChecked
+                ? ' checked="checked" '
+                : '',
+            '',
+            'class="np-notify',
+        );
+        $temp = "\n" . '<div id="launch_notify_div" style="width:40%">' . "\n";
+
+        $temp .= $this->getTpl('boolTpl');
+
+        $temp = str_replace($find, $replace, $temp);
+
+        $c = $this->modx->newQuery('modTemplateVar', array(
+            'name' => 'NotifySubscribers',
+        ));
+        $c->select('elements');
+        $elements = $this->modx->getValue($c->prepare());
+        $inner = "\n<hr>\n";
+        $elements = explode('||', $elements);
+        $current = isset($_POST['pageType']) ? $_POST['pageType'] : '';
+        foreach ($elements as $s) {
+            list($caption, $name) = explode('==', $s);
+            $checked = '';
+            if ($name == $current) {
+                $checked = 'checked="checked"';
+            } else {
+                if ($name == 'new' && (!$this->existing)) {
+                    $checked = 'checked="checked"';
+                } elseif ($name == 'existing' && ($this->existing)) {
+                    $checked = 'checked="checked"';
+                }
+            }
+            $inner .= "\n" . '<input style="width:30px;margin-left:25px" type="radio" name="pageType" id="' . $name . '"
+ value="' . $name . '" ' .   $checked .  ' >' .  '<span
+>' . $caption . '</span><br>';
+        }
+        $temp = str_replace('</fieldset', $inner . "\n" . '</fieldset', $temp);
+        return $temp . "\n" . '</div>';
+    }
 
     /** displays an individual field
      * @access protected
@@ -1726,8 +1800,7 @@ class Newspublisher {
             $fields['syncsite'] = true;
         }
         unset($fields['pub_date_time'], $fields['Submit'],
-            $fields['unpub_date_time'], $fields['hidSubmit'],
-            $fields['syncsite']);
+            $fields['unpub_date_time'], $fields['hidSubmit']);
 
         /*echo "<br>Post<pre> " . print_r($_POST, true);
         echo "<br>Fields<pre> " . print_r($fields, true);
@@ -1762,6 +1835,25 @@ class Newspublisher {
 
             $postId = $object['id'];
 
+            if ($this->launchNotify) {
+                $notifyObj = $this->modx->getObject('modResource', array('alias' => 'notify'));
+                if ($notifyObj) {
+                    if (isset($_POST['pageType']) && (!empty($_POST['pageType']))) {
+                        $pageType = $_POST['pageType'];
+                    } else {
+                        $pageType = $this->existing ? 'existing' : 'new';
+                    }
+
+                $_SESSION['nf.pageId'] = $postId;
+                $_SESSION['nf.pageType'] = $pageType;
+                $notifyUrl = $this->modx->makeUrl($notifyObj->get('id'), "", "", "full");
+                    $this->modx->reloadContext($this->modx->context->get('key'));
+                    $this->modx->sendRedirect($notifyUrl);
+                } else {
+                    $this->setError('Could not find Notify page');
+                }
+
+            }
             /* clean post array */
             $_POST = array();
         }
