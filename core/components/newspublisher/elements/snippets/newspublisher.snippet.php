@@ -153,12 +153,16 @@ if (!empty($errors)) {
 }
 
 /* add Cancel button only if requested */
-if (!empty ($scriptProperties['cancelid'])) {
-    $cancelUrl = $modx->makeUrl($scriptProperties['cancelid'], '', '', 'full');
+$cancelId = $modx->getOption('cancelid', $scriptProperties, null);
+
+if (is_numeric($cancelId)) {
+    $cancelUrl = $modx->makeUrl($cancelId, '', '', 'full');
 } else {
     $cancelUrl = isset($_SERVER['HTTP_REFERER'])
-            ? $_SERVER['HTTP_REFERER'] : $modx->resource->get('id');
+        ? $_SERVER['HTTP_REFERER']
+        : $modx->makeUrl($modx->resource->get('id'), "", "", "full");
 }
+
 $modx->toPlaceholder('cancel_url', $cancelUrl, $np_prefix);
 
 $formTpl .= $np->displayForm($scriptProperties['show']);
