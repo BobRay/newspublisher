@@ -78,6 +78,7 @@ $_lang['np_source_wctx_error'] = 'The working context of the media source could 
 $_lang['np_unauthorized_document'] = 'Unauthorized document';
 $_lang['np_parent_resource_nf'] = 'Parent Resource not found';
 $_lang['np_parent_context_nf'] = 'Parent Context not found';
+$_lang['np_launch_notify'] = 'Launch Notify';
 
 
 /* missing resource field lexicon strings */

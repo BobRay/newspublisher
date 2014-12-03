@@ -2,7 +2,7 @@
 /**
  * chunks transport file for NewsPublisher extra
  *
- * Copyright 2013-2014 by Bob Ray <http://bobsguides.com>
+ * Copyright 2013-2015 by Bob Ray <http://bobsguides.com>
  * Created on 07-11-2014
  *
  * @package newspublisher
@@ -183,7 +183,9 @@ $chunks[16]->fromArray(array (
   'property_preprocess' => false,
   'name' => 'npOuterTpl',
   'description' => 'Outer Tpl chunk for entire NewsPublisher form',
-  'properties' => NULL,
+  'properties' => 
+  array (
+  ),
 ), '', true, true);
 $chunks[16]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/npoutertpl.chunk.tpl'));
 
