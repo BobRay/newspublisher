@@ -1,8 +1,16 @@
 Changelog for NewsPublisher
 
+NewsPublisher 2.0.1-pl
+----------------------
+Fix bug with cancelid/cancelUrl
+Mods to allow launching Notify
+Clear cache for updated resource
+Fix bug with parentid
+
+
+
 NewsPublisher 2.0.0-pl
 ----------------------
-
 Allow editing MODX tags with allow_tags_in_post off
 Mods for MODX 2.3 (thanks to Markus Schlegel)
 Remove support for MODX versions < 2.2
@@ -23,7 +31,7 @@ Fixed more E_NOTICE bugs
 Corrected Lexicon strings
 Prevent switching of Media Source
 Added Italian lexicon files -- Thanks to Alberto Ramacciotti (obert2k11)
-Update German lexiconfiles -- thanks to Markus Schlegel
+Update German lexicon files -- thanks to Markus Schlegel
 Many bug fixes and corrections
 
 NewsPublisher 1.4.2-pl

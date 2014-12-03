@@ -150,6 +150,19 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p>The usual variables are available in the plugin (<code>$id</code>, <code>$resource</code>, and <code>$mode</code>). The <code>$resource</code> variable is a reference to the resource object itself, so you can check its fields and modify it at will. If the plugin is attached to <code>OnDocFormSave</code>, remember to save the Resource object again after making any changes to it.</p>
 
+<h3>Launch Notify</h3>
+<p>If the <code>&shownotify</code> property is set to <code>1</code>, the &quot;Launch Notify&quot; option will be shown in the form. If it is selected, after the NewsPublisher form is successfully submitted, the user will be forwarded to the Notify form to send email notifying users of the new or updated page. There will also be radio buttons to allow the user to select a Notify Tpl chunk to use for the email.</p>
+
+<p>In order for Notify to work properly, the user must have view_user permission in the front end and must have access these three pages in the front-end context:</p>
+
+<ul>
+    <li>Notify</li>
+    <li>NotifyPreview</li>
+    <li>NotifyStatus</li>
+</ul>
+
+<p>Unless the user has the <code>view_unpublished</code> permission, the three pages must also be published, though they can be hidden from menus.</p>
+
 
 <h3>Configuring NewsPublisher</h3>
 <p>NewsPublisher has many options, but almost all of them are optional. You can see the list by editing the NewsPublisher snippet and clicking on the Properties tab. Unlock the default properties by clicking on the &quot;Default Properties Locked&quot; button. Then, click the little plus sign next to a property to see what it does. It is <b>strongly</b> recommended that you not change the default properties on the Properties tab of the snippet. Either put properties in the snippet tag to override them, or create a property set by clicking on the &quot;Add Property Set&quot; button and specify it in the snippet tag like this:</p>
@@ -281,10 +294,15 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p><code>&classkey</code> &mdash; (string) Class key for new documents; only necessary if you have extended the resource object for a custom resource class or are editing Articles blog posts.</p>
 
-<p><code>&usetabs</code> &mdash; (0/1) If set, displays the fields on separate tabs.</p>
+<p><code>&usetabs</code> &mdash; (0/1 - optional) If set, displays the fields on separate tabs.</p>
 <p><code>&tabs</code> &mdash; (JSON string - required if <code>&usetabs</code> is set) JSON string specifying which fields go on which tabs. Unlisted fields will go on the &quot;Other&quot; tab; See the example above.</p>
 
 <p><code>&activetabs</code> &mdash; (string - optional) If set, determines the tab shown when the form is loaded; if left out, all tabs are shown.</p>
+
+<p><code>&shownotify</code> &mdash; (0/1 - optional) If set, the &quot;Launch Notify&quot; option is set. If selected, Notify will be launched for the resource on successful submission; default: 0.</p>
+
+<p><code>&notifychecked</code> &mdash; (0/1 - optional) If is this option and <code>&shownotify</code> are set, the &quot;Launch Notify&quot; option will be checked by default; default: 0.</p>
+
 
 <p><b>NpEditThisButton Snippet</b></p>
 
@@ -488,6 +506,12 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>20</td>
     </tr>
     <tr>
+        <td>notifychecked</td>
+        <td>(optional) If set to 1 and shownotify is set to 1, the Launch Notify checkbox will be checked by default</td>
+        <td>0</td>
+    </tr>
+
+    <tr>
         <td>optionoutertpl</td>
         <td>(optional) Tpl used for as a shell for checkbox, list, and radio option TVs</td>
         <td>npOptionOuterTpl</td>
@@ -571,6 +595,11 @@ In debug mode, the button will always show, and if it would normally be hidden, 
         <td>pagetitle,longtitle,hidemenu,published,
             description,menutitle,pub_date,
             unpub_date,introtext,content</td>
+    </tr>
+    <tr>
+        <td>shownotify</td>
+        <td>(optional) If set, show option to launch Notify</td>
+        <td>0</td>
     </tr>
     <tr>
         <td>stopOnBadTv</td>

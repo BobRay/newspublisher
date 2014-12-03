@@ -318,13 +318,13 @@ class Newspublisher {
         $this->setPostback(isset($_POST['hidSubmit']) &&
             $_POST['hidSubmit'] == 'true');
 
-        $this->showNotify = (bool) $this->modx->getOption('showNotify', $this->props, false, true);
+        $this->showNotify = (bool) $this->modx->getOption('shownotify', $this->props, false, true);
         if ($this->showNotify) {
             if ($this->isPostBack) {
                 $this->notifyChecked = $this->modx->getOption('np_launch_notify',
                     $_POST, false);
             } else {
-                $this->notifyChecked = $this->modx->getOption('notifyChecked',
+                $this->notifyChecked = $this->modx->getOption('notifychecked',
                     $this->props, false, true);
             }
             $this->launchNotify = $this->notifyChecked;
