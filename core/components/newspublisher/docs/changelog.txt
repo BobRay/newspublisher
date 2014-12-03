@@ -6,6 +6,7 @@ Fix bug with cancelid/cancelUrl
 Mods to allow launching Notify
 Clear cache for updated resource
 Fix bug with parentid
+Fix bug with syncsite
 
 
 
