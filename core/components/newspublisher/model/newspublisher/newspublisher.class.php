@@ -792,7 +792,7 @@ class Newspublisher {
             'class="np-checkbox"',
         );
         $replace = array(
-            $this->modx->lexicon('np_launch_notify~~Launch Notify'),
+            $this->modx->lexicon('np_launch_notify'),
             'np_launch_notify',
             '',
             $this->notifyChecked
