@@ -1,6 +1,6 @@
 Changelog for NewsPublisher
 
-NewsPublisher 2.0.1-pl
+NewsPublisher 2.0.2-pl
 ----------------------
 Fix bug with cancelid/cancelUrl
 Mods to allow launching Notify
