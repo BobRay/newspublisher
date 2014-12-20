@@ -364,6 +364,8 @@ class Newspublisher {
                     $ph = $this->resource->toArray();
                     if ($ph['parent'] == 0) {
                         $ph['parent'] = $ph['context_key'];
+                    } else {
+                        $this->parentId = $this->resource->get('parent');
                     }
                     if ($this->hasToken($ph)) {
                         if ($this->modx->hasPermission('allow_modx_tags')) {
