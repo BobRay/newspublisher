@@ -911,6 +911,18 @@ class Newspublisher {
                 }
                 break;
 
+            case 'description':
+                $rows = !empty($this->props['descriptionrows'])
+                    ? $this->props['descriptionrows']
+                    : '5';
+                $cols = !empty($this->props['descriptioncols'])
+                    ? $this->props['descriptioncols']
+                    : '51';
+                $inner .= $this->_displayTextarea($field,
+                    $this->props['rtdescription'],
+                    'np-description', $rows, $cols);
+                break;
+
             case 'introtext':
                 $rows =  ! empty($this->props['summaryrows'])
                     ? $this->props['summaryrows']
