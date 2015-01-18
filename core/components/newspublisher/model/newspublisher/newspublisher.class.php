@@ -1048,14 +1048,14 @@ class Newspublisher {
             /* make sure requested TV is attached to this template*/
             $tvId = $tvObj->get('id');
             $found = $this->modx->getCount('modTemplateVarTemplate', array(
-                'templateid' => $this->modx->resource->get('template'),
+                'templateid' => $this->template,
                 'tmplvarid' => $tvId,
             ));
             if (! $found) {
                 /* No error if stopOnBadTv is false  */
                 if ($this->stopOnBadTv) {
                     $this->setError($this->modx->lexicon('np_not_our_tv') .
-                        ' Template: ' . $this->modx->resource->get('template') . '  ----    TV: ' .
+                        ' Template: ' . $this->template . '  ----    TV: ' .
                         $tvNameOrId);
                     return null;
                 } else {
