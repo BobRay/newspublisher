@@ -58,7 +58,7 @@ $modx->lexicon->load($language . 'newspublisher:button');
 /* For lexicon helper
 $modx->lexicon->load('newspublisher:button'); */
 
-
+$ownPagesOnly = $modx->getOption('ownpagesonly', $props, '');
 /* Caption for edit button  */
 $debug = $modx->getOption('debug', $props, false);
 $buttonCaption = empty($props['buttonCaption'])? $modx->lexicon('np_edit') : $props['buttonCaption'];
@@ -73,6 +73,12 @@ $defaultButtonCaption = $buttonCaption;
 
 $npId = $modx->getOption('np_id', $props, '');
 $npEditId = $modx->getOption('np_edit_id', $props, '');
+
+if (!empty($ownPagesOnly)) {
+    if ($modx->resource->get('createdby') !== $modx->user->get('id')) {
+        $defaultButtonCaption = $modx->lexicon('np_not_your_page');
+    }
+}
 
 /* set the np_id property to the ID of the NewsPublisher page
  * on first run if possible, error message if not */
