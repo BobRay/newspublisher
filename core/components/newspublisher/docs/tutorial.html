@@ -102,6 +102,10 @@ When you preview the document, you should see a basic resource editing form. If 
 In debug mode, the button will always show, and if it would normally be hidden, the button itself will display a message explaining why it would not be shown.
 </p>
 
+<p>With debug mode off, the button will show on any page that uses the template when the user has edit_document and save_document permissions in general, and save permission for the current resource (unless the page is excluded by the <code>&noshow</code> property.</p>
+
+<p>When the <code>ownpagesonly</code> property is set, the button will show only on pages created by the current user (based on the resource's <code>createdon</code> field).</p>
+
 <h3>Altering the Form</h3>
 
 <p>You can make many changes to the look of the form using CSS rules for styling. You can find the CSS form at assets/components/newspublisher/css/newspublisher.css. Using CSS, you can change the text color, background color, size, and/or position of any field, though the control of richtext fields is limited. You can put fields side-by-side by using &quot;display:inline;&quot; for the appropriate field(s). If you plan to make changes, it's recommended that you make a copy of the CSS file, the <code>assets/components/newspublisher/css</code> directory and put the name of your new file in the <code>&cssfile</code> property.</p>
@@ -709,8 +713,13 @@ In debug mode, the button will always show, and if it would normally be hidden, 
     </tr>
     <tr>
         <td>right</td>
-        <td>(optional) - distance from right of window to place button. Can be in any legal CSS format</td>
+        <td>(optional) - Distance from right of window to place button. Can be in any legal CSS format</td>
         <td>20%</td>
+    </tr>
+    <tr>
+        <td>ownpagesonly</td>
+        <td>(optional) - Show button only on pages the current user created (uses the resource's <code>createdby</code> field).</td>
+        <td>0</td>
     </tr>
 
 </table>

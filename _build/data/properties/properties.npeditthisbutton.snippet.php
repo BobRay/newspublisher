@@ -93,7 +93,7 @@ $properties = array (
     'options' => 
     array (
     ),
-    'value' => '',
+    'value' => 22,
     'lexicon' => 'newspublisher:button',
     'area' => '',
   ),
@@ -106,6 +106,18 @@ $properties = array (
     array (
     ),
     'value' => '20%',
+    'lexicon' => 'newspublisher:button',
+    'area' => '',
+  ),
+  'ownpagesonly' => 
+  array (
+    'name' => 'ownpagesonly',
+    'desc' => 'np_ownpagesonly_desc',
+    'type' => 'combo-boolean',
+    'options' => 
+    array (
+    ),
+    'value' => false,
     'lexicon' => 'newspublisher:button',
     'area' => '',
   ),

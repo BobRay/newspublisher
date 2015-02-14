@@ -42,3 +42,5 @@ $_lang['np_right_desc'] = '(optional) - distance from right of window to place b
 $_lang['np_language_desc'] = '(optional) - Language to use for error messages; default: (empty).';
 $_lang['np_debug_desc'] = '(optional) - Displays the button on all pages with either the $buttonCaption, or a message explaining why it would not be shown; Default: No.';
 $_lang['editHome_desc'] = '(optional) If set to Yes, edit button may be shown on the Home page; default: No';
+$_lang['np_not_your_page'] = 'Disallowed - Not your page';
+$_lang['np_ownpagesonly_desc'] = "(optional) - Only show button on pages created by the current user (uses the resource's createdby field); default: No";
