@@ -1309,6 +1309,12 @@ class Newspublisher {
                 $formTpl .= $this->_displayFileInput($name, $tvType.'Tpl',
                     $params, $openTo);
                 break;
+            default:
+                $tvFile = dirname(dirname(dirname(__FILE__))).'/tvs/'.$tvType.'.php';
+                if (file_exists($tvFile)){
+                    include ($tvFile);
+                }
+                break;                
                 
         }  /* end switch */
         
