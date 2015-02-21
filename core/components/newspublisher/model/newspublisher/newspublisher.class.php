@@ -1156,7 +1156,6 @@ class Newspublisher {
                     $tv->getValue($this->existing), $params);
                 break;
 
-            default:
             case 'text':
             case 'textbox':
             case 'email';
@@ -1323,7 +1322,18 @@ class Newspublisher {
                 $formTpl .= $this->_displayFileInput($name, $tvType.'Tpl',
                     $params, $openTo);
                 break;
-                
+            default:
+                /* use custom TV file if it exists */
+                $tvFile = dirname(dirname(dirname(__FILE__))) . '/tvs/' . $tvType . '.php';
+                 if (file_exists($tvFile)) {
+                    include($tvFile);
+                } else {
+                     /* Use text type by default */
+                     $formTpl .= $this->_displaySimple($name,
+                         'TextTpl', $this->textMaxlength);
+                }
+                break;
+
         }  /* end switch */
         
         $formTpl = $this->strReplaceAssoc($replace, $formTpl);
