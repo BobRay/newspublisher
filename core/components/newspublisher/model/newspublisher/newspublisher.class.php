@@ -1797,12 +1797,16 @@ class Newspublisher {
                 $name = $tv->get('name');
 
                 if ($tv->get('type') == 'date') {
-                    $fields['tv' . $tv->get('id')] = $_POST[$name] . ' ' .
-                        $_POST[$name . '_time'];
+                    if (empty($_POST[$name])) {
+                        $fields['tv' . $tv->get('id')] = '';
+                    } else {
+                        $fields['tv' . $tv->get('id')] = $_POST[$name] . ' ' .
+                            $_POST[$name . '_time'];
+                    }
                 } else {
                     if (is_array($_POST[$name])) {
                         /* get rid of phantom checkbox */
-                        if ($tv->get('type')=='checkbox') {
+                        if ($tv->get('type') == 'checkbox') {
                             unset($_POST[$name][0]);
                         }
                     }
