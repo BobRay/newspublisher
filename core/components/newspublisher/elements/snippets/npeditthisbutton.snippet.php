@@ -165,7 +165,16 @@ if (!empty($noShow)) {
 }
 
 /* protect against forged edit ID */
-$_SESSION['np_doc_to_edit'] = $resourceToEdit;
+if (!isset($_SESSION['np_doc_to_edit'])) {
+    $_SESSION['np_doc_to_edit'] = $resourceToEdit;
+} else {
+    $temp = explode(',', $_SESSION['np_doc_to_edit']);
+    if (! in_array($resourceToEdit, $temp)) {
+        $temp[] = $resourceToEdit;
+        $_SESSION['np_doc_to_edit'] = implode(',', $temp);
+    }
+    unset($temp);
+}
 
 /* create and return the form */
 if ($npEditId) {

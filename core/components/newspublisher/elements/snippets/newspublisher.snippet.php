@@ -107,9 +107,9 @@ $modx->lexicon->load($language . ':newspublisher:default');
 
 /* Protect against forged np_doc_id from npEditThisButton */
 if (isset($_POST['np_doc_id'])) {
-    if ( (!isset($_SESSION['np_doc_to_edit']))
-        || ($_SESSION['np_doc_to_edit'] != $_POST['np_doc_id'] )) {
-        return($modx->lexicon('np_unauthorized_document'));
+    if (! isset($_SESSION['np_doc_to_edit']) ||
+        !in_array($_POST['np_doc_id'], explode(',', $_SESSION['np_doc_to_edit']))) {
+            return ($modx->lexicon('np_unauthorized_document'));
     }
 }
 
