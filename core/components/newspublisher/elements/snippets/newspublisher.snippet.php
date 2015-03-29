@@ -103,8 +103,17 @@
 $errorMessage = '';
 $formTpl = '';
 
+/** @var $scriptProperties array */
+$language = $modx->getOption('language', $scriptProperties, 'en');
+
 $modx->lexicon->load($language . ':newspublisher:default');
 
+/* Make these match if coming from Duplicate */
+if (isset($_SESSION['np_doc_id'])) {
+    $_POST['np_doc_id'] = $_SESSION['np_doc_id'];
+    $_POST['np_existing'] = true;
+    unset($_SESSION['np_doc_id']);
+}
 /* Protect against forged np_doc_id from npEditThisButton */
 if (isset($_POST['np_doc_id'])) {
     if (! isset($_SESSION['np_doc_to_edit']) ||

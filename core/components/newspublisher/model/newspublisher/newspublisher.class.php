@@ -203,6 +203,8 @@ class Newspublisher {
     protected $showNotify;
     /** @var  $notifyChecked bool - If true, Notify checkbox is checked by default */
     protected $notifyChecked;
+    /** @var  @var $duplicateButton - If true, show duplicate button */
+    protected $duplicateButton = false;
 
 
     /** NewsPublisher constructor
@@ -267,7 +269,8 @@ class Newspublisher {
                 $this->modx->lexicon->load($language . ':newspublisher:default');
                 break;
         }
-
+        $this->duplicateButton =
+            $this->modx->getOption('duplicatebutton', $this->props, false);
         /* set tab properties */
         $this->useTabs = isset($this->props['usetabs'])
             ? ! empty($this->props['usetabs'])
@@ -348,8 +351,23 @@ class Newspublisher {
 
         if($this->existing) {
 
+
             $this->resource = $this->modx->getObject('modResource', $this->existing);
             if ($this->resource) {
+                if (isset($_POST['Duplicate'])) {
+                    if (! $this->resource->checkPolicy('copy')) {
+                        $this->setError(
+                            $this->modx->lexicon('np_copy_permission_denied~~Sorry, you do not have copy permission for this resource'));
+                        return;
+                    }
+                    $result = $this->duplicate($this->resource->get('id'), $this->resource->get('context_key'));
+                    if ($result !== true) {
+                        $this->setError($result);
+                        return;
+                    }
+                }
+
+
                 if (! ($this->modx->hasPermission('view_document') &&
                     $this->resource->checkPolicy('view')) ) {
                     if (!$this->modx->hasPermission('view_document')) {
@@ -780,6 +798,10 @@ class Newspublisher {
         }
 
         $formTpl = str_replace('[[+npx.insert]]',$inner,$this->getTpl('OuterTpl'));
+        if ($this->duplicateButton && $this->existing) {
+            $formTpl = str_replace('[[+np_duplicate_button]]',
+                '<input class="submit" id="np_duplicate_button" type="submit" name="Duplicate" value="Duplicate" />', $formTpl);
+        }
         //die ('<pre>' . print_r($formTpl,true));
         /*echo '$_POST<br /><pre>'  . print_r($this->resource->toArray(), true) . '</pre>';*/
         return $formTpl;
@@ -2208,6 +2230,10 @@ public function getParents() {
         $parents = explode(',', $temp);
         foreach($parents as $parent) {
             if (is_numeric($parent)) {
+                if ($parent == $this->resource->get('id')) {
+                    /* Doc can't be its own parent */
+                    continue;
+                }
                 $obj = $this->modx->getObject('modResource', (int) $parent);
                 if ($obj) {
                     $parentArray[$obj->get('id')] = $obj->get('pagetitle');
@@ -2228,6 +2254,38 @@ public function getParents() {
         }
     }
     return $parentArray;
+}
+
+public function duplicate($id, $context) {
+    $fields = array(
+        'id' => $id,
+        'name' => 'Duplicate of ' . $this->resource->get('pagetitle'),
+    );
+    $response = $this->modx->runProcessor('resource/duplicate', $fields);
+    /* @var $response modProcessorResponse */
+    if ($response->isError()) {
+        if ($response->hasFieldErrors()) {
+            $fieldErrors = $response->getAllErrors();
+            $errorMessage = implode("\n", $fieldErrors);
+        } else {
+            $errorMessage = 'An error occurred: ' . $response->getMessage();
+        }
+        $this->setError($errorMessage);
+
+        return '';
+
+    } else {
+        $object = $response->getObject();
+        $postId = $object['id'];
+        $this->modx->reloadContext($context);
+        $_SESSION['np_doc_id'] = $postId;
+        $_SESSION['np_doc_to_edit'] = $postId;
+        /* Get NewsPublisher ID to forward to */
+        $npId = $this->modx->resource->get('id');
+        $url = $this->modx->makeUrl($npId, "", "", "full");
+        $this->modx->sendRedirect($url);
+    }
+    return true;
 
 }
 
