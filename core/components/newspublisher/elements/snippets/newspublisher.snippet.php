@@ -104,7 +104,10 @@ $errorMessage = '';
 $formTpl = '';
 
 /** @var $scriptProperties array */
-$language = $modx->getOption('language', $scriptProperties, 'en');
+$language = !empty($this->props['language'])
+    ? $this->props['language']
+    : $this->modx->getOption('cultureKey', NULL,
+        $this->modx->getOption('manager_language', NULL, 'en'));
 
 $modx->lexicon->load($language . ':newspublisher:default');
 

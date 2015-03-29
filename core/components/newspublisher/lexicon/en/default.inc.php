@@ -79,6 +79,8 @@ $_lang['np_unauthorized_document'] = 'Unauthorized document';
 $_lang['np_parent_resource_nf'] = 'Parent Resource not found';
 $_lang['np_parent_context_nf'] = 'Parent Context not found';
 $_lang['np_launch_notify'] = 'Launch Notify';
+$_lang['np_copy_permission_denied'] = 'Sorry, you do not have copy permission for this resource';
+$_lang['np_duplicate'] = 'Duplicate';
 
 
 /* missing resource field lexicon strings */

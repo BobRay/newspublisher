@@ -357,7 +357,7 @@ class Newspublisher {
                 if (isset($_POST['Duplicate'])) {
                     if (! $this->resource->checkPolicy('copy')) {
                         $this->setError(
-                            $this->modx->lexicon('np_copy_permission_denied~~Sorry, you do not have copy permission for this resource'));
+                            $this->modx->lexicon('np_copy_permission_denied'));
                         return;
                     }
                     $result = $this->duplicate($this->resource->get('id'), $this->resource->get('context_key'));
@@ -799,8 +799,9 @@ class Newspublisher {
 
         $formTpl = str_replace('[[+npx.insert]]',$inner,$this->getTpl('OuterTpl'));
         if ($this->duplicateButton && $this->existing) {
+            $caption = $this->modx->lexicon('np_duplicate');
             $formTpl = str_replace('[[+np_duplicate_button]]',
-                '<input class="submit" id="np_duplicate_button" type="submit" name="Duplicate" value="Duplicate" />', $formTpl);
+                '<input class="submit" id="np_duplicate_button" type="submit" name="Duplicate" value="' . $caption . '" />', $formTpl);
         }
         //die ('<pre>' . print_r($formTpl,true));
         /*echo '$_POST<br /><pre>'  . print_r($this->resource->toArray(), true) . '</pre>';*/
