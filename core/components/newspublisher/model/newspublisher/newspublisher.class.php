@@ -282,7 +282,7 @@ class Newspublisher {
 
         $this->confirmDelete =
             $this->modx->getOption('confirmdelete', $this->props, true);
-        
+
         /* set tab properties */
         $this->useTabs = isset($this->props['usetabs'])
             ? ! empty($this->props['usetabs'])
