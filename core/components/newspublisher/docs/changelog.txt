@@ -16,10 +16,6 @@ Fix Template and TV bugs
 Set parentid properly for existing resources
 
 
-
-
-
-
 NewsPublisher 2.0.2-pl
 ----------------------
 Fix bug with cancelid/cancelUrl
@@ -27,8 +23,6 @@ Mods to allow launching Notify
 Clear cache for updated resource
 Fix bug with parentid
 Fix bug with syncsite
-
-
 
 NewsPublisher 2.0.0-pl
 ----------------------
