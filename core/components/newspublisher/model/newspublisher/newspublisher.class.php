@@ -1853,11 +1853,6 @@ class Newspublisher {
         unset($fields['pub_date_time'], $fields['Submit'],
             $fields['unpub_date_time'], $fields['hidSubmit']);
 
-        /*echo "<br>Post<pre> " . print_r($_POST, true);
-        echo "<br>Fields<pre> " . print_r($fields, true);
-        die();*/
-
-        // xxx
         /* call the appropriate processor to save resource and TVs */
 
 
@@ -2258,6 +2253,12 @@ public function getParents() {
 }
 
 public function duplicate($id, $context) {
+
+    /* Save changes before duplicating */
+    $saved = $this->saveResource();
+    if (empty($saved)) {
+        return '';
+    }
     $fields = array(
         'id' => $id,
         'name' => 'Duplicate of ' . $this->resource->get('pagetitle'),
