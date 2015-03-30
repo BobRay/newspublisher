@@ -81,6 +81,7 @@ $_lang['np_parent_context_nf'] = 'Parent Context not found';
 $_lang['np_launch_notify'] = 'Launch Notify';
 $_lang['np_copy_permission_denied'] = 'Sorry, you do not have copy permission for this resource';
 $_lang['np_duplicate'] = 'Duplicate';
+$_lang['np_duplicate_of'] = 'Duplicate of';
 
 
 /* missing resource field lexicon strings */

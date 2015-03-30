@@ -2261,7 +2261,8 @@ public function duplicate($id, $context) {
     }
     $fields = array(
         'id' => $id,
-        'name' => 'Duplicate of ' . $this->resource->get('pagetitle'),
+        'name' => $this->modx->lexicon('np_duplicate_of') .
+            $this->resource->get('pagetitle'),
     );
     $response = $this->modx->runProcessor('resource/duplicate', $fields);
     /* @var $response modProcessorResponse */
