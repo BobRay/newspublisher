@@ -203,11 +203,14 @@ class Newspublisher {
     protected $showNotify;
     /** @var  $notifyChecked bool - If true, Notify checkbox is checked by default */
     protected $notifyChecked;
-    /** @var   $duplicateButton - If true, show duplicate button */
+    /** @var   $duplicateButton bool - If true, show duplicate button */
     protected $duplicateButton = false;
 
-    /** @var   $deleteButton - If true, show delete button */
+    /** @var   $deleteButton bool - If true, show delete button */
     protected $deleteButton = false;
+
+    /** $var $confirmDelete bool - if true, show 'are you sure' dialog */
+    protected $confirmDelete = true;
 
 
     /** NewsPublisher constructor
@@ -276,6 +279,10 @@ class Newspublisher {
             $this->modx->getOption('duplicatebutton', $this->props, false);
         $this->deleteButton =
             $this->modx->getOption('deletebutton', $this->props, false);
+
+        $this->confirmDelete =
+            $this->modx->getOption('confirmdelete', $this->props, true);
+        
         /* set tab properties */
         $this->useTabs = isset($this->props['usetabs'])
             ? ! empty($this->props['usetabs'])
@@ -821,9 +828,12 @@ class Newspublisher {
         }
 
         if ($this->deleteButton && $this->existing) {
+            $confirm = $this->confirmDelete
+                ? 'onClick="return confirm(\'' . $this->modx->lexicon('np_confirm_delete') . '\')"'
+            : '';
             $caption = $this->modx->lexicon('np_delete');
             $formTpl = str_replace('[[+np_delete_button]]',
-                '<input class="submit" id="np_delete_button" type="submit" name="Delete" value="' . $caption . '" onClick="return confirm(\'' . $this->modx->lexicon('np_confirm_delete') . '\')" />
+                '<input class="submit" id="np_delete_button" type="submit" name="Delete" value="' . $caption . '"' . $confirm .   '/>
                 ', $formTpl);
 /*        $this->modx->regClientStartupScript('<script type = "text/javascript">
                 function np_delete() {
