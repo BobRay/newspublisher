@@ -203,8 +203,11 @@ class Newspublisher {
     protected $showNotify;
     /** @var  $notifyChecked bool - If true, Notify checkbox is checked by default */
     protected $notifyChecked;
-    /** @var  @var $duplicateButton - If true, show duplicate button */
+    /** @var   $duplicateButton - If true, show duplicate button */
     protected $duplicateButton = false;
+
+    /** @var   $deleteButton - If true, show delete button */
+    protected $deleteButton = false;
 
 
     /** NewsPublisher constructor
@@ -271,6 +274,8 @@ class Newspublisher {
         }
         $this->duplicateButton =
             $this->modx->getOption('duplicatebutton', $this->props, false);
+        $this->deleteButton =
+            $this->modx->getOption('deletebutton', $this->props, false);
         /* set tab properties */
         $this->useTabs = isset($this->props['usetabs'])
             ? ! empty($this->props['usetabs'])
@@ -367,6 +372,17 @@ class Newspublisher {
                     }
                 }
 
+                if (isset($_POST['Delete'])) {
+                    if (!$this->resource->checkPolicy('delete')) {
+                        $this->setError(
+                            $this->modx->lexicon('np_no_delete_permission'));
+                        return;
+                    }
+                    $result =
+                        $this->deleteResource($this->resource->get('id'));
+                    $this->setError($result);
+                    return;
+                }
 
                 if (! ($this->modx->hasPermission('view_document') &&
                     $this->resource->checkPolicy('view')) ) {
@@ -803,6 +819,27 @@ class Newspublisher {
             $formTpl = str_replace('[[+np_duplicate_button]]',
                 '<input class="submit" id="np_duplicate_button" type="submit" name="Duplicate" value="' . $caption . '" />', $formTpl);
         }
+
+        if ($this->deleteButton && $this->existing) {
+            $caption = $this->modx->lexicon('np_delete');
+            $formTpl = str_replace('[[+np_delete_button]]',
+                '<input class="submit" id="np_delete_button" type="submit" name="Delete" value="' . $caption . '" onClick="return confirm(\'' . $this->modx->lexicon('np_confirm_delete') . '\')" />
+                ', $formTpl);
+/*        $this->modx->regClientStartupScript('<script type = "text/javascript">
+                function np_delete() {
+                    var r = confirm(_("np_confirm_delete"));
+                    if (r == true) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+            </script>');*/
+        }
+
+
+
         //die ('<pre>' . print_r($formTpl,true));
         /*echo '$_POST<br /><pre>'  . print_r($this->resource->toArray(), true) . '</pre>';*/
         return $formTpl;
@@ -2250,6 +2287,39 @@ public function getParents() {
         }
     }
     return $parentArray;
+}
+
+public function deleteResource($id) {
+    $okToDelete = true;
+    $msg = $this->modx->lexicon('np_delete_failed');
+    if (!$this->modx->hasPermission('delete_document')) {
+        $okToDelete = false;
+        $msg = $this->modx->lexicon('np_no_delete_document_permission');
+    } elseif (! $this->resource->checkPolicy('delete')) {
+        $okToDelete = false;
+        $msg = $this->modx->lexicon('np_no_delete_permission');
+    }
+
+    if ($okToDelete) {
+        $fields = array(
+            'id' => $id,
+        );
+
+        $response = $this->modx->runProcessor('resource/delete', $fields);
+        if ($response->isError()) {
+            if ($response->hasFieldErrors()) {
+                $fieldErrors = $response->getAllErrors();
+                $msg = implode("\n", $fieldErrors);
+            } else {
+                $msg = 'An error occurred: ' . $response->getMessage();
+            }
+        } else {
+            $msg = $this->modx->lexicon('np_resource_deleted');
+        }
+    }
+
+    return $msg;
+
 }
 
 public function duplicate($id, $context) {

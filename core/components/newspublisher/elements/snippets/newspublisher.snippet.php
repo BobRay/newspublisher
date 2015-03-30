@@ -161,6 +161,11 @@ if (!empty($errors)) {
         $errorMessage .= str_replace('[[+' . $np_prefix . '.error]]', $error, $errorTpl);
     }
     $modx->toPlaceholder('errors_presubmit', $errorMessage, $np_prefix);
+
+    /* Leave out header if resource has been deleted */
+    if (strstr($errorMessage, $modx->lexicon('np_resource_deleted'))) {
+        $errorHeaderPresubmit = '';
+    }
     return '<div class="newspublisher">' . $errorHeaderPresubmit . $errorMessage . '</div>';
 }
 

@@ -82,7 +82,13 @@ $_lang['np_launch_notify'] = 'Launch Notify';
 $_lang['np_copy_permission_denied'] = 'Sorry, you do not have copy permission for this resource';
 $_lang['np_duplicate'] = 'Duplicate';
 $_lang['np_duplicate_of'] = 'Duplicate of';
+$_lang['np_delete'] = 'Delete';
+$_lang['np_no_delete_document_permission'] = 'Sorry, you do not have delete_document permission';
+$_lang['np_no_delete_permission'] = 'Sorry, you do not have delete permission for this resource';
 
+$_lang['np_confirm_delete'] = 'Are you sure you want to delete this resource? All its children will be deleted as well.';
+$_lang['np_delete_failed'] = 'Failed to delete resource';
+$_lang['np_resource_deleted'] = 'Resource Deleted';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Publish Date';
