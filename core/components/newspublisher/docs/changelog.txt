@@ -1,5 +1,25 @@
 Changelog for NewsPublisher
 
+NewsPublisher 2.1.0-pl
+----------------------
+Add optional Duplicate button to NP form
+Add optional Delete button to NP form
+Add confirmdelete option for popup dialog
+Fix bug with setting language
+Prevent parent=self bug
+Fix unauthorized document error with multiple edit buttons
+Fix bug with blank date TVs
+Allow custom TV types
+Add OwnPagesOnly option for edit button
+Change description field to a textarea
+Fix Template and TV bugs
+Set parentid properly for existing resources
+
+
+
+
+
+
 NewsPublisher 2.0.2-pl
 ----------------------
 Fix bug with cancelid/cancelUrl
