@@ -150,6 +150,12 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p>If the <code>&duplicatebutton</code> property is set to <code>1</code>, a &quot;Duplicate&quot; button will be shown at the bottom of the NewsPublisher form. When the user clicks on the button, the page currently being edited will be duplicated and the user will be forwarded to the NewsPublisher page to edit the duplicate. Changes made to the original before duplication will be saved before it is duplicated.</p>
 
+<h3>Delete Button</h3>
+
+<p>If the <code>&deletebutton</code> property is set to <code>1</code>, a &quot;Delete&quot; button will be shown at the bottom of the
+NewsPublisher form. When the user clicks on the button, the page currently being edited will be deleted. Children of the resource will be deleted as well.  If the <code>&confirmdelete</code> property is set to <code>1</code> (this is the default), a dialog will pop up asking the user to confirm the decision and warning that children will be deleted. If the <code>&confirmdelete</code> property is set to <code>0</code>, the resource (and any children) will be deleted immediately.</p>
+
+
 <h3>Plugins with NewsPublisher</h3>
 
 <p>NewsPublisher calls either the <code>resource/create</code> processor (for new docs) or the <code>resource/update</code> processor (for existing ones). Those processors fire the <code>OnBeforeDocFormSave</code> event just before saving the resource and the <code>OnDocFormSave</code> event just after a successful save of the resource.</p>
@@ -215,6 +221,10 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p><code>&duplicatebutton</code> &mdash; (0/1) If set to <code>1</code>, a &quot;Duplicate&quot; button will be placed at the bottom of the form.</p>
 
+<p><code>&deletebutton</code> &mdash; (0/1) If set to <code>1</code>, a &quot;Delete&quot; button will be placed at the bottom of the
+form.</p>
+
+<p><code>&confirmdelete</code> &mdash; (0/1) If set to <code>1</code> (the default), a dialog will pop up asking the user to confirm the decision and warning that children will be deleted.</p>
 
 <p>
 <code>&templateid</code> &mdash; (mixed) The name or ID of the template to be assigned to new docs. Can also be set to 'Parent' to assign the parent's template; default: default_template System Setting. To force a particular template, set this, and don't put the <code>template</code> field in the <code>&show</code> property. (For backward compatibility, <code>&template</code> will also work.)</p>
