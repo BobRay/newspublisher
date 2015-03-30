@@ -9,9 +9,9 @@
 <p>(Jump to <a href="[[~[[*id]]]]#np_propertiesTable">NewsPublisher Snippet Properties Table</a>.)</p>
 <p>(Jump to <a href="[[~[[*id]]]]#npet_propertiesTable">NpEditThisButton Snippet Properties Table</a>.)</p>
 
-<p>Markus Schlegel, who developed the NewsPublisher browser for files and images, the NewsPublisherEditor Policy and Policy Template, and vastly improved the datepicker, was kind enough to step in and solve the many problems necessary to make the file browser work in MODX Version 2.3. and  now has a fully functional.</p>
+<p>Markus Schlegel, who developed the NewsPublisher browser for files and images, the NewsPublisherEditor Policy and Policy Template, and vastly improved the datepicker, was kind enough to step in and solve the many problems necessary to make the file browser work in MODX Version 2.3.</p>
 
-<p><i>Note: Earlier versions of TinyMCE may not work correctly in the front end. Be sure you're using the current version.</i>
+<p><i>Note: Some early versions of TinyMCE may not work correctly in the front end.</i>
 </p>
 
 <h3>Important Security Note</h3>
@@ -146,6 +146,10 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p>The Tab names are on the left and you can use any names you like and as many or as few tabs as you need. NewsPublisher will add a &quot;Show All&quot; button that will show all fields at once. If you include a field that is not in the <code>&show</code> property, you'll see an error message telling you that the tab field can't be found. If there is a field in the <code>&show</code> property that is not in your <code>&tabs</code> list, it will go on the &quot;Other&quot; tab (which will not be shown if all the fields are accounted for).</p>
 
+<h3>Duplicate Button</h3>
+
+<p>If the <code>&duplicatebutton</code> property is set to <code>1</code>, a &quot;Duplicate&quot; button will be shown at the bottom of the NewsPublisher form. When the user clicks on the button, the page currently being edited will be duplicated and the user will be forwarded to the NewsPublisher page to edit the duplicate. Changes made to the original before duplication will be saved before it is duplicated.</p>
+
 <h3>Plugins with NewsPublisher</h3>
 
 <p>NewsPublisher calls either the <code>resource/create</code> processor (for new docs) or the <code>resource/update</code> processor (for existing ones). Those processors fire the <code>OnBeforeDocFormSave</code> event just before saving the resource and the <code>OnDocFormSave</code> event just after a successful save of the resource.</p>
@@ -208,6 +212,8 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 <p><code>&parentid</code> &mdash; (integer) ID of the parent for new pages; defaults to NewsPublisher page. If you want to force a particular parent, set this and don't include the <code>parent</code> field in the <code>&show</code> property. (For backward compatibility, <code>&parent</code> will also work.)</p>
 
 <p><code>&parents</code> &mdash; comma-separated list of possible parent IDs (must be IDs or Context Keys!) of parents for user to select from; Note: <code>new_document_in_root</code> permission may be necessary for new resources; default: empty. If <code>&parentid</code> is set, it will be selected in the list.</p>
+
+<p><code>&duplicatebutton</code> &mdash; (0/1) If set to <code>1</code>, a &quot;Duplicate&quot; button will be placed at the bottom of the form.</p>
 
 
 <p>
@@ -294,7 +300,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
     field itself); default: `1`. The MODX help strings are shown for
     resource fields. For TVs, the TV description is shown.</p>
 
-<p><code>&language</code> &mdash; (string) language to use for form; defaults to Manager language.</p>
+<p><code>&language</code> &mdash; (string) language to use for form; defaults: (in order of application) cultureKey, manager_language, en.</p>
 
 <p><code>&classkey</code> &mdash; (string) Class key for new documents; only necessary if you have extended the resource object for a custom resource class or are editing Articles blog posts.</p>
 
