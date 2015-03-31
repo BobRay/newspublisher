@@ -263,10 +263,11 @@ class Newspublisher {
     public function init($context) {
         $this->context = $context;
 
-        $language = !empty($this->props['language'])
-            ? $this->props['language']
-            : $this->modx->getOption('cultureKey',null,
-                $this->modx->getOption('manager_language',null,'en'));
+        $language = $this->modx->getOption('language', $this->props, '');
+        $language = !empty($language)
+            ? $language
+            : $this->modx->getOption('cultureKey', NULL,
+                $this->modx->getOption('manager_language', NULL, 'en'));
         switch ($context) {
             case 'mgr':
                 break;

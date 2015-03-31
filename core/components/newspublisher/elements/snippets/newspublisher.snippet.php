@@ -104,11 +104,11 @@ $errorMessage = '';
 $formTpl = '';
 
 /** @var $scriptProperties array */
-$language = !empty($scriptProperties['language'])
-    ? $scriptProperties['language']
+$language = $modx->getOption('language', $scriptProperties, '');
+$language = !empty($language)
+    ? $language
     : $modx->getOption('cultureKey', NULL,
         $modx->getOption('manager_language', NULL, 'en'));
-
 $modx->lexicon->load($language . ':newspublisher:default');
 
 /* Make these match if coming from Duplicate */
