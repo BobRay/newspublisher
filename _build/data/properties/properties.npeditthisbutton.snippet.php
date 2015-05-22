@@ -93,7 +93,7 @@ $properties = array (
     'options' => 
     array (
     ),
-    'value' => 22,
+    'value' => '',
     'lexicon' => 'newspublisher:button',
     'area' => '',
   ),
