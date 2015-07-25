@@ -1758,6 +1758,9 @@ class Newspublisher {
                 $this->resource->_fieldMeta[$field]['phptype'] == 'timestamp') {
                     $postTime = isset($_POST[$field . '_time'])? $_POST[$field . '_time'] : '';
                 $_POST[$field] = $val . ' ' . $postTime;
+                if (empty($_POST[$field]) || $_POST[$field] == ' ') {
+                    $_POST[$field] = 0;
+                }
             }
         }
         $fields = array_merge($oldFields, $_POST);
@@ -1868,11 +1871,15 @@ class Newspublisher {
                 $name = $tv->get('name');
 
                 if ($tv->get('type') == 'date') {
+                    $tvCode = 'tv' . $tv->get('id');
                     if (empty($_POST[$name])) {
-                        $fields['tv' . $tv->get('id')] = '';
+                        $fields[$tvCode] = '';
                     } else {
-                        $fields['tv' . $tv->get('id')] = $_POST[$name] . ' ' .
+                        $fields[$tvCode] = $_POST[$name] . ' ' .
                             $_POST[$name . '_time'];
+                    }
+                    if ($fields[$tvCode] == ' ' || empty($fields[$tvCode])) {
+                        $fields[$tvCode] = 0;
                     }
                 } else {
                     if (is_array($_POST[$name])) {
@@ -1902,7 +1909,6 @@ class Newspublisher {
             $fields['unpub_date_time'], $fields['hidSubmit']);
 
         /* call the appropriate processor to save resource and TVs */
-
 
         if ($this->existing) {
             /* Clear cache file for existing resource */
