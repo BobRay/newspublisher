@@ -47,7 +47,7 @@
 class Newspublisher {
 
    /** @var $version string current version */
-    protected $version = '2.0.0-pl';
+    protected $version = '2.1.0-pl';
    /**
     * @var modx object Reference pointer to modx object
     */
@@ -540,8 +540,39 @@ class Newspublisher {
             ? $this->props['textmaxlength']
             : 60;
 
-        /* new code from Markus Schlegel */
+        /* TinyMceWrapper */
+        //xxx
         if ($this->props['initrte']) {
+            $src = '<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="//tinymce.cachefly.net/4.2/tinymce.min.js"></script>';
+            //. "<script>tinymce.init({selector:'textarea'});</script>";
+            $this->modx->regClientStartupScript($src);
+            $fullSrc = '<script type="text/javascript">$(document).ready(function() {';
+
+
+            if ($this->modx->getOption('rtcontent', $this->props)) {
+                $src = "\n" . $this->modx->getChunk('TinymceWrapperContent');
+                $src = str_replace('#ta', '#np-content', $src);
+                $fullSrc .= $src;
+            }
+            if ($this->modx->getOption('rtsummary', $this->props)) {
+                $src = "\n" .$this->modx->getChunk('TinymceWrapperIntrotext');
+                $src = str_replace('#modx-resource-introtext', '#np-introtext', $src);
+                $fullSrc .= $src;
+            }
+            if ($this->modx->getOption('rtdescription', $this->props)) {
+                $src = "\n" . $this->modx->getChunk('TinymceWrapperDescription');
+                $src = str_replace('#modx-resource-description', '#np-description', $src);
+                $fullSrc .= $src;
+            }
+            if (!empty($fullSrc)) {
+                $this->modx->regClientStartupScript($fullSrc . '
+                });' . "\n</script>");
+            }
+        }
+
+
+        /* new code from Markus Schlegel */
+        if (false && $this->props['initrte']) {
 
             $whichEditor = $this->modx->getOption('which_editor', $this->props,'TinyMCE');
 
