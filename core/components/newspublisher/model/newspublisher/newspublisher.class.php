@@ -522,7 +522,7 @@ class Newspublisher {
                 $dirty = false;
                 foreach($this->presets as $pKey => $pValue) {
                     if (key_exists($pKey, $f)) {
-                        $dirty = true;
+                       $dirty = true;
                        $f[$pKey] = $pValue;
                     }
                 }
@@ -530,7 +530,7 @@ class Newspublisher {
                     $this->modx->toPlaceholders($f, $this->prefix);
                 }
             }
-            unset($f);
+            unset($f, $dirty);
         }
 
         if( !empty($this->props['badwords'])) {
@@ -857,7 +857,7 @@ class Newspublisher {
             $field = trim($field);
 
             if (in_array($field,$resourceFieldNames)) {
-                /* regular resource field */ //xxx
+                /* regular resource field */
                 $inner .= $this->_displayField($field);
             } else {
                 /* see if it's a TV */
@@ -1265,12 +1265,13 @@ class Newspublisher {
                 return null;
                 
             } else {
+                /* Do presets for TVs */
                 if (isset($this->presets[$name])) {
                     if ((!$this->existing)) {
                         $ph = $this->presets[$name];
                     }
                 }
-                $this->modx->toPlaceholder($name, $ph, $this->prefix ); //xxx
+                $this->modx->toPlaceholder($name, $ph, $this->prefix );
             }
         }
 
@@ -2439,6 +2440,11 @@ public function duplicate($id, $context) {
 
 }
 
+    /**
+     * Parse double-delimited string to a PHP array
+     * @param $s string in the form 'key1:value1,key2,$value2
+     * @return array parsed array or empty array
+     */
     public function parseDoubleDelimitedString($s) {
         $retVal = array();
         if (!empty($s)) {
