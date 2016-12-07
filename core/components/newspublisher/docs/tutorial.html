@@ -242,6 +242,20 @@ form.</p>
 &searchable_default
 &richtext_default</fixedpre></pre>
 
+<a name="presets"></a>
+
+<h3>Presets Property</h3>
+
+<p>You can preset values for new documents using the <code>&presets</code> property in the NewsPublisher snippet tag. This will work for most resource fields and TVs. The property must be in this form:</p>
+
+<pre><fixedpre>
+&presets=`content:Some default content,introtext:My preset introtext`
+</fixedpre></pre>
+
+<p>In each of the comma-separated pairs, the left side of the <code>:</code> is the name of the field or the name or ID of a TV. The right side of the <code>:</code> is the preset value you want in the field.</p>
+
+<p><b>Important:</b> To have a preset, a field must be in the <code>&show</code> property and must be spelled exactly the same way in both the <code>&show</code> property and the <code>&presets</code> property. In both cases, it must be the actual name of the database field (e.g., <code>introtext</code>, *not* <code>summary</code>, and *not* the value you use for a custom caption. </p>
+
 
 <h3>Tpl Properties</h3>
 
