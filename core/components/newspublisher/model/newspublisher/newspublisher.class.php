@@ -27,9 +27,7 @@
 /**
  * MODx NewsPublisher Class
  *
- * @version Version 1.3.0-rc1
- *
- * @package  newspublisher
+  * @package  newspublisher
  *
  * The NewsPublisher snippet presents a form in the front end for
  * creating resources. Rich text editing is available for text fields
@@ -212,6 +210,9 @@ class Newspublisher {
     /** $var $confirmDelete bool - if true, show 'are you sure' dialog */
     protected $confirmDelete = true;
 
+    /** $var $presets string - Preset values for fields */
+    protected $presets = array();
+
 
     /** NewsPublisher constructor
      *
@@ -262,7 +263,6 @@ class Newspublisher {
 
     public function init($context) {
         $this->context = $context;
-
         $language = $this->modx->getOption('language', $this->props, '');
         $language = !empty($language)
             ? $language
@@ -347,7 +347,6 @@ class Newspublisher {
         }
 
         if ($this->isPostBack) {
-            /* $fs = array(); */
             foreach($_POST as $k => $v) {
                 /* Don't use arrays for HTML select/radio fields with a single element.
                  * The nested arrays cause problems when saving fields */
@@ -435,11 +434,18 @@ class Newspublisher {
 
         } else {
             /* new document */
+
             if (!$this->modx->hasPermission('new_document')) {
                 $this->setError($this->modx->lexicon('np_create_permission_denied'));
                 return;
             }
+
+
+            /* Create new resource object */
             $this->resource = $this->modx->newObject($this->classKey);
+
+
+
             /* get folder id where we should store the new resource,
              else store under current document */
 
@@ -502,6 +508,29 @@ class Newspublisher {
             $this->footer = !empty($this->props['footertpl'])
                 ? $this->modx->getChunk($this->props['footertpl'])
                 :'';
+
+            /* Set $presets array from properties */
+            if (isset($this->props['presets'])) {
+                $this->presets = $this->parseDoubleDelimitedString($this->props['presets']);
+            }
+
+            /* Do presets for resource fields on new docs */
+            $f = $this->resource->toArray();
+
+            /* Set presets for regular resource fields */
+            if ((!empty($this->presets)) && (!$this->isPostBack)) {
+                $dirty = false;
+                foreach($this->presets as $pKey => $pValue) {
+                    if (key_exists($pKey, $f)) {
+                        $dirty = true;
+                       $f[$pKey] = $pValue;
+                    }
+                }
+                if ($dirty) {
+                    $this->modx->toPlaceholders($f, $this->prefix);
+                }
+            }
+            unset($f);
         }
 
         if( !empty($this->props['badwords'])) {
@@ -541,7 +570,7 @@ class Newspublisher {
             : 60;
 
         /* TinyMceWrapper */
-        //xxx
+
         if ($this->props['initrte']) {
             $src = '<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="//tinymce.cachefly.net/4.2/tinymce.min.js"></script>';
             //. "<script>tinymce.init({selector:'textarea'});</script>";
@@ -814,32 +843,26 @@ class Newspublisher {
                 unset($tabsJs);
                 //$this->setError('json_passed');
             }
-
         }
 
         /* get the resource field names */
         $resourceFieldNames = array_keys($this->modx->getFields($this->classKey));
 
         /* set captions from properties (if any) */
-        if (! empty($this->props['captions'])) {
-            $captionSettings = explode(',',$this->props['captions']);
-            if (!empty($captionSettings)) {
-                foreach ($captionSettings as $captionSetting) {
-                    $pair = explode(':', $captionSetting, 2);
-                    $this->captions[trim($pair[0])] = trim($pair[1]);
-                }
-            }
+        if (isset($this->props['captions'])) {
+            $this->captions = $this->parseDoubleDelimitedString($this->props['captions']);
         }
 
         foreach($fields as $field) {
             $field = trim($field);
 
             if (in_array($field,$resourceFieldNames)) {
-                /* regular resource field */
+                /* regular resource field */ //xxx
                 $inner .= $this->_displayField($field);
-              
             } else {
                 /* see if it's a TV */
+                /* (presets done inside  _displayTv() ) */
+
                 $retVal = $this->_displayTv($field);
                 if ($retVal) {
                     $inner .= "\n" . $retVal;
@@ -1187,8 +1210,9 @@ class Newspublisher {
 
         $formTpl = '';
         $tv = $tvObj;
+
         $fields = $tv->toArray();
-        
+
         $name = $fields['name'];
 
         $params = $tv->get('input_properties');
@@ -1241,7 +1265,12 @@ class Newspublisher {
                 return null;
                 
             } else {
-                $this->modx->toPlaceholder($name, $ph, $this->prefix );
+                if (isset($this->presets[$name])) {
+                    if ((!$this->existing)) {
+                        $ph = $this->presets[$name];
+                    }
+                }
+                $this->modx->toPlaceholder($name, $ph, $this->prefix ); //xxx
             }
         }
 
@@ -2409,6 +2438,21 @@ public function duplicate($id, $context) {
     return true;
 
 }
+
+    public function parseDoubleDelimitedString($s) {
+        $retVal = array();
+        if (!empty($s)) {
+            $c = explode(',', $s);
+            if (!empty($c)) {
+                foreach ($c as $p) {
+                    $pair = explode(':', $p, 2);
+                    $retVal[trim($pair[0])] = trim($pair[1]);
+                }
+            }
+        }
+
+        return $retVal;
+    }
 
 
 
