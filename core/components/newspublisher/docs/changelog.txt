@@ -1,5 +1,10 @@
 Changelog for NewsPublisher
 
+NewsPublisher 2.2.0-pl
+----------------------
+Add presets property to set fields for new document
+Add readonly placeholder to text Tpls
+
 NewsPublisher 2.1.0-pl
 ----------------------
 Add optional Duplicate button to NP form
