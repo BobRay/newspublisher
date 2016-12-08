@@ -805,6 +805,18 @@ $properties = array (
     'lexicon' => 'newspublisher:properties',
     'area' => 'Tpls',
   ),
+  'presets' => 
+  array (
+    'name' => 'presets',
+    'desc' => 'np_presets_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => '',
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'Resource Field Settings',
+  ),
 );
 
 return $properties;
