@@ -520,17 +520,19 @@ class Newspublisher {
             /* Set presets for regular resource fields */
             if ((!empty($this->presets)) && (!$this->isPostBack)) {
                 $dirty = false;
+                /* separate array to avoid overwriting other fields */
+                $fArray = array();
                 foreach($this->presets as $pKey => $pValue) {
                     if (key_exists($pKey, $f)) {
                        $dirty = true;
-                       $f[$pKey] = $pValue;
+                       $fArray[$pKey] = $pValue;
                     }
                 }
                 if ($dirty) {
-                    $this->modx->toPlaceholders($f, $this->prefix);
+                    $this->modx->toPlaceholders($fArray, $this->prefix);
                 }
             }
-            unset($f, $dirty);
+            unset($f, $fArray,$dirty);
         }
 
         if( !empty($this->props['badwords'])) {
