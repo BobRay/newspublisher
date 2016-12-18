@@ -573,8 +573,8 @@ class Newspublisher {
 
         /* TinyMceWrapper */
 
-        if ($this->props['initrte']) {
-            $src = '<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="//tinymce.cachefly.net/4.2/tinymce.min.js"></script>';
+        if (false && $this->props['initrte']) {
+            $src = '<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="//cdn.tinymce.com/4/tinymce.min.js"></script>';
             //. "<script>tinymce.init({selector:'textarea'});</script>";
             $this->modx->regClientStartupScript($src);
             $fullSrc = '<script type="text/javascript">$(document).ready(function() {';
@@ -662,7 +662,29 @@ class Newspublisher {
 
         } /* end if ($richtext) */
 
-    } /* end init */
+        if ($this->props['initrte']) {
+            $tinyproperties['language'] = '"' .
+            $this->modx->getOption('fe_editor_lang', array(), $language) . '"';
+            // $tinyproperties['file_browser_callback'] = 'elFinderBrowser';
+            /*$actionObj = $this->modx->getObject('modAction',
+                array('namespace' => 'core', 'controller' => 'browser'));
+            $action = $actionObj ? $actionObj->get('id') : 'browser';
+            $tinyproperties["browserUrl"] = $this->modx->getOption('manager_url',
+                    null, MODX_MANAGER_URL) . 'index.php?a=' . $action;*/
+
+
+            $tinyChunk = $this->modx->getOption('tinymceinittpl', $this->props, 'npTinymceInitTpl', true);
+            $tinySource = $this->modx->getOption('tinysource', $this->props, "//cdn.tinymce.com/4/tinymce.min.js", true);
+            if ($this->props['initrte']) { // removed which_editor
+                $this->modx->regClientStartupHTMLBlock('
+                <script src="' . $tinySource . '"></script > '); // ever-current official CDN
+                /*$this->modx->regClientStartupHTMLBlock('<script src = "' .
+                    $this->props['tinymceCDN'] . '" ></script > ');*/
+                // better and flexible approach! for easy downgrade or use with Enterprise edition
+                $this->modx->regClientStartupscript($this->modx->getChunk($tinyChunk, $tinyproperties));
+            }
+        } /* end if ($richtext) */
+} /* end init */
 
     /** Sets default values for published, hidemenu, searchable,
      * cacheable, and groups (if sent).
