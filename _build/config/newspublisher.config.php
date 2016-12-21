@@ -23,7 +23,7 @@ $components = array(
     'authorUrl' => 'http://bobsguides.com',
     'authorSiteName' => "Bob's Guides",
     'packageDocumentationUrl' => 'http://bobsguides.com/newspublisher-tutorial.html',
-    'copyright' => '2013-2015',
+    'copyright' => '2013-2017',
 
     /* no need to edit this except to change format */
     'createdon' => strftime('%m-%d-%Y'),
@@ -249,6 +249,16 @@ $components = array(
         ),
 
         'templates' => array(
+            'npElFinderTemplate' => array(
+                'category' => 'NewsPublisher',
+                'description' => 'Template for NewsPublisher Connector to launch el Finder',
+                'static' => false,
+            ),
+          /*  'npElFinderTemplate' => array(
+                'category' => 'NewsPublisher',
+                'description' => 'Template for elFinder window in NewsPublisher',
+                'static' => false,
+            ),*/
         ),
         'templateVars' => array(
         ),
@@ -263,6 +273,18 @@ $components = array(
      * ************************************************************** */
     /* Array of Resource pagetitles for your Extra; All other fields optional.
        You can set any resource field here */
+
+    'resources' => array(
+        'npElFinder' => array( /* example with other fields */
+            'pagetitle' => 'npElFinder',
+            'alias' => 'npelfinder',
+            'context_key' => 'web',
+            'parent' => 'NewsPublisher',
+            'template' => 'npElFinderConnectorTemplate',
+            'richtext' => false,
+            'published' => true,
+        ),
+    ),
 
     /* Array of languages for which you will have language files,
      *  and comma-separated list of topics
@@ -425,6 +447,7 @@ $components = array(
 
         'snippets',
         'chunks',
+        'templates',
     ),
     /*  Array  of resources to process. You can specify specific resources
         or parent (container) resources, or both.
