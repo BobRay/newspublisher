@@ -29,12 +29,14 @@ $templates[1] = $modx->newObject('modTemplate');
 $templates[1]->fromArray(array (
   'id' => 1,
   'property_preprocess' => false,
-  'templatename' => 'npElFinderConnectorTemplate',
-  'description' => 'Template for NewsPublisher Connector to launch el Finder',
+  'templatename' => 'npElFinderTemplate',
+  'description' => 'Template for elFinder in NewsPublisher',
   'icon' => '',
   'template_type' => 0,
-  'properties' => NULL,
+  'properties' => 
+  array (
+  ),
 ), '', true, true);
-$templates[1]->setContent(file_get_contents($sources['source_core'] . '/elements/templates/npelfinderconnectortemplate.template.html'));
+$templates[1]->setContent(file_get_contents($sources['source_core'] . '/elements/templates/npelfindertemplate.template.html'));
 
 return $templates;

@@ -1,0 +1,48 @@
+<script>
+  if(typeof autoFileBrowser == "undefined" || autoFileBrowser.name == "elFinderBrowser"){
+    var browserUrl = "assets/components/tinymcewrapper/frontend/imogen_theme/index.html";
+    autoFileBrowser = function(field_name, url, type, win, gallery) {
+    tinymce.activeEditor.windowManager.open({
+    // file: 'assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/elfinder.html',// use an absolute path!
+    file: 'http://localhost/addons/npelfinder.html',
+    title: 'elFinder 2.0',
+    width : window.innerWidth/1.2,
+    height : window.innerHeight/1.2,
+    resizable: 'yes',
+  }, {
+    setUrl: function (url) {
+      win.document.getElementById(field_name).value = url;
+    }
+  });
+  return false;
+  }};   
+
+  tinymce.init({  
+    
+    selector: "#np-content,#np-rt1",
+    language: [[+language]],
+    file_browser_callback: autoFileBrowser,
+    relative_urls: false,
+    document_base_url: 'http://localhost/addons/',
+    // remove_script_host: false,
+    // height: [[+height]],
+    // width: [[+width]],
+    paste_word_valid_elements: "a,div,b,strong,i,em,h1,h2,h3,p,blockquote,ol,ul,pre",
+    image_caption: true,
+    browser_spellcheck: true,
+    gecko_spellcheck: true,
+    paste_data_images: false,
+    statusbar: true,
+    resize: true,
+    plugins: "imagetools,autoresize,preview,paste,contextmenu,image,wordcount,fullscreen,code,charmap,searchreplace,textpattern,emoticons,insertdatetime",
+    // plugins: "imagetools contextmenu autosave save paste image link searchreplace",
+    menubar: false,
+    toolbar: "fullscreen | code | undo redo | blockquote | bold italic alignleft aligncenter alignright | bullist numlist | link unlink | image | styleselect charmap emoticons insertdatetime searchreplace bubbleBarOptionsButton",
+    contextmenu: "code | twPreCodeManager | fullscreen | removeformat | link | image",
+  
+  });
+  
+  
+  // file_browser_callback: autoFileBrowser;
+
+</script>
