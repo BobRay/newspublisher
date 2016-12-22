@@ -3,7 +3,7 @@
 /**
  * NewsPublisher
  *
- * Copyright 2011-2015 Bob Ray
+ * Copyright 2011-2017 Bob Ray
  *
  * @author Bob Ray <http://bobsguides.com>
  * @author Raymond Irving
@@ -663,26 +663,34 @@ class Newspublisher {
         } /* end if ($richtext) */
 
         if ($this->props['initrte']) {
-            $tinyproperties['language'] = '"' .
-            $this->modx->getOption('fe_editor_lang', array(), $language) . '"';
-            // $tinyproperties['file_browser_callback'] = 'elFinderBrowser';
-            /*$actionObj = $this->modx->getObject('modAction',
-                array('namespace' => 'core', 'controller' => 'browser'));
-            $action = $actionObj ? $actionObj->get('id') : 'browser';
-            $tinyproperties["browserUrl"] = $this->modx->getOption('manager_url',
-                    null, MODX_MANAGER_URL) . 'index.php?a=' . $action;*/
 
+            /* Remove manager specific initialization code (which may depend on ModExt)
+               and fire loadRTE()  */
 
-            $tinyChunk = $this->modx->getOption('tinymceinittpl', $this->props, 'npTinymceInitTpl', true);
+            $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
+                    delete Tiny.config.setup; 
+                    Ext.onReady(function() {
+                        MODx.loadRTE();
+                    });
+                </script>');
+
+            /* Get location to load TinyMCE fom */
             $tinySource = $this->modx->getOption('tinysource', $this->props, "//cdn.tinymce.com/4/tinymce.min.js", true);
-            if ($this->props['initrte']) { // removed which_editor
-                $this->modx->regClientStartupHTMLBlock('
-                <script src="' . $tinySource . '"></script > '); // ever-current official CDN
-                /*$this->modx->regClientStartupHTMLBlock('<script src = "' .
-                    $this->props['tinymceCDN'] . '" ></script > ');*/
-                // better and flexible approach! for easy downgrade or use with Enterprise edition
-                $this->modx->regClientStartupscript($this->modx->getChunk($tinyChunk, $tinyproperties));
-            }
+
+            /* Get name of TinyMCE configuration chunk */
+            $tinyChunk = $this->modx->getOption('tinymceinittpl', $this->props, 'npTinymceInitTpl', true);
+            $language = $this->modx->getOption('language', $this->props, 'en', true);
+            /* Tinyproperties is the array sent to getChunk to replace placeholder */
+            $tinyproperties['language'] = '"' . $language . '"';
+
+
+            /* Load Tiny JS */
+            $this->modx->regClientStartupHTMLBlock('
+            <script src="' . $tinySource . '"></script > '); // ever-current official CDN
+
+            /* Load Tiny configuration chunk */
+            $this->modx->regClientStartupscript($this->modx->getChunk($tinyChunk, $tinyproperties));
+
         } /* end if ($richtext) */
 } /* end init */
 
