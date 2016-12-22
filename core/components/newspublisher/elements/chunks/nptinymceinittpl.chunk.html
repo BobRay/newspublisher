@@ -4,7 +4,8 @@
     autoFileBrowser = function(field_name, url, type, win, gallery) {
     tinymce.activeEditor.windowManager.open({
     // file: 'assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/elfinder.html',// use an absolute path!
-    file: 'http://localhost/addons/npelfinder.html',
+    // file is the URL of a resource
+    file: '[[++site_url]]npelfinder.html',
     title: 'elFinder 2.0',
     width : window.innerWidth/1.2,
     height : window.innerHeight/1.2,
@@ -23,7 +24,8 @@
     language: [[+language]],
     file_browser_callback: autoFileBrowser,
     relative_urls: false,
-    document_base_url: 'http://localhost/addons/',
+    // document_base_url: 'http://localhost/addons/',
+    document_base_url: '[[++site_url]]',
     // remove_script_host: false,
     // height: [[+height]],
     // width: [[+width]],
@@ -34,11 +36,11 @@
     paste_data_images: false,
     statusbar: true,
     resize: true,
-    plugins: "imagetools,autoresize,preview,paste,contextmenu,image,wordcount,fullscreen,code,charmap,searchreplace,textpattern,emoticons,insertdatetime",
+    plugins: "imagetools,autoresize,preview,paste,contextmenu,image,wordcount,fullscreen,code,charmap,searchreplace,textpattern,emoticons,insertdatetime,link",
     // plugins: "imagetools contextmenu autosave save paste image link searchreplace",
     menubar: false,
     toolbar: "fullscreen | code | undo redo | blockquote | bold italic alignleft aligncenter alignright | bullist numlist | link unlink | image | styleselect charmap emoticons insertdatetime searchreplace bubbleBarOptionsButton",
-    contextmenu: "code | twPreCodeManager | fullscreen | removeformat | link | image",
+    contextmenu: "code | twPreCodeManager | fullscreen | removeformat | link | image | codesample"
   
   });
   
