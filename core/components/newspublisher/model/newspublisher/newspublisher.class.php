@@ -653,7 +653,7 @@ class Newspublisher {
 
                 $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
                     // delete Tiny.config.setup; // remove manager specific initialization code (depending on ModExt)
-                    Ext.onReady(function() {
+                    $().ready(function () {
                         MODx.loadRTE();
                     });
                 </script>');
@@ -667,12 +667,7 @@ class Newspublisher {
             /* Remove manager specific initialization code (which may depend on ModExt)
                and fire loadRTE()  */
 
-            $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
-                    // delete Tiny.config.setup; 
-                    Ext.onReady(function() {
-                        MODx.loadRTE();
-                    });
-                </script>');
+
 
             /* Get location to load TinyMCE fom */
             $tinySource = $this->modx->getOption('tinysource', $this->props, "//cdn.tinymce.com/4/tinymce.min.js", true);
@@ -689,11 +684,21 @@ class Newspublisher {
             <script src="' . $tinySource . '"></script > '); // ever-current official CDN*/
 
             /* Load Tiny configuration chunk */
-            $this->modx->regClientHTMLBlock('
+            $this->modx->regClientStartupHTMLBlock('
                 <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
                 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
                 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>'
             );
+
+            $fields = array(
+                'editor' => 'TinyMCE',
+                'elements' => '',
+                'forfrontend' => 1,
+                // 'width' => $w,
+                // height' => $h
+            );
+
+            $this->modx->invokeEvent('OnRichTextEditorInit', $fields);
 
             $this->modx->regClientStartupScript($tinySource); // ever-current official CDN
             /* Load Tiny configuration chunk */

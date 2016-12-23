@@ -1,4 +1,5 @@
-<script>
+<script type="text/javascript">
+/********** File/Image Browser **************/
   if(typeof autoFileBrowser == "undefined" || autoFileBrowser.name == "elFinderBrowser"){
     var browserUrl = "assets/components/tinymcewrapper/frontend/imogen_theme/index.html";
     autoFileBrowser = function(field_name, url, type, win, gallery) {
@@ -18,17 +19,31 @@
   return false;
   }};   
 
+/********** TinyMCE content **************/
   tinymce.init({  
     
-    selector: "#np-content,#np-rt1",
+    selector: "#np-content",
     language: [[+language]],
     file_browser_callback: autoFileBrowser,
     relative_urls: false,
+    image_advtab: true,
+    skin_url: '[[++assets_url]]components/tinymcewrapper/tinymceskins/modxPericles',
     // document_base_url: 'http://localhost/addons/',
     document_base_url: '[[++site_url]]',
     // remove_script_host: false,
     // height: [[+height]],
     // width: [[+width]],
+    external_plugins: {
+    // twAceEditor: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twAceEditor.js",
+    // twCodeMirror: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twCodeMirror.js",
+    // C:\xampp\htdocs\addons\assets\components\tinymcewrapper\tinymceplugins\tinymceBubbleBar.js
+    // bubbleBar: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/tinymceBubbleBar.js",
+    //twExoticMarkdownEditor: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twExoticMarkdownEditor.js",
+    modxMagicHoverLink: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/modxMagicHoverLink.js",
+    twPreCodeManager: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twPreCodeManager.js"
+  },
+  
+
     paste_word_valid_elements: "a,div,b,strong,i,em,h1,h2,h3,p,blockquote,ol,ul,pre",
     image_caption: true,
     browser_spellcheck: true,
@@ -39,12 +54,11 @@
     plugins: "imagetools,autoresize,preview,paste,contextmenu,image,wordcount,fullscreen,code,charmap,searchreplace,textpattern,emoticons,insertdatetime,link",
     // plugins: "imagetools contextmenu autosave save paste image link searchreplace",
     menubar: false,
-    toolbar: "fullscreen | code | undo redo | blockquote | bold italic alignleft aligncenter alignright | bullist numlist | link unlink | image | styleselect charmap emoticons insertdatetime searchreplace bubbleBarOptionsButton",
+    toolbar: "fullscreen | code | undo redo | blockquote | bold italic alignleft aligncenter alignright | bullist numlist | link unlink | image | styleselect charmap emoticons insertdatetime searchreplace",
     contextmenu: "code | twPreCodeManager | fullscreen | removeformat | link | image | codesample"
   
   });
   
-  
-  // file_browser_callback: autoFileBrowser;
-
+// end of tpl chunk
 </script>
+
