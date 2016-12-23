@@ -652,7 +652,7 @@ class Newspublisher {
                 $tiny->initialize();
 
                 $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
-                    delete Tiny.config.setup; // remove manager specific initialization code (depending on ModExt)
+                    // delete Tiny.config.setup; // remove manager specific initialization code (depending on ModExt)
                     Ext.onReady(function() {
                         MODx.loadRTE();
                     });
@@ -668,7 +668,7 @@ class Newspublisher {
                and fire loadRTE()  */
 
             $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
-                    delete Tiny.config.setup; 
+                    // delete Tiny.config.setup; 
                     Ext.onReady(function() {
                         MODx.loadRTE();
                     });
@@ -685,11 +685,19 @@ class Newspublisher {
 
 
             /* Load Tiny JS */
-            $this->modx->regClientStartupHTMLBlock('
-            <script src="' . $tinySource . '"></script > '); // ever-current official CDN
+            /*$this->modx->regClientStartupHTMLBlock('
+            <script src="' . $tinySource . '"></script > '); // ever-current official CDN*/
 
             /* Load Tiny configuration chunk */
-            $this->modx->regClientStartupscript($this->modx->getChunk($tinyChunk, $tinyproperties));
+            $this->modx->regClientHTMLBlock('
+                <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+                <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>'
+            );
+
+            $this->modx->regClientStartupScript($tinySource); // ever-current official CDN
+            /* Load Tiny configuration chunk */
+            $this->modx->regClientStartupScript($this->modx->getChunk($tinyChunk, $tinyproperties));
 
         } /* end if ($richtext) */
 } /* end init */
