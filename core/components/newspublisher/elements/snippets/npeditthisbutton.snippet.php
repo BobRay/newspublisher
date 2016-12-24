@@ -48,7 +48,7 @@
  */
 
 /* @var $modx modX */
-/* ToDo: Internationalize button caption debug messages */
+
 $props =& $scriptProperties;
 $thisId = $modx->resource->get('id');
 /* let user &language property override default language */
@@ -117,7 +117,7 @@ if (empty($npId)) {
     } else {
         $success = false;
     }
-    /* Failed - turn on debug to error message will display in button */
+    /* Failed - turn on debug so error message will display in button */
     if (!$success) {
         $defaultButtonCaption = $modx->lexicon('np_no_np_id');
         $debug = true;

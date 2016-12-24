@@ -755,7 +755,6 @@ class Newspublisher {
                     $retVal = $this->parentObj->get($field);
                 }
             } elseif ($field == 'groups') {
-                /* ToDo: Sanity Check groups here (or in _setGroups() ) */
                 $retVal = $this->_setGroups($prop);
             }
         } else { /* not 1, 0, or parent; use system default except for groups */
@@ -1872,7 +1871,6 @@ class Newspublisher {
         $fields = array_merge($oldFields, $_POST);
         if (!$this->existing) { /* new document */
 
-            /* ToDo: Move this to init()? */
             /* set alias name of document used to store articles */
             if (empty($fields['alias'])) { /* leave it alone if filled */
                 if (!$this->aliasTitle) {
