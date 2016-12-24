@@ -280,7 +280,7 @@ $components = array(
             'alias' => 'npelfinder',
             'context_key' => 'web',
             'parent' => 'NewsPublisher',
-            'template' => 'npElFinderConnectorTemplate',
+            'template' => 'npElFinderTemplate',
             'richtext' => false,
             'published' => true,
         ),
@@ -448,6 +448,7 @@ $components = array(
         'snippets',
         'chunks',
         'templates',
+        'resources',
     ),
     /*  Array  of resources to process. You can specify specific resources
         or parent (container) resources, or both.
@@ -458,6 +459,7 @@ $components = array(
     'getResourcesById' => false,
 
     'exportResources' => array(
+        'npElFinder',
     ),
     /* Array of resource parent IDs to get children of. */
     'parents' => array(),

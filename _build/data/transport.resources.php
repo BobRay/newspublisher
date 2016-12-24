@@ -2,7 +2,7 @@
 /**
  * resources transport file for NewsPublisher extra
  *
- * Copyright 2013-2015 by Bob Ray <http://bobsguides.com>
+ * Copyright 2013-2017 by Bob Ray <http://bobsguides.com>
  * Created on 12-20-2016
  *
  * @package newspublisher
@@ -28,17 +28,39 @@ $resources = array();
 $resources[1] = $modx->newObject('modResource');
 $resources[1]->fromArray(array (
   'id' => 1,
-  'pagetitle' => 'npElFinderConnector',
-  'alias' => 'npelfinderconnector',
-  'context_key' => 'web',
-  'template' => 'npElFinderConnectorTemplate',
-  'richtext' => false,
+  'type' => 'document',
+  'contentType' => 'text/html',
+  'pagetitle' => 'npElFinder',
+  'longtitle' => '',
+  'description' => 'Called from TinyMCE. URL specified in the npTinymceInitTpl chunk in the autobrowser section.',
+  'alias' => 'npelfinder',
+  'link_attributes' => '',
   'published' => true,
+  'isfolder' => false,
+  'introtext' => '',
+  'richtext' => false,
+  'template' => 'npElFinderTemplate',
+  'menuindex' => 2,
+  'searchable' => true,
+  'cacheable' => true,
+  'createdby' => 1,
+  'editedby' => 1,
+  'deleted' => false,
+  'deletedon' => 0,
+  'deletedby' => 0,
+  'menutitle' => '',
+  'donthit' => false,
+  'privateweb' => false,
+  'privatemgr' => false,
+  'content_dispo' => 0,
+  'hidemenu' => false,
   'class_key' => 'modDocument',
-  'hidemenu' => '0',
-  'cacheable' => '1',
-  'searchable' => '1',
+  'context_key' => 'web',
+  'content_type' => 1,
+  'hide_children_in_tree' => 0,
+  'show_in_tree' => 1,
+  'properties' => NULL,
 ), '', true, true);
-$resources[1]->setContent(file_get_contents($sources['data'].'resources/npelfinderconnector.content.html'));
+$resources[1]->setContent(file_get_contents($sources['data'].'resources/npelfinder.content.html'));
 
 return $resources;
