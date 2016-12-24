@@ -53,4 +53,16 @@ $properties = include $sources['data'].'properties/properties.npeditthisbutton.s
 $snippets[2]->setProperties($properties);
 unset($properties);
 
+$snippets[3] = $modx->newObject('modSnippet');
+$snippets[3]->fromArray(array (
+  'id' => 3,
+  'property_preprocess' => false,
+  'name' => 'npElFinderContent',
+  'description' => '',
+  'properties' => 
+  array (
+  ),
+), '', true, true);
+$snippets[3]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/npelfindercontent.snippet.php'));
+
 return $snippets;

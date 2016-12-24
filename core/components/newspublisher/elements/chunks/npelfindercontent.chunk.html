@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset="utf-8">
+        <title>elFinder 2.1.x source version with PHP connector</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2" />
+     <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <!-- elFinder CSS (REQUIRED) -->
+   <link rel="stylesheet" type="text/css" href="http://localhost/addons/assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/css/theme.css">
+   <!--<link rel="stylesheet" type="text/css" media="screen" href="http://addons/assets/components/tinymcewrapper/elfinderthemes/moono/css/theme.css">--> <!-- ? &name=`theme` &max=`5`]] -->
+   <!--<link rel="stylesheet" type="text/css" media="screen" href="[[++np.assets_url]]components/tinymcewrapper/elfinderthemes/windows-10/css/theme.css">--><!--`? &name=`theme` &max=`9`]]-->
+
+      <script src="http://localhost/addons/assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/js/elfinder.min.js"
+                type="text/javascript"></script>
+
+        <script type="text/javascript">
+
+            var FileBrowserDialogue = {
+                init: function () {
+                    // Here goes your code for setting your custom things onLoad.
+                },
+                mySubmit: function (URL) {
+                    // pass selected file path to TinyMCE
+                    parent.tinymce.activeEditor.windowManager.getParams().setUrl(URL);
+
+                    // force the TinyMCE dialog to refresh and fill in the image dimensions
+                    var t = parent.tinymce.activeEditor.windowManager.windows[0];
+                    t.find('#src').fire('change');
+
+                    // close popup window
+                    parent.tinymce.activeEditor.windowManager.close();
+                }
+            };
+
+            $().ready(function () {
+                var elf = $('#elfinder').elfinder({
+                    // set your elFinder options here
+                    // assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/php/myconnector.php
+                    url: 'http://localhost/addons/assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/php/myconnector.php', // WORKS
+                    // url: 'http://localhost/addons/assets/components/tinymcewrapper/browserConnectors/elfinder.php',
+                     width : window.innerWidth-20,
+                     height : window.innerHeight-20,
+                    getFileCallback: function (file) { // editor callback
+                        // file.url - commandsOptions.getfile.onlyURL = false (default)
+                        // file     - commandsOptions.getfile.onlyURL = true
+                        FileBrowserDialogue.mySubmit(file.url); // pass selected file path to TinyMCE
+                    }
+                }).elfinder('instance');
+            });
+
+            /* Added */
+            jQuery.browser = {};
+            (function () {
+                jQuery.browser.msie = false;
+                jQuery.browser.version = 0;
+                if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
+                    jQuery.browser.msie = true;
+                    jQuery.browser.version = RegExp.$1;
+                }
+            })();
+
+
+        </script>
+        <!-- Require JS (REQUIRED) -->
+        <!-- Rename "main.default.js" to "main.js" and edit it if you need configure elFInder options or any things -->
+    <!-- <script data-main="./main.default.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js"></script>-->
+
+    </head>
+    <body>
+
+        <!-- Element where elFinder will be created (REQUIRED) -->
+        <div id="elfinder"></div>
+
+    </body>
+</html>
