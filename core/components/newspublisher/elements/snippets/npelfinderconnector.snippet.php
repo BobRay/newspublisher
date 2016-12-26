@@ -6,7 +6,11 @@ error_reporting(0); // Set E_ALL for debuging
 
 // elFinder autoload
 // require './autoload.php';
-require 'C:/xampp/htdocs/addons/assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/php/autoload.php';
+$assetsPath = $modx->getOption('np.assets_path', null, $modx->getOption('assets_path', null) . 'components/newspublisher/');
+
+// require 'C:/xampp/htdocs/addons/assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/php/autoload.php';
+
+require $assetsPath . 'elfinder/php/autoload.php';
 // ===============================================
 
 // Enable FTP connector netmount
