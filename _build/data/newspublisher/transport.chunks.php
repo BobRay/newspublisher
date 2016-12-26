@@ -206,7 +206,7 @@ $chunks[18]->fromArray(array (
   'id' => 18,
   'property_preprocess' => false,
   'name' => 'npElFinderContent',
-  'description' => 'Loaded by ElFinderConent snippet into npElFinder resource.',
+  'description' => 'Loaded by ElFinderContent snippet into npElFinder resource.',
   'properties' => 
   array (
   ),
