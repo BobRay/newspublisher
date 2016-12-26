@@ -10,7 +10,7 @@
     title: 'elFinder 2.0',
     width : window.innerWidth/1.2,
     height : window.innerHeight/1.2,
-    resizable: 'yes',
+    resizable: 'yes'
   }, {
     setUrl: function (url) {
       win.document.getElementById(field_name).value = url;
@@ -36,11 +36,11 @@
     external_plugins: {
     // twAceEditor: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twAceEditor.js",
     // twCodeMirror: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twCodeMirror.js",
-    // C:\xampp\htdocs\addons\assets\components\tinymcewrapper\tinymceplugins\tinymceBubbleBar.js
     // bubbleBar: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/tinymceBubbleBar.js",
     //twExoticMarkdownEditor: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twExoticMarkdownEditor.js",
-    modxMagicHoverLink: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/modxMagicHoverLink.js",
-    twPreCodeManager: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twPreCodeManager.js"
+    // twPreCodeManager: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twPreCodeManager.js"
+    twPreCodeManager: "[[+npAssetsURL]]js/twPreCodeManager.js" // original
+   // twPreCodeManager: "[[+npAssetsURL]]js/npFixedPre.js"
   },
   
 
