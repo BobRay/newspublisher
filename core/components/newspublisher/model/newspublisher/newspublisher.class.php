@@ -677,6 +677,7 @@ class Newspublisher {
             $language = $this->modx->getOption('language', $this->props, 'en', true);
             /* Tinyproperties is the array sent to getChunk to replace placeholder */
             $tinyproperties['language'] = '"' . $language . '"';
+            $tinyproperties['npAssetsURL'] = $this->assetsUrl;
 
 
             /* Load Tiny JS */
