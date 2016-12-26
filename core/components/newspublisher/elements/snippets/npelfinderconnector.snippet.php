@@ -96,13 +96,24 @@ function access($attr, $path, $data, $volume) {
 // Documentation for connector options:
 // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
 
+
+$path = $modx->getOption('browserStartPath', $scriptProperties, $modx->getOption('base_path') . 'assets/images', true);
+/* Remove any trailing slash */
+$path = rtrim($path, '/\\');
+
+$url = $modx->getOption('browserStartURL', $scriptProperties, $modx->getOption('base_url') . 'assets/images', true);
+/* Remove any trailing slash */
+$url = rtrim($url, '/\\');
+
 $opts = array(
     // 'debug' => true,
     'roots' => array(
         array(
             'driver'        => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
-            'path' => 'c:/xampp/htdocs/addons/assets/images',                 // path to files (REQUIRED) This works!
-            'URL'           =>   'http://localhost/addons/assets/images', // URL to files (REQUIRED)
+            // 'path' => 'c:/xampp/htdocs/addons/assets/images',                 // path to files (REQUIRED) This works!
+            'path' => $path,
+            // 'URL'           =>   'http://localhost/addons/assets/images', // URL to files (REQUIRED)
+            'URL' => $url,
             'uploadDeny'    => array('all'),                // All Mimetypes not allowed to upload
             'uploadAllow'   => array('image', 'text/plain'),// Mimetype `image` and `text/plain` allowed to upload
             'uploadOrder'   => array('deny', 'allow'),      // allowed Mimetype `image` and `text/plain` only
