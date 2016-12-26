@@ -1,5 +1,4 @@
 <?php
-
 error_reporting(0); // Set E_ALL for debuging
 
 // load composer autoload before load elFinder autoload If you need composer
@@ -115,4 +114,4 @@ $opts = array(
 // run elFinder
 $connector = new elFinderConnector(new elFinder($opts));
 $connector->run();
-
+return '';

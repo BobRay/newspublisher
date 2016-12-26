@@ -57,12 +57,24 @@ $snippets[3] = $modx->newObject('modSnippet');
 $snippets[3]->fromArray(array (
   'id' => 3,
   'property_preprocess' => false,
+  'name' => 'npElFinderConnector',
+  'description' => 'Runs from a tag on the npElFinderConnector resource. Calls the real elFinder connector.',
+  'properties' => 
+  array (
+  ),
+), '', true, true);
+$snippets[3]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/npelfinderconnector.snippet.php'));
+
+$snippets[4] = $modx->newObject('modSnippet');
+$snippets[4]->fromArray(array (
+  'id' => 4,
+  'property_preprocess' => false,
   'name' => 'npElFinderContent',
   'description' => '',
   'properties' => 
   array (
   ),
 ), '', true, true);
-$snippets[3]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/npelfindercontent.snippet.php'));
+$snippets[4]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/npelfindercontent.snippet.php'));
 
 return $snippets;

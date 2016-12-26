@@ -284,6 +284,16 @@ $components = array(
             'richtext' => false,
             'published' => true,
         ),
+        'npElFinderConnector' => array(
+                'pagetitle' => 'npElFinderConnector',
+                'alias' => 'npelfinderconnector',
+                'context_key' => 'web',
+                'parent' => 'NewsPublisher',
+                'template' => 'npElFinderTemplate',
+                'richtext' => false,
+                'published' => true,
+
+        ),
     ),
 
     /* Array of languages for which you will have language files,
