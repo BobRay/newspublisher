@@ -678,6 +678,12 @@ class Newspublisher {
             /* Tinyproperties is the array sent to getChunk to replace placeholder */
             $tinyproperties['language'] = '"' . $language . '"';
             $tinyproperties['npAssetsURL'] = $this->assetsUrl;
+            $tinyproperties['width'] = empty ($this->props['tinywidth'])
+                ? '95%'
+                : $this->props['tinywidth'];
+            $tinyproperties['height'] = empty ($this->props['tinyheight'])
+                ? '400px'
+                : $this->props['tinyheight'];
 
 
             /* Load Tiny JS */
