@@ -33,14 +33,16 @@
     // remove_script_host: false,
     // height: [[+height]],
     // width: [[+width]],
+    extended_valid_elements : "fixedpre",
+    custom_elements: "fixedpre",
+   
     external_plugins: {
     // twAceEditor: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twAceEditor.js",
     // twCodeMirror: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twCodeMirror.js",
     // bubbleBar: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/tinymceBubbleBar.js",
-    //twExoticMarkdownEditor: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twExoticMarkdownEditor.js",
-    // twPreCodeManager: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twPreCodeManager.js"
-    twPreCodeManager: "[[+npAssetsURL]]js/twPreCodeManager.js" // original
-   // twPreCodeManager: "[[+npAssetsURL]]js/npFixedPre.js"
+    // twExoticMarkdownEditor: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twExoticMarkdownEditor.js",
+    // twPreCodeManager: "[[+npAssetsURL]]js/twPreCodeManager.js" // original
+    // twPreCodeManager: "[[+npAssetsURL]]js/npFixedPre.js"
   },
   
 
@@ -51,12 +53,13 @@
     paste_data_images: false,
     statusbar: true,
     resize: true,
-    plugins: "imagetools,autoresize,preview,paste,contextmenu,image,wordcount,fullscreen,code,charmap,searchreplace,textpattern,emoticons,insertdatetime,link",
+    plugins: "imagetools,autoresize,preview,paste,contextmenu,image,wordcount,fullscreen,code,charmap,searchreplace,textpattern,emoticons,insertdatetime,link,codesample",
     // plugins: "imagetools contextmenu autosave save paste image link searchreplace",
     menubar: false,
     toolbar: "fullscreen | code | undo redo | blockquote | bold italic alignleft aligncenter alignright | bullist numlist | link unlink | image | styleselect charmap emoticons insertdatetime searchreplace",
-    contextmenu: "code | twPreCodeManager | fullscreen | removeformat | link | image | codesample"
-  
+      // contextmenu: "code | twPreCodeManager | fullscreen | removeformat | link | image"
+      contextmenu: "code | fullscreen | removeformat | link | image"
+
   });
   
 // end of tpl chunk
