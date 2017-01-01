@@ -664,11 +664,6 @@ class Newspublisher {
 
         if ($this->props['initrte']) {
 
-            /* Remove manager specific initialization code (which may depend on ModExt)
-               and fire loadRTE()  */
-
-
-
             /* Get location to load TinyMCE fom */
             $tinySource = $this->modx->getOption('tinysource', $this->props, "//cdn.tinymce.com/4/tinymce.min.js", true);
 
@@ -694,7 +689,9 @@ class Newspublisher {
             $this->modx->regClientStartupHTMLBlock('
                 <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
                 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-                <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>'
+                <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+                <script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js"
+                type="text/javascript"></script >'
             );
 
             $fields = array(
