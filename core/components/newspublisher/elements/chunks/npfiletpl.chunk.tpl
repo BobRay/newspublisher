@@ -15,14 +15,18 @@ $('#elfinder_button').on('click', function() {
           zIndex: 99999,
            // don't know why this is necessary, but without it this only works once
           commandsOptions: {},
-          url : 'http://localhost/addons/npelfinderconnector.html',
+          url : '[[++site_url]]npelfinderconnector.html',
           width: '80%',
           height: '600px',
           getFileCallback: function(file) {
-            // var filePath = file; // (file is an object)
-            // console.log(file.path);
-            $('#np-[[+npx.fieldName]]').val('[[++assets_path]]' + file.path); // put the file path in the input field
-            $('#editor').remove(); //close the window after image is selected
+             var filePath = file.url.replace('\\','/'); // (normalize file path)
+             var base = file.baseUrl.replace('\\','/');
+             var finalPath = filePath.replace(base, '');
+             $('#np-[[+npx.fieldName]]').val(finalPath); // put the file path in the input field
+             $('#editor').remove(); //close the window after image is selected
+             // console.log(filePath);
+             // console.log(file.url);
+             // console.log(file.baseUrl);
           }
   });
 });
