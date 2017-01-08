@@ -71,7 +71,9 @@ $chunks[5]->fromArray(array (
   'property_preprocess' => false,
   'name' => 'npImageTpl',
   'description' => 'Tpl chunk for NewsPublisher image TVs',
-  'properties' => NULL,
+  'properties' => 
+  array (
+  ),
 ), '', true, true);
 $chunks[5]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/npimagetpl.chunk.tpl'));
 
@@ -81,7 +83,9 @@ $chunks[6]->fromArray(array (
   'property_preprocess' => false,
   'name' => 'npFileTpl',
   'description' => 'Tpl chunk for NewsPublisher file TVs',
-  'properties' => NULL,
+  'properties' => 
+  array (
+  ),
 ), '', true, true);
 $chunks[6]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/npfiletpl.chunk.tpl'));
 
