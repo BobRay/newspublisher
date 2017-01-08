@@ -109,6 +109,8 @@ $url = $modx->getOption('browserStartURL', $scriptProperties, $modx->getOption('
 /* Remove any trailing slash */
 $url = rtrim($url, '/\\');
 
+$tmbSize = $modx->getOption('tmbSize', $scriptProperties, 150, true);
+
 $opts = array(
     // 'debug' => true,
     'roots' => array(
@@ -121,6 +123,7 @@ $opts = array(
             'uploadDeny'    => array('all'),                // All Mimetypes not allowed to upload
             'uploadAllow'   => array('image', 'text/plain'),// Mimetype `image` and `text/plain` allowed to upload
             'uploadOrder'   => array('deny', 'allow'),      // allowed Mimetype `image` and `text/plain` only
+            'tmbSize'       => $tmbSize,
             'accessControl' => 'access'                     // disable and hide dot starting files (OPTIONAL)
         )
     )
