@@ -252,7 +252,7 @@ class Newspublisher {
         return $this->isPostBack;
     }
 
-    /** Initialize variables and placeholders.
+    /** Initialize variables and placeholders - load RTE and file browser if called for.
      *  Uses $_POST on postback.
      *  Checks for an existing resource to edit in $_POST.
      *  Sets errors on failure.
@@ -440,15 +440,11 @@ class Newspublisher {
                 return;
             }
 
-
             /* Create new resource object */
             $this->resource = $this->modx->newObject($this->classKey);
 
-
-
             /* get folder id where we should store the new resource,
              else store under current document */
-
             if (isset($this->props['parent'])) {
                 $this->props['parentid'] = $this->props['parent'];
                 unset($this->props['parent']);
@@ -463,6 +459,7 @@ class Newspublisher {
             }
             unset($temp);
 
+            /* Set some field defaults */
 
             $this->resource->set('parent', $this->parentId);
 
@@ -494,6 +491,8 @@ class Newspublisher {
                 : $this->_setDefault('published',$this->parentId);
             $this->resource->set('published', $this->published);
 
+            /* This is the default for the richtext checkbox --
+               nothing to do with whether NP uses an RTE */
             $this->richtext = isset($_POST['richtext'])
                 ? $_POST['richtext']
                 : $this->_setDefault('richtext',$this->parentId);
@@ -535,6 +534,7 @@ class Newspublisher {
             unset($f, $fArray,$dirty);
         }
 
+        /* Set some control properties */
         if( !empty($this->props['badwords'])) {
             $this->badwords = str_replace(' ','', $this->props['badwords']);
             $this->badwords = "/".str_replace(',','|', $this->badwords)."/i";
@@ -549,7 +549,7 @@ class Newspublisher {
             ? array()
             : explode(',', $temp);
         $this->parents = $this->getParents();
-        // echo "<br />$this->parents init: " . print_r($this->parents, true). '<br />';
+
         if($this->props['initdatepicker']) {
             $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
             $this->modx->regClientStartupHTMLBlock('<script type=text/javascript src="' .
@@ -571,141 +571,44 @@ class Newspublisher {
             ? $this->props['textmaxlength']
             : 60;
 
-        /* TinyMceWrapper */
-
-        if (false && $this->props['initrte']) {
-            $src = '<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="//cdn.tinymce.com/4/tinymce.min.js"></script>';
-            //. "<script>tinymce.init({selector:'textarea'});</script>";
-            $this->modx->regClientStartupScript($src);
-            $fullSrc = '<script type="text/javascript">$(document).ready(function() {';
-
-
-            if ($this->modx->getOption('rtcontent', $this->props)) {
-                $src = "\n" . $this->modx->getChunk('TinymceWrapperContent');
-                $src = str_replace('#ta', '#np-content', $src);
-                $fullSrc .= $src;
-            }
-            if ($this->modx->getOption('rtsummary', $this->props)) {
-                $src = "\n" .$this->modx->getChunk('TinymceWrapperIntrotext');
-                $src = str_replace('#modx-resource-introtext', '#np-introtext', $src);
-                $fullSrc .= $src;
-            }
-            if ($this->modx->getOption('rtdescription', $this->props)) {
-                $src = "\n" . $this->modx->getChunk('TinymceWrapperDescription');
-                $src = str_replace('#modx-resource-description', '#np-description', $src);
-                $fullSrc .= $src;
-            }
-            if (!empty($fullSrc)) {
-                $this->modx->regClientStartupScript($fullSrc . '
-                });' . "\n</script>");
-            }
-        }
-
-
-        /* new code from Markus Schlegel */
-        if (false && $this->props['initrte']) {
-
-            $whichEditor = $this->modx->getOption('which_editor', $this->props,'TinyMCE');
-
-            if ($whichEditor == 'TinyMCE' ) {
-                $_REQUEST['a'] = '';  /* fixes E_NOTICE bug in TinyMCE */
-                $plugin=$this->modx->getObject('modPlugin',array('name'=>'TinyMCE'));
-
-                /* set rich text content placeholders and includes necessary js files */
-                $this->modx->regClientStartupScript($this->modx->getOption('manager_url') .
-                    'assets/ext3/adapter/ext/ext-base.js');
-                $this->modx->regClientStartupScript($this->modx->getOption('manager_url') .
-                    'assets/ext3/ext-all.js');
-                $this->modx->regClientStartupScript($this->modx->getOption('manager_url') .
-                    'assets/modext/core/modx.js');
-
-                $tinyPath = $this->modx->getOption('core_path') .
-                    'components/tinymce/';
-                $tinyUrl = $this->modx->getOption('assets_url') .
-                    'components/tinymce/';
-                /* @var $plugin modPlugin */
-                $tinyproperties=$plugin->getProperties();
-
-                /* Added by Markus for 2.3 */
-                $actionObj = $this->modx->getObject('modAction',
-                    array('namespace' => 'core', 'controller' => 'browser'));
-                $action = $actionObj ? $actionObj->get('id') : 'browser';
-                $tinyproperties["browserUrl"] = $this->modx->getOption('manager_url',
-                        null,MODX_MANAGER_URL).'index.php?a='.$action;
-                /* ************* */
-
-                require_once $tinyPath.'tinymce.class.php';
-                $tiny = new TinyMCE($this->modx, $tinyproperties);
-
-                $tinyproperties['language'] =
-                    $this->modx->getOption('fe_editor_lang',array(),$language);
-                $tinyproperties['frontend'] = true;
-                $tinyproperties['cleanup'] = true; /* prevents "bogus" bug */
-                $tinyproperties['width'] = empty ($this->props['tinywidth'] )
-                    ? '95%'
-                    : $this->props['tinywidth'];
-                $tinyproperties['height'] = empty ($this->props['tinyheight'])
-                    ? '400px'
-                    : $this->props['tinyheight'];
-                $tinyproperties['resource'] = $this->resource;
-                $tiny->setProperties($tinyproperties);
-                $tiny->initialize();
-
-                $this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
-                    // delete Tiny.config.setup; // remove manager specific initialization code (depending on ModExt)
-                    $().ready(function () {
-                        MODx.loadRTE();
-                    });
-                </script>');
-
-            } /* end if ($whichEditor == 'TinyMCE') */
-
-        } /* end if ($richtext) */
-
+        /* Rich Text Editing and/or file or image TVs */
         if ($this->props['initrte']) {
 
             /* Get location to load TinyMCE fom */
             $tinySource = $this->modx->getOption('tinysource', $this->props, "//cdn.tinymce.com/4/tinymce.min.js", true);
+            // $this->modx->log(modX::LOG_LEVEL_ERROR, 'tinysource ' . $tinySource);
 
             /* Get name of TinyMCE configuration chunk */
             $tinyChunk = $this->modx->getOption('tinymceinittpl', $this->props, 'npTinymceInitTpl', true);
             $language = $this->modx->getOption('language', $this->props, 'en', true);
-            /* Tinyproperties is the array sent to getChunk to replace placeholder */
+
+            /* Tinyproperties is the array sent to getChunk to replace the placeholders in $tinyChunk */
             $tinyproperties['language'] = '"' . $language . '"';
             $tinyproperties['npAssetsURL'] = $this->assetsUrl;
-            $tinyproperties['width'] = empty ($this->props['tinywidth'])
-                ? '95%'
-                : $this->props['tinywidth'];
-            $tinyproperties['height'] = empty ($this->props['tinyheight'])
-                ? '400px'
-                : $this->props['tinyheight'];
+            $tinyproperties['width'] = $this->modx->getOption('tinywidth', $this->props, '95%', true);
+            $tinyproperties['height'] = $this->modx->getOption('tinyheight', $this->props, '400px', true);
 
-
-            /* Load Tiny JS */
-            /*$this->modx->regClientStartupHTMLBlock('
-            <script src="' . $tinySource . '"></script > '); // ever-current official CDN*/
-
-            /* Load Tiny configuration chunk */
+            /* Load JQuery and elFinder JS */
             $this->modx->regClientStartupHTMLBlock('
                 <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-                <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-                <script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js"
-                type="text/javascript"></script >'
+                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" type="text/javascript"></script>
+                <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+                <script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js" type="text/javascript"></script >'
             );
 
+            /* Fire OnRichTextEditorInit (probably unnecessary) */
             $fields = array(
                 'editor' => 'TinyMCE',
                 'elements' => '',
                 'forfrontend' => 1,
-                // 'width' => $w,
-                // height' => $h
             );
 
             $this->modx->invokeEvent('OnRichTextEditorInit', $fields);
 
-            $this->modx->regClientStartupScript($tinySource); // ever-current official CDN
-            /* Load Tiny configuration chunk */
+            /* Inject Tiny Source */
+            $this->modx->regClientStartupScript($tinySource);
+
+            /* Inject Tiny configuration chunk */
             $this->modx->regClientStartupScript($this->modx->getChunk($tinyChunk, $tinyproperties));
 
         } /* end if ($richtext) */
@@ -805,7 +708,7 @@ class Newspublisher {
     }
 
 
-    /** return a specified tpl
+    /** return a specified Tpl chunk
      *
      * @access public
      * @param $tpl string - tpl name
@@ -1470,6 +1373,7 @@ class Newspublisher {
                 /* code adapted from core/model/modx/processors/element/tv/renders/mgr/input/file.php
                  * and (...)/image.php */
 
+                /* remove this? */
                 $this->modx->getService('fileHandler',
                     'modFileHandler', '', array('context' => $this->context));
                 $params['wctx'] = $this->context;
@@ -1643,13 +1547,14 @@ class Newspublisher {
 
     protected function _displayFileInput($name, $tplName, $sourceOptions = array(), $openTo = '') {
         /* @var $browserAction modAction */
-        $browserAction = $this->modx->getObject('modAction',
+
+       /* $browserAction = $this->modx->getObject('modAction',
             array('namespace' => 'newspublisher', 'controller' => 'filebrowser'));
         $browserUrl = $browserAction ? $this->modx->getOption('manager_url',null,
-                MODX_MANAGER_URL).'index.php?a='.$browserAction->get('id') : null;
-
+                MODX_MANAGER_URL).'index.php?a='.$browserAction->get('id') : null;*/
+        $browserUrl = true;
         if ($browserUrl) {
-            $phpthumbUrl = $this->modx->getOption('connectors_url',null,
+          /*  $phpthumbUrl = $this->modx->getOption('connectors_url',null,
                     MODX_CONNECTORS_URL) . 'system/phpthumb.php?';
             foreach ($sourceOptions as $key => $value) {
                 $phpthumbUrl .= "&{$key}={$value}";
@@ -1657,13 +1562,15 @@ class Newspublisher {
 
             $browserUrl .= '&field=' . $name;
             $sourceOptions['openTo'] = $openTo;
-            $_SESSION['newspublisher']['filebrowser'][$name] = $sourceOptions;
+            $_SESSION['newspublisher']['filebrowser'][$name] = $sourceOptions;*/
 
-             $PHs = array(
-                '[[+npx.phpthumbBaseUrl]]' => $phpthumbUrl,
-                '[[+npx.browserUrl]]'   => $browserUrl
-            );
-            
+            $PHs = array();
+
+            // $PHs = array(
+            //    '[[+npx.phpthumbBaseUrl]]' => $phpthumbUrl,
+            //    '[[+npx.browserUrl]]'   => $browserUrl
+            //);
+
             return $this->strReplaceAssoc($PHs, $this->getTpl($tplName));
 
         } else {
