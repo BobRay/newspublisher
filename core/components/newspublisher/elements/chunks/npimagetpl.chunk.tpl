@@ -11,8 +11,14 @@
              width: "80%", 
              title: "Double-click to select your file", 
              zIndex: 99999,
-             // don't know why this is necessary, but without it this only works once
-             commandsOptions: {},
+             
+             // Disable kb shortcuts for these commands, otherwise they still work even if they are listed as disabled
+             commandsOptions: {
+               upload : {shortcuts : []},
+               rm : {shortcuts : []},
+               download : {shortcuts : []}
+             },
+             // 'allowShortcuts' : false,
              url : 'http://localhost/addons/npelfinderconnector.html',
              width: '80%',
              height: '600px',
