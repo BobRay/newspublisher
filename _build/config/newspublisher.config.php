@@ -156,9 +156,19 @@ $components = array(
                 'description' => 'NewsPublisher main snippet',
             ),
 
-            'NpEditThisButton' => array( /* newspublisher with static and property set(s)  */
+            'NpEditThisButton' => array(
                 'category' => 'NewsPublisher',
                 'description' => 'Snippet to display Edit button for NewsPublisher',
+            ),
+
+            'npElFinderConnector' => array(
+                'category' => 'NewsPublisher',
+                'description' => 'Runs from a tag on the npElFinderConnector resource',
+            ),
+
+            'npElFinderContent' => array(
+                'category' => 'NewsPublisher',
+                'description' => 'Loads the npElFinderContent chunk',
             ),
 
         ),

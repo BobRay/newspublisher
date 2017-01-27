@@ -58,7 +58,7 @@ $snippets[3]->fromArray(array (
   'id' => 3,
   'property_preprocess' => false,
   'name' => 'npElFinderConnector',
-  'description' => 'Runs from a tag on the npElFinderConnector resource. Calls the real elFinder connector.',
+  'description' => 'Runs from a tag on the npElFinderConnector resource.',
   'properties' => 
   array (
   ),
