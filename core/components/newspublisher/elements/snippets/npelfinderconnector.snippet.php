@@ -130,9 +130,7 @@ $opts = array(
     'roots' => array(
         array(
             'driver'        => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
-            // 'path' => 'c:/xampp/htdocs/addons/assets/images',                 // path to files (REQUIRED) This works!
             'path' => $path,
-            // 'URL'           =>   'http://localhost/addons/assets/images', // URL to files (REQUIRED)
             'URL' => $url,
             'uploadDeny'    => array('all'),                // All Mimetypes not allowed to upload
             'uploadAllow'   => array('image', 'text/plain'),// Mimetype `image` and `text/plain` allowed to upload
