@@ -256,6 +256,17 @@ $components = array(
                 'category'    => 'NewsPublisher',
                 'filename'    => 'npoptiontpl.chunk.tpl',
             ),
+            'npElFinderContent' => array(
+                'description' => 'Loaded by ElFinderContent snippet into npElFinder resource.',
+                'category' => 'NewsPublisher',
+                'filename' => 'npelfindercontent.chunk.tpl',
+            ),
+
+            'npTinymceInitTpl' => array(
+                'description' => 'Javascript configuration code for TinyMCE in Newspublisher',
+                'category' => 'NewsPublisher',
+                'filename' => 'nptinymceinittpl.chunk.tpl',
+            ),
         ),
 
         'templates' => array(

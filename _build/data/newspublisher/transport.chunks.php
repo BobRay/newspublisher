@@ -203,7 +203,7 @@ $chunks[17]->fromArray(array (
   array (
   ),
 ), '', true, true);
-$chunks[17]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/nptinymceinittpl.chunk.html'));
+$chunks[17]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/nptinymceinittpl.chunk.tpl'));
 
 $chunks[18] = $modx->newObject('modChunk');
 $chunks[18]->fromArray(array (
@@ -215,6 +215,6 @@ $chunks[18]->fromArray(array (
   array (
   ),
 ), '', true, true);
-$chunks[18]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/npelfindercontent.chunk.html'));
+$chunks[18]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/npelfindercontent.chunk.tpl'));
 
 return $chunks;
