@@ -28,7 +28,6 @@
     relative_urls: true,
     image_advtab: true,
     skin_url: '[[++assets_url]]components/tinymcewrapper/tinymceskins/modxPericles',
-    // document_base_url: 'http://localhost/addons/',
     document_base_url: '[[++site_url]]',
     // remove_script_host: false,
     // height: [[+height]],

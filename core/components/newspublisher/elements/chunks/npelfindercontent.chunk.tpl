@@ -13,8 +13,6 @@
    <!--<link rel="stylesheet" type="text/css" media="screen" href="http://addons/assets/components/tinymcewrapper/elfinderthemes/moono/css/theme.css">--> <!-- ? &name=`theme` &max=`5`]] -->
    <!--<link rel="stylesheet" type="text/css" media="screen" href="[[++assets_url]]components/tinymcewrapper/elfinderthemes/windows-10/css/theme.css">--><!--`? &name=`theme` &max=`9`]]-->
 
-   <!--   <script src="http://localhost/addons/assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/js/elfinder.min.js"
-                type="text/javascript"></script> -->
               <!--  Necessary to have elfinder js in iFrame -->
    <script src="[[+npAssetsURL]]elfinder/js/elfinder.min.js"
                 type="text/javascript"></script>
@@ -49,13 +47,12 @@
                     },
                    */
 
-                   //  url: 'http://localhost/addons/assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/php/myconnector.php', // WORKS
+                   // url: 'http://localhost/addons/npelfinderconnector.html',
+                    url: '[[++site_url]]npelfinderconnector.html',
                    
-                   url: 'http://localhost/addons/npelfinderconnector.html',
-                   
-                    // url: 'http://localhost/addons/assets/components/tinymcewrapper/browserConnectors/elfinder.php',
-                     width : window.innerWidth-20,
-                     height : window.innerHeight-20,
+
+                    width : window.innerWidth-20,
+                    height : window.innerHeight-20,
                     getFileCallback: function (file) { // editor callback
                         // file.url - commandsOptions.getfile.onlyURL = false (default)
                         // file     - commandsOptions.getfile.onlyURL = true
