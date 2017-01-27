@@ -111,6 +111,20 @@ $url = rtrim($url, '/\\');
 
 $tmbSize = $modx->getOption('tmbSize', $scriptProperties, 150, true);
 
+$disable = $modx->getOption('disableCommands', $scriptProperties, '', true);
+if (!empty($disable)) {
+
+   $disabledCommands = array_map('trim', explode(',', $disable));
+} else {
+  
+   $disabledCommands = array('archive', 'open', 'view', 'quicklook', 'edit', 'mkdir', 'mkfile', 'duplicate','cut', 'copy', 'paste', 'rm', 'rename', 'upload', 'download', 'netmount');
+}
+
+/* Possible commands: 'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
+    'download', 'rm', 'duplicate', 'rename', 'mkfile', 'upload', 'copy',
+    'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help', 'fullscreen' */
+
+
 $opts = array(
     // 'debug' => true,
     'roots' => array(
@@ -124,9 +138,12 @@ $opts = array(
             'uploadAllow'   => array('image', 'text/plain'),// Mimetype `image` and `text/plain` allowed to upload
             'uploadOrder'   => array('deny', 'allow'),      // allowed Mimetype `image` and `text/plain` only
             'tmbSize'       => $tmbSize,
-            'accessControl' => 'access'                     // disable and hide dot starting files (OPTIONAL)
+            'accessControl' => 'access',                     // disable and hide dot starting files (OPTIONAL)
+            'acceptedName'    => '/^[^\.].*$/',
+            'disabled' => $disabledCommands
         )
-    )
+    ),
+    
 );
 
 // run elFinder
