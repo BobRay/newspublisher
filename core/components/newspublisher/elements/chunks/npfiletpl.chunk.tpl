@@ -10,7 +10,8 @@
 $('#elfinder_button').on('click', function() {
   $('<div id="editor" />').dialogelfinder({
           modal: true, 
-          width: "80%", 
+          width: "80%",
+          height: '600px',
           title: "Double-click to select your file", 
           zIndex: 99999,
           // Disable kb shortcuts for these commands, otherwise they still work even if they are listed as disabled
@@ -22,8 +23,8 @@ $('#elfinder_button').on('click', function() {
           allowShortcuts : false,
 
           url : '[[++site_url]]npelfinderconnector.html',
-          width: '80%',
-          height: '600px',
+
+
           getFileCallback: function(file) {
              var filePath = file.url.replace('\\','/'); // (normalize file path)
              var base = file.baseUrl.replace('\\','/');

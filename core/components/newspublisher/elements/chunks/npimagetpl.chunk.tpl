@@ -8,7 +8,8 @@
         $('#np-[[+npx.fieldName]]_button').on('click', function() {
           $('<div id="editor" />').dialogelfinder({
              modal: true, 
-             width: "80%", 
+             width: "80%",
+             height: '600px',
              title: "Double-click to select your file", 
              zIndex: 99999,
              
@@ -18,10 +19,10 @@
                rm : {shortcuts : []},
                download : {shortcuts : []}
              },
-             // 'allowShortcuts' : false,
-             url : 'http://localhost/addons/npelfinderconnector.html',
-             width: '80%',
-             height: '600px',
+
+             url: '[[++site_url]]npelfinderconnector.html',
+
+
              getFileCallback: function(file) {
                var fileUrl = file.url.replace('\\','/'); // (file is an object)
                var mybase = file.baseUrl.replace('\\','/');
