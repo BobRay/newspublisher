@@ -1,5 +1,5 @@
 <?php
-error_reporting(0); // Set E_ALL for debuging
+error_reporting(0); // Set E_ALL for debugging
 
 // load composer autoload before load elFinder autoload If you need composer
 //require './vendor/autoload.php';
@@ -100,50 +100,67 @@ function access($attr, $path, $data, $volume) {
 // Documentation for connector options:
 // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
 
+/* @var $scriptProperties array */
 
-$path = $modx->getOption('browserStartPath', $scriptProperties, $modx->getOption('base_path') . 'assets/images', true);
-/* Remove any trailing slash */
+$driver = $modx->getOption('driver', $scriptProperties, 'LocalFileSystem', true);
+
+$path = $modx->getOption('browserBasePath', $scriptProperties, $modx->getOption('base_path') . 'assets', true);
+
+// Remove any trailing slash
 $path = rtrim($path, '/\\');
 
-$url = $modx->getOption('browserStartURL', $scriptProperties, $modx->getOption('base_url') . 'assets/images', true);
-/* Remove any trailing slash */
+$startPath = $modx->getOption('browserStartPath', $scriptProperties, $path, true);
+// Remove any trailing slash
+$startPath = rtrim($path, '/\\');
+
+$url = $modx->getOption('browserStartURL', $scriptProperties, $modx->getOption('base_url') . 'assets', true);
+// Remove any trailing slash
 $url = rtrim($url, '/\\');
 
+$locale = $modx->getOption('locale', $scriptProperties, '', true);
+
 $tmbSize = $modx->getOption('tmbSize', $scriptProperties, 150, true);
-
+$tmbPath = $modx->getOption('tmbPath', $scriptProperties, '.tmb', true);
+$uploadOverwrite = $modx->getOption('uploadAllowOverwrite', $scriptProperties, true, true);
+$uploadAllow = $modx->getOption('uploadAllow', $scriptProperties, array('image', 'text/plain'), true); // Mimetype `image` and `text/plain` allowed to upload
+$uploadMaxSize = $modx->getOption('uploadMaxSize', $scriptProperties, 0, true);
 $disable = $modx->getOption('disableCommands', $scriptProperties, '', true);
-if (!empty($disable)) {
 
+if (!empty($disable)) {
    $disabledCommands = array_map('trim', explode(',', $disable));
 } else {
-  
    $disabledCommands = array('archive', 'open', 'view', 'quicklook', 'edit', 'mkdir', 'mkfile', 'duplicate','cut', 'copy', 'paste', 'rm', 'rename', 'upload', 'download', 'netmount');
 }
 
-/* Possible commands: 'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
-    'download', 'rm', 'duplicate', 'rename', 'mkfile', 'upload', 'copy',
-    'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help', 'fullscreen' */
+/* Possible commands: 'archive', 'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
+    'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy',
+    'cut', 'paste', 'edit', 'extract', 'search', 'info', 'view', 'help', 'fullscreen' */
 
 
 $opts = array(
-    // 'debug' => true,
     'roots' => array(
         array(
-            'driver'        => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
-            'path' => $path,
-            'URL' => $url,
-            'uploadDeny'    => array('all'),                // All Mimetypes not allowed to upload
-            'uploadAllow'   => array('image', 'text/plain'),// Mimetype `image` and `text/plain` allowed to upload
-            'uploadOrder'   => array('deny', 'allow'),      // allowed Mimetype `image` and `text/plain` only
-            'tmbSize'       => $tmbSize,
-            'accessControl' => 'access',                     // disable and hide dot starting files (OPTIONAL)
-            'acceptedName'    => '/^[^\.].*$/',
-            'disabled' => $disabledCommands
+            'driver'            => $driver,             // driver for accessing file system (REQUIRED)
+            'path'              => $path,
+            'startPath'         => $startPath,
+            'URL'               => $url,
+            'uploadOverwrite'   => $uploadOverwrite,
+            'uploadDeny'        => array('all'),        // All Mimetypes not allowed to upload
+            'uploadAllow'       => $uploadAllow,
+            'uploadOrder'       => array('deny', 'allow'),
+            'tmbSize'           => $tmbSize,
+            'tmbPath'           => $tmbPath,
+            'accessControl'     => 'access',            // disable and hide dot starting files (OPTIONAL)
+            'acceptedName'      => '/^[^\.].*$/',
+            'disabled'          => $disabledCommands,
         )
     ),
     
 );
 
+if (!empty($locale)) {
+    $opts['locale'] = $locale;
+}
 // run elFinder
 $connector = new elFinderConnector(new elFinder($opts));
 $connector->run();
