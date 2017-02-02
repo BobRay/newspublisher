@@ -129,12 +129,13 @@ $disable = $modx->getOption('disableCommands', $scriptProperties, '', true);
 if (!empty($disable)) {
    $disabledCommands = array_map('trim', explode(',', $disable));
 } else {
-   $disabledCommands = array('archive', 'open', 'view', 'quicklook', 'edit', 'mkdir', 'mkfile', 'duplicate','cut', 'copy', 'paste', 'rm', 'rename', 'upload', 'download', 'netmount');
+   $disabledCommands = array('archive', 'download', 'cut', 'copy', 'paste', 'duplicate', 'edit', 'open', 'mkdir', 'mkfile', 'netmount', 'netunmount', 'rm', 'rename', 'quicklook',     'upload', 'view');
 }
 
-/* Possible commands: 'archive', 'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
-    'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy',
-    'cut', 'paste', 'edit', 'extract', 'search', 'info', 'view', 'help', 'fullscreen' */
+/* Possible commands:  'archive', 'back', 'chmod', 'colwidth', 'copy', 'cut', 'download', 'duplicate',
+    'edit', 'extract', 'forward', 'fullscreen', 'getfile', 'help', 'home', 'info',
+    'mkdir', 'mkfile', 'netmount', 'netunmount', 'open', 'opendir', 'paste', 'places',
+    'quicklook', 'reload', 'rename', 'resize', 'rm', 'search', 'sort', 'up', 'upload', 'view' */
 
 
 $opts = array(
