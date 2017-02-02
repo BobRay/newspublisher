@@ -90,10 +90,8 @@ $properties = array (
     'name' => 'np_id',
     'desc' => 'np_id_desc',
     'type' => 'numberfield',
-    'options' => 
-    array (
-    ),
-    'value' => '',
+    'options' => '',
+    'value' => 22,
     'lexicon' => 'newspublisher:button',
     'area' => '',
   ),

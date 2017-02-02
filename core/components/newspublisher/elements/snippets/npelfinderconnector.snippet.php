@@ -117,12 +117,18 @@ $url = $modx->getOption('browserStartURL', $scriptProperties, $modx->getOption('
 // Remove any trailing slash
 $url = rtrim($url, '/\\');
 
-$locale = $modx->getOption('locale', $scriptProperties, '', true);
+$locale = $modx->getOption('locale', $scriptProperties, $modx->getOption('locale', null), true);
 
 $tmbSize = $modx->getOption('tmbSize', $scriptProperties, 150, true);
 $tmbPath = $modx->getOption('tmbPath', $scriptProperties, '.tmb', true);
 $uploadOverwrite = $modx->getOption('uploadAllowOverwrite', $scriptProperties, true, true);
-$uploadAllow = $modx->getOption('uploadAllow', $scriptProperties, array('image', 'text/plain'), true); // Mimetype `image` and `text/plain` allowed to upload
+$uploadAllow = $modx->getOption('uploadAllow', $scriptProperties, '', true); // Mimetype `image` and `text/plain` allowed to upload
+if (!empty($uploadAllow)) {
+    $uploadAllow = array_map('trim', explode(',', $uploadAllow));
+} else {
+    $uploadAllow = array('image', 'text/plain');
+}
+
 $uploadMaxSize = $modx->getOption('uploadMaxSize', $scriptProperties, 0, true);
 $disable = $modx->getOption('disableCommands', $scriptProperties, '', true);
 

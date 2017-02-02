@@ -56,14 +56,16 @@ unset($properties);
 $snippets[3] = $modx->newObject('modSnippet');
 $snippets[3]->fromArray(array (
   'id' => 3,
-  'property_preprocess' => false,
+  'property_preprocess' => true,
   'name' => 'npElFinderConnector',
   'description' => 'Runs from a tag on the npElFinderConnector resource.',
-  'properties' => 
-  array (
-  ),
 ), '', true, true);
 $snippets[3]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/npelfinderconnector.snippet.php'));
+
+
+$properties = include $sources['data'].'properties/properties.npelfinderconnector.snippet.php';
+$snippets[3]->setProperties($properties);
+unset($properties);
 
 $snippets[4] = $modx->newObject('modSnippet');
 $snippets[4]->fromArray(array (
