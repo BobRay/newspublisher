@@ -84,3 +84,21 @@ $_lang['np_templates_desc'] = '(optional) Comma-separated list of template IDs f
 $_lang['np_parents_desc'] = 'Comma-separated list of parent IDs for user to select from (must be IDs or Context keys); If &parentid is sent, it will be selected in the list. Note: new_document_in_root permission may be necessary for new resources); default: (empty)';
 $_lang['np_which_editor_desc'] = 'Rich-text editor to use; at present, TinyMCE is the only value that will work; default: TinyMCE';
 $_lang['np_presets_desc'] = 'Preset values for new document fields in this form: `content:Some default content,introtext:default introtext`';
+
+/* Properties for npElFinderConnector snippet */
+
+$_lang['browser_base_path_desc'] = 'Users can browse below this directory, but not above it. Must match browserBaseURL setting.';
+$_lang['browser_base_url_desc'] = 'Users can browse below this URL, but not above it. Must Match browserBasePath settings.';
+$_lang['browser_start_path_desc'] = 'Set this to start the browser in a directory below the browserBasePath. Must Match browserStart URL. Default: browserBasePath.';
+$_lang['browser_start_url_desc'] = 'Set this to start browsing in a directory below browserBaseURL. Must match browserStartPath. Required only if browserStartPath is set.';
+$_lang['disable_commands_desc'] = 'Comma-separated list of commands to disable. To enable a command, delete it from the list.<br><br><b>Default:</b> archive, download\', cut, copy, paste, duplicate, edit, open, mkdir, mkfile, netmount, netunmount, rm, rename, quicklook, upload, view.<br><br><b>Possible</b>Commands: archive, back, chmod, colwidth, copy, cut, download, duplicate, edit, extract, forward, fullscreen, getfile, help, home, info, mkdir, mkfile, netmount, netunmount, open, opendir, paste, places, quicklook, reload, rename, resize, rm,  search, sort, up, upload, view. ';
+$_lang['driver_desc'] = 'Driver type for file browser (for future use).';
+$_lang['locale_desc'] = 'Locale setting. Will use MODX locale System Setting if empty.';
+$_lang['tmb_path_desc'] = 'Path to directory to store thumbnails on upload; default: .tmb';
+$_lang['tmb_size_desc'] = 'Size of thumbnails in pixels. This only works when uploading. To change it, delete thumbs and re-upload.';
+$_lang['upload_allow_desc'] = 'Comma-separated list of mime types to allow; default: image, text/plain.';
+$_lang['upload_allow_overwrite_desc'] = 'Allow overwriting of existing files when uploading; Default: true.';
+$_lang['upload_max_size'] = 'Maximum upload file size. This size is per files. Can be set as number or string with unit 10M, 500K, 1G. Note you still have to configure PHP files upload limits. Default: 0 (use PHP max size).';
+
+
+
