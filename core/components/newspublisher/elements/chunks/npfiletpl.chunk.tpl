@@ -14,13 +14,20 @@ $('#elfinder_button').on('click', function() {
           height: '600px',
           title: "Double-click to select your file", 
           zIndex: 99999,
-          // Disable kb shortcuts for these commands, otherwise they still work even if they are listed as disabled
-          /*commandsOptions: {
-            upload : {shortcuts : []},
-            rm : {shortcuts : []},
-            download : {shortcuts : []}
-          },*/
-          allowShortcuts : false,
+
+              /* Disable command Keyboard shortcuts, otherwise they still work
+                     even if the commands are listed as disabled */
+
+              /* Disable all command shortcuts */
+              allowShortcuts: false,
+
+              /* Disable specific command shortcuts */
+
+              // commandsOptions: {
+              //     upload : {shortcuts : []},
+              //     rm : {shortcuts : []},
+              //     download : {shortcuts : []}
+              // },
 
           url : '[[++site_url]]npelfinderconnector.html',
 
