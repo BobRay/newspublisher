@@ -1156,8 +1156,7 @@ class Newspublisher {
         }
 
 
-    /* we have a TV to show */
-    /* Build TV template dynamically based on type */
+    /* We have a TV to show */
 
         $formTpl = '';
         $tv = $tvObj;
@@ -1369,12 +1368,11 @@ class Newspublisher {
                 
             case 'image':
             case 'file':
-                            
-                /* code adapted from core/model/modx/processors/element/tv/renders/mgr/input/file.php
-                 * and (...)/image.php */
+                $tvId = $tv->get('id');
+                $mediaSourceId = $tv->get('source');
 
                 /* remove this? */
-                $this->modx->getService('fileHandler',
+               /* $this->modx->getService('fileHandler',
                     'modFileHandler', '', array('context' => $this->context));
                 $params['wctx'] = $this->context;
                 $value = $tv->getValue($this->existing);
@@ -1401,10 +1399,9 @@ class Newspublisher {
 
                 if (!empty($value)) {
                     $openTo = $source->getOpenTo($value,$params);
-                }
+                }*/
 
-                $formTpl .= $this->_displayFileInput($name, $tvType.'Tpl',
-                    $params, $openTo);
+                $formTpl .= $this->_displayFileInput($name, $tvType.'Tpl', $mediaSourceId);
                 break;
             default:
                 /* use custom TV file if it exists */
@@ -1539,46 +1536,23 @@ class Newspublisher {
      * @access protected
      * @param $name string - name of the TV
      * @param $tplName string - name of the template chunk that should be used
-     * @param $sourceOptions array - Associative array of options. Accepts all file/image TV input options.
-     *       Possible options: all (processed) TV input options (Revo versions below 2.20), respectively the media source.
-     *       'wctx' doesn't seem to have an effect (?)
      * @param $openTo string - Path for the directory to open to
      * @return string - HTML code */
 
-    protected function _displayFileInput($name, $tplName, $sourceOptions = array(), $openTo = '') {
-        /* @var $browserAction modAction */
-
-       /* $browserAction = $this->modx->getObject('modAction',
-            array('namespace' => 'newspublisher', 'controller' => 'filebrowser'));
-        $browserUrl = $browserAction ? $this->modx->getOption('manager_url',null,
-                MODX_MANAGER_URL).'index.php?a='.$browserAction->get('id') : null;*/
-        $browserUrl = true;
-        if ($browserUrl) {
-          /*  $phpthumbUrl = $this->modx->getOption('connectors_url',null,
+    protected function _displayFileInput($name, $tplName, $mediaSourceId = null) {
+        /*  $phpthumbUrl = $this->modx->getOption('connectors_url',null,
                     MODX_CONNECTORS_URL) . 'system/phpthumb.php?';
             foreach ($sourceOptions as $key => $value) {
                 $phpthumbUrl .= "&{$key}={$value}";
-            }
+            } */
 
-            $browserUrl .= '&field=' . $name;
-            $sourceOptions['openTo'] = $openTo;
-            $_SESSION['newspublisher']['filebrowser'][$name] = $sourceOptions;*/
+        /* Pass any placeholders here */
+        $PHs = array(
+            '[[+media_source]]' => '?&media_source=' . $mediaSourceId,
+        );
 
-            $PHs = array();
+        return $this->strReplaceAssoc($PHs, $this->getTpl($tplName));
 
-            // $PHs = array(
-            //    '[[+npx.phpthumbBaseUrl]]' => $phpthumbUrl,
-            //    '[[+npx.browserUrl]]'   => $browserUrl
-            //);
-
-            return $this->strReplaceAssoc($PHs, $this->getTpl($tplName));
-
-        } else {
-            
-            $this->setError($this->modx->lexicon('np_no_action_found'));
-            return null;
-        }
-    
     }
     
     /** Produces the HTML code for boolean (checkbox) fields/TVs

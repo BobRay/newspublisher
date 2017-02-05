@@ -27,7 +27,7 @@
               //     download : {shortcuts : []}
               // },
 
-             url: '[[++site_url]]npelfinderconnector.html',
+             url: '[[++site_url]]npelfinderconnector.html[[+media_source]]',
 
 
              getFileCallback: function(file) {

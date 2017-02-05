@@ -102,25 +102,49 @@ function access($attr, $path, $data, $volume) {
 
 /* @var $scriptProperties array */
 
+$path='';
+$url = '';
+$startPath = '';
+
 $driver = $modx->getOption('driver', $scriptProperties, 'LocalFileSystem', true);
+$mediaSourceId =  $modx->getOption('media_source', $_GET, null, true);
+unset($_GET['media_source']);
 
-$path = $modx->getOption('browserBasePath', $scriptProperties, $modx->getOption('base_path') . 'assets', true);
 
-// Remove any trailing slash
+$modx->log(modX::LOG_LEVEL_ERROR, 'GET: ' . print_r($_GET, true));
+
+if ($mediaSourceId !== null) {
+    $ms = $modx->getObject('modMediaSource', (int) $mediaSourceId);
+    if (!$ms) {
+        $modx->log(modX::LOG_LEVEL_ERROR, 'Invalid Media Source');
+    } else {
+        $ms->initialize();
+        $bases = $ms->getBases();
+        $path = $bases['path'];
+        $url =  $bases['url'];
+        $startPath = $path;
+    }
+}
+
+if (empty($path)) {
+    $path = $modx->getOption('browserBasePath', $scriptProperties, $modx->getOption('base_path') . 'assets', true);
+}
+if (empty($startPath)) {
+    $startPath = $modx->getOption('browserStartPath', $scriptProperties, $path, true);
+}
+if (empty($url)) {
+    $url = $modx->getOption('browserStartURL', $scriptProperties, $modx->getOption('base_url') . 'assets', true);
+}
+
+// Remove any trailing slashes
 $path = rtrim($path, '/\\');
-
-$startPath = $modx->getOption('browserStartPath', $scriptProperties, $path, true);
-// Remove any trailing slash
 $startPath = rtrim($path, '/\\');
-
-$url = $modx->getOption('browserStartURL', $scriptProperties, $modx->getOption('base_url') . 'assets', true);
-// Remove any trailing slash
 $url = rtrim($url, '/\\');
 
 $locale = $modx->getOption('locale', $scriptProperties, $modx->getOption('locale', null), true);
 
 $tmbSize = $modx->getOption('tmbSize', $scriptProperties, 150, true);
-$tmbPath = $modx->getOption('tmbPath', $scriptProperties, '.tmb', true);
+$tmbPath = $modx->getOption('tmbPath', $scriptProperties, '.tmb');
 $uploadOverwrite = $modx->getOption('uploadAllowOverwrite', $scriptProperties, true, true);
 $uploadAllow = $modx->getOption('uploadAllow', $scriptProperties, '', true); // Mimetype `image` and `text/plain` allowed to upload
 if (!empty($uploadAllow)) {
