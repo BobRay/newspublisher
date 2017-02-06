@@ -54,6 +54,11 @@ if($object->xpdo) {
                   'parent' => 'NewsPublisher',
                   'template' => 'npElFinderTemplate',
                 ),
+                1 =>  array (
+                  'pagetitle' => 'npElFinderConnector',
+                  'parent' => 'NewsPublisher',
+                  'template' => 'npElFinderTemplate',
+                ),
             );
 
             if (is_array($intersects)) {

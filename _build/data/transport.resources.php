@@ -63,4 +63,42 @@ $resources[1]->fromArray(array (
 ), '', true, true);
 $resources[1]->setContent(file_get_contents($sources['data'].'resources/npelfinder.content.html'));
 
+$resources[2] = $modx->newObject('modResource');
+$resources[2]->fromArray(array (
+  'id' => 2,
+  'type' => 'document',
+  'contentType' => 'text/html',
+  'pagetitle' => 'npElFinderConnector',
+  'longtitle' => '',
+  'description' => 'Calls the npElFinderConnector snippet, which launches the elFinder window',
+  'alias' => 'npelfinderconnector',
+  'link_attributes' => '',
+  'published' => true,
+  'isfolder' => false,
+  'introtext' => '',
+  'richtext' => false,
+  'template' => 'npElFinderTemplate',
+  'menuindex' => 4,
+  'searchable' => true,
+  'cacheable' => true,
+  'createdby' => 1,
+  'editedby' => 1,
+  'deleted' => false,
+  'deletedon' => 0,
+  'deletedby' => 0,
+  'menutitle' => '',
+  'donthit' => false,
+  'privateweb' => false,
+  'privatemgr' => false,
+  'content_dispo' => 0,
+  'hidemenu' => false,
+  'class_key' => 'modDocument',
+  'context_key' => 'web',
+  'content_type' => 1,
+  'hide_children_in_tree' => 0,
+  'show_in_tree' => 1,
+  'properties' => NULL,
+), '', true, true);
+$resources[2]->setContent(file_get_contents($sources['data'].'resources/npelfinderconnector.content.html'));
+
 return $resources;

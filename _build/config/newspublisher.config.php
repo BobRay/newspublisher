@@ -491,6 +491,8 @@ $components = array(
 
     'exportResources' => array(
         'npElFinder',
+        'npElFinderConnector',
+
     ),
     /* Array of resource parent IDs to get children of. */
     'parents' => array(),
