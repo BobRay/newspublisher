@@ -84,6 +84,8 @@ $_lang['np_templates_desc'] = '(optional) Comma-separated list of template IDs f
 $_lang['np_parents_desc'] = 'Comma-separated list of parent IDs for user to select from (must be IDs or Context keys); If &parentid is sent, it will be selected in the list. Note: new_document_in_root permission may be necessary for new resources); default: (empty)';
 $_lang['np_which_editor_desc'] = 'Rich-text editor to use; at present, TinyMCE is the only value that will work; default: TinyMCE';
 $_lang['np_presets_desc'] = 'Preset values for new document fields in this form: `content:Some default content,introtext:default introtext`';
+$_lang['initfilebrowser_desc'] = 'Initialize file browser for use in RTE and file/image TVs; default: no.';
+
 
 /* Properties for npElFinderConnector snippet */
 

@@ -201,11 +201,15 @@ class Newspublisher {
     protected $showNotify;
     /** @var  $notifyChecked bool - If true, Notify checkbox is checked by default */
     protected $notifyChecked;
+
     /** @var   $duplicateButton bool - If true, show duplicate button */
     protected $duplicateButton = false;
 
-    /** @var   $deleteButton bool - If true, show delete button */
-    protected $deleteButton = false;
+    /** @var   $initrte bool - If true, initialize richtext editor */
+    protected $initrte = false;
+
+    /** @var   $initFileBrowser bool - If true, initialize the  file browser */
+    protected $initFileBrowser = false;
 
     /** $var $confirmDelete bool - if true, show 'are you sure' dialog */
     protected $confirmDelete = true;
@@ -571,8 +575,21 @@ class Newspublisher {
             ? $this->props['textmaxlength']
             : 60;
 
-        /* Rich Text Editing and/or file or image TVs */
-        if ($this->props['initrte']) {
+        $this->initrte = $this->modx->getOption('initrte', $this->props, false, true);
+        $this->initFileBrowser = $this->modx->getOption('initfilebrowser', $this->props, false, true);
+
+        if ($this->initFileBrowser) {
+            /* Load JQuery and elFinder JS */
+            $this->modx->regClientStartupHTMLBlock('
+                <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" type="text/javascript"></script>
+                <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+                <script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js" type="text/javascript"></script >'
+            );
+        }
+
+        /* Rich Text Editing  */
+        if ($this->initrte) {
 
             /* Get location to load TinyMCE fom */
             $tinySource = $this->modx->getOption('tinysource', $this->props, "//cdn.tinymce.com/4/tinymce.min.js", true);
@@ -588,13 +605,7 @@ class Newspublisher {
             $tinyproperties['width'] = $this->modx->getOption('tinywidth', $this->props, '95%', true);
             $tinyproperties['height'] = $this->modx->getOption('tinyheight', $this->props, '400px', true);
 
-            /* Load JQuery and elFinder JS */
-            $this->modx->regClientStartupHTMLBlock('
-                <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" type="text/javascript"></script>
-                <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
-                <script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js" type="text/javascript"></script >'
-            );
+
 
             /* Fire OnRichTextEditorInit (probably unnecessary) */
             $fields = array(
@@ -1681,7 +1692,7 @@ class Newspublisher {
             );
 
         if ($RichText) {
-            if($this->props['initrte']) {
+            if($this->initrte) {
                 $PHs['[[+npx.class]]'] = 'modx-richtext';
             } else {
                 $msg = $this->modx->lexicon('np_no_rte');

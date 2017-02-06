@@ -157,6 +157,18 @@ $properties = array (
     'lexicon' => 'newspublisher:properties',
     'area' => 'NewsPublisher Control Settings',
   ),
+  'initfilebrowser' => 
+  array (
+    'name' => 'initfilebrowser',
+    'desc' => 'initfilebrowser_desc',
+    'type' => 'combo-boolean',
+    'options' => 
+    array (
+    ),
+    'value' => false,
+    'lexicon' => 'newpublisher:properties',
+    'area' => 'NewsPublisher Control Settings',
+  ),
   'initrte' => 
   array (
     'name' => 'initrte',
@@ -565,6 +577,18 @@ $properties = array (
     'lexicon' => 'newspublisher:properties',
     'area' => 'Resource Field Settings',
   ),
+  'presets' => 
+  array (
+    'name' => 'presets',
+    'desc' => 'np_presets_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => '',
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'Resource Field Settings',
+  ),
   'published' => 
   array (
     'name' => 'published',
@@ -804,18 +828,6 @@ $properties = array (
     'value' => '',
     'lexicon' => 'newspublisher:properties',
     'area' => 'Tpls',
-  ),
-  'presets' => 
-  array (
-    'name' => 'presets',
-    'desc' => 'np_presets_desc',
-    'type' => 'textfield',
-    'options' => 
-    array (
-    ),
-    'value' => '',
-    'lexicon' => 'newspublisher:properties',
-    'area' => 'Resource Field Settings',
   ),
 );
 
