@@ -111,13 +111,9 @@ $mediaSourceId =  $modx->getOption('media_source', $_GET, null, true);
 unset($_GET['media_source']);
 
 
-$modx->log(modX::LOG_LEVEL_ERROR, 'GET: ' . print_r($_GET, true));
-
 if ($mediaSourceId !== null) {
     $ms = $modx->getObject('modMediaSource', (int) $mediaSourceId);
-    if (!$ms) {
-        $modx->log(modX::LOG_LEVEL_ERROR, 'Invalid Media Source');
-    } else {
+    if ($ms) {
         $ms->initialize();
         $bases = $ms->getBases();
         $path = $bases['path'];
