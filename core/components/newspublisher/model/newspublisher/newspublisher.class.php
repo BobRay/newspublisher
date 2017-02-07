@@ -584,9 +584,16 @@ class Newspublisher {
                 <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
                 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" type="text/javascript"></script>
                 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
-                <script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js" type="text/javascript"></script >'
+                '
             );
+            $this->modx->regClientStartupScript('<script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js" type="text/javascript"></script>');
+            $this->modx->regClientStartupScript($this->modx->getChunk('npelFinderInitTpl'));
+
+
+        } else {
+            $this->modx->regClientStartupScript("<script>var autoFileBrowser=null;</script>");
         }
+
 
         /* Rich Text Editing  */
         if ($this->initrte) {
