@@ -3,7 +3,7 @@
  * snippets transport file for NewsPublisher extra
  *
  * Copyright 2013-2017 by Bob Ray <http://bobsguides.com>
- * Created on 07-11-2014
+ * Created on 02-06-2017
  *
  * @package newspublisher
  * @subpackage build
@@ -28,14 +28,14 @@ $snippets = array();
 $snippets[1] = $modx->newObject('modSnippet');
 $snippets[1]->fromArray(array (
   'id' => 1,
-  'property_preprocess' => false,
-  'name' => 'NewsPublisher',
-  'description' => 'Front-end resource creation/editing snippet.',
+  'property_preprocess' => true,
+  'name' => 'npElFinderConnector',
+  'description' => 'Runs from a tag on the npElFinderConnector resource.',
 ), '', true, true);
-$snippets[1]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/newspublisher.snippet.php'));
+$snippets[1]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/npelfinderconnector.snippet.php'));
 
 
-$properties = include $sources['data'].'properties/properties.newspublisher.snippet.php';
+$properties = include $sources['data'].'properties/properties.npelfinderconnector.snippet.php';
 $snippets[1]->setProperties($properties);
 unset($properties);
 
@@ -43,14 +43,12 @@ $snippets[2] = $modx->newObject('modSnippet');
 $snippets[2]->fromArray(array (
   'id' => 2,
   'property_preprocess' => false,
-  'name' => 'NpEditThisButton',
-  'description' => 'Displays a button to edit the current resource with NewsPublisher.',
+  'name' => 'npElFinderContent',
+  'description' => '',
+  'properties' => 
+  array (
+  ),
 ), '', true, true);
-$snippets[2]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/npeditthisbutton.snippet.php'));
-
-
-$properties = include $sources['data'].'properties/properties.npeditthisbutton.snippet.php';
-$snippets[2]->setProperties($properties);
-unset($properties);
+$snippets[2]->setContent(file_get_contents($sources['source_core'] . '/elements/snippets/npelfindercontent.snippet.php'));
 
 return $snippets;

@@ -193,28 +193,4 @@ $chunks[16]->fromArray(array (
 ), '', true, true);
 $chunks[16]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/npoutertpl.chunk.tpl'));
 
-$chunks[17] = $modx->newObject('modChunk');
-$chunks[17]->fromArray(array (
-  'id' => 17,
-  'property_preprocess' => false,
-  'name' => 'npTinymceInitTpl',
-  'description' => 'Javascript configuration code for TinyMCE in Newspublisher',
-  'properties' => 
-  array (
-  ),
-), '', true, true);
-$chunks[17]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/nptinymceinittpl.chunk.tpl'));
-
-$chunks[18] = $modx->newObject('modChunk');
-$chunks[18]->fromArray(array (
-  'id' => 18,
-  'property_preprocess' => false,
-  'name' => 'npElFinderContent',
-  'description' => 'Loaded by ElFinderContent snippet into npElFinder resource.',
-  'properties' => 
-  array (
-  ),
-), '', true, true);
-$chunks[18]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/npelfindercontent.chunk.tpl'));
-
 return $chunks;

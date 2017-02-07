@@ -116,6 +116,14 @@ $components = array(
             'category' => 'NewsPublisher',
             'parent' => '',  /* top level category */
         ),
+        'npElFinder' => array(
+            'category' => 'npElFinder',
+            'parent' => 'NewsPublisher',
+        ),
+        'npTinyMCE' => array(
+            'category' => 'npTinyMCE',
+            'parent' => 'NewsPublisher',
+        ),
     ),
 
     /* *************************** MENUS ****************************** */
@@ -162,12 +170,12 @@ $components = array(
             ),
 
             'npElFinderConnector' => array(
-                'category' => 'NewsPublisher',
+                'category' => 'npElFinder',
                 'description' => 'Runs from a tag on the npElFinderConnector resource',
             ),
 
             'npElFinderContent' => array(
-                'category' => 'NewsPublisher',
+                'category' => 'npElFinder',
                 'description' => 'Loads the npElFinderContent chunk',
             ),
 
@@ -258,20 +266,26 @@ $components = array(
             ),
             'npElFinderContent' => array(
                 'description' => 'Loaded by ElFinderContent snippet into npElFinder resource.',
-                'category' => 'NewsPublisher',
+                'category' => 'elFinder',
                 'filename' => 'npelfindercontent.chunk.tpl',
             ),
 
             'npTinymceInitTpl' => array(
                 'description' => 'Javascript configuration code for TinyMCE in Newspublisher',
-                'category' => 'NewsPublisher',
+                'category' => 'npTinyMCE',
                 'filename' => 'nptinymceinittpl.chunk.tpl',
             ),
+            'npelFinderInitTpl' => array(
+                'description' => 'Javascript configuration code for elFinder file browser in Newspublisher',
+                'category' => 'npElFinder',
+                'filename' => 'npelfinderinittpl.chunk.tpl',
+            ),
+
         ),
 
         'templates' => array(
             'npElFinderTemplate' => array(
-                'category' => 'NewsPublisher',
+                'category' => 'npElFinder',
                 'description' => 'Template for NewsPublisher Connector to launch el Finder',
                 'static' => false,
             ),
