@@ -56,6 +56,14 @@ $components = array(
      * their namespace to the lowercase package name of your extra */
 
     'newSystemSettings' => array(
+        'np_elfinder_theme' => array(
+            'key' => 'np_elfinder_theme',
+            'name' => 'NewsPublisher elFinder Theme',
+            'description' => 'setting_np_elfinder_theme_desc',
+            'namespace' => 'newspublisher',
+            'xtype' => 'textfield',
+            'value' => 'osx',
+        ),
 
     ),
 

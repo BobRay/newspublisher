@@ -69,7 +69,7 @@ $properties = array (
     'options' => 
     array (
     ),
-    'value' => 'archive, download\', cut, copy, paste, duplicate, edit, open, mkdir, mkfile, netmount, netunmount, rm, rename, quicklook, upload, view',
+    'value' => 'archive, download, cut, copy, paste, duplicate, edit, open, mkdir, mkfile, netmount, netunmount, rm, rename, quicklook, upload, view',
     'lexicon' => 'newspublisher:properties',
     'area' => '',
   ),
