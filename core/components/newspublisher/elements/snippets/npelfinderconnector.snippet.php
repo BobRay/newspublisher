@@ -165,6 +165,7 @@ if (!empty($disable)) {
 
 
 $opts = array(
+
     'roots' => array(
         array(
             'driver'            => $driver,             // driver for accessing file system (REQUIRED)
