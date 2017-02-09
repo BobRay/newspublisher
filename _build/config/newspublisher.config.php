@@ -64,6 +64,14 @@ $components = array(
             'xtype' => 'textfield',
             'value' => 'osx',
         ),
+        'np_elfinder_remember_last_dir' => array(
+            'key' => 'np_elfinder_remember_last_dir',
+            'name' => 'Make elFinder remember last directory browsed',
+            'description' => 'setting_np_elfinder_remember_last_dir_desc',
+            'namespace' => 'newspublisher',
+            'xtype' => 'textfield',
+            'value' => 'false',
+        ),
 
     ),
 
@@ -274,7 +282,7 @@ $components = array(
             ),
             'npElFinderContent' => array(
                 'description' => 'Loaded by ElFinderContent snippet into npElFinder resource.',
-                'category' => 'elFinder',
+                'category' => 'npElFinder',
                 'filename' => 'npelfindercontent.chunk.tpl',
             ),
 

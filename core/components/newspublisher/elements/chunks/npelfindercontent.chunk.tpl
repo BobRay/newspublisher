@@ -46,7 +46,7 @@
                     cssAutoLoad: [
                         './assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/elfinderthemes/[[++np_elfinder_theme]]/css/theme.css'
                     ],
-                    rememberLastDir : false,
+                    rememberLastDir : [[++np_elfinder_remember_last_dir]],
                     width : window.innerWidth-20,
                     height : window.innerHeight-20,
                     getFileCallback: function (file) { // editor callback
