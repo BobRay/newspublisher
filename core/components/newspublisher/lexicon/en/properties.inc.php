@@ -85,7 +85,7 @@ $_lang['np_parents_desc'] = 'Comma-separated list of parent IDs for user to sele
 $_lang['np_which_editor_desc'] = 'Rich-text editor to use; at present, TinyMCE is the only value that will work; default: TinyMCE';
 $_lang['np_presets_desc'] = 'Preset values for new document fields in this form: `content:Some default content,introtext:default introtext`';
 $_lang['initfilebrowser_desc'] = 'Initialize file browser for use in RTE and file/image TVs; default: no.';
-
+$_lang['tinymce_skin_desc'] = 'Skin directory for TinyMCE skin in assets/components/newspublisher/tinymceskins; default: modxPericles';
 
 /* Properties for npElFinderConnector snippet */
 

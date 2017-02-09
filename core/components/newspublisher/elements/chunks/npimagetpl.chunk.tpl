@@ -28,6 +28,9 @@
               // },
 
              url: '[[++site_url]]npelfinderconnector.html[[+media_source]]',
+             cssAutoLoad: [
+                  './assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/elfinderthemes/[[++np_elfinder_theme]]/css/theme.css'
+             ],
 
 
              getFileCallback: function(file) {

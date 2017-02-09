@@ -587,10 +587,12 @@ class Newspublisher {
                 '
             );
             $this->modx->regClientStartupScript('<script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js" type="text/javascript"></script>');
+            /* ToDo: Make property and Use getTpl() */
             $this->modx->regClientStartupScript($this->modx->getChunk('npelFinderInitTpl'));
 
 
         } else {
+            /* Make sure autoFileBrowser is not undefined */
             $this->modx->regClientStartupScript("<script>var autoFileBrowser=null;</script>");
         }
 
@@ -611,6 +613,7 @@ class Newspublisher {
             $tinyproperties['npAssetsURL'] = $this->assetsUrl;
             $tinyproperties['width'] = $this->modx->getOption('tinywidth', $this->props, '95%', true);
             $tinyproperties['height'] = $this->modx->getOption('tinyheight', $this->props, '400px', true);
+            $tinyproperties['TinyMCE_skin'] = $this->modx->getOption('TinyMCE_skin', $this->props, 'modxPericles');
 
 
 
