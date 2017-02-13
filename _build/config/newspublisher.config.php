@@ -66,11 +66,19 @@ $components = array(
         ),
         'np_elfinder_remember_last_dir' => array(
             'key' => 'np_elfinder_remember_last_dir',
-            'name' => 'Make elFinder remember last directory browsed',
+            'name' => 'elFinder Remember last dir',
             'description' => 'setting_np_elfinder_remember_last_dir_desc',
             'namespace' => 'newspublisher',
             'xtype' => 'textfield',
             'value' => 'false',
+        ),
+        'np_elfinder_tmb_size' => array(
+            'key' => 'np_elfinder_tmb_size_last_dir',
+            'name' => 'elFinder Thumb Size',
+            'description' => 'setting_np_elfinder_tmb_size',
+            'namespace' => 'newspublisher',
+            'xtype' => 'textfield',
+            'value' => '150',
         ),
 
     ),

@@ -140,6 +140,7 @@ $url = rtrim($url, '/\\');
 $locale = $modx->getOption('locale', $scriptProperties, $modx->getOption('locale', null), true);
 
 $tmbSize = $modx->getOption('tmbSize', $scriptProperties, 150, true);
+$tmbCrop = false;
 $tmbPath = $modx->getOption('tmbPath', $scriptProperties, '.tmb');
 $uploadOverwrite = $modx->getOption('uploadAllowOverwrite', $scriptProperties, true, true);
 $uploadAllow = $modx->getOption('uploadAllow', $scriptProperties, '', true); // Mimetype `image` and `text/plain` allowed to upload
@@ -177,6 +178,7 @@ $opts = array(
             'uploadAllow'       => $uploadAllow,
             'uploadOrder'       => array('deny', 'allow'),
             'tmbSize'           => $tmbSize,
+            'tmbCrop'           => false,
             'tmbPath'           => $tmbPath,
             'accessControl'     => 'access',            // disable and hide dot starting files (OPTIONAL)
             'acceptedName'      => '/^[^\.].*$/',

@@ -1557,20 +1557,32 @@ class Newspublisher {
      * @access protected
      * @param $name string - name of the TV
      * @param $tplName string - name of the template chunk that should be used
-     * @param $openTo string - Path for the directory to open to
+     * @param $mediaSourceId string - ID of TV's Media Source
      * @return string - HTML code */
 
     protected function _displayFileInput($name, $tplName, $mediaSourceId = null) {
-        /*  $phpthumbUrl = $this->modx->getOption('connectors_url',null,
-                    MODX_CONNECTORS_URL) . 'system/phpthumb.php?';
-            foreach ($sourceOptions as $key => $value) {
-                $phpthumbUrl .= "&{$key}={$value}";
-            } */
-
-        /* Pass any placeholders here */
         $PHs = array(
             '[[+media_source]]' => '?&media_source=' . $mediaSourceId,
         );
+
+        if ($tplName === 'imageTpl' && ($mediaSourceId !== null) ) {
+            $source = $this->modx->getObject('sources.modMediaSource', $mediaSourceId);
+
+            if (!$source) {
+                $this->modx->log(modX::LOG_LEVEL_ERROR, '[NewsPublisher] Failed to get Media Source in _displayFileInput');
+            } else {
+                $source->initialize();
+                $phpThumbUrl = $this->modx->getOption('connectors_url', null,
+                        MODX_CONNECTORS_URL) . 'system/phpthumb.php?';
+
+                $bases = $source->getBases();
+                $baseUrl = $bases['url'];
+                $PHs['[[+phpThumbUrl]]'] = $phpThumbUrl;
+                $PHs['[[+baseUrl]]'] = $baseUrl;
+            }
+        } else {
+            $PHs['[[+preview_image_tag]]'] = '';
+        }
 
         return $this->strReplaceAssoc($PHs, $this->getTpl($tplName));
 

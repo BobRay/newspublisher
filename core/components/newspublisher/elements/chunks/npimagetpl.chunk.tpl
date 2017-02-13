@@ -3,7 +3,7 @@
         <label class="fieldlabel" for="np-[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]: </label>
         <input name="[[+npx.fieldName]]" class="image" id="np-[[+npx.fieldName]]"  type="textarea" rows="1"  value="[[+np.[[+npx.fieldName]]]]" height="30px"    />
         <button id="np-[[+npx.fieldName]]_button" type="button">[[%np_launch_image_browser]]</button>
-        <div id="np-[[+npx.fieldName]]_preview"></div>
+        <div id="np-[[+npx.fieldName]]_preview" style="margin-top:10px;"></div>
         <script>
         $('#np-[[+npx.fieldName]]_button').on('click', function() {
           $('<div id="editor" />').dialogelfinder({
@@ -50,7 +50,27 @@
                // console.log(file);
              }
           });
-}); 
+});
+
+/* Show image preview on page load (if TV value isn't blank) */
+
+    $(document).ready(function () {
+        var val = $('#np-[[+npx.fieldName]]').val();
+        console.log("Value: " + val);
+        if (val.length > 0) {
+            var phpThumbUrl = '[[+phpThumbUrl]]';
+            var baseUrl = '[[+baseUrl]]';
+            var imgTag = '<img src="' + phpThumbUrl + '&src=' + baseUrl + val + '&h=[[++np_elfinder_tmb_size]]&w=[[++np_elfinder_tmb_size]]">';
+            // console.log("Base URL: " + baseUrl);
+            // console.log("phpThumbUrl: " + phpThumbUrl);
+            // console.log("Image Tag: " + imgTag);
+            console.log('Has Length');
+            $('#np-[[+npx.fieldName]]_preview').html(imgTag);
+        }
+
+
+
+    });
 
 </script>
 </div>
