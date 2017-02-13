@@ -139,7 +139,7 @@ $url = rtrim($url, '/\\');
 
 $locale = $modx->getOption('locale', $scriptProperties, $modx->getOption('locale', null), true);
 
-$tmbSize = $modx->getOption('tmbSize', $scriptProperties, 150, true);
+$tmbSize = $modx->getOption('tmbSize', null, 150, true); // System Setting
 $tmbCrop = false;
 $tmbPath = $modx->getOption('tmbPath', $scriptProperties, '.tmb');
 $uploadOverwrite = $modx->getOption('uploadAllowOverwrite', $scriptProperties, true, true);

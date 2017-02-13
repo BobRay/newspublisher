@@ -109,18 +109,6 @@ $properties = array (
     'lexicon' => 'newspublisher:properties',
     'area' => '',
   ),
-  'tmbSize' => 
-  array (
-    'name' => 'tmbSize',
-    'desc' => 'tmb_size_desc',
-    'type' => 'textfield',
-    'options' => 
-    array (
-    ),
-    'value' => '150',
-    'lexicon' => 'newspublisher:properties',
-    'area' => '',
-  ),
   'uploadAllow' => 
   array (
     'name' => 'uploadAllow',

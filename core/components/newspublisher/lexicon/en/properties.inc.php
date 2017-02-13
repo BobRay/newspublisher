@@ -97,7 +97,6 @@ $_lang['disable_commands_desc'] = 'Comma-separated list of commands to disable. 
 $_lang['driver_desc'] = 'Driver type for file browser (for future use).';
 $_lang['locale_desc'] = 'Locale setting. Will use MODX locale System Setting if empty.';
 $_lang['tmb_path_desc'] = 'Path to directory to store thumbnails on upload; default: .tmb -- leave empty to prevent thumb generation.';
-$_lang['tmb_size_desc'] = 'Size of thumbnails in pixels. This only works when uploading. To change it, delete thumbs and re-upload.';
 $_lang['upload_allow_desc'] = 'Comma-separated list of mime types to allow; default: image, text/plain.';
 $_lang['upload_allow_overwrite_desc'] = 'Allow overwriting of existing files when uploading; Default: true.';
 $_lang['upload_max_size'] = 'Maximum upload file size. This size is per files. Can be set as number or string with unit 10M, 500K, 1G. Note you still have to configure PHP files upload limits. Default: 0 (use PHP max size).';
