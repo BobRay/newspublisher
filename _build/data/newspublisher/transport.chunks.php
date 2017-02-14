@@ -199,7 +199,9 @@ $chunks[17]->fromArray(array (
   'property_preprocess' => false,
   'name' => 'npRichtextTpl',
   'description' => 'Tpl chunk for richtext TVs',
-  'properties' => NULL,
+  'properties' => 
+  array (
+  ),
 ), '', true, true);
 $chunks[17]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/nprichtexttpl.chunk.tpl'));
 
