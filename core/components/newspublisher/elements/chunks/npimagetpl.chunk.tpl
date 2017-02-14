@@ -55,8 +55,9 @@
 /* Show image preview on page load (if TV value isn't blank) */
 
     $(document).ready(function () {
+        /* ToDo: Trim this */
         var val = $('#np-[[+npx.fieldName]]').val();
-        console.log("Value: " + val);
+        // console.log("Value: " + val);
         if (val.length > 0) {
             var phpThumbUrl = '[[+phpThumbUrl]]';
             var baseUrl = '[[+baseUrl]]';
@@ -64,7 +65,7 @@
             // console.log("Base URL: " + baseUrl);
             // console.log("phpThumbUrl: " + phpThumbUrl);
             // console.log("Image Tag: " + imgTag);
-            console.log('Has Length');
+            // console.log('Has Length');
             $('#np-[[+npx.fieldName]]_preview').html(imgTag);
         }
 

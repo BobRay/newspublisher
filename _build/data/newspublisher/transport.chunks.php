@@ -193,4 +193,14 @@ $chunks[16]->fromArray(array (
 ), '', true, true);
 $chunks[16]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/npoutertpl.chunk.tpl'));
 
+$chunks[17] = $modx->newObject('modChunk');
+$chunks[17]->fromArray(array (
+  'id' => 17,
+  'property_preprocess' => false,
+  'name' => 'npRichtextTpl',
+  'description' => 'Tpl chunk for richtext TVs',
+  'properties' => NULL,
+), '', true, true);
+$chunks[17]->setContent(file_get_contents($sources['source_core'] . '/elements/chunks/nprichtexttpl.chunk.tpl'));
+
 return $chunks;

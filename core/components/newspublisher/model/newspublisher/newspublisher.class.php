@@ -1277,8 +1277,7 @@ class Newspublisher {
                 break;
 
             case 'richtext':
-                $formTpl .= $this->_displayTextarea($name, true, 'textarea');
-
+                $formTpl .= $this->_displayTextarea($name, true, 'richtext', 20, 60, $tv->get('source') );
                 break;
 
 
@@ -1707,15 +1706,21 @@ class Newspublisher {
      * @return string - field/TV HTML code
      */
 
-    protected function _displayTextarea($name, $RichText, $noRTE_class, $rows = 20, $columns = 60) {
+    protected function _displayTextarea($name, $RichText, $noRTE_class, $rows = 20, $columns = 60, $mediaSourceId = null) {
         $PHs = array(
             '[[+npx.rows]]' => $rows,
             '[[+npx.cols]]' => $columns
             );
-
+        $tpl = 'TextAreaTpl';
         if ($RichText) {
+
             if($this->initrte) {
                 $PHs['[[+npx.class]]'] = 'modx-richtext';
+                if ($mediaSourceId !== null) {
+                    $tpl = 'RichtextTpl';
+                    $PHs['[[+npx.class]]'] = 'modx-richtext-tv';
+                    $PHs['[[+media_source]]'] = '?&media_source=' . $mediaSourceId;
+                }
             } else {
                 $msg = $this->modx->lexicon('np_no_rte');
                 $this->setError($msg . $name);
@@ -1726,7 +1731,7 @@ class Newspublisher {
             $PHs['[[+npx.class]]'] = $noRTE_class;
         }
         return $this->strReplaceAssoc($PHs,
-            $this->getTpl('TextAreaTpl'));
+            $this->getTpl($tpl));
     }
 
 

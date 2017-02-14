@@ -75,7 +75,7 @@ $components = array(
         'np_elfinder_tmb_size' => array(
             'key' => 'np_elfinder_tmb_size_last_dir',
             'name' => 'elFinder Thumb Size',
-            'description' => 'setting_np_elfinder_tmb_size',
+            'description' => 'setting_np_elfinder_tmb_size_desc',
             'namespace' => 'newspublisher',
             'xtype' => 'textfield',
             'value' => '150',
@@ -303,6 +303,11 @@ $components = array(
                 'description' => 'Javascript configuration code for elFinder file browser in Newspublisher',
                 'category' => 'npElFinder',
                 'filename' => 'npelfinderinittpl.chunk.tpl',
+            ),
+            'npRichtextTpl' => array(
+                'description' => 'Tpl chunk for richtext TVs',
+                'category' => 'NewsPublisher',
+                'filename' => 'nprichtexttpl.chunk.tpl',
             ),
 
         ),
