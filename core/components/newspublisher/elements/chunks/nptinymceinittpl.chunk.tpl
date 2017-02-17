@@ -8,7 +8,7 @@
     file_browser_callback: autoFileBrowser,
     relative_urls: true,
     image_advtab: true,
-    skin_url: '[[+npAssetsURL]]tinymceskins/[[+TinyMCE_skin]]',
+    skin_url: '[[+npAssetsURL]]tinymceskins/[[++np_tinymce_skin]]',
     document_base_url: '[[++site_url]]',
     // remove_script_host: false,
     // height: [[+height]],

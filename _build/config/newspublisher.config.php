@@ -63,6 +63,7 @@ $components = array(
             'namespace' => 'newspublisher',
             'xtype' => 'textfield',
             'value' => 'osx',
+            'area' => 'elFinder',
         ),
         'np_elfinder_remember_last_dir' => array(
             'key' => 'np_elfinder_remember_last_dir',
@@ -71,6 +72,7 @@ $components = array(
             'namespace' => 'newspublisher',
             'xtype' => 'textfield',
             'value' => 'false',
+            'area' => 'elFinder',
         ),
         'np_elfinder_tmb_size' => array(
             'key' => 'np_elfinder_tmb_size_last_dir',
@@ -79,7 +81,18 @@ $components = array(
             'namespace' => 'newspublisher',
             'xtype' => 'textfield',
             'value' => '150',
+            'area' => 'elFinder',
         ),
+        'np_tinymce_skin' => array(
+            'key' => 'np_tinymce_skin',
+            'name' => 'TinyMCE skin',
+            'description' => 'setting_np_tinymce_skin_desc',
+            'namespace' => 'newspublisher',
+            'xtype' => 'textfield',
+            'value' => 'modxPericles',
+            'area' => 'TinyMCE',
+        ),
+
 
     ),
 
@@ -523,6 +536,7 @@ $components = array(
         'chunks',
         'templates',
         'resources',
+        'systemSettings',
     ),
     /*  Array  of resources to process. You can specify specific resources
         or parent (container) resources, or both.

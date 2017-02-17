@@ -217,6 +217,12 @@ class Newspublisher {
     /** $var $presets string - Preset values for fields */
     protected $presets = array();
 
+    /** $var $tinyProperties array - properties for TinyMCEinit placeholders - elements may be overridden */
+    protected $tinyProperties = array();
+
+    /** $var $tinyChunk string - Name of TinyMCE init chunk */
+    protected $tinyChunk = array();
+
 
     /** NewsPublisher constructor
      *
@@ -606,16 +612,18 @@ class Newspublisher {
 
             /* Get name of TinyMCE configuration chunk */
             $tinyChunk = $this->modx->getOption('tinymceinittpl', $this->props, 'npTinymceInitTpl', true);
+
             $language = $this->modx->getOption('language', $this->props, 'en', true);
 
             /* Tinyproperties is the array sent to getChunk to replace the placeholders in $tinyChunk */
-            $tinyproperties['language'] = '"' . $language . '"';
-            $tinyproperties['npAssetsURL'] = $this->assetsUrl;
-            $tinyproperties['width'] = $this->modx->getOption('tinywidth', $this->props, '95%', true);
-            $tinyproperties['height'] = $this->modx->getOption('tinyheight', $this->props, '400px', true);
-            $tinyproperties['TinyMCE_skin'] = $this->modx->getOption('TinyMCE_skin', $this->props, 'modxPericles');
+            $tinyProperties['[[+language]]'] = '"' . $language . '"';
+            $tinyProperties['[[+npAssetsURL]]'] = $this->assetsUrl;
+            $tinyProperties['[[+width]]'] = $this->modx->getOption('tinywidth', $this->props, '95%', true);
+            $tinyProperties['[[+height]]'] = $this->modx->getOption('tinyheight', $this->props, '400px', true);
+            // $tinyProperties['TinyMCE_skin'] = $this->modx->getOption('TinyMCE_skin', $this->props, 'modxPericles');
 
-
+            $this->tinyChunk = $tinyChunk;
+            $this->tinyProperties = $tinyProperties;
 
             /* Fire OnRichTextEditorInit (probably unnecessary) */
             $fields = array(
@@ -630,7 +638,7 @@ class Newspublisher {
             $this->modx->regClientStartupScript($tinySource);
 
             /* Inject Tiny configuration chunk */
-            $this->modx->regClientStartupScript($this->modx->getChunk($tinyChunk, $tinyproperties));
+            $this->modx->regClientStartupScript($this->strReplaceAssoc($tinyProperties, $this->modx->getChunk($tinyChunk)));
 
         } /* end if ($richtext) */
 } /* end init */
@@ -771,7 +779,7 @@ class Newspublisher {
 
             /* set different placeholder prefix if requested */
 
-            if ($this->prefix != 'np') {
+            if ($this->prefix !== 'np') {
                 $this->tpls[$tpl] = str_replace('np.',
                     $this->prefix . '.', $this->tpls[$tpl]);
             }
@@ -1730,6 +1738,8 @@ class Newspublisher {
         } else {
             $PHs['[[+npx.class]]'] = $noRTE_class;
         }
+
+        $PHs = array_merge($this->tinyProperties, $PHs);
         return $this->strReplaceAssoc($PHs,
             $this->getTpl($tpl));
     }

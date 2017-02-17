@@ -25,11 +25,11 @@
     /********** TinyMCE init code **************/
     tinymce.init({
 
-        selector: ".modx-richtext-tv",
+        selector: '.modx-richtext-tv',
         file_browser_callback: rt_tv_filebrowser,
         relative_urls: true,
         image_advtab: true,
-        skin_url: '[[+npAssetsURL]]tinymceskins/[[+TinyMCE_skin]]',
+        skin_url: '[[+npAssetsURL]]tinymceskins/[[++np_tinymce_skin]]',
         document_base_url: '[[++site_url]]',
         // remove_script_host: false,
         // height: [[+height]],
@@ -58,7 +58,6 @@
         // plugins: "imagetools contextmenu autosave save paste image link searchreplace",
         menubar: false,
         toolbar: "fullscreen | code | undo redo | blockquote | bold italic alignleft aligncenter alignright | bullist numlist | link unlink | image | styleselect charmap emoticons insertdatetime searchreplace",
-        // contextmenu: "code | twPreCodeManager | fullscreen | removeformat | link | image"
         contextmenu: "code | fullscreen | removeformat | link | image |"
 
     });
