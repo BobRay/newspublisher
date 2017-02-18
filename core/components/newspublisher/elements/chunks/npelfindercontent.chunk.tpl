@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/html">
     <head>
         <meta charset="utf-8">
-        <title>elFinder 2.1.x source version with PHP connector</title>
+        <!-- <title>elFinder 2.1.x source version with PHP connector</title> -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2" />
      <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>

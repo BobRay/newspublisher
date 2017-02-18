@@ -10,7 +10,7 @@
         tinymce.activeEditor.windowManager.open({
             // file is the URL of of the npElFinder resource
             file: '[[++site_url]]npelfinder.html[[+media_source]]',
-            title: 'elFinder 2.0',
+            title: "elFinder 2.0 (double-click to select your file)",
             width: window.innerWidth / 1.2,
             height: window.innerHeight / 1.2,
             resizable: 'yes'

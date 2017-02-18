@@ -10,7 +10,7 @@
              modal: true, 
              width: "80%",
              height: '600px',
-             title: "Double-click to select your file", 
+             title: '<b>elFinder 2.0 (double-click to select your file)</b>',
              zIndex: 99999,
 
               /* Disable command Keyboard shortcuts, otherwise they still work
@@ -29,7 +29,6 @@
 
              url: '[[++site_url]]npelfinderconnector.html[[+media_source]]',
              cssAutoLoad: [
-                  // '[[++site_url]]/assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/elfinderthemes/[[++np_elfinder_theme]]/css/theme.css'
                  '[[+np_assets_url]]elfinder/elfinderthemes/[[++np_elfinder_theme]]/css/theme.css'
              ],
 

@@ -12,7 +12,7 @@ $('#elfinder_button').on('click', function() {
           modal: true, 
           width: "80%",
           height: '600px',
-          title: "Double-click to select your file", 
+          title: '<b>elFinder 2.0 (double-click to select your file)</b>',
           zIndex: 99999,
 
               /* Disable command Keyboard shortcuts, otherwise they still work
