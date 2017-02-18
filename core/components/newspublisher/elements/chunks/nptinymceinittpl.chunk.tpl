@@ -2,7 +2,6 @@
 <script type="text/javascript">
 /********** TinyMCE init code **************/
   tinymce.init({  
-    
     selector: "#np-content, .modx-richtext",
     language: [[+language]],
     file_browser_callback: autoFileBrowser,
@@ -10,12 +9,11 @@
     image_advtab: true,
     skin_url: '[[+npAssetsURL]]tinymceskins/[[++np_tinymce_skin]]',
     document_base_url: '[[++site_url]]',
-    // remove_script_host: false,
-    // height: [[+height]],
-    // width: [[+width]],
+    height: '[[+height]]',
+    width: '[[+width]]',
     extended_valid_elements : "fixedpre",
     custom_elements: "fixedpre",
-   
+
     external_plugins: {
     // twAceEditor: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twAceEditor.js",
     // twCodeMirror: "[[++assets_url]]components/tinymcewrapper/tinymceplugins/twCodeMirror.js",
@@ -24,8 +22,6 @@
     // twPreCodeManager: "[[+npAssetsURL]]js/twPreCodeManager.js" // original
     // npFixedpreCodeManager: "[[+npAssetsURL]]js/npFixedPre.js"
   },
-  
-
     paste_word_valid_elements: "a,div,b,strong,i,em,h1,h2,h3,p,blockquote,ol,ul,pre",
     image_caption: true,
     browser_spellcheck: true,
@@ -41,7 +37,5 @@
       contextmenu: "code | fullscreen | removeformat | link | image |"
 
   });
-  
-// end of tpl chunk
 </script>
 

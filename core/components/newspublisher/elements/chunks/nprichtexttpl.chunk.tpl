@@ -31,9 +31,9 @@
         image_advtab: true,
         skin_url: '[[+npAssetsURL]]tinymceskins/[[++np_tinymce_skin]]',
         document_base_url: '[[++site_url]]',
-        // remove_script_host: false,
-        // height: [[+height]],
-        // width: [[+width]],
+        remove_script_host: false,
+        height: '[[+height]]',
+        width: '[[+width]]',
         extended_valid_elements: "fixedpre",
         custom_elements: "fixedpre",
 
