@@ -316,21 +316,22 @@ class Newspublisher {
         /* inject NP CSS file */
         /* Empty but sent parameter means use no CSS file at all */
 
-        if ($this->props['cssfile'] === '0') { /* 0 sent, -- no css file */
+        $css = $this->modx->getOption('cssfile', $this->props, '', false);
+
+        if ($css === '0') { /* 0 sent, -- no css file */
             $css = false;
-        } elseif (empty($this->props['cssfile'])) { /* nothing sent - use default */
+        } elseif (empty($css)) { /* nothing sent - use default */
             $css = $this->assetsUrl . 'css/newspublisher.css';
         } else {  /* set but not empty -- use it */
-            $css = $this->assetsUrl . 'css/' . $this->props['cssfile'];
+            $css = $this->assetsUrl . 'css/' . $css;
         }
 
         if ($css !== false) {
             $this->modx->regClientCSS($css . '?v=' . $this->version);
         }
 
-        $this->prefix =  empty($this->props['prefix'])
-            ? 'np'
-            : $this->props['prefix'];
+        $this->prefix = $this->modx->getOption('prefix', $this->props, 'np', true);
+
         /* see if we're editing an existing doc */
         $this->existing = false;
         if (isset($_POST['np_existing']) &&
@@ -455,6 +456,8 @@ class Newspublisher {
 
             /* get folder id where we should store the new resource,
              else store under current document */
+
+            /* Convert legacy parent property */
             if (isset($this->props['parent'])) {
                 $this->props['parentid'] = $this->props['parent'];
                 unset($this->props['parent']);
@@ -473,12 +476,11 @@ class Newspublisher {
 
             $this->resource->set('parent', $this->parentId);
 
-            $this->aliasTitle = $this->props['aliastitle']
-                ? true
-                : false;
+            $this->aliasTitle  = (bool) $this->modx->getOption('aliastitle', $this->props, false, true);
+
             $this->clearcache = isset($_POST['clearcache'])
                 ? $_POST['clearcache']
-                : $this->props['clearcache'];
+                : (bool)$this->modx->getOption('clearcache', $this->props, false, true);
 
             $this->hideMenu = isset($_POST['hidemenu'])
                 ? $_POST['hidemenu']
@@ -488,7 +490,6 @@ class Newspublisher {
             $this->cacheable = isset($_POST['cacheable'])
                 ? $_POST['cacheable']
                 : $this->_setDefault('cacheable',$this->parentId);
-
             $this->resource->set('cacheable', $this->cacheable);
 
             $this->searchable = isset($_POST['searchable'])
@@ -508,13 +509,13 @@ class Newspublisher {
                 : $this->_setDefault('richtext',$this->parentId);
             $this->resource->set('richtext', $this->richtext);
 
-            if (! empty($this->props['groups'])) {
+            if (isset($this->props['groups']) && (! empty($this->props['groups']))) {
                 $this->groups = $this->_setDefault('groups',$this->parentId);
             }
-            $this->header = !empty($this->props['headertpl'])
+            $this->header = isset($this->props['headertpl']) && (!empty($this->props['headertpl']))
                 ? $this->modx->getChunk($this->props['headertpl'])
                 : '';
-            $this->footer = !empty($this->props['footertpl'])
+            $this->footer = isset($this->props['footertpl']) && (!empty($this->props['footertpl']))
                 ? $this->modx->getChunk($this->props['footertpl'])
                 :'';
 
@@ -545,7 +546,7 @@ class Newspublisher {
         }
 
         /* Set some control properties */
-        if( !empty($this->props['badwords'])) {
+        if(isset($this->props['baswords']) && (!empty($this->props['badwords']))) {
             $this->badwords = str_replace(' ','', $this->props['badwords']);
             $this->badwords = "/".str_replace(',','|', $this->badwords)."/i";
         }
@@ -560,28 +561,23 @@ class Newspublisher {
             : explode(',', $temp);
         $this->parents = $this->getParents();
 
-        if($this->props['initdatepicker']) {
+        if($this->modx->getOption('initdatepicker', $this->props, false, true)) {
             $this->modx->regClientCSS($this->assetsUrl . 'datepicker/css/datepicker.css');
             $this->modx->regClientStartupHTMLBlock('<script type=text/javascript src="' .
                 $this->assetsUrl . 'datepicker/js/datepicker.packed.js">{"lang":"' .
                 $language . '"}</script>');
         }
 
-        $this->listboxMax = $this->props['listboxmax']
-            ? $this->props['listboxmax']
-            : 8;
-        $this->multipleListboxMax = $this->props['multiplelistboxmax']
-            ? $this->props['multiplelistboxmax']
-            : 8;
+        $this->listboxMax = $this->modx->getOption('listboxmax', $this->props, 8, true);
 
-        $this->intMaxlength = !empty($this->props['intmaxlength'])
-            ? $this->props['intmaxlength']
-            : 10;
-        $this->textMaxlength = !empty($this->props['textmaxlength'])
-            ? $this->props['textmaxlength']
-            : 60;
+        $this->multipleListboxMax = $this->modx->getOption('multiplelistboxmax', $this->props, 8, true);
+
+        $this->intMaxlength = $this->modx->getOption('intmaxlength', $this->props, 10, true);
+
+        $this->textMaxlength = $this->modx->getOption('textmaxlength', $this->props, 60, true);
 
         $this->initrte = $this->modx->getOption('initrte', $this->props, false, true);
+
         $this->initFileBrowser = $this->modx->getOption('initfilebrowser', $this->props, false, true);
 
         if ($this->initFileBrowser) {
@@ -658,8 +654,9 @@ class Newspublisher {
     protected function _setDefault($field,$parentId) {
 
         $retVal = null;
-        $prop = $this->props[$field];
-        if ($prop == 'Parent' || $prop == 'parent') {
+        $prop = $this->modx->getOption($field, $this->props, '', true);
+        // $prop = $this->props[$field];
+        if ($prop === 'Parent' || $prop === 'parent') {
             /* get parent if we don't already have it */
             if (! $this->parentObj) {
                 if (is_numeric($this->parentId)) {
@@ -678,19 +675,19 @@ class Newspublisher {
         $prop = $prop == 'Yes'? '1': $prop;
         $prop = $prop == 'No'? '0' :$prop;
 
-        if ($prop != 'System Default') {
+        if ($prop !== 'System Default') {
             if ($prop === '1' || $prop === '0') {
                 $retVal = $prop;
 
-            } elseif ($prop == 'parent' || $prop == 'Parent') {
-                if ($field == 'groups') {
+            } elseif ($prop === 'parent' || $prop === 'Parent') {
+                if ($field === 'groups') {
                     $groupString = $this->_setGroups($prop, $this->parentObj);
                     $retVal = $groupString;
                     unset($groupString);
                 } else {
                     $retVal = $this->parentObj->get($field);
                 }
-            } elseif ($field == 'groups') {
+            } elseif ($field === 'groups') {
                 $retVal = $this->_setGroups($prop);
             }
         } else { /* not 1, 0, or parent; use system default except for groups */
@@ -720,7 +717,7 @@ class Newspublisher {
                     $this->setError($this->modx->lexicon('np_unknown_field') . $field);
                     return null;
             }
-            if ($option != 'groups') {
+            if ($option !== 'groups') {
                 $retVal = $this->modx->getOption($option);
             }
             if ($retVal === null) {
@@ -748,7 +745,7 @@ class Newspublisher {
 
     public function getTpl($tpl) {
         if (!isset($this->tpls[$tpl])) {
-            $this->tpls[$tpl] = !empty ($this->props[strtolower($tpl)])
+            $this->tpls[$tpl] = isset($this->props[strtolower($tpl)]) && (!empty ($this->props[strtolower($tpl)]))
                 ? $this->modx->getChunk($this->props[strtolower($tpl)])
                 : $this->modx->getChunk('np' . $tpl);
 
@@ -958,7 +955,7 @@ class Newspublisher {
             : '';
 
         /* if set use 1) caption from properties, 2) MODX field captions */
-        $caption =  !empty($this->captions[$field])
+        $caption = isset($this->captions[$field]) && (!empty($this->captions[$field]))
             ? $this->captions[$field]
             : '[[%resource_' . $field . ']]';
         $replace['[[+npx.caption]]'] = $caption;
@@ -991,14 +988,12 @@ class Newspublisher {
                 switch ($class_key) {
                     default:
                     case 'modDocument':
-                        $rows =  ! empty($this->props['contentrows'])
-                            ? $this->props['contentrows']
-                            : '10';
-                        $cols =  ! empty($this->props['contentcols'])
-                            ? $this->props['contentcols']
-                            : '60';
+                        $rows = $this->modx->getOption('contentrows', $this->props, '10', true);
+                        $cols = $this->modx->getOption('contentcols', $this->props, '60', true);
+                        $rtContent = (bool) $this->modx->getOption('rtcontent', $this->props, false, true);
                         $inner .= $this->_displayTextarea($field,
-                            $this->props['rtcontent'], 'np-content', $rows, $cols);
+                            $rtContent, 'np-content', $rows, $cols);
+                        unset($rtContent);
                         break;
                     
                     case 'modWebLink':
@@ -1017,27 +1012,23 @@ class Newspublisher {
                 break;
 
             case 'description':
-                $rows = !empty($this->props['descriptionrows'])
-                    ? $this->props['descriptionrows']
-                    : '5';
-                $cols = !empty($this->props['descriptioncols'])
-                    ? $this->props['descriptioncols']
-                    : '51';
+                $rows = $this->modx->getOption('descriptionrows', $this->props, '5', true);
+                $cols =  $this->modx->getOption('descriptioncols', $this->props, '51', true);
+                $rtDescription = (bool) $this->modx->getOption('rtdescription', false, true);
                 $inner .= $this->_displayTextarea($field,
-                    $this->props['rtdescription'],
+                    $rtDescription,
                     'np-description', $rows, $cols);
+                unset ($rtDescription);
                 break;
 
             case 'introtext':
-                $rows =  ! empty($this->props['summaryrows'])
-                    ? $this->props['summaryrows']
-                    : '10';
-                $cols =  ! empty($this->props['summarycols'])
-                    ? $this->props['summarycols']
-                    : '60';
+                $rows = $this->modx->getOption('summaryrows', $this->props, '10', true);
+                $cols = $this->modx->getOption('summarycols', $this->props, '60', true);
+                $rtSummary = (bool) $this->modx->getOption('rtsummary', false, true);
                 $inner .= $this->_displayTextarea($field,
-                    $this->props['rtsummary'],
+                    $rtSummary,
                     'np-introtext', $rows, $cols);
+                unset($rtSummary);
                 break;
 
             case 'template':
@@ -1255,9 +1246,9 @@ class Newspublisher {
         }
 
         $replace = array();
-        $replace['[[+npx.help]]'] = $this->props['hoverhelp']
-            ? $fields['description']
-            :'';
+        $description = isset($fields['description'])? $fields['description']: '';
+        $replace['[[+npx.help]]'] = $this->modx->getOption('hoverhelp', $description, '', true);
+        unset($description);
         $replace['[[+npx.caption]]'] = $caption;
         $replace['[[+npx.fieldName]]'] = $name;
 
@@ -1480,11 +1471,13 @@ class Newspublisher {
     
     protected function _displayDateInput($name, $timeString, $options = array()) {
 
-        if (! $this->props['initdatepicker']) {
+        $initDatePicker = (bool) $this->modx->getOption('initdatepicker', $this->props, false, true);
+        if (!$initDatePicker) {
             $msg = $this->modx->lexicon('np_no_datepicker');
             $this->setError($msg . $name);
             $this->setFieldError($name, $msg);
         }
+        unset($initDatePicker);
         
         if (! $this->isPostBack) {
             $s = $timeString? $s = substr($timeString, 11, 5):'';
@@ -1803,14 +1796,14 @@ class Newspublisher {
         }
         $fields = array_merge($oldFields, $_POST);
         if (!$this->existing) { /* new document */
-
+            $alias = $this->modx->getOption('alias', $fields, '', true);
             /* set alias name of document used to store articles */
             if (empty($fields['alias'])) { /* leave it alone if filled */
                 if (!$this->aliasTitle) {
-                    $suffix = !empty($this->props['aliasdateformat'])
+                    $suffix = isset($this->props['aliasdateformat']) && (!empty($this->props['aliasdateformat']))
                         ? date($this->props['aliasdateformat'])
                         : '-' . time();
-                    if (!empty($this->props['aliasprefix'])) {
+                    if (isset($this->props['aliasprefix']) && (!empty($this->props['aliasprefix']))) {
                         $alias = $this->props['aliasprefix'] . $suffix;
                     } else {
                         $alias = $suffix;
@@ -1875,8 +1868,6 @@ class Newspublisher {
             $fields['context_key'] = isset ($fields['context_key'])
                 ? $fields['context_key']
                 : $this->modx->context->get('key');
-
-
         }
 
         /* Add TVs to $fields for processor */
@@ -1939,7 +1930,7 @@ class Newspublisher {
             /* return without altering the DB */
             return '';
         }
-        if ($this->props['clearcache']) {
+        if (isset($this->props['clearcache']) && $this->props['clearcache']) {
             $fields['syncsite'] = true;
         }
         unset($fields['pub_date_time'], $fields['Submit'],
@@ -2132,14 +2123,15 @@ class Newspublisher {
         if ($this->existing) {
             return $this->resource->get('template');
         }
+
         /* Allow templateid as alias for template */
         if (isset($this->props['templateid'])) {
             $this->props['template'] = $this->props['templateid'];
             unset($this->props['templateid']);
         }
-        $template = $this->modx->getOption('default_template');
+        $template = $this->modx->getOption('template', $this->props, '', false);
 
-        if ($this->props['template'] == 'parent') {
+        if ($template === 'parent') {
             if (empty($this->parentId)) {
                 $this->setError($this->modx->lexicon('np_parent_not_sent'));
             }
@@ -2154,25 +2146,23 @@ class Newspublisher {
                     $this->parentId);
             }
 
-        } elseif (!empty($this->props['template'])) {
-
-
-            if (is_numeric($this->props['template'])) { /* user sent a number */
+        } elseif (!empty($template)) {
+            if (is_numeric($template)) { /* user sent a number */
                 $t = $this->modx->getObject('modTemplate',
-                    (integer) $this->props['template']);
+                    (int) $template);
                 /* make sure it exists */
                 if (! $t) {
                     $this->SetError($this->modx->lexicon('np_no_template_name') .
-                        $this->props['template']);
+                        $template);
                 }
             } else { /* user sent a template name */
                 $t = $this->modx->getObject('modTemplate',
                     array(
-                        'templatename' => $this->props['template']
+                        'templatename' => $template,
                     ));
                 if (!$t) {
                     $this->setError($this->modx->lexicon('np_no_template_name') .
-                        $this->props['template']);
+                        $template);
                 }
             }
             /* @var $t modTemplate */
@@ -2180,6 +2170,8 @@ class Newspublisher {
                 ? $t->get('id')
                 : $this->modx->getOption('default_template');
                 unset($t);
+        } else {
+            $template = $this->modx->getOption('default_template');
         }
 
         return $template;
@@ -2191,23 +2183,24 @@ class Newspublisher {
      * */
 
     public function validate() {
-        $errorTpl = $this->getTpl('FieldErrorTpl');
         $success = true;
-        $fields = explode(',', $this->props['required']);
-        if (!empty($fields)) {
+        if (isset($this->props['required'])) {
+            $fields = explode(',', $this->props['required']);
+            if (!empty($fields)) {
 
-            foreach ($fields as $field) {
-                if (empty($_POST[$field])) {
-                    $success = false;
-                    /* set ph for field error msg */
-                    $msg = $this->modx->lexicon('np_error_required');
-                    $this->setFieldError($field, $msg);
+                foreach ($fields as $field) {
+                    if (empty($_POST[$field])) {
+                        $success = false;
+                        /* set ph for field error msg */
+                        $msg = $this->modx->lexicon('np_error_required');
+                        $this->setFieldError($field, $msg);
 
-                    /* set error for header */
-                    $msg = $this->modx->lexicon('np_missing_field');
-                    $msg = str_replace('[[+name]]', $field, $msg);
-                    $this->setError($msg);
+                        /* set error for header */
+                        $msg = $this->modx->lexicon('np_missing_field');
+                        $msg = str_replace('[[+name]]', $field, $msg);
+                        $this->setError($msg);
 
+                    }
                 }
             }
         }
