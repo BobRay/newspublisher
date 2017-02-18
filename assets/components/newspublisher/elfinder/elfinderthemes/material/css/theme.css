@@ -378,7 +378,8 @@ select.elfinder-tabstop.ui-state-hover {
   cursor: pointer !important;
 }
 .ui-icon-gripsmall-diagonal-se {
-  background: url("../../img/toolbar.png") 0 -496px no-repeat !important;
+  // background: url("../../img/toolbar.png") 0 -496px no-repeat !important;
+  background: url("images/toolbar.png") 0 -496px no-repeat !important;
 }
 
 /**
