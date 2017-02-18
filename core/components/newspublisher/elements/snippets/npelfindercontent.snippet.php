@@ -1,7 +1,6 @@
 <?php
 /** @var $modx modX */
-$assetsUrl = $modx->getOption('np.assets_url', null, $modx->getOption('assets_url', null) . 'components/newspublisher/');
-
+$assetsUrl = $modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/');
 $fields = array(
     'npAssetsURL' => $assetsUrl,
 );

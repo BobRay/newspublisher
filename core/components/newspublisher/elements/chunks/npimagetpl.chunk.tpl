@@ -29,7 +29,8 @@
 
              url: '[[++site_url]]npelfinderconnector.html[[+media_source]]',
              cssAutoLoad: [
-                  './assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/elfinderthemes/[[++np_elfinder_theme]]/css/theme.css'
+                  // '[[++site_url]]/assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/elfinderthemes/[[++np_elfinder_theme]]/css/theme.css'
+                 '[[+np_assets_url]]elfinder/elfinderthemes/[[++np_elfinder_theme]]/css/theme.css'
              ],
 
 
@@ -50,6 +51,7 @@
                // console.log(file);
              }
           });
+
 });
 
 /* Show image preview on page load (if TV value isn't blank) */

@@ -4,7 +4,7 @@
   tinymce.init({  
     selector: "#np-content, .modx-richtext",
     language: [[+language]],
-    file_browser_callback: autoFileBrowser,
+    file_browser_callback: [[+file_browser_function]],
     relative_urls: true,
     image_advtab: true,
     skin_url: '[[+npAssetsURL]]tinymceskins/[[++np_tinymce_skin]]',

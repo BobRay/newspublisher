@@ -45,7 +45,7 @@
                     url: '[[++site_url]]npelfinderconnector.html[[+media_source]]',
                     rememberLastDir : [[++np_elfinder_remember_last_dir]],
                     cssAutoLoad: [
-                        './assets/mycomponents/newspublisher/assets/components/newspublisher/elfinder/elfinderthemes/[[++np_elfinder_theme]]/css/theme.css'
+                        '[[+npAssetsURL]]elfinder/elfinderthemes/[[++np_elfinder_theme]]/css/theme.css'
                     ],
 
                     width : window.innerWidth-20,

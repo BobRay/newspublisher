@@ -6,7 +6,7 @@
 </div>
 
 <script type="text/javascript">
-    rt_tv_filebrowser = function (field_name, url, type, win, gallery) {
+    [[+file_browser_function]] = function (field_name, url, type, win, gallery) {
         tinymce.activeEditor.windowManager.open({
             // file is the URL of of the npElFinder resource
             file: '[[++site_url]]npelfinder.html[[+media_source]]',
@@ -26,7 +26,7 @@
     tinymce.init({
 
         selector: '.modx-richtext-tv',
-        file_browser_callback: rt_tv_filebrowser,
+        file_browser_callback: [[+file_browser_function]],
         relative_urls: true,
         image_advtab: true,
         skin_url: '[[+npAssetsURL]]tinymceskins/[[++np_tinymce_skin]]',

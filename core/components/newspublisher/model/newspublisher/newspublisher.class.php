@@ -590,7 +590,7 @@ class Newspublisher {
             );
             $this->modx->regClientStartupScript('<script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js" type="text/javascript"></script>');
             /* ToDo: Make property and Use getTpl() */
-            $this->modx->regClientStartupScript($this->modx->getChunk('npelFinderInitTpl'));
+            $this->modx->regClientStartupScript($this->modx->getChunk('npelFinderInitTpl', array('file_browser_function' => 'autoFileBrowser')));
 
 
         } else {
@@ -608,6 +608,7 @@ class Newspublisher {
 
             /* Get name of TinyMCE configuration chunk */
             $tinyChunk = $this->modx->getOption('tinymceinittpl', $this->props, 'npTinymceInitTpl', true);
+            $this->tinyChunk = $tinyChunk;
 
             $language = $this->modx->getOption('language', $this->props, 'en', true);
 
@@ -616,9 +617,8 @@ class Newspublisher {
             $tinyProperties['[[+npAssetsURL]]'] = $this->assetsUrl;
             $tinyProperties['[[+width]]'] = $this->modx->getOption('tinywidth', $this->props, '95%', true);
             $tinyProperties['[[+height]]'] = $this->modx->getOption('tinyheight', $this->props, '400px', true);
-            // $tinyProperties['TinyMCE_skin'] = $this->modx->getOption('TinyMCE_skin', $this->props, 'modxPericles');
+            $tinyProperties['[[+file_browser_function]]'] = 'autoFileBrowser';
 
-            $this->tinyChunk = $tinyChunk;
             $this->tinyProperties = $tinyProperties;
 
             /* Fire OnRichTextEditorInit (probably unnecessary) */
@@ -1564,7 +1564,7 @@ class Newspublisher {
         $PHs = array(
             '[[+media_source]]' => '?&media_source=' . $mediaSourceId,
         );
-
+        $PHs['[[+np_assets_url]]'] = $this->assetsUrl;
         if ($tplName === 'imageTpl' && ($mediaSourceId !== null) ) {
             $source = $this->modx->getObject('sources.modMediaSource', $mediaSourceId);
 
@@ -1579,6 +1579,7 @@ class Newspublisher {
                 $baseUrl = $bases['url'];
                 $PHs['[[+phpThumbUrl]]'] = $phpThumbUrl;
                 $PHs['[[+baseUrl]]'] = $baseUrl;
+
             }
         } else {
             $PHs['[[+preview_image_tag]]'] = '';
@@ -1718,9 +1719,11 @@ class Newspublisher {
             if($this->initrte) {
                 $PHs['[[+npx.class]]'] = 'modx-richtext';
                 if ($mediaSourceId !== null) {
+                    /* Rich text TVs */
                     $tpl = 'RichtextTpl';
                     $PHs['[[+npx.class]]'] = 'modx-richtext-tv';
                     $PHs['[[+media_source]]'] = '?&media_source=' . $mediaSourceId;
+                    $PHs['file_browser_function'] = 'fileBrowser' . $name;
                 }
             } else {
                 $msg = $this->modx->lexicon('np_no_rte');
