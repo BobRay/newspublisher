@@ -61,9 +61,10 @@ $modx->lexicon->load('newspublisher:button'); */
 $ownPagesOnly = $modx->getOption('ownpagesonly', $props, '');
 /* Caption for edit button  */
 $debug = $modx->getOption('debug', $props, false);
-$buttonCaption = empty($props['buttonCaption'])? $modx->lexicon('np_edit') : $props['buttonCaption'];
-$bottom = empty($props['bottom']) ? '20%' : $props['bottom'];
-$right = empty($props['right']) ? '20%' : $props['right'];
+$buttonCaption = $modx->getOption('buttonCaption', $props, $modx->lexicon('np_edit'), true);
+$bottom = $modx->getOption('bottom', $props, '20%', true);
+$right = $modx->getOption('right', $props, '20%', true);
+
 
 $assetsUrl = $modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/');
 $modx->regClientCss($assetsUrl . 'css/button.css');

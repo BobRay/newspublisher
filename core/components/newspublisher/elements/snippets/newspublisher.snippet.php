@@ -139,9 +139,9 @@ if (isset($scriptProperties['require'])) {
 }
 /* make sure some prefix is set in $scriptProperties */
 
-$scriptProperties['prefix'] = empty($scriptProperties['prefix'])
-        ? 'np' : $scriptProperties['prefix'];
-$np_prefix = $scriptProperties['prefix'];
+$prefix = $modx->getOption('prefix', $scriptProperties, 'np', true);
+$scriptProperties['prefix'] = $prefix;
+$np_prefix = $prefix;
 
 /* create and initialize newspublisher object */
 $np = new Newspublisher($modx, $scriptProperties);
@@ -170,7 +170,7 @@ if (!empty($errors)) {
 }
 
 /* add Cancel button only if requested */
-$cancelId = $modx->getOption('cancelid', $scriptProperties, null);
+$cancelId = $modx->getOption('cancelid', $scriptProperties, null, true);
 
 if (is_numeric($cancelId)) {
     $cancelUrl = $modx->makeUrl($cancelId, '', '', 'full');
