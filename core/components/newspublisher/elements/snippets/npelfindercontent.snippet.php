@@ -1,5 +1,10 @@
 <?php
 /** @var $modx modX */
+
+if ((!$modx->user->hasSessionContext($modx->context->get('key'))) && (!$modx->user->get('sudo'))) {
+    die('Unauthorized');
+}
+
 $assetsUrl = $modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/');
 $fields = array(
     'npAssetsURL' => $assetsUrl,

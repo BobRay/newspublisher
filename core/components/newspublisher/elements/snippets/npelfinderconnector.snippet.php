@@ -96,6 +96,9 @@ function access($attr, $path, $data, $volume) {
         :  null;                                    // else elFinder decide it itself
 }
 
+if ((!$modx->user->hasSessionContext($modx->context->get('key'))) && (!$modx->user->get('sudo'))) {
+    die('Unauthorized');
+}
 
 // Documentation for connector options:
 // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options

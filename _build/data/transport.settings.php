@@ -27,6 +27,26 @@ $systemSettings = array();
 
 $systemSettings[1] = $modx->newObject('modSystemSetting');
 $systemSettings[1]->fromArray(array (
+  'key' => 'np_login_redirect',
+  'value' => '1',
+  'xtype' => 'combo-boolean',
+  'namespace' => 'newspublisher',
+  'area' => 'NewsPublisher',
+  'name' => 'NewsPublisher redirect to login',
+  'description' => 'setting_np_login_redirect_desc',
+), '', true, true);
+$systemSettings[2] = $modx->newObject('modSystemSetting');
+$systemSettings[2]->fromArray(array (
+  'key' => 'np_login_id',
+  'value' => '',
+  'xtype' => 'textfield',
+  'namespace' => 'newspublisher',
+  'area' => 'NewsPublisher',
+  'name' => 'NewsPublisher login page ID',
+  'description' => 'setting_np_login_id_desc',
+), '', true, true);
+$systemSettings[3] = $modx->newObject('modSystemSetting');
+$systemSettings[3]->fromArray(array (
   'key' => 'np_tinymce_skin',
   'value' => 'modxPericles',
   'xtype' => 'textfield',
@@ -35,34 +55,34 @@ $systemSettings[1]->fromArray(array (
   'name' => 'TinyMCE skin',
   'description' => 'setting_np_tinymce_skin_desc',
 ), '', true, true);
-$systemSettings[2] = $modx->newObject('modSystemSetting');
-$systemSettings[2]->fromArray(array (
+$systemSettings[4] = $modx->newObject('modSystemSetting');
+$systemSettings[4]->fromArray(array (
   'key' => 'np_elfinder_tmb_size',
   'value' => '150',
   'xtype' => 'textfield',
   'namespace' => 'newspublisher',
   'area' => 'elFinder',
-  'name' => 'elFinder Thumb Size',
+  'name' => 'elFinder thumb size',
   'description' => 'setting_np_elfinder_tmb_size_desc',
 ), '', true, true);
-$systemSettings[3] = $modx->newObject('modSystemSetting');
-$systemSettings[3]->fromArray(array (
+$systemSettings[5] = $modx->newObject('modSystemSetting');
+$systemSettings[5]->fromArray(array (
   'key' => 'np_elfinder_remember_last_dir',
-  'value' => 'false',
+  'value' => '0',
   'xtype' => 'combo-boolean',
   'namespace' => 'newspublisher',
   'area' => 'elFinder',
   'name' => 'elFinder remember last dir',
   'description' => 'setting_np_elfinder_remember_last_dir_desc',
 ), '', true, true);
-$systemSettings[4] = $modx->newObject('modSystemSetting');
-$systemSettings[4]->fromArray(array (
+$systemSettings[6] = $modx->newObject('modSystemSetting');
+$systemSettings[6]->fromArray(array (
   'key' => 'np_elfinder_theme',
   'value' => 'osx',
   'xtype' => 'textfield',
   'namespace' => 'newspublisher',
   'area' => 'elFinder',
-  'name' => 'elFinder Theme',
+  'name' => 'elFinder theme',
   'description' => 'setting_np_elfinder_theme_desc',
 ), '', true, true);
 return $systemSettings;

@@ -89,6 +89,8 @@ $_lang['np_no_delete_permission'] = 'Sorry, you do not have delete permission fo
 $_lang['np_confirm_delete'] = 'Are you sure you want to delete this resource? All its children will be deleted as well.';
 $_lang['np_delete_failed'] = 'Failed to delete resource';
 $_lang['np_resource_deleted'] = 'Resource Deleted';
+$_lang['np_no_login_id'] = 'NewsPublisher np_login_id System Setting is not set';
+$_lang['np_not_logged_in'] = 'You must be logged in to use NewsPublisher';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Publish Date';

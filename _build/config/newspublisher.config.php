@@ -58,7 +58,7 @@ $components = array(
     'newSystemSettings' => array(
         'np_elfinder_theme' => array(
             'key' => 'np_elfinder_theme',
-            'name' => 'NewsPublisher elFinder Theme',
+            'name' => 'NewsPublisher elFinder theme',
             'description' => 'setting_np_elfinder_theme_desc',
             'namespace' => 'newspublisher',
             'xtype' => 'textfield',
@@ -67,15 +67,15 @@ $components = array(
         ),
         'np_elfinder_remember_last_dir' => array(
             'key' => 'np_elfinder_remember_last_dir',
-            'name' => 'elFinder Remember last dir',
+            'name' => 'elFinder remember last dir',
             'description' => 'setting_np_elfinder_remember_last_dir_desc',
             'namespace' => 'newspublisher',
-            'xtype' => 'textfield',
-            'value' => 'false',
+            'xtype' => 'combo-boolean',
+            'value' => '0',
             'area' => 'elFinder',
         ),
         'np_elfinder_tmb_size' => array(
-            'key' => 'np_elfinder_tmb_size_last_dir',
+            'key' => 'np_elfinder_tmb_size',
             'name' => 'elFinder Thumb Size',
             'description' => 'setting_np_elfinder_tmb_size_desc',
             'namespace' => 'newspublisher',
@@ -91,6 +91,24 @@ $components = array(
             'xtype' => 'textfield',
             'value' => 'modxPericles',
             'area' => 'TinyMCE',
+        ),
+        'np_login_id' => array(
+            'key' => 'np_login_id',
+            'name' => 'NewsPublisher login page ID',
+            'description' => 'setting_np_login_id_desc',
+            'namespace' => 'newspublisher',
+            'xtype' => 'textfield',
+            'value' => '',
+            'area' => 'NewsPublisher',
+        ),
+        'np_login_redirect' => array(
+            'key' => 'np_login_redirect',
+            'name' => 'NewsPublisher redirect to login',
+            'description' => 'setting_np_login_redirect_desc',
+            'namespace' => 'newspublisher',
+            'xtype' => 'combo-boolean',
+            'value' => '1',
+            'area' => 'NewsPublisher',
         ),
 
 

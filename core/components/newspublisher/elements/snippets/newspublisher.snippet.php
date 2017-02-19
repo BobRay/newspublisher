@@ -98,18 +98,37 @@
 
 /** @define "$modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/')" "VALUE" */
 
-    /* @var $modx modX */
+    /** @var $modx modX */
+    /** @var $scriptProperties array */
 
 $errorMessage = '';
 $formTpl = '';
 
-/** @var $scriptProperties array */
 $language = $modx->getOption('language', $scriptProperties, '');
 $language = !empty($language)
     ? $language
     : $modx->getOption('cultureKey', NULL,
         $modx->getOption('manager_language', NULL, 'en'));
 $modx->lexicon->load($language . ':newspublisher:default');
+
+/* Redirect to login page if np_login_redirect is set and user is not logged in */
+$loggedIn = $modx->user->hasSessionContext($modx->context->get('key'));
+
+if ((!$loggedIn) && (!$modx->user->get('sudo'))) {
+    $redirect = $modx->getOption('np_login_redirect', null, false, true);
+    if ($redirect) {
+        $loginId = $modx->getOption('np_login_id', $scriptProperties, '', true);
+        if (!empty($loginId)) {
+            $url = $modx->makeUrl($loginId, "", "", "full");
+            $modx->sendRedirect($url);
+        } else {
+            $modx->log(modX::LOG_LEVEL_ERROR, $modx->lexicon('np_no_login_id'));
+            die($modx->lexicon('np_not_logged_in'));
+        }
+    } else {
+        die($modx->lexicon('np_not_logged_in'));
+    }
+}
 
 /* Make these match if coming from Duplicate */
 if (isset($_SESSION['np_doc_id'])) {
