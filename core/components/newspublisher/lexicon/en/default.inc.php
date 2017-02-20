@@ -91,6 +91,7 @@ $_lang['np_delete_failed'] = 'Failed to delete resource';
 $_lang['np_resource_deleted'] = 'Resource Deleted';
 $_lang['np_no_login_id'] = 'NewsPublisher np_login_id System Setting is not set';
 $_lang['np_not_logged_in'] = 'You must be logged in to use NewsPublisher';
+$_lang['np_file_manager_permission_denied'] = 'You do not have permission to launch the File Manager';
 
 /* missing resource field lexicon strings */
 $_lang['resource_pub_date'] =  'Publish Date';

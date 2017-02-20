@@ -546,7 +546,7 @@ class Newspublisher {
         }
 
         /* Set some control properties */
-        if(isset($this->props['baswords']) && (!empty($this->props['badwords']))) {
+        if(isset($this->props['badwords']) && (!empty($this->props['badwords']))) {
             $this->badwords = str_replace(' ','', $this->props['badwords']);
             $this->badwords = "/".str_replace(',','|', $this->badwords)."/i";
         }
@@ -581,16 +581,21 @@ class Newspublisher {
         $this->initFileBrowser = $this->modx->getOption('initfilebrowser', $this->props, false, true);
 
         if ($this->initFileBrowser) {
-            /* Load JQuery and elFinder JS */
-            $this->modx->regClientStartupHTMLBlock('
+            if ( (!$this->modx->hasPermission('file_manager')) && (!$this->modx->user->get('sudo'))) {
+                $this->setError($this->modx->lexicon('np_file_manager_permission_denied'));
+            } else {
+                /* Load JQuery and elFinder JS */
+                $this->modx->regClientStartupHTMLBlock('
                 <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
                 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" type="text/javascript"></script>
                 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
                 '
-            );
-            $this->modx->regClientStartupScript('<script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js" type="text/javascript"></script>');
-            /* ToDo: Make property and Use getTpl() */
-            $this->modx->regClientStartupScript($this->modx->getChunk('npelFinderInitTpl', array('file_browser_function' => 'autoFileBrowser')));
+                );
+
+                $this->modx->regClientStartupScript('<script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js" type="text/javascript"></script>');
+                /* ToDo: Make property and Use getTpl() */
+                $this->modx->regClientStartupScript($this->modx->getChunk('npelFinderInitTpl', array('file_browser_function' => 'autoFileBrowser')));
+            }
 
 
         } else {

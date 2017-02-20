@@ -100,6 +100,10 @@ if ((!$modx->user->hasSessionContext($modx->context->get('key'))) && (!$modx->us
     die('Unauthorized');
 }
 
+if (!$modx->hasPermission('file_manager') && (!$modx->user->get("sudo"))) {
+    die ('Unauthorized File Manager');
+}
+
 // Documentation for connector options:
 // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
 
