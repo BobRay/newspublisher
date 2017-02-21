@@ -409,6 +409,18 @@ $properties = array (
     'lexicon' => 'newspublisher:properties',
     'area' => 'NewsPublisher Control Settings',
   ),
+  'tinysource' => 
+  array (
+    'name' => 'tinysource',
+    'desc' => 'tinysource_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => '',
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'NewsPublisher Control Settings',
+  ),
   'tinywidth' => 
   array (
     'name' => 'tinywidth',
@@ -733,6 +745,18 @@ $properties = array (
     'lexicon' => 'newspublisher:properties',
     'area' => 'Tpls',
   ),
+  'elfinderinittpl' => 
+  array (
+    'name' => 'elfinderinittpl',
+    'desc' => 'elfinderinittpl_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => '',
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'Tpls',
+  ),
   'errortpl' => 
   array (
     'name' => 'errortpl',
@@ -749,6 +773,30 @@ $properties = array (
   array (
     'name' => 'fielderrortpl',
     'desc' => 'np_fielderrortpl_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => '',
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'Tpls',
+  ),
+  'filetpl' => 
+  array (
+    'name' => 'filetpl',
+    'desc' => 'filetpl_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => '',
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'Tpls',
+  ),
+  'imagetpl' => 
+  array (
+    'name' => 'imagetpl',
+    'desc' => 'imagetpl_desc',
     'type' => 'textfield',
     'options' => 
     array (
@@ -817,10 +865,34 @@ $properties = array (
     'lexicon' => 'newspublisher:properties',
     'area' => 'Tpls',
   ),
+  'richtexttpl' => 
+  array (
+    'name' => 'richtexttpl',
+    'desc' => 'richtexttpl_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => '',
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'Tpls',
+  ),
   'texttpl' => 
   array (
     'name' => 'texttpl',
     'desc' => 'np_texttpl_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => '',
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'Tpls',
+  ),
+  'tinymceinittpl' => 
+  array (
+    'name' => 'tinymceinittpl',
+    'desc' => 'tinymceinittpl_desc',
     'type' => 'textfield',
     'options' => 
     array (

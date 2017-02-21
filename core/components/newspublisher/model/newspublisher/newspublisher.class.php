@@ -591,12 +591,11 @@ class Newspublisher {
                 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
                 '
                 );
-
+                $efChunkName = $this->modx->getOption('elfinderinittpl', $this->props, 'npelFinderInitTpl', true);
                 $this->modx->regClientStartupScript('<script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js" type="text/javascript"></script>');
-                /* ToDo: Make property and Use getTpl() */
-                $this->modx->regClientStartupScript($this->modx->getChunk('npelFinderInitTpl', array('file_browser_function' => 'autoFileBrowser')));
-            }
 
+                $this->modx->regClientStartupScript($this->modx->getChunk($efChunkName, array('file_browser_function' => 'autoFileBrowser')));
+            }
 
         } else {
             /* Make sure autoFileBrowser is not undefined */

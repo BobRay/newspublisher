@@ -85,6 +85,13 @@ $_lang['np_parents_desc'] = 'Comma-separated list of parent IDs for user to sele
 $_lang['np_which_editor_desc'] = 'Rich-text editor to use; at present, TinyMCE is the only value that will work; default: TinyMCE';
 $_lang['np_presets_desc'] = 'Preset values for new document fields in this form: `content:Some default content,introtext:default introtext`';
 $_lang['initfilebrowser_desc'] = 'Initialize file browser for use in RTE and file/image TVs; default: no.';
+$_lang['imagetpl_desc'] = '(optional) Tpl used for image TVs';
+$_lang['filetpl_desc'] = '(optional) Tpl used for file TVs';
+$_lang['richtexttpl_desc'] = '(optional) Tpl used for richtext TVs';
+$_lang['elfinderinittpl_desc'] = '(optional) Tpl used to initialize elFinder';
+$_lang['tinymceinittpl_desc'] = '(optional) Tpl used to initialize TinyMCE';
+$_lang['tinysource_desc'] = 'Source to load TinyMCE from; default: //cdn.tinymce.com/4/tinymce.min.js';
+
 
 /* Properties for npElFinderConnector snippet */
 
