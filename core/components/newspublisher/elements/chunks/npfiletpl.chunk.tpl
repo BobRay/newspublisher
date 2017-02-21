@@ -3,7 +3,7 @@
         <label class="fieldlabel" for="np-[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]: </label>
         <input name="[[+npx.fieldName]]" class="file" id="np-[[+npx.fieldName]]" type="text"  value="[[+np.[[+npx.fieldName]]]]" />
    <!--     <button type="button" onclick="autoFileBrowser('#np-[[+npx.fieldName]]');">[[%np_launch_file_browser]]</button> -->
-   <button id="elfinder_button" type="button">[[%np_launch_file_browser]]</button>
+   <button id="elfinder_button" type="button">[[%np_launch_file_browser? &namespace=`newspublisher` &topic=`default`]]</button>
     </div>
 
 <script>

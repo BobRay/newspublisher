@@ -2,7 +2,7 @@
         [[+np.error_[[+npx.fieldName]]]]
         <label class="fieldlabel" for="np-[[+npx.fieldName]]" title="[[+npx.help]]">[[+npx.caption]]: </label>
         <input name="[[+npx.fieldName]]" class="image" id="np-[[+npx.fieldName]]"  type="textarea" rows="1"  value="[[+np.[[+npx.fieldName]]]]" height="30px"    />
-        <button id="np-[[+npx.fieldName]]_button" type="button">[[%np_launch_image_browser]]</button>
+        <button id="np-[[+npx.fieldName]]_button" type="button">[[%np_launch_image_browser? &namespace=`newspublisher` &topic=`default`]]</button>
         <div id="np-[[+npx.fieldName]]_preview" style="margin-top:10px;"></div>
         <script>
         $('#np-[[+npx.fieldName]]_button').on('click', function() {
