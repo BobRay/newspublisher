@@ -58,7 +58,7 @@ $systemSettings[3]->fromArray(array (
 $systemSettings[4] = $modx->newObject('modSystemSetting');
 $systemSettings[4]->fromArray(array (
   'key' => 'np_elfinder_tmb_size',
-  'value' => '150',
+  'value' => '48',
   'xtype' => 'textfield',
   'namespace' => 'newspublisher',
   'area' => 'elFinder',

@@ -80,7 +80,7 @@ $components = array(
             'description' => 'setting_np_elfinder_tmb_size_desc',
             'namespace' => 'newspublisher',
             'xtype' => 'textfield',
-            'value' => '150',
+            'value' => '48',
             'area' => 'elFinder',
         ),
         'np_tinymce_skin' => array(
