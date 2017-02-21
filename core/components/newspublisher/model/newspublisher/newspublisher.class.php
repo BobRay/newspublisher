@@ -205,6 +205,9 @@ class Newspublisher {
     /** @var   $duplicateButton bool - If true, show duplicate button */
     protected $duplicateButton = false;
 
+    /** @var   $deleteButton bool - If true, show duplicate button */
+    protected $deleteButton = false;
+
     /** @var   $initrte bool - If true, initialize richtext editor */
     protected $initrte = false;
 
