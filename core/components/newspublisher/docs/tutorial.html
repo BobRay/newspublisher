@@ -6,6 +6,7 @@
 
 </div>
 
+<p>(Jump to <a href="[[~[[*id]]]]#np_SettingsTable">NewsPublisher System Settings Table</a>.)</p>
 <p>(Jump to <a href="[[~[[*id]]]]#np_propertiesTable">NewsPublisher Snippet Properties Table</a>.)</p>
 <p>(Jump to <a href="[[~[[*id]]]]#npet_propertiesTable">NpEditThisButton Snippet Properties Table</a>.)</p>
 
@@ -378,12 +379,67 @@ form.</p>
 
 <p>NewsPublisher should also work with other Custom Resource Classes as long as they are implemented properly, but I haven't had an opportunity to test it with anything but Articles.</p>
 
+<a name="np_SettingsTable"></a>
+
+<h3>NewsPublisher System Settings</h3>
+
+<p>To edit these settings, go to System (gear icon) -> System Settings and put <code>newspublisher</code> in the &quot;Namespace&quot; input field.</p>
+
+
+<table class="properties">
+    <tr>
+        <th>Setting</th>
+        <th>Description</th>
+        <th>Default</th>
+    </tr>
+
+    <tr>
+        <td>np_login_redirect</td>
+        <td>If set to Yes, not-logged-in users will be directed to the login page; use &loginResourceId=`##` (where ##
+            is the ID of the NewsPublisher page) in the login tag to bounce users back to newspublisher after login
+        </td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>np_login_id</td>
+        <td>ID of login page; used to redirect not-logged-in users</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>np_tinymce_skin</td>
+        <td>Skin directory for TinyMCE skin in assets/components/newspublisher/tinymceskins; built-in options:
+            modxPericles, fairOphelia, fallenMacbeth, light
+        </td>
+        <td>modxPericles</td>
+    </tr>
+    <tr>
+        <td>np_elfinder_tmb_size</td>
+        <td>Thumb size for elFinder in NewsPublisher (in pixels)</td>
+        <td>150</td>
+    </tr>
+    <tr>
+        <td>np_elfinder_remember_last_dir</td>
+        <td>Make elFinder remember last directory browsed (must be the string true or false)</td>
+        <td>false</td>
+    </tr>
+    <tr>
+        <td>np_elfinder_theme</td>
+        <td>Theme for elFinder to use in NewsPublisher; built-in themes include: osx, windows-10, moono, material</td>
+        <td>osx</td>
+    </tr>
+</table>
+
+
 <a name="np_propertiesTable"></a>
 
 <h3>Complete Property List for NewsPublisher Snippet</h3>
 
 <table class="properties">
-    <tr><th>Property</th><th>Description</th><th>Default</th></tr>
+    <tr>
+        <th>Property</th>
+        <th>Description</th>
+        <th>Default</th>
+    </tr>
 
     <tr>
         <td>activetab</td>
@@ -391,30 +447,14 @@ form.</p>
         <td>(empty)</td>
     </tr>
     <tr>
-        <td>aliasdateformat</td>
-        <td>(optional) Format string for auto date alias -- see tutorial</td>
-        <td>PHP date + time format</td>
-    </tr>
-    <tr>
-        <td>aliasprefix</td>
-        <td>(optional) Prefix to be prepended to alias for new documents with an empty alias; alias will be aliasprefix - timestamp</td>
-        <td>(empty)</td>
-    </tr>
-    <tr>
-        <td>aliastitle</td>
-        <td>(optional) Set to Yes to use lowercase, hyphenated, page title as alias. If set to No, 'article-(date created)' is used. Ignored
-            if alias is filled in form
-        </td>
-        <td>1</td>
-    </tr>
-    <tr>
         <td>allowedtags</td>
         <td>(optional) Tags allowed in text fields</td>
-        <td><fixedpre> <p> <br> <a> <i> <em> <b> <strong> <pre>
-        <table> <th> <td> <tr> <img> <span> <div> <h1> <h2>
-        <h3> <h4> <h5> <font> <ul> <ol> <li> <dl> <dt> <dd>
-        <object> <blockquote> <code>
-        </fixedpre> </td>
+        <td>
+            <fixedpre>
+                <p><br><a><i><em><b><strong>
+                    <pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd><object><blockquote><code>
+            </fixedpre>
+        </td>
     </tr>
     <tr>
         <td>badwords</td>
@@ -422,30 +462,16 @@ form.</p>
         <td>(empty)</td>
     </tr>
     <tr>
-        <td>booltpl</td>
-        <td>(optional) Tpl used for Yes/No resource fields (e.g., published, searchable, etc.)</td>
-        <td>npBoolTpl</td>
-    </tr>
-    <tr>
-        <td>cacheable</td>
-        <td>(optional) Sets the flag that determines whether or not the resource is cached; for new resources, set to `Parent` to use parent's setting</td>
-        <td>System Default</td>
-    </tr>
-
-    <tr>
         <td>cancelid</td>
         <td>(optional) Document ID to load on cancel</td>
         <td>http_referer</td>
     </tr>
     <tr>
         <td>captions</td>
-        <td>(optional) Custom captions -- Comma-separated list of FieldNames:FieldCaptions. Example: &captions=`introtext:Summary,content:Enter Your Post`</td>
+        <td>(optional) Custom captions -- Comma-separated list of FieldNames:FieldCaptions. Example:
+            &captions=`introtext:Summary,content:Enter Your Post`
+        </td>
         <td>(empty)</td>
-    </tr>
-    <tr>
-        <td>classkey</td>
-        <td>(optional) Class key for new resources; use only if you have subclassed resource or are using this for Articles (set to Article)</td>
-        <td>modDocument</td>
     </tr>
     <tr>
         <td>clearcache</td>
@@ -464,33 +490,17 @@ form.</p>
     </tr>
     <tr>
         <td>cssfile</td>
-        <td>(optional) Name of CSS file to use, or `0` for no CSS file; File should be in assets/newspublisher/css/ directory</td>
+        <td>(optional) Name of CSS file to use, or `` for no CSS file; File should be in assets/newspublisher/css/
+            directory
+        </td>
         <td>newspublisher.css</td>
     </tr>
     <tr>
-        <td>datetpl</td>
-        <td>(optional) Tpl used for date resource fields and date TVs</td>
-        <td>npDateTpl</td>
-    </tr>
-    <tr>
-        <td>errortpl</td>
-        <td>(optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder</td>
-        <td>npErrorTpl</td>
-    </tr>
-    <tr>
-        <td>fielderrortpl</td>
-        <td>(optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder</td>
-        <td>npFieldErrorTpl</td>
-    </tr>
-    <tr>
         <td>groups</td>
-        <td>(optional) Comma-separated list of resource groups to put new document in (no effect with existing docs); set to `parent` to use parent's groups</td>
+        <td>(optional) Comma-separated list of resource groups to put new document in (no effect with existing docs);
+            set to `parent` to use parent's groups
+        </td>
         <td>(empty)</td>
-    </tr>
-    <tr>
-        <td>hidemenu</td>
-        <td>(optional) Sets the flag that determines whether or not the new page shows in the menu; for new resources, set to `Parent to use parent's setting</td>
-        <td>System Default</td>
     </tr>
     <tr>
         <td>hoverhelp</td>
@@ -503,6 +513,11 @@ form.</p>
         <td>1</td>
     </tr>
     <tr>
+        <td>initfilebrowser</td>
+        <td>Initialize file browser for use in RTE and file/image TVs</td>
+        <td>0</td>
+    </tr>
+    <tr>
         <td>initrte</td>
         <td>(optional) Initialize rich text editor; set this if there are any rich text fields</td>
         <td>0</td>
@@ -511,11 +526,6 @@ form.</p>
         <td>intmaxlength</td>
         <td>(optional) Max length for integer input fields</td>
         <td>10</td>
-    </tr>
-    <tr>
-        <td>inttpl</td>
-        <td>(optional) Tpl used for integer resource fields</td>
-        <td>npIntTpl</td>
     </tr>
     <tr>
         <td>language</td>
@@ -528,45 +538,16 @@ form.</p>
         <td>8</td>
     </tr>
     <tr>
-        <td>listoptiontpl</td>
-        <td>(optional) Tpl used for each option of listbox TVs</td>
-        <td>npListOptionTpl</td>
-    </tr>
-
-    <tr>
         <td>multiplelistboxmax</td>
         <td>(optional) Maximum length for multi-select listboxes</td>
         <td>20</td>
     </tr>
     <tr>
-        <td>notifychecked</td>
-        <td>(optional) If set to 1 and shownotify is set to 1, the Launch Notify checkbox will be checked by default</td>
-        <td>0</td>
-    </tr>
-
-    <tr>
-        <td>optionoutertpl</td>
-        <td>(optional) Tpl used for as a shell for checkbox, list, and radio option TVs</td>
-        <td>npOptionOuterTpl</td>
-    </tr>
-    <tr>
-        <td>optiontpl</td>
-        <td>(optional) Tpl used for each option of checkbox and radio option TVs</td>
-        <td>npOptionTpl</td>
-    </tr>
-    <tr>
-        <td>outertpl</td>
-        <td>(optional) Tpl used as a shell for the whole page</td>
-        <td>npOuterTpl</td>
-    </tr>
-    <tr>
-        <td>parentid</td>
-        <td>(optional) Folder ID where new documents are to be stored</td>
-        <td>NewsPublisher folder</td>
-    </tr>
-    <tr>
         <td>parents</td>
-        <td>Comma-separated list of parent IDs for user to select from (must be Resource IDs or Context keys);  (Note: <code>new_document_in_root</code> permission may be necessary for new resources)</td>
+        <td>Comma-separated list of parent IDs for user to select from (must be IDs or Context keys); If &parentid is
+            sent, it will be selected in the list. Note: new_document_in_root permission may be necessary for new
+            resources)
+        </td>
         <td>(empty)</td>
     </tr>
     <tr>
@@ -580,34 +561,16 @@ form.</p>
         <td>np</td>
     </tr>
     <tr>
-        <td>presets</td>
-        <td>(optional) Preset values for new document fields in this form: `content:Some default content,introtext:default introtext`</td>
-        <td>(empty))</td>
-    </tr>
-    <tr>
-        <td>published</td>
-        <td>(optional) Set new resource as published or not (will be overridden by publish and unpublish dates). Set to `parent` to match
-            parent's pub status
-        </td>
-        <td>System Default</td>
-    </tr>
-
-    <tr>
         <td>readonly</td>
-        <td>(optional) Comma-separated list of fields that should be read only; does not work with option or textarea fields</td>
+        <td>(optional) Comma-separated list of fields that should be read only; does not work with option or textarea
+            fields
+        </td>
         <td>(empty)</td>
     </tr>
     <tr>
         <td>required</td>
         <td>(optional) Comma separated list of fields/tvs to require</td>
         <td>pagetitle,content</td>
-    </tr>
-    <tr>
-        <td>richtext</td>
-        <td>(optional) Sets the flag that determines whether or Rich Text Editor is used to when editing the page content in the Manager;
-            for new resources, set to `Parent` to use parent's setting
-        </td>
-        <td>System Default</td>
     </tr>
     <tr>
         <td>rtcontent</td>
@@ -620,24 +583,9 @@ form.</p>
         <td>0</td>
     </tr>
     <tr>
-        <td>searchable</td>
-        <td>(optional) Sets the flag that determines whether or not the new page is included in site searches; for new resources, set to
-            `Parent` to us parent's setting
-        </td>
-        <td>System Default</td>
-    </tr>
-
-    <tr>
         <td>show</td>
         <td>(optional) Comma separated list of fields/tvs to show</td>
-        <td>pagetitle,longtitle,hidemenu,published,
-            description,menutitle,pub_date,
-            unpub_date,introtext,content</td>
-    </tr>
-    <tr>
-        <td>shownotify</td>
-        <td>(optional) If set, show option to launch Notify</td>
-        <td>0</td>
+        <td>pagetitle,longtitle,hidemenu,published,description,menutitle,pub_date,unpub_date,introtext,content</td>
     </tr>
     <tr>
         <td>stopOnBadTv</td>
@@ -659,17 +607,12 @@ form.</p>
         <td>(required only if usetabs is set) Specification for tabs (see tutorial)</td>
         <td>(empty)</td>
     </tr>
-
     <tr>
         <td>templates</td>
-        <td>(optional) Comma-separated list of template IDs for user to select from (must be IDs); if empty, all templates are shown; to force a template, set <code>&templateid</code> and do not show the template field; if <code>&templateid</code> is set, it will be selected.</td>
-        <td>(empty)</td>
-    </tr>
-    <tr>
-        <td>templateid</td>
-        <td>(optional) Name of template to use for new document; for new resources, set to `parent` to use parent's template; for `parent`, <code>&parentid</code> must be set
+        <td>(optional) Comma-separated list of template IDs for user to select from (must be IDs); if &template is set,
+            it will be selected in the list
         </td>
-        <td>the default_template System Setting</td>
+        <td>(empty)</td>
     </tr>
     <tr>
         <td>textmaxlength</td>
@@ -677,14 +620,14 @@ form.</p>
         <td>60</td>
     </tr>
     <tr>
-        <td>texttpl</td>
-        <td>(optional) Tpl used for text resource fields</td>
-        <td>npTextTpl</td>
-    </tr>
-    <tr>
         <td>tinyheight</td>
         <td>(optional) Height of richtext areas</td>
         <td>400px</td>
+    </tr>
+    <tr>
+        <td>tinysource</td>
+        <td>Source to load TinyMCE from</td>
+        <td>//cdn.tinymce.com/4/tinymce.min.js</td>
     </tr>
     <tr>
         <td>tinywidth</td>
@@ -700,6 +643,159 @@ form.</p>
         <td>which_editor</td>
         <td>Rich-text editor to use; at present, TinyMCE is the only value that will work</td>
         <td>TinyMCE</td>
+    </tr>
+    <tr>
+        <td>aliasdateformat</td>
+        <td>(optional) Format string for auto date alias -- see tutorial</td>
+        <td>PHP date + time format</td>
+    </tr>
+    <tr>
+        <td>aliasprefix</td>
+        <td>(optional) Prefix to be prepended to alias for new documents with an empty alias; alias will be aliasprefix
+            - timestamp
+        </td>
+        <td>(empty)</td>
+    </tr>
+    <tr>
+        <td>aliastitle</td>
+        <td>(optional) Set to Yes to use lowercase, hyphenated, page title as alias. If set to No, 'article-(date
+            created)' is used. Ignored if alias is filled in form
+        </td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>cacheable</td>
+        <td>(optional) Sets the flag that determines whether or not the resource is cached; for new resources, set to
+            `Parent` to use parent's setting
+        </td>
+        <td>System Default</td>
+    </tr>
+    <tr>
+        <td>classkey</td>
+        <td>(optional) Class key for new resources; use only if you have subclassed resource or are using this for
+            Articles (set to Article)
+        </td>
+        <td>modDocument</td>
+    </tr>
+    <tr>
+        <td>hidemenu</td>
+        <td>(optional) Sets the flag that determines whether or not the new page shows in the menu; for new resources,
+            set to `Parent to use parent's setting
+        </td>
+        <td>System Default</td>
+    </tr>
+    <tr>
+        <td>parentid</td>
+        <td>(optional) Folder ID where new documents are stored</td>
+        <td>NewsPublisher folder; to force a parent, set this and do not show the parent field</td>
+    </tr>
+    <tr>
+        <td>presets</td>
+        <td>Preset values for new document fields in this form: `content:Some default content,introtext</td>
+        <td>introtext`</td>
+    </tr>
+    <tr>
+        <td>published</td>
+        <td>(optional) Set new resource as published or not (will be overridden by publish and unpublish dates). Set to
+            `parent` to match parent's pub status
+        </td>
+        <td>System Default</td>
+    </tr>
+    <tr>
+        <td>richtext</td>
+        <td>(optional) Sets the flag that determines whether or Rich Text Editor is used to when editing the page
+            content in the Manager; for new resources, set to `Parent` to use parent's setting
+        </td>
+        <td>System Default</td>
+    </tr>
+    <tr>
+        <td>searchable</td>
+        <td>(optional) Sets the flag that determines whether or not the new page is included in site searches; for new
+            resources, set to `Parent` to use parent's setting
+        </td>
+        <td>System Default</td>
+    </tr>
+    <tr>
+        <td>template</td>
+        <td>(optional) Name or ID of template to use for new document; for new resources, set to `Parent` to use
+            parent's template; for `parent`, &parentid must be set
+        </td>
+        <td>the default_template System Setting</td>
+    </tr>
+    <tr>
+        <td>booltpl</td>
+        <td>(optional) Tpl used for Yes/No resource fields (e.g., published, searchable, etc.)</td>
+        <td>npBoolTpl</td>
+    </tr>
+    <tr>
+        <td>datetpl</td>
+        <td>(optional) Tpl used for date resource fields and date TVs</td>
+        <td>npDateTpl</td>
+    </tr>
+    <tr>
+        <td>elfinderinittpl</td>
+        <td>(optional) Tpl used to initialize elFinder</td>
+        <td>npelFinderInitTpl</td>
+    </tr>
+    <tr>
+        <td>errortpl</td>
+        <td>(optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder</td>
+        <td>npErrorTpl</td>
+    </tr>
+    <tr>
+        <td>fielderrortpl</td>
+        <td>(optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder</td>
+        <td>npFieldErrorTpl</td>
+    </tr>
+    <tr>
+        <td>filetpl</td>
+        <td>(optional) Tpl used for file TVs</td>
+        <td>npFileTpl</td>
+    </tr>
+    <tr>
+        <td>imagetpl</td>
+        <td>(optional) Tpl used for image TVs</td>
+        <td>npImageTpl</td>
+    </tr>
+    <tr>
+        <td>inttpl</td>
+        <td>(optional) Tpl used for integer resource fields</td>
+        <td>npIntTpl</td>
+    </tr>
+    <tr>
+        <td>listoptiontpl</td>
+        <td>(optional) Tpl used for each option of listbox TVs</td>
+        <td>npListOptionTpl</td>
+    </tr>
+    <tr>
+        <td>optionoutertpl</td>
+        <td>(optional) Tpl used for as a shell for checkbox, list, and radio option TVs</td>
+        <td>npOptionOuterTpl</td>
+    </tr>
+    <tr>
+        <td>optiontpl</td>
+        <td>(optional) Tpl used for each option of checkbox and radio option TVs</td>
+        <td>npOptionTpl</td>
+    </tr>
+    <tr>
+        <td>outertpl</td>
+        <td>(optional) Tpl used as a shell for the whole page</td>
+        <td>npOuterTpl</td>
+    </tr>
+    <tr>
+        <td>richtexttpl</td>
+        <td>(optional) Tpl used for richtext TVs</td>
+        <td>npRichTextTpl</td>
+    </tr>
+    <tr>
+        <td>texttpl</td>
+        <td>(optional) Tpl used for text resource fields</td>
+        <td>npTextTpl</td>
+    </tr>
+    <tr>
+        <td>tinymceinittpl</td>
+        <td>(optional) Tpl used to initialize TinyMCE</td>
+        <td>npTinyMCEInitTpl</td>
     </tr>
 </table>
 
