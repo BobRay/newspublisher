@@ -146,8 +146,8 @@ $url = rtrim($url, '/\\');
 
 $locale = $modx->getOption('locale', $scriptProperties, $modx->getOption('locale', null), true);
 
-$tmbSize = $modx->getOption('np_elfinder_tmb_size', null, 48, false); // System Setting
-// $modx->log(modX::LOG_LEVEL_ERROR, 'Thumb size: ' . $tmbSize);
+$tmbSize = $modx->getOption('np_elfinder_tmb_size', null, 150, false); // System Setting
+$modx->log(modX::LOG_LEVEL_ERROR, 'Thumb size: ' . $tmbSize);
 $tmbCrop = false;
 $tmbPath = $modx->getOption('tmbPath', $scriptProperties, '.tmb');
 $uploadOverwrite = $modx->getOption('uploadAllowOverwrite', $scriptProperties, true, true);

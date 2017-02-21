@@ -117,7 +117,7 @@ $properties = array (
     'options' => 
     array (
     ),
-    'value' => '',
+    'value' => 'image,text/plain',
     'lexicon' => 'newspublisher:properties',
     'area' => '',
   ),
