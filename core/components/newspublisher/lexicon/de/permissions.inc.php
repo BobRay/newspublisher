@@ -27,5 +27,5 @@
  */
 
 
-$_lang['np_allow_modx_tags_desc'] = 'Bearbeiten von Dokumenten mit MODx-Tags durch NewsPublisher erlauben.';
+$_lang['np_allow_modx_tags_desc'] = 'Bearbeiten von Dokumenten mit MODX-Tags durch NewsPublisher erlauben.';
 

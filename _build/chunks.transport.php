@@ -24,7 +24,7 @@
 
 /**
  * Utility snippet for development - just installs the
- * Tpl chunks into MODx.
+ * Tpl chunks into MODX
  *
  * @package newspublisher
  * @subpackage build
@@ -47,7 +47,7 @@ $sources= array (
 );
 unset($root);
 
-/* instantiate MODx */
+/* instantiate MODX */
 require_once $sources['build'].'build.config.php';
 require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
 $modx= new modX();

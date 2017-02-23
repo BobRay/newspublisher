@@ -1,4 +1,4 @@
-NewsPublisher Extra for MODx Revolution
+NewsPublisher Extra for MODX Revolution
 =======================================
 
 **Original Author:** Raymond Irving     
@@ -11,9 +11,9 @@ NewsPublisher is a front-end resource editing and creation tool for MODX Revolut
 
 Documentation is available at [Bob's Guides] (http://bobsguides.com/newspublisher-tutorial.html)
 
-NewsPublisher is based on the NewsPublisher snippet for MODx
+NewsPublisher is based on the NewsPublisher snippet for MODX
 Evolution but has been completely refactored from the ground up for
-MODx Revolution. It includes rich text editing
+MODX Revolution. It includes rich text editing
 for the content and summary (introtext) fields and also for any
 rich text TVs.
 

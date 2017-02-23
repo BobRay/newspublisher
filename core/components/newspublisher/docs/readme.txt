@@ -8,7 +8,7 @@ Major Contributor: Markus Schlegel -Invaluable fixes, improvements, and feature 
 
 Tabs feature thanks to Gregor Šekoranja
 
-A Front-end resource editor for MODx Revolution.
+A Front-end resource editor for MODX Revolution.
 
 Official Documentation: http://bobsguides.com/newspublisher-tutorial.html
 Bugs and Feature Requests: https://github.com/BobRay/newspublisher

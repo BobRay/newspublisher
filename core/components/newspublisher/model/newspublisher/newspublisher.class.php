@@ -25,7 +25,7 @@
  * @package newspublisher
  */
 /**
- * MODx NewsPublisher Class
+ * MODX NewsPublisher Class
  *
   * @package  newspublisher
  *

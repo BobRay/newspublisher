@@ -27,5 +27,5 @@
  */
 
 
-$_lang['np_allow_modx_tags_desc'] = 'Allow editing of resources with MODx tags using NewsPublisher.';
+$_lang['np_allow_modx_tags_desc'] = 'Allow editing of resources with MODX tags using NewsPublisher.';
 

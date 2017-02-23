@@ -28,4 +28,4 @@
 
 /** Translation by Alberto Ramacciotti (obert2k11) <ramacciotti.alberto@gmail.com> */
 
-$_lang['np_allow_modx_tags_desc'] = 'Consente la modifca di risorse con tags di MODx utilizzando NewsPublisher.';
+$_lang['np_allow_modx_tags_desc'] = 'Consente la modifca di risorse con tags di MODX utilizzando NewsPublisher.';
