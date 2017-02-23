@@ -1394,41 +1394,10 @@ class Newspublisher {
                 
             case 'image':
             case 'file':
-                $tvId = $tv->get('id');
                 $mediaSourceId = $tv->get('source');
-
-                /* remove this? */
-               /* $this->modx->getService('fileHandler',
-                    'modFileHandler', '', array('context' => $this->context));
-                $params['wctx'] = $this->context;
-                $value = $tv->getValue($this->existing);
-                $openTo = '';
-
-                $source = $tv->getSource($this->context);
-                if (!$source) {
-                    $this->setError($this->modx->lexicon('np_no_media_source') .
-                        $name);
-                    return null;
-                }
-                if (!$source->getWorkingContext()) {
-                    $this->setError($this->modx->lexicon('np_source_wctx_error') .
-                        $name);
-                }
-                $source->initialize();
-                $params['source'] = $source->get('id');
-                
-                if (!$source->checkPolicy('view')) {
-                    $this->setError($this->modx->lexicon('np_media_source_access_denied')
-                        . $name);
-                    return null;
-                }
-
-                if (!empty($value)) {
-                    $openTo = $source->getOpenTo($value,$params);
-                }*/
-
                 $formTpl .= $this->_displayFileInput($name, $tvType.'Tpl', $mediaSourceId);
                 break;
+
             default:
                 /* use custom TV file if it exists */
                 $tvFile = dirname(dirname(dirname(__FILE__))) . '/tvs/' . $tvType . '.php';
