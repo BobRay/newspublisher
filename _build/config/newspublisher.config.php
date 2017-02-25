@@ -463,6 +463,7 @@ $components = array(
         'accesspolicy',
         'accesspolicytemplate',
         'filemove',
+        'default',
 
     ),
 
