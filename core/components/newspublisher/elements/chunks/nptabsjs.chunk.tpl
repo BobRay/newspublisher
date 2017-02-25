@@ -114,7 +114,7 @@ $(document).ready(function(){
     var filters_a = $('#' + filterId + ' a');
     filters_a.click(function(){
       var selector = $(this).data('filter');
-      console.log(selector);
+      // console.log(selector);
 
       if (selector == '*') { /* Show All */
           formChildren.removeClass('np-hidden');
