@@ -123,9 +123,11 @@ if ($mediaSourceId !== null) {
     if ($ms) {
         $ms->initialize();
         $bases = $ms->getBases();
-        $path = $bases['path'];
-        $url =  $bases['url'];
+        $path = $modx->getOption('base_path') . $bases['path'];
+        $url =  $modx->getOption('site_url') . $bases['url'];
         $startPath = $path;
+        $path = empty($path) ? $modx->getOption('base_path') : $path;
+        $url = empty($path) ? $modx->getOption('site_url') : $url;
     }
 }
 
@@ -136,13 +138,17 @@ if (empty($startPath)) {
     $startPath = $modx->getOption('browserStartPath', $scriptProperties, $path, true);
 }
 if (empty($url)) {
-    $url = $modx->getOption('browserStartURL', $scriptProperties, $modx->getOption('base_url') . 'assets', true);
+    $url = $modx->getOption('browserBaseURL', $scriptProperties, $modx->getOption('site_url') . 'assets', true);
 }
 
 // Remove any trailing slashes
 $path = rtrim($path, '/\\');
 $startPath = rtrim($path, '/\\');
 $url = rtrim($url, '/\\');
+
+// $modx->log(modX::LOG_LEVEL_ERROR, '[Connector] MediaSource: ' . $mediaSourceId);
+// $modx->log(modX::LOG_LEVEL_ERROR, '[Connector] Path: ' . $path);
+// $modx->log(modX::LOG_LEVEL_ERROR, '[Connector] URL: ' . $url);
 
 $locale = $modx->getOption('locale', $scriptProperties, $modx->getOption('locale', null), true);
 

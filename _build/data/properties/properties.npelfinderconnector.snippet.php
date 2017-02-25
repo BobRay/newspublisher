@@ -33,7 +33,7 @@ $properties = array (
     'options' => 
     array (
     ),
-    'value' => '[[++base_url]]assets',
+    'value' => '[[++site_url]]assets',
     'lexicon' => 'newsputblisher:properties',
     'area' => '',
   ),

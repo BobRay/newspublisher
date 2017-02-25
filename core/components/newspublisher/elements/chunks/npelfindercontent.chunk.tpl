@@ -41,7 +41,7 @@
                       },
                     },
                    */
-
+                    loadtmbs: 50,
                     url: '[[++site_url]]npelfinderconnector.html[[+media_source]]',
                     rememberLastDir : [[++np_elfinder_remember_last_dir]],
                     cssAutoLoad: [

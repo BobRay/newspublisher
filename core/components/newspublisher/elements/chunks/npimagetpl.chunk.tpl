@@ -44,10 +44,10 @@
                $('#np-[[+npx.fieldName]]').val(finalUrl); // put the file path in the input field
                $('#editor').remove(); //close the window after image is selected
                $('#np-[[+npx.fieldName]]_preview').html(imgTag);
-               // console.log(file.path);
-               // console.log(file.url);
-               // console.log('FINAL: '+finalUrl);
-               // console.log(file);
+               console.log("Path: " + file.path);
+               console.log("URL: " +file.url);
+               console.log('FINAL: '+finalUrl);
+               console.log(file);
              }
           });
 
