@@ -28,73 +28,179 @@
  * NpEditThisButton snippet.
  * /
 
-/*
+/* Properties
 
-   NOTE: You may need the latest version of TinyMCE for rich text editing.
+           AREA: NewsPublisher Control Settings
 
-  Properties:
-    @property parentid      - (optional) Folder id where new documents are stored; defaults to NewsPublisher folder.
-    @property show        - (optional) Comma separated list of fields/tvs to show (shown in order).
-                     defaults to 'pagetitle,longtitle,description,menutitle,pub_date,unpub_date,introtext,content'.
-    @property required    - (optional) Comma-separated list of fields/tvs to require; defaults to 'pagetitle,content'.
-    @property published   - (optional) Set new resource as published or not
-                      (will be overridden by publish and unpublish dates).
-                       Set to `Parent` to match parent's pub status;
-                       defaults to publish_default system setting.
-    @property postid      - (optional) Document id to load on success; defaults to the page created or edited.
-    @property cancelid    - (optional) Document id to load on cancel; defaults to http_referer.
-    @property badwords    - (optional) Comma delimited list of words not allowed in new document.
-    @property template    - (optional) Name of template to use for new document; set to 'Parent' to use parent's template;
-                       for 'parent', &parent must be set; defaults to system default template.
-    @property headertpl   - (optional) Header Tpl chunk (chunk name) to be inserted at the beginning of a new document.
-    @property footertpl   - (optional) Footer Tpl chunk (chunk name) to be inserted at the end of a new document.
-    @property tinyheight  - (optional) Height of richtext areas; default `400px`.
-    @property tinywidth   - (optional) Width of richtext areas; default `95%`.
-    @property outertpl    - (optional) Tpl used as a shell for the whole page
-    @property texttpl     - (optional) Tpl used for text resource fields
-    @property inttpl      - (optional) Tpl used for integer resource fields.
-    @property datetpl     - (optional) Tpl used for date resource fields and date TVs
-    @property booltpl     - (optional) Tpl used for Yes/No resource fields (e.g., published, searchable, etc.).
-    @property optionoutertpl - (optional) Tpl used for as a shell for checkbox, list, and radio option TVs.
-    @property optiontpl   - (optional) Tpl used for each option of checkbox and radio option TVs.
-    @property listoptiontpl - (optional) Tpl used for each option of listbox TVs.
-    @property richtext    - (optional) Sets the flag to as to whether or Rich Text Editor is used when editing the page
-                       content in the Manager; defaults to richtext_default System Setting for new resources;
-                       set to `Parent` to use parent's setting.
-    @property rtcontent   - (optional) Use rich text for the content form field.
-    @property rtsummary   - (optional) Use rich text for the summary (introtext) form field.
-    @property hidemenu    - (optional) Sets the flag (0/1) for whether or not the new page shows in the menu; defaults to 1.
-    @property searchable  - (optional) Search add-on components can use this to determine whether to include the resource in searches;
-                       default is search_default System Setting; set to `Parent` to use parent's setting.
-    @property cacheable   - (optional) Sets the flag (0/1) for whether or not the new page is marked as cacheable;
-                       default is cache_default System Setting; set to `Parent` to use parent's setting.
+ * @property &activetab textfield -- (optional) Tab to show when form
+ *    is loaded; Default: (empty).
+ * @property &allowedtags textfield -- (optional) Tags allowed in text
+ *    fields; Default: see tutorial.
+ * @property &badwords textfield -- (optional) Comma delimited list of
+ *    words not allowed in document; Default: (empty).
+ * @property &cancelid textfield -- (optional) Document ID to load on
+ *    cancel; Default: http_referer.
+ * @property &captions textfield -- (optional) Custom captions --
+ *    Comma-separated list of FieldNames:FieldCaptions. Example:
+ *    &captions=`introtext:Summary,content:Enter Your Post`; Default:
+ *    (empty).
+ * @property &clearcache combo-boolean -- (optional) When set to Yes,
+ *    NewsPublisher will clear the site cache after saving the resource;
+ *    Default: Yes.
+ * @property &contentcols textfield -- (optional) Columns to show in
+ *    Content field; Default: 60.
+ * @property &contentrows textfield -- (optional) Rows to show in
+ *    Content field; Default: 10.
+ * @property &cssfile textfield -- (optional) Name of CSS file to use,
+ *    or `` for no CSS file; File should be in assets/newspublisher/css/
+ *    directory; Default: newspublisher.css.
+ * @property &groups textfield -- (optional) Comma-separated list of
+ *    resource groups to put new document in (no effect with existing docs);
+ *    set to `parent` to use parent's groups; Default: (empty).
+ * @property &hoverhelp combo-boolean -- (optional) Show help when
+ *    hovering over field caption; Default: Yes.
+ * @property &initdatepicker combo-boolean -- (optional) Initialize
+ *    date picker; set this if there are any date fields; Default: Yes.
+ * @property &initfilebrowser combo-boolean -- Initialize file browser
+ *    for use in RTE and file/image TVs; Default: no.
+ * @property &initrte combo-boolean -- (optional) Initialize rich text
+ *    editor; set this if there are any rich text fields; Default: No.
+ * @property &intmaxlength numberfield -- (optional) Max length for
+ *    integer input fields; Default: 10.
+ * @property &language textfield -- (optional) Language to use in
+ *    forms and error messages; Default: (empty).
+ * @property &listboxmax numberfield -- (optional) Maximum length for
+ *    listboxes; Default: 8.
+ * @property &multiplelistboxmax textfield -- (optional) Maximum
+ *    length for multi-select listboxes; Default: 20.
+ * @property &parents textfield -- Comma-separated list of parent IDs
+ *    for user to select from (must be IDs or Context keys); If &parentid is
+ *    sent, it will be selected in the list. Note: new_document_in_root
+ *    permission may be necessary for new resources); Default: (empty).
+ * @property &postid numberfield -- (optional) Document ID to load on
+ *    success; Default: the page created or edited.
+ * @property &prefix textfield -- (optional) Prefix to use for
+ *    placeholders; Default: np.
+ * @property &readonly textfield -- (optional) Comma-separated list of
+ *    fields that should be read only; does not work with option or textarea
+ *    fields; Default: (empty).
+ * @property &required textfield -- (optional) Comma separated list of
+ *    fields/tvs to require; Default: (empty).
+ * @property &rtcontent combo-boolean -- (optional) Use rich text for
+ *    the content form field; Default: No.
+ * @property &rtsummary combo-boolean -- (optional) Use rich text for
+ *    the summary (introtext) form field; Default: No.
+ * @property &show textfield -- (optional) Comma separated list of
+ *    fields/tvs to show; Default: (empty).
+ * @property &stopOnBadTv combo-boolean -- (optional) If set to No,
+ *    &show can contain TVs not attached to the current template without an
+ *    error; Default: Yes.
+ * @property &summarycols textfield -- (optional) Number of columns
+ *    for the summary field; Default: 60.
+ * @property &summaryrows textfield -- (optional) Number of rows for
+ *    the summary field; Default: 10.
+ * @property &tabs textfield -- (required only if usetabs is set)
+ *    Specification for tabs (see tutorial); Default: (empty).
+ * @property &templates textfield -- (optional) Comma-separated list
+ *    of template IDs for user to select from (must be IDs); if &template is
+ *    set, it will be selected in the list; Default: (empty).
+ * @property &textmaxlength numberfield -- (optional) Max length for
+ *    text input fields; Default: 60.
+ * @property &tinyheight textfield -- (optional) Height of richtext
+ *    areas; Default: 400px.
+ * @property &tinysource textfield -- Source to load TinyMCE from;
+ *    Default: //cdn.tinymce.com/4/tinymce.min.js.
+ * @property &tinywidth textfield -- (optional) Width of richtext
+ *    areas; Default: 95%.
+ * @property &usetabs combo-boolean -- (optional) Show tabbed display;
+ *    Default: No.
+ * @property &which_editor textfield -- Rich-text editor to use; at
+ *    present, TinyMCE is the only value that will work; Default: TinyMCE.
 
-    @property aliastitle  - (optional) Set to 1 to use lowercase, hyphenated, page title as alias. Defaults to 1.
-                       If 0,'article-(date created)' is used. Ignored if alias is filled in form.
-    @property aliasprefix - (optional) Prefix to be prepended to alias for new documents with an empty alias; alias will be aliasprefix - timestamp (or alias - customDate if the 'aliasdateformat property was set)";
-    @property aliasdateformat - (optional) Allows to have a formatted date/time instead of the timestamp suffix. Example: '_Ymd' leads to 'aliasprefix_20110707' (see documentation for the php date() function for all formatting options). Default: empty";
-    @property clearcache  - (optional) When set to 1, cache will be cleared after saving the resource; default: 1.
-    @property listboxmax  - (optional) Maximum length for listboxes. Default is 8 items.
-    @property cssfile     - (optional) Name of CSS file to use, or `0` for no CSS file; defaults to newspublisher.css.
-                       File should be in assets/newspublisher/css/ directory
-    @property errortpl    - (optional) Name of Tpl chunk for formatting errors in the header. Must contain [[+np.error]] placeholder.
-    @property fielderrortpl (optional) Name of Tpl chunk for formatting field errors. Must contain [[+np.error]] placeholder.
-    @property groups      - (optional) Resource groups to put new document in (no effect with existing docs);
-                       set to 'Parent' to use parent's groups.
-    @property language    - (optional) Language to use in forms and error messages.
-    @property prefix      - (optional) Prefix to use for placeholders; defaults to 'np'
-    @property fielderrortpl - (optional)
-    @property initrte     - '(optional) Initialize rich text editor; set this if there are any rich text fields; defaults to 0'
-    @property initdatepicker - (optional) Initialized the datepicker; set this if there are any date fields; defaults to '1'
-    @property readonly    - (optional) Comma-separated list of fields that should be read only; does not work on option or richtext fields
-    @property intmaxlength- (optional) Max length for integer input fields; default: 10
-    @property textmaxlength- (optional) Max length for text input fields; default 60
-    @property hoverhelp    - (optional) Show help when hovering over field caption: default `1`
-    @property usetabs  - (optional) show the fields on separate tabs
-    @property tabs - (required if usetabs is set); JSON string with the tab specifications
-    @property activetab - (optional) Tab to display when form is shown; if missing, all tabs will show
+           AREA: Resource Field Settings
 
-*/
+ * @property &aliasdateformat textfield -- (optional) Format string
+ *    for auto date alias -- see tutorial; Default: PHP date + time format.
+ * @property &aliasprefix textfield -- (optional) Prefix to be
+ *    prepended to alias for new documents with an empty alias; alias will
+ *    be aliasprefix - timestamp; Default: (empty).
+ * @property &aliastitle combo-boolean -- (optional) Set to Yes to use
+ *    lowercase, hyphenated, page title as alias. If set to No,
+ *    'article-(date created)' is used. Ignored if alias is filled in form;
+ *    Default: Yes.
+ * @property &cacheable list -- (optional) Sets the flag that
+ *    determines whether or not the resource is cached; for new resources,
+ *    set to `Parent` to use parent's setting; Default: cache_default System
+ *    Setting.
+ * @property &classkey textfield -- (optional) Class key for new
+ *    resources; use only if you have subclassed resource or are using this
+ *    for Articles (set to Article); Default: modDocument.
+ * @property &hidemenu list -- (optional) Sets the flag that
+ *    determines whether or not the new page shows in the menu; for new
+ *    resources, set to `Parent to use parent's setting; Default:
+ *    hidemenu_default System Setting.
+ * @property &parentid numberfield -- (optional) Folder ID where new
+ *    documents are stored; Default: NewsPublisher folder; to force a
+ *    parent, set this and do not show the parent field.
+ * @property &presets textfield -- Preset values for new document
+ *    fields in this form: `content:Some default content,introtext; Default:
+ *    introtext`.
+ * @property &published list -- (optional) Set new resource as
+ *    published or not (will be overridden by publish and unpublish dates).
+ *    Set to `parent` to match parent's pub status; Default: publish_default
+ *    system setting.
+ * @property &richtext list -- (optional) Sets the flag that
+ *    determines whether or Rich Text Editor is used to when editing the
+ *    page content in the Manager; for new resources, set to `Parent` to use
+ *    parent's setting; Default: richtext_default System Setting.
+ * @property &searchable list -- (optional) Sets the flag that
+ *    determines whether or not the new page is included in site searches;
+ *    for new resources, set to `Parent` to use parent's setting; Default:
+ *    search_default System Setting.
+ * @property &template textfield -- (optional) Name or ID of template
+ *    to use for new document; for new resources, set to `Parent` to use
+ *    parent's template; for `parent`, &parentid must be set; Default: the
+ *    default_template System Setting.
+
+           AREA: Tpls
+
+ * @property &booltpl textfield -- (optional) Tpl used for Yes/No
+ *    resource fields (e.g., published, searchable, etc.); Default:
+ *    npBoolTpl.
+ * @property &datetpl textfield -- (optional) Tpl used for date
+ *    resource fields and date TVs; Default: npDateTpl.
+ * @property &elfinderinittpl textfield -- (optional) Tpl used to
+ *    initialize elFinder; Default: (empty).
+ * @property &errortpl textfield -- (optional) Name of Tpl chunk for
+ *    formatting field errors. Must contain [[+np.error]] placeholder;
+ *    Default: npErrorTpl.
+ * @property &fielderrortpl textfield -- (optional) Name of Tpl chunk
+ *    for formatting field errors. Must contain [[+np.error]] placeholder;
+ *    Default: npFieldErrorTpl.
+ * @property &filetpl textfield -- (optional) Tpl used for file TVs;
+ *    Default: (empty).
+ * @property &imagetpl textfield -- (optional) Tpl used for image TVs;
+ *    Default: (empty).
+ * @property &inttpl textfield -- (optional) Tpl used for integer
+ *    resource fields; Default: npIntTpl.
+ * @property &listoptiontpl textfield -- (optional) Tpl used for each
+ *    option of listbox TVs; Default: npListOptionTpl.
+ * @property &optionoutertpl textfield -- (optional) Tpl used for as a
+ *    shell for checkbox, list, and radio option TVs; Default:
+ *    npOptionOuterTpl.
+ * @property &optiontpl textfield -- (optional) Tpl used for each
+ *    option of checkbox and radio option TVs; Default: npOptionTpl.
+ * @property &outertpl textfield -- (optional) Tpl used as a shell for
+ *    the whole page; Default: npOuterTpl.
+ * @property &richtexttpl textfield -- (optional) Tpl used for
+ *    richtext TVs; Default: (empty).
+ * @property &texttpl textfield -- (optional) Tpl used for text
+ *    resource fields; Default: npTextTpl.
+ * @property &tinymceinittpl textfield -- (optional) Tpl used to
+ *    initialize TinyMCE; Default: (empty).
+
+ */
+
 
 /** @define "$modx->getOption('np.core_path',null,$modx->getOption('core_path').'components/newspublisher/')" "VALUE" */
 
