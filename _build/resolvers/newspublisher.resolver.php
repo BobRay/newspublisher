@@ -29,8 +29,21 @@
 if ($object->xpdo) {
     $modx =& $object->xpdo;
     switch ($options[xPDOTransport::PACKAGE_ACTION]) {
-        case xPDOTransport::ACTION_INSTALL:
+        /** @noinspection PhpMissingBreakStatementInspection */
         case xPDOTransport::ACTION_UPGRADE:
+            $cp = MODX_CORE_PATH;
+            $files = array(
+                $cp . 'components/newspublisher/controllers/filebrowser.class.php',
+                $cp . 'components/newspublisher/filebrowser.class.php',
+                $cp . 'components/newspublisher/templates/filebrowser-2.2.tpl',
+                $cp . 'components/newspublisher/templates/filebrowser.tpl',
+            );
+            foreach ($files as $file) {
+                @unlink($file);
+            }
+        /* Intentional fallthrough */
+        case xPDOTransport::ACTION_INSTALL:
+
             $doc = $modx->getObject('modResource', array('alias' => 'login'));
             if (! $doc) {
                 $doc = $modx->getObject('modResource', array('pagetitle' => "Login"));
