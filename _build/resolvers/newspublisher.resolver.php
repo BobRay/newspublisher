@@ -44,6 +44,7 @@ if ($object->xpdo) {
         /* Intentional fallthrough */
         case xPDOTransport::ACTION_INSTALL:
 
+            /* Try to set np_login_is System Setting if it's empty */
             $doc = $modx->getObject('modResource', array('alias' => 'login'));
             if (! $doc) {
                 $doc = $modx->getObject('modResource', array('pagetitle' => "Login"));
@@ -52,9 +53,12 @@ if ($object->xpdo) {
             if ($doc) {
                 $setting = $modx->getObject('modSystemSetting', array('key' => 'np_login_id'));
                 if ($setting) {
-                    $setting->set('value', $doc->get('id'));
-                    if ($setting->save()) {
-                        $modx->log(modX::LOG_LEVEL_INFO, 'Setting np_login_id System Setting to ID of login page');
+                    $val = $setting->get('value');
+                    if (empty($val)) {
+                        $setting->set('value', $doc->get('id'));
+                        if ($setting->save()) {
+                            $modx->log(modX::LOG_LEVEL_INFO, 'Setting np_login_id System Setting to ID of login page');
+                        }
                     }
                 }
             } else {
