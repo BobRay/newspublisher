@@ -1379,6 +1379,7 @@ class Newspublisher {
                 }
                 $source->initialize();
                 $params['source'] = $source->get('id');
+                $replace['[[+npx.source]]'] = $source->get('id');
                 
                 if (!$source->checkPolicy('view')) {
                     $this->setError($this->modx->lexicon('np_media_source_access_denied')
