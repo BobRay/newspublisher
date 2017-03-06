@@ -1,5 +1,25 @@
 Changelog for NewsPublisher
 
+NewsPublisher 3.0.0-pl
+----------------------
+Remove all dependencies on extJS/modExt
+Remove all dependencies on TinyMCE extra
+Load TinyMCE from tinymce.com
+Integrate elFinder file/image browser
+Enable image editing in file browser
+Check Login status before any code executes
+Add redirect to Login option
+Add properties: filetpl, imagetpl, richtexttpl
+Add properties: tinymceinittpl, tinysource
+Add properties: initfilebrowser, elfinderinittpl
+Allow direct configuration of TinyMCE
+Allow direct configuration of elFinder
+Force Media Source path for richtext TVs
+Pass Media Source ID as _$GET variable
+Allow disabling specific elFinder commands
+Numerous bug fixes, sanity checks, and other improvements
+
+
 NewsPublisher 2.2.0-pl
 ----------------------
 Add presets property to set fields for new document
