@@ -1,17 +1,17 @@
 
-<p>This snippet is for use with MODX Revolution. NewsPublisher is a front-end resource creation and editing tool. It allows users to create new documents and edit existing documents in the front end of your site. Editing existing documents involves placing a tag for the NpEditThisButton snippet in your page template. Clicking on the button produced by the snippet launches NewsPublisher for that resource. You do not have to create *any* form fields. NewsPublisher creates them based on the field or TV type and its current or default value (if any).</p>
+<p>NewsPublisher is a front-end resource creation and editing tool for MODX Revolution. It allows users to create new documents and edit existing documents in the front end of your site. Editing existing documents involves placing a tag for the NpEditThisButton snippet in your page template. Clicking on the button produced by the snippet launches NewsPublisher for that resource. You do not have to create *any* form fields. NewsPublisher creates them based on the field or TV type and its current or default value (if any).</p>
 
 <div class="box">
-    <p><b>Important: If you are upgrading from a version prior to NewsPublisher 3.0, be sure to see the <a href="#np_upgrade_notes">Upgrade Notes</a> at the bottom of this page.</b></p>
+    <p><b>Important: If you are upgrading from a version prior to NewsPublisher 3.0, be sure to see the <a href="[[~[[*id]]]]#np_upgrade_notes">Upgrade Notes</a> at the bottom of this page.</b></p>
 </div>
 
-<p>(Jump to <a href="#np_SettingsTable">NewsPublisher System Settings Table</a>.)</p>
+<p>(Jump to <a href="[[~[[*id]]]]#np_SettingsTable">NewsPublisher System Settings Table</a>.)</p>
 
-<p>(Jump to <a href="#np_propertiesTable">NewsPublisher Snippet Properties Table</a>.)</p>
+<p>(Jump to <a href="[[~[[*id]]]]#np_propertiesTable">NewsPublisher Snippet Properties Table</a>.)</p>
 
-<p>(Jump to <a href="#np_elFinderConnectorTable">npElFinderConnector Snippet Properties Table</a>.)</p>
+<p>(Jump to <a href="[[~[[*id]]]]#np_elFinderConnectorTable">npElFinderConnector Snippet Properties Table</a>.)</p>
 
-<p>(Jump to <a href="#npet_propertiesTable">NpEditThisButton Snippet Properties Table</a>.)</p>
+<p>(Jump to <a href="[[~[[*id]]]]#npet_propertiesTable">NpEditThisButton Snippet Properties Table</a>.)</p>
 
 
 <h3>Acknowledgements</h3>
@@ -41,13 +41,14 @@ Setting up a basic form is very simple. Create a document called &quot;NewsPubli
 When you preview the document, you should see a basic resource editing form. If you fill it in and click on the "Submit" button, the resource should be created. The basic form shows several standard fields, but you can change that with the <code>&show</code> property. It should contain a comma-delimited list (no spaces) of the fields you would like to display in the form. It can include TV fields listed by name or by ID (shown in the Elements tree next to the TV's name). The fields will appear in the form in the order you list them in the property. You can create multiple NewsPublisher pages showing different sets of fields for different users.
 </p>
 
-<p>The form is highly flexible and you can show any fields or TVs in any order. Some fields will require you to set certain properties. For example, if you have any rich text fields, you'll need to set the <code>&initrte</code> property. If you show any date fields, you'll need the <code>&initdatepicker</code> property. The <code>&rtcontent</code> and <code>&rtsummary</code> properties control whether those fields will have rich text editing. See the list below for more information on the available properties. The properties can be in any order. Here's an example:</p>
+<p>The form is highly flexible and you can show any fields or TVs in any order. Some fields will require you to set certain properties. For example, if you have any rich text fields, you'll need to set the <code>&initrte</code> property. If you show any date fields, you'll need the <code>&initdatepicker</code> property. The <code>&rtcontent</code> and <code>&rtsummary</code> properties control whether those fields will have rich text editing. See the list below for more information on the available properties. If you'll be using the elFinder file/image browser, either for TinyMCE, or file, richtext, or image TVs, you'll need to set the <code>&initfilebrowser</code> property. The properties can be in any order. Here's an example:</p>
 
 <pre><fixedpre>
     [[!NewsPublisher?
         &show=`pagetitle,description,pub_date,introtext,TV1,TV2`
         &initrte=`1`
         &initdatepicker=`1`
+        &initfilebrowser=`1`
         &rtcontent=`1`
         &rtsummary=`1`
         &parentid=`12`
@@ -62,39 +63,47 @@ When you preview the document, you should see a basic resource editing form. If 
 <p>The captions field is optional, so try the form and see if the default captions will work for you. If not, add the <code>&captions</code> property. If your captions are long, you may have to adjust the CSS to keep them from wrapping.</p>
 
 <h3>Security</h3>
-<p>NewsPublisher responds to the MODX security permission system, so users can only create resources if they have permission to do so. As the admin Super User, you'll have full rights (unless you've done something that takes them away) to create and edit any document in the front end. Other users, however, will have to be granted permission before they can do either and their ability to edit existing resources will depend on the resource group settings.</p>
+<p>NewsPublisher responds to the MODX security permission system, so users can only create resources if they are logged in and have permission to do so. As the admin Super User, you'll have full rights (unless you've done something that takes them away) to create and edit any document in the front end. Other users, however, will have to be granted permission before they can do either and their ability to edit existing resources will depend on the resource group settings.</p>
 
-<p>In addition, users (including you) will not be able to edit resources containing MODX tags without the <code>allow_modx_tags</code> permission. As of NewsPublisher 1.3.0, this permission is included in the NewsPublisherEditor Policy but is unchecked by default. You must check the Permission and save the NewsPublisherEditor Policy if you want to allow users to edit or create documents with MODX tags in them. Be sure to see the section below on dealing with MODX tags.</p>
+<p>In addition, users (including you) will not be able to edit resources containing MODX tags without the NewsPublisher <code>allow_modx_tags</code> permission. As of NewsPublisher 1.3.0, this permission is included in the NewsPublisherEditor Policy but is unchecked by default. Turn it on if you want users to be able to insert MODX tags in their documents. Be sure to see the section below on dealing with MODX tags.</p>
 
-<p>In order to create Context Access ACL entries using the NewsPublisherEditor Policy, you may have to flush both permissions and sessions before the new policy will show up in the list.</p>
+<p>When you create Context Access ACL entries using the NewsPublisherEditor Policy, you may have to flush both permissions and sessions before the new Policy will show up in the list.</p>
 
 <p>Be aware that if you upgrade or reinstall NewsPublisher, the <code>allow_modx_tags</code> permission may be unchecked during the process and any other permissions you changed may be reverted unless you have duplicated the NewsPublisherEditor Policy and are using the duplicate.</p>
 
 <h3>MODX Tags</h3>
 
-<p>Recent versions of MODX include the <code>allow_tags_in_post</code> System Setting (not to be confused with the <code>allow_modx_tags</code> permission mentioned above). This makes MODX front-end forms much more secure because any MODX tags are removed from the <code>$_POST</code> array when a form is submitted. Unfortunately, it kills the option to edit resources or TVs containing MODX tags in the front end unless the <code>allow_modx_tags</code> System Setting is on (which poses significant security risks). As of NewsPublisher 2.0, there is a workaround for this. It's not ideal, but it works. MODX tags are now represented in NewsPublisher in the form <code>{{...}}</code> instead of <code>[[ ... ]]</code>. This allows users with the required permission to edit MODX tags in NewsPublisher without turning on the System Setting.</p>
+<p>Recent versions of MODX include the <code>allow_tags_in_post</code> System Setting (not to be confused with the <code>allow_modx_tags</code> permission mentioned above). This makes MODX front-end forms much more secure because any MODX tags are removed from the <code>$_POST</code> array when a form is submitted. Unfortunately, it kills the option to edit resources or TVs containing MODX tags in the front end unless the <code>allow_tags_in_post</code> System Setting is on (which poses significant security risks). As of NewsPublisher 2.0, there is a workaround for this. It's not ideal, but it works. MODX tags are now represented in NewsPublisher in the form <code>{{ ... }}</code> instead of <code><fixedpre>[[ ... ]]</fixedpre></code>. This allows users with the required permission to edit MODX tags in NewsPublisher without turning on the System Setting.</p>
 
-<p>For security reasons, it's <b>strongly recommended</b> that you leave the MODX <code>allow_tags_in_post</code> System Setting at its default setting of 'No'. If you want users to be able to edit MODX tags in NewsPublisher, put a check next to the <code>allow_modx_tags</code> permission in the NewsPublisherEditor Policy and save the Policy. For any users who will be using NewsPublisher, create a Context Access ACL entry for their User Group with a Context of 'web' and NewsPublisherEditor for the Policy. That will give them the <code>allow_modx_tags</code> permission. As always, flush permissions and sessions on the Security menu after making any changes.</p>
+<p>For security reasons, it's <b>strongly recommended</b> that you leave the MODX <code>allow_tags_in_post</code> System Setting at its default setting of 'No'. If you want users to be able to edit MODX tags in NewsPublisher, put a check next to the <code>allow_modx_tags</code> permission in the NewsPublisherEditor Policy and save the Policy. For any users who will be using NewsPublisher, create a Context Access ACL entry for their User Group with a Context of 'web' and NewsPublisherEditor for the Policy. That will give them the <code>allow_modx_tags</code> permission. As always, flush permissions and sessions on the Security menu after making any changes. Remember, when testing, that if you are a sudo user, you have all possible permissions, so the restriction won't affect you.</p>
 
-<p>NewsPublisher users will see all MODX tags in this form: <code>{{ ... }}</code> and will need to use the curly braces for any new tags they enter. All MODX tags are allowed and nested tags work fine in all my tests. The tags will be converted to standard MODX tags when the Resource is saved. <b>Important</b>: Note that if there are any tags in the form <code>[[ ... ]]</code> in any field of the NewsPublisher form, MODX will remove them when the form is submitted.</p>
+<p>NewsPublisher users will see all MODX tags in this form: <code>{{ ... }}</code> and will need to use the curly braces for any new tags they enter. All MODX tags are allowed and nested tags work fine in all my tests. The tags will be converted to standard MODX tags when the Resource is saved. <b>Important</b>: Note that if there are any tags in the form <code><fixedpre>[[ ... ]]</fixedpre></code> in any field of the NewsPublisher form, MODX will remove them when the form is submitted.</p>
+
 
 <p>The NewsPublisherEditor Policy is based on the NewsPublisherPolicyTemplate, which in turn is based on the Administrator Policy Template, but with the addition of the <code>allow_modx_tags</code> permission. Both the Policy and the Policy Template should be installed automatically when you install the NewsPublisher Package.</p>
 
-<p>To use File and Image TVs in your form, or the file/image browser in the rich text editor you must perform two more steps, because the file and image browsers require Manager access. First, include <code>&contexts=`web,mgr`</code> in the Login snippet tag or the user will have to login a second time when trying to use the File or Image browser. Second, create a second Context Access ACL entry (just like the one above) for any groups who will use the form, with a context of 'mgr'. These steps are only necessary if you show File and/or Image TVs in the form or if your users will be using the rich text editor to insert image or file links.
+
+    <a name="np_login_redirect"></a>
 
 <h3>Login Redirect</h3>
 
 <p>As of Version 3.0, NewsPublisher checks for login status and redirects users to the Login page if they are not logged in. If you
     don't want this, you can set the <code>&np_login_redirect</code> property of the NewsPublisher snippet to <code>No</code>. It is set to
-    <code>Yes</code> by default. If set to <code>YES</code>, <b>you must set the <code>&np_login_id</code>
-    property of the NewsPublisher snippet to the ID of your login page</b>. NewsPublisher will try to do this for you during
-    the install, but if the alias of your login page is not <code>login</code>, you'll have to do it yourself.</p>
+    <code>Yes</code> by default.</p>
+
+<p>If <code>&np_login_redirect</code> is set to <code>YES</code>, the <code>&np_login_id</code>
+    property of the NewsPublisher snippet must be set to the ID of your login page. NewsPublisher will try to do this for you during
+    the install, but if the alias of your login page is not <code>login</code>, you'll have to do it yourself. I you want to use a separate login page for NewsPublisher, set the property to the ID of that page.</p>
+
+<br>
 
 <div class="box">
     <p>If you are a <code>sudo</code> user and are previewing NewsPublisher from the Manager, the login checks and all
         permission checks will be bypassed. To test your permissions, you should logout all users (Manage -> Logout all
         Users on the Manager's top menu) and log in as a non-sudo user.</p>
 </div>
+
+<br>
 
 <p>You no longer need to log users in to the <code>mgr</code> context, so you should remove <code>mgr</code> from the
     <code>&contexts</code> property of the NewsPublisher snippet tag and list only front-end contexts there.</p>
@@ -107,7 +116,7 @@ When you preview the document, you should see a basic resource editing form. If 
 
 <h3>Editing Existing Resources</h3>
 
-<p>To edit existing resources, simply place a tag for the NpEditThisButton snippet anywhere in the <code><body></code> section of your template(s) or in the Resource Content field of a Resource. The button is positioned absolutely in the lower right section of the page. The <code>&right</code> property controls the distance from the right side of the page and the <code>&bottom</code> property controls the distance from the bottom. The default for these properties is `20%`. Like NewsPublisher, the button also responds to security permissions and is not shown on pages the user has no right to edit or save. It also does not show on the NewsPublisher page or the home page. If there are other pages where you would like to hide it, you can include a comma-delimited list of their IDs in the <code>&noShow</code> property.</p>
+<p>To edit existing resources, simply place a tag for the NpEditThisButton snippet anywhere in the <code><body></code> section of your template(s) or in the Resource Content field of a Resource. The button is positioned absolutely in the lower right section of the page. The <code>&right</code> property controls the distance from the right side of the page and the <code>&bottom</code> property controls the distance from the bottom. The default for these properties is `20%`. Like NewsPublisher, the button also responds to security permissions and is not shown on pages the user has no right to edit or save. It also does not show on the NewsPublisher page or the home page. If there are other pages where you would like to hide it, you can include a comma-delimited list of their IDs in the <code>&noShow</code> property of the NpEditThisButton snippet tag.</p>
 
 <p>Because the button will be hidden until you get the permissions correct, it's recommended that you start with the button tag like this:</p>
 <p><pre><fixedpre>[[!NpEditThisButton? &debug=`1`]]</fixedpre></pre></p>
@@ -116,13 +125,13 @@ When you preview the document, you should see a basic resource editing form. If 
 In debug mode, the button will always show, and if it would normally be hidden, the button itself will display a message explaining why it would not be shown.
 </p>
 
-<p>With debug mode off, the button will show on any page that uses the template when the user has edit_document and save_document permissions in general, and save permission for the current resource (unless the page is excluded by the <code>&noshow</code> property.</p>
+<p>With debug mode off, the button will show on any page that uses the template when the user has <code>edit_document</code> and <code>save_document</code> permissions in general, and <code>save</code> permission for the current resource (unless the page is excluded by the <code>&noshow</code> property.</p>
 
 <p>When the <code>ownpagesonly</code> property is set, the button will show only on pages created by the current user (based on the resource's <code>createdon</code> field).</p>
 
 <h3>Altering the Form</h3>
 
-<p>You can make many changes to the look of the form using CSS rules for styling. You can find the CSS form at assets/components/newspublisher/css/newspublisher.css. Using CSS, you can change the text color, background color, size, and/or position of any field, though the control of richtext fields is limited. You can put fields side-by-side by using &quot;display:inline;&quot; for the appropriate field(s). If you plan to make changes, it's recommended that you make a copy of the CSS file, the <code>assets/components/newspublisher/css</code> directory and put the name of your new file in the <code>&cssfile</code> property.</p>
+<p>You can make many changes to the look of the form using CSS rules for styling. You can find the CSS file at assets/components/newspublisher/css/newspublisher.css. Using CSS, you can change the text color, background color, size, and/or position of any field, though the control of richtext fields is limited. You can put fields side-by-side by using &quot;display:inline;&quot; for the appropriate field(s). If you plan to make changes, it's recommended that you make a copy of the CSS file, the <code>assets/components/newspublisher/css</code> directory and put the name of your new file in the <code>&cssfile</code> property.</p>
 
 <p>If you feel you must, you can alter the Tpl chunks for any of the field types. Again, you should duplicate the existing chunk and put the name of your duplicate in the appropriate property. Be careful not to change the prefixes of any of the placeholders in the Tpl chunks, even if you specify a custom prefix for the form as a property. The prefixes will be altered automatically by the snippet. Note that there are both
 <code>np.</code> and <code>npx.</code> prefixes. The <code>npx.</code> prefixes are used internally by the snippet, the <code>np.</code> prefixes are usually in the value field of the element and will be set via placeholders.
@@ -181,7 +190,7 @@ NewsPublisher form. When the user clicks on the button, the page currently being
 <h3>Launch Notify</h3>
 <p>If the <code>&shownotify</code> property is set to <code>1</code>, the &quot;Launch Notify&quot; option will be shown in the form. If it is selected, after the NewsPublisher form is successfully submitted, the user will be forwarded to the Notify form to send email notifying users of the new or updated page. There will also be radio buttons to allow the user to select a Notify Tpl chunk to use for the email.</p>
 
-<p>In order for Notify to work properly, the user must have view_user permission in the front end and must have access these three pages in the front-end context:</p>
+<p>In order for Notify to work properly, the user must have <code>view_user</code> permission in the front end and must have access these three pages in the front-end context:</p>
 
 <ul>
     <li>Notify</li>
@@ -246,7 +255,7 @@ form.</p>
 <code>&templateid</code> &mdash; (mixed) The name or ID of the template to be assigned to new docs. Can also be set to 'Parent' to assign the parent's template; default: default_template System Setting. To force a particular template, set this, and don't put the <code>template</code> field in the <code>&show</code> property. (For backward compatibility, <code>&template</code> will also work.)</p>
 
 <p>
-<code>&templates</code> &mdash; comma-separated list of IDs (must be IDs!) of Templates for user to select from; default: empty. If <code>&template</code> is also set, it will be selected in the list. $</p>
+<code>&templates</code> &mdash; comma-separated list of IDs (must be IDs!) of Templates for user to select from; default: empty. If <code>&template</code> is also set, it will be selected in the list.</p>
 
 <h3>Page Settings for New Documents</h3>
 <p>The next five properties control the standard page settings of the resource being created (whether you show them or not). They can each be set to `1`, `0`, `Parent`, or `System Default` (the default setting). If set to `Parent`, the settings of the resource's parent will be used (and the <code>&parentid</code> property must be set). If left unset, the MODX System Settings will be used for each one. Note that the published setting may be overridden if you show <code>pub_date</code> or <code>unpub_date</code> in the form and the user sets them.
@@ -258,7 +267,7 @@ form.</p>
 &searchable_default
 &richtext_default</fixedpre></pre>
 
-<a name="presets"></a>
+<a name="np_presets"></a>
 
 <h3>Presets Property</h3>
 
@@ -268,7 +277,7 @@ form.</p>
 &presets=`content:Some default content,introtext:My preset introtext`
 </fixedpre></pre>
 
-<p>In each of the comma-separated pairs, the left side of the <code>:</code> is the name of the field or the name or ID of a TV. The right side of the <code>:</code> is the preset value you want in the field.</p>
+<p>In each of the comma-separated pairs, the left side of the <code>:</code> is the lowercase name of the field or the name or ID of a TV. The right side of the <code>:</code> is the preset value you want in the field.</p>
 
 <p><b>Important:</b> To have a preset, a field must be in the <code>&show</code> property and must be spelled exactly the same way in both the <code>&show</code> property and the <code>&presets</code> property. In both cases, it must be the actual name of the database field (e.g., <code>introtext</code>, *not* <code>summary</code>, and *not* the value you use for a custom caption. </p>
 
@@ -370,7 +379,7 @@ form.</p>
 
 <h3>NewsPublisher and getResources</h3>
 
-<p>As of NewsPublisher 1.2.0, you can put the edit button tag in the getResources Tpl chunk and have an edit button for each resource retrieved using the np_edit_id property. You can also hard-code a page with multiple NpEditThisButton tags. To use this technique with getResources, remove any NpEditThisButton tags from the page template and create a Tpl chunk something like this:</p>
+<p>As of NewsPublisher 1.2.0, you can put the edit button tag in the getResources Tpl chunk and have an edit button for each resource retrieved using the <code>np_edit_id property</code>. You can also hard-code a page with multiple NpEditThisButton tags. To use this technique with getResources, remove any NpEditThisButton tags from the page template and create a Tpl chunk something like this:</p>
 
 <pre><fixedpre>
 <div class="MyItem">
@@ -397,39 +406,81 @@ form.</p>
 
 <p>NewsPublisher should also work with other Custom Resource Classes as long as they are implemented properly, but I haven't had an opportunity to test it with anything but Articles.</p>
 
+<a name="np_configuring_elfinder"></a>
+
+<h3>Configuring elFinder</h3>
+
+<p>NewsPublisher 3.0 uses the <a href="https://github.com/Studio-42/elFinder/wiki">elFinder Browser</a>.</p>
+
+<p>If you don't want users to see the file browser at all, uncheck the <code>file_manager</code> permission in the
+    NewsPublisherEditor Policy (or whatever policy you have assigned for your NewsPublisher users).</p>
+
+<p>If you do want to enable the file browser, you must also set the new <code>&initfilebrowser</code> property of the
+    NewsPublisher snippet to <code>Yes</code> (in addition to checking the <code>file_manager</code> permission).</p>
+
+
+<p>To configure the elFinder Browser, see the properties of the npElFinderConnector snippet. As always, you should create a property set if you want to change any of the default values to prevent them from being overwritten when you upgrade NewsPublisher. Most of the properties there are self-explanatory. In particular, you'll want to check the <code>&disableCommands</code> property. See the description of the property for a list of possible commands. To prevent users from accessing a specific feature, simply remove it from the list. The elFinder browser will automatically remove icons for commands that are disabled.</p>
+
+<p>The <code>&browserBasePath</code> and <code>&browserBaseURL</code> properties of the npElfinderConnector snippet are set to the <code>assets</code> directory. You may want to change them, but be sure they match. Users will not be able to browse above them.</p>
+
+<p>The <code>&browserStartPath</code> and <code>&browserStartURL</code> properties allow the browser to open in a lower directory. The two must match. Users will be able to browse above them, but only up to the <code>&browserBasePath</code> and <code>&browserBaseURL</code> directories.</p>
+
+<p>There are also three new System Settings in the <code>newspublisher</code> namespace that are used to configure elFinder: <code>np_elfinder_remember_last_dir</code>,
+    <code>np_elfinder_theme</code>, and <code>np_elfinder_tmb_size</code>.</p>
+
+<p>If <code>np_elfinder_remember_last_dir</code> is set to <code>Yes</code> (it's <code>No</code> by default), elFinder will open in the directory that was last accessed, though users can still browse above it up to the directory set in the <code>&browserBasePath</code> and <code>&browserBaseURL</code> properties of the npElfinderConnector snippet.</p>
+
+    <p>The <code>np_elfinder_theme</code> setting description lists the built-in themes, but you can add your own if you like. They go in the <code>assets\components\newspublisher\elfinder\elfinderthemes</code> directory. The only file loaded is elfinderthemes/<i>theme name</i>/css/theme.css, which sometimes uses other files in the same directory.</p>
+
+<p>The default elFinder theme is <code>osx</code>, which I think is the most attractive. The other themes are not always reliable. The <code>windows-10</code> theme, for example, hides the <code>X</code> that closes the window, though you can still click on the invisible <code>X</code> to close the window. You're welcome to fix problems you find with any of the themes and contribute them to future NewsPublisher releases. The <code>moono</code> theme seems to work well, but it you have to right-click on the images to see a preview.</p>
+
+    <p>The <code>np_elfinder_tmb_size</code> setting controls the size of the elFinder thumbnails. It's in pixels and the image is always square. The default is 48px. If you want to change that, you should do it before launching elFinder or uploading any images. If you forget, you can simply delete the existing thumbs. They are placed below each directory the images are in and are in a subdirectory named <code>.tmb</code>, unless you've changed the <code>&tmbPath</code> property of the npElFinderConnector snippet. You can use the elFinder thumbnails in your HTML code, but since their names are hashed, it's a pain, and it's not very well documented. I recommend using phpThumb or one of its replacements (e.g., phpThumbOf, or pThumb) for thumbnails.</p>
+
+<p>You can also edit the code of the npelFinderInitTpl chunk to alter elFinder in more advanced ways, though typically, the supplied properties should do most of what you want. Get elFinder working first. To modify it, create a duplicate chunk and specify its name in the <code>&elfinderinittpl</code> property of the NewsPublisher snippet tag.</p>
+
+<p>One use-case for modifying elFinder would be allowing users to browse in and under more than one directory (i.e., multiple roots). This requires modifying the npElFinderConnector snippet code. If you do this, duplicate the snippet and modify the tag on the npElFinderConnector Resource to point to your duplicate. See the docs <a href="https://github.com/Studio-42/elFinder/wiki/Multiple-Roots">here</a> for an example. Note that this will not apply to any TVs. For TVs, the user's browsing will always be limited to the baseURL/basePath of each TV's Media Source. One great feature of elFinder using multiple roots is that the user can have different capabilities in each root. You might, for example, have one directory where users can only upload files and another where they can only download files. This would not be possible with the MODX file browser.</p>
+
+<a name="np_configuring_tinymce"></a>
+
+<h3>Configuring TinyMCE</h3>
+
+<p>NewsPublisher 3.0 loads <a href="https://www.tinymce.com/docs/">TinyMCE 4</a> directly from <a href="tinymce.com">tinymce.com</a>.</p>
+
+<p>There are three properties that affect TinyMCE in the NewsPublisher snippet properties: <code>tinyheight</code>, <code>tinywidth</code>, and <code>tinysource</code>. Their descriptions explain what each one does. You don't need to set these properties unless you want to change the defaults. You can change the <code>&tinysource</code> property to load TinyMCE 4 from another location.</p>
+
+<p>There is also a System Setting for the TinyMCE skin: <code>np_tinymce_skin</code>. The setting is in the <code>newspublisher</code> namespace on the System Settings grid. The built-in themes are listed in the description, but you're welcome to add additional themes. They go in the <code>assets/components/newspublisher/tinymceskins</code> directory.
+
+<p>For more fine-grained control of TinyMCE, you can edit the npTinyMCEInitTpl chunk, which contains initialization code for TinyMCE. If you want to do this, be sure to duplicate the chunk, then specify the duplicate's name in the <code>&tinymceinittpl</code> property of the NewsPublisher snippet. You may want to modify the plugins and toolbar sections to customize TinyMCE.</p>
+
+<p>There is also some TinyMCE initialization code your can modify in the npRichTextTpl chunk. Changes there will only affect Richtext TVs. If you make changes in the
+    npTinyMCEInitTpl, you may (or may not) want to modify the npRichTextTpl chunk to match.</p>
+
+
 <a name="np_SettingsTable"></a>
 
 <h3>NewsPublisher System Settings</h3>
 
-<p>To edit these settings, go to System (gear icon) -> System Settings and put <code>newspublisher</code> in the &quot;Namespace&quot; input field.</p>
+<p>To edit these settings, go to System (gear icon) -> System Settings and select <code>newspublisher</code> in the &quot;Namespace&quot; input field.</p>
 
 
 <table class="properties">
-    <tr>
-        <th>Setting</th>
-        <th>Description</th>
-        <th>Default</th>
-    </tr>
-
+    <tr><th>Setting</th><th>Description</th><th>Default</th></tr>
+<tr><td colspan="3" class="properties_header">NewsPublisher</td></tr>
     <tr>
         <td>np_login_redirect</td>
-        <td>If set to Yes, not-logged-in users will be directed to the login page; use &loginResourceId=`##` (where ##
-            is the ID of the NewsPublisher page) in the login tag to bounce users back to newspublisher after login
-        </td>
+        <td>If set to Yes, not-logged-in users will be directed to the login page; use &loginResourceId=`##` (where ## is the ID of the NewsPublisher page) in the login tag to bounce users back to newspublisher after login</td>
         <td>1</td>
     </tr>
     <tr>
         <td>np_login_id</td>
         <td>ID of login page; used to redirect not-logged-in users</td>
         <td></td>
-    </tr>
+    </tr><tr><td colspan="3" class="properties_header">TinyMCE</td></tr>
     <tr>
         <td>np_tinymce_skin</td>
-        <td>Skin directory for TinyMCE skin in assets/components/newspublisher/tinymceskins; built-in options:
-            modxPericles, fairOphelia, fallenMacbeth, light
-        </td>
+        <td>Skin directory for TinyMCE skin in assets/components/newspublisher/tinymceskins; built-in options: modxPericles, fairOphelia, fallenMacbeth, light</td>
         <td>modxPericles</td>
-    </tr>
+    </tr><tr><td colspan="3" class="properties_header">elFinder</td></tr>
     <tr>
         <td>np_elfinder_tmb_size</td>
         <td>Thumb size for elFinder in NewsPublisher (in pixels)</td>
@@ -448,17 +499,14 @@ form.</p>
 </table>
 
 
+<br>
 <a name="np_propertiesTable"></a>
 
-<h3>Complete Property List for NewsPublisher Snippet</h3>
+<h3>NewsPublisher Snippet Properties</h3>
 
 <table class="properties">
-    <tr>
-        <th>Property</th>
-        <th>Description</th>
-        <th>Default</th>
-    </tr>
-
+    <tr><th>Property</th><th>Description</th><th>Default</th></tr>
+<tr><td colspan="3" class="properties_header">NewsPublisher Control Settings</td></tr>
     <tr>
         <td>activetab</td>
         <td>(optional) Tab to show when form is loaded</td>
@@ -467,12 +515,7 @@ form.</p>
     <tr>
         <td>allowedtags</td>
         <td>(optional) Tags allowed in text fields</td>
-        <td>
-            <fixedpre>
-                <p><br><a><i><em><b><strong>
-                    <pre><table><th><td><tr><img><span><div><h1><h2><h3><h4><h5><font><ul><ol><li><dl><dt><dd><object><blockquote><code>
-            </fixedpre>
-        </td>
+        <td>&lt;p&gt;,<wbr>&lt;br&gt;,<wbr>&lt;a&gt;,<wbr>&lt;i&gt;,<wbr>&lt;em&gt;,<wbr>&lt;b&gt;,<wbr>&lt;strong&gt;,<wbr>&lt;pre&gt;,<wbr>&lt;table&gt;,<wbr>&lt;th&gt;,<wbr>&lt;td&gt;,<wbr>&lt;tr&gt;,<wbr>&lt;img&gt;,<wbr>&lt;span&gt;,<wbr>&lt;div&gt;,<wbr>&lt;h1&gt;,<wbr>&lt;h2&gt;,<wbr>&lt;h3&gt;,<wbr>&lt;h4&gt;,<wbr>&lt;h5&gt;,<wbr>&lt;font&gt;,<wbr>&lt;ul&gt;,<wbr>&lt;ol&gt;,<wbr>&lt;li&gt;,<wbr>&lt;dl&gt;,<wbr>&lt;dt&gt;,<wbr>&lt;dd&gt;,<wbr>&lt;object&gt;,<wbr>&lt;blockquote&gt;,<wbr>&lt;code&gt;,<wbr></td>
     </tr>
     <tr>
         <td>badwords</td>
@@ -486,9 +529,7 @@ form.</p>
     </tr>
     <tr>
         <td>captions</td>
-        <td>(optional) Custom captions -- Comma-separated list of FieldNames:FieldCaptions. Example:
-            &captions=`introtext:Summary,content:Enter Your Post`
-        </td>
+        <td>(optional) Custom captions -- Comma-separated list of FieldNames:FieldCaptions. Example: &captions=`introtext:Summary,content:Enter Your Post`</td>
         <td>(empty)</td>
     </tr>
     <tr>
@@ -508,16 +549,12 @@ form.</p>
     </tr>
     <tr>
         <td>cssfile</td>
-        <td>(optional) Name of CSS file to use, or `` for no CSS file; File should be in assets/newspublisher/css/
-            directory
-        </td>
+        <td>(optional) Name of CSS file to use, or `` for no CSS file; File should be in assets/newspublisher/css/ directory</td>
         <td>newspublisher.css</td>
     </tr>
     <tr>
         <td>groups</td>
-        <td>(optional) Comma-separated list of resource groups to put new document in (no effect with existing docs);
-            set to `parent` to use parent's groups
-        </td>
+        <td>(optional) Comma-separated list of resource groups to put new document in (no effect with existing docs); set to `parent` to use parent's groups</td>
         <td>(empty)</td>
     </tr>
     <tr>
@@ -562,10 +599,7 @@ form.</p>
     </tr>
     <tr>
         <td>parents</td>
-        <td>Comma-separated list of parent IDs for user to select from (must be IDs or Context keys); If &parentid is
-            sent, it will be selected in the list. Note: new_document_in_root permission may be necessary for new
-            resources)
-        </td>
+        <td>Comma-separated list of parent IDs for user to select from (must be IDs or Context keys); If &parentid is sent, it will be selected in the list. Note: new_document_in_root permission may be necessary for new resources)</td>
         <td>(empty)</td>
     </tr>
     <tr>
@@ -580,9 +614,7 @@ form.</p>
     </tr>
     <tr>
         <td>readonly</td>
-        <td>(optional) Comma-separated list of fields that should be read only; does not work with option or textarea
-            fields
-        </td>
+        <td>(optional) Comma-separated list of fields that should be read only; does not work with option or textarea fields</td>
         <td>(empty)</td>
     </tr>
     <tr>
@@ -603,7 +635,7 @@ form.</p>
     <tr>
         <td>show</td>
         <td>(optional) Comma separated list of fields/tvs to show</td>
-        <td>pagetitle,longtitle,hidemenu,published,description,menutitle,pub_date,unpub_date,introtext,content</td>
+        <td>pagetitle,<wbr>longtitle,<wbr>hidemenu,<wbr>published,<wbr>description,<wbr>menutitle,<wbr>pub_date,<wbr>unpub_date,<wbr>introtext,<wbr>content</td>
     </tr>
     <tr>
         <td>stopOnBadTv</td>
@@ -627,9 +659,7 @@ form.</p>
     </tr>
     <tr>
         <td>templates</td>
-        <td>(optional) Comma-separated list of template IDs for user to select from (must be IDs); if &template is set,
-            it will be selected in the list
-        </td>
+        <td>(optional) Comma-separated list of template IDs for user to select from (must be IDs); if &template is set, it will be selected in the list</td>
         <td>(empty)</td>
     </tr>
     <tr>
@@ -661,7 +691,7 @@ form.</p>
         <td>which_editor</td>
         <td>Rich-text editor to use; at present, TinyMCE is the only value that will work</td>
         <td>TinyMCE</td>
-    </tr>
+    </tr><tr><td colspan="3" class="properties_header">Resource Field Settings</td></tr>
     <tr>
         <td>aliasdateformat</td>
         <td>(optional) Format string for auto date alias -- see tutorial</td>
@@ -669,37 +699,27 @@ form.</p>
     </tr>
     <tr>
         <td>aliasprefix</td>
-        <td>(optional) Prefix to be prepended to alias for new documents with an empty alias; alias will be aliasprefix
-            - timestamp
-        </td>
+        <td>(optional) Prefix to be prepended to alias for new documents with an empty alias; alias will be aliasprefix - timestamp</td>
         <td>(empty)</td>
     </tr>
     <tr>
         <td>aliastitle</td>
-        <td>(optional) Set to Yes to use lowercase, hyphenated, page title as alias. If set to No, 'article-(date
-            created)' is used. Ignored if alias is filled in form
-        </td>
+        <td>(optional) Set to Yes to use lowercase, hyphenated, page title as alias. If set to No, 'article-(date created)' is used. Ignored if alias is filled in form</td>
         <td>1</td>
     </tr>
     <tr>
         <td>cacheable</td>
-        <td>(optional) Sets the flag that determines whether or not the resource is cached; for new resources, set to
-            `Parent` to use parent's setting
-        </td>
+        <td>(optional) Sets the flag that determines whether or not the resource is cached; for new resources, set to `Parent` to use parent's setting</td>
         <td>System Default</td>
     </tr>
     <tr>
         <td>classkey</td>
-        <td>(optional) Class key for new resources; use only if you have subclassed resource or are using this for
-            Articles (set to Article)
-        </td>
+        <td>(optional) Class key for new resources; use only if you have subclassed resource or are using this for Articles (set to Article)</td>
         <td>modDocument</td>
     </tr>
     <tr>
         <td>hidemenu</td>
-        <td>(optional) Sets the flag that determines whether or not the new page shows in the menu; for new resources,
-            set to `Parent to use parent's setting
-        </td>
+        <td>(optional) Sets the flag that determines whether or not the new page shows in the menu; for new resources, set to `Parent to use parent's setting</td>
         <td>System Default</td>
     </tr>
     <tr>
@@ -714,32 +734,24 @@ form.</p>
     </tr>
     <tr>
         <td>published</td>
-        <td>(optional) Set new resource as published or not (will be overridden by publish and unpublish dates). Set to
-            `parent` to match parent's pub status
-        </td>
+        <td>(optional) Set new resource as published or not (will be overridden by publish and unpublish dates). Set to `parent` to match parent's pub status</td>
         <td>System Default</td>
     </tr>
     <tr>
         <td>richtext</td>
-        <td>(optional) Sets the flag that determines whether or Rich Text Editor is used to when editing the page
-            content in the Manager; for new resources, set to `Parent` to use parent's setting
-        </td>
+        <td>(optional) Sets the flag that determines whether or Rich Text Editor is used to when editing the page content in the Manager; for new resources, set to `Parent` to use parent's setting</td>
         <td>System Default</td>
     </tr>
     <tr>
         <td>searchable</td>
-        <td>(optional) Sets the flag that determines whether or not the new page is included in site searches; for new
-            resources, set to `Parent` to use parent's setting
-        </td>
+        <td>(optional) Sets the flag that determines whether or not the new page is included in site searches; for new resources, set to `Parent` to use parent's setting</td>
         <td>System Default</td>
     </tr>
     <tr>
         <td>template</td>
-        <td>(optional) Name or ID of template to use for new document; for new resources, set to `Parent` to use
-            parent's template; for `parent`, &parentid must be set
-        </td>
+        <td>(optional) Name or ID of template to use for new document; for new resources, set to `Parent` to use parent's template; for `parent`, &parentid must be set</td>
         <td>the default_template System Setting</td>
-    </tr>
+    </tr><tr><td colspan="3" class="properties_header">Tpls</td></tr>
     <tr>
         <td>booltpl</td>
         <td>(optional) Tpl used for Yes/No resource fields (e.g., published, searchable, etc.)</td>
@@ -753,7 +765,7 @@ form.</p>
     <tr>
         <td>elfinderinittpl</td>
         <td>(optional) Tpl used to initialize elFinder</td>
-        <td>npelFinderInitTpl</td>
+        <td></td>
     </tr>
     <tr>
         <td>errortpl</td>
@@ -768,12 +780,12 @@ form.</p>
     <tr>
         <td>filetpl</td>
         <td>(optional) Tpl used for file TVs</td>
-        <td>npFileTpl</td>
+        <td></td>
     </tr>
     <tr>
         <td>imagetpl</td>
         <td>(optional) Tpl used for image TVs</td>
-        <td>npImageTpl</td>
+        <td></td>
     </tr>
     <tr>
         <td>inttpl</td>
@@ -803,7 +815,7 @@ form.</p>
     <tr>
         <td>richtexttpl</td>
         <td>(optional) Tpl used for richtext TVs</td>
-        <td>npRichTextTpl</td>
+        <td></td>
     </tr>
     <tr>
         <td>texttpl</td>
@@ -813,14 +825,14 @@ form.</p>
     <tr>
         <td>tinymceinittpl</td>
         <td>(optional) Tpl used to initialize TinyMCE</td>
-        <td>npTinyMCEInitTpl</td>
+        <td></td>
     </tr>
 </table>
 
-
+<br>
 <a name="np_elFinderConnectorTable"></a>
 
-<h3>Complete Property List for the npElFinderConnector Snippet</h3>
+<h3>npElFinderConnector Snippet Properties</h3>
 <table class="properties">
     <tr>
         <th>Property</th>
@@ -891,9 +903,10 @@ form.</p>
     </tr>
 </table>
 
+<br>
 <a name="npet_propertiesTable"></a>
 
-<h3>Complete Property List for the NpEditThisButton Snippet</h3>
+<h3>NpEditThisButton Snippet Properties</h3>
 
 <table class="properties">
     <tr><th>Property</th><th>Description</th><th>Default</th></tr>
@@ -949,30 +962,36 @@ form.</p>
 <p>&nbsp;</p>
 <h3>Bugs, Feature Requests, and Questions</h3>
 
-<p>Bugs and feature requests should be reported here: <a href="https://github.com/BobRay/newspublisher">GitHub NewsPublisher Page</a> (on the &quot;issues&quot; tab).</p>
+<p>Bugs and feature requests should be reported here: <a href="https://github.com/BobRay/newspublisher/issues">GitHub NewsPublisher Page</a>.</p>
 
 <p>
 Questions should be posted in the NewsPublisher topic at <a href="http://modxcms.com/forums">MODX Forums</a>.</p>
 
 
-<a name="np_upgrade_notes"></a>
-<div class="box">
+<p>&nbsp;</p>
 
-    <p>NewsPublisher 3.0 has some great new features, but you'll have to do a little work to implement them. If you've changed any of the default Tpl chunks, your changes may be lost.</p>
+
+
+<a name="np_upgrade_notes"></a>
+
+<div class="box">
+    <h2>NewsPublisher 3.0 Upgrade Notes</h2>
+
+    <p>NewsPublisher 3.0 has some great new features, but you'll have to do a little work to implement them. <b>If you've changed any of the default Tpl chunks, (you'd never do that, right?) your changes may be lost unless you preserve them by renaming them *before* installing NewsPublisher 3.0</b>.</p>
 
 <h3>New Features Overview</h3>
 
 <p>NewsPublisher no longer depends on extJS/modExt, access to the MODX Manager, or the MODX TinyMCE extra. You don't even have to have the TinyMCE extra installed to use NewsPublisher. NewsPublisher loads TinyMCE 4 directly from tinymce.com (or the location of your choice). The NewsPublisher package includes the elFinder file/image browser and loads JQuery and JQuery-UI from the Web.</p>
 
-<p>NewsPublisher responds properly to the Media Sources of all file, image, and richtext TVs. Users will automatically be restricted to browsing in and below the root of the TV's Media Source. You can also disable the file browser altogether, or disable specific commands within the file browser, such as upload, download, delete, etc. The elFinder browser also provides image editing within NewsPublisher. You can crop, rotate, and resize images when you insert them without altering the original image.</p>
+<p>NewsPublisher responds properly to the Media Sources of all file, image, and richtext TVs. Users will automatically be restricted to browsing in and below the root of the TV's Media Source. You can also disable the file browser altogether, or easily enable or disable specific commands within the file browser, such as upload, download, delete, and so on. Better yet, you can modify the TinyMCE initialization for Richtext TVs, so they will have their own version or TinyMCE in NewsPublisher.
+
+    <p>The elFinder browser also provides image editing within NewsPublisher. You can crop, rotate, and resize images when you insert them without altering the original image.</p>
 
 <p>New Tpl chunks for initializing TinyMCE and elFinder allow you to customize their operation by creating and specifying your own custom Tpl chunks, and you can set the directory for file browsing within richtext sections of any of your non-TV richtext sections.</p>
 
 <p>There are also several changes to make NewsPublisher more secure.</p>
 
-<h2>Things to Do</h2>
 
-<p>Here are some things you may need to mess with to make the new version work as you like.</p>
 
 <h3>Upgrade Checklist</h3>
     <p>Here are the main things you'll want to deal with after the upgrade. See the text below for details.</p>
@@ -991,49 +1010,34 @@ Questions should be posted in the NewsPublisher topic at <a href="http://modxcms
 
 <h3>Update: Login Redirect</h3>
 
-<p>NewsPublisher now checks for login status and redirects users to the Login page if they are not logged in. If you don't want this, you can set the <code>np_login_redirect</code> System Setting to <code>No</code>. It is set to <code>Yes</code> by default. For the redirection to work, though, you must set the <code>np_login_id</code> System Setting to the ID of your login page. NewsPublisher will try to do this for you during the install, but if the alias of your login page is not <code>login</code>, you'll have to do it yourself.</p>
+    <p>NewsPublisher now checks for login status and redirects users to the Login page if they are not logged in. To configure this option, see the <a href="[[~[[*id]]]]#np_login_redirect">Login Redirect</a> section above.</p>
 
-<p>You no longer need to log users in to the <code>mgr</code> context, so you should <b>remove <code>mgr</code> from the <code>&contexts</code> property of the Login snippet tag</b> and list only front-end contexts there.</p>
-
-<p>Using the <code>&redirectToPrior</code> property in the Login snippet tag to redirect users back to the NewsPublisher page is not entirely reliable, since some browsers don't set the <code>$_SERVER[HTTP_REFERER]</code> variable properly. It's recommended instead to set the <code>&loginResourceId</code> property to the ID of the NewsPublisher page. If necessary, you can have a separate Login page for NewsPublisher. If you do this, be sure to set the <code>np_login_id</code> System Setting to the ID of your NewsPublisher Login page. </p>
+<p>For improved security, you no longer need to log users in to the <code>mgr</code> context for NewsPublisher, so you should <b>remove <code>mgr</code> from the <code>&contexts</code> property of the Login snippet tag</b> and list only front-end contexts there.</p>
 
 <h3>Tpl Changes</h3>
-    <p>If you have not changed the default Tpl chunks, and have not specified alternate chunks in the Tpl properties, you should be fine. </p>
+
+    <p>If you have not changed the default Tpl chunks, and have not specified alternate chunks in the Tpl properties, you should be fine. If you have, these are the only Tpl chunks that have changed (as a result of integrating the elFinder file browser): </p>
+    <ul>
+        <li>npFileTpl</li>
+        <li>npImageTpl</li>
+        <li>npTextTpl</li>
+        <li>npTextAreaTpl</li>
+    </ul>
+
+    <p>If you have modified any of those default chunks, and need to keep the modifications, rename your chunks <b>before installing NewsPublisher 3.0</b>. Then, install NewsPublisher 3.0. Integrate the changes in NewsPublisher's new chunks into your renamed chunks. Then, specify the renamed chunks in the Tpl properties of the NewsPublisher snippet tag, or in a property set.</p>
+
+    <p>If you have duplicated the default chunks already and use properties to specify them, just install NewsPublisher 3.0 and integrate the features of its new Tpl chunks into your duplicates.</p>
 
 <h3>Update: File Browser Access, Customization, and Commands</h3>
 
-<p>If you don't want users to see the file browser at all, uncheck the <code>file_manager</code> permission in the NewsPublisherEditor Policy (or whatever policy you have assigned for your NewsPublisher users).</p>
-
-<p>If you do want to enable the file browser, you must also set the new <code>&initfilebrowser</code> property of the NewsPublisher snippet to <code>Yes</code> (in addition to checking the <code>file_manager</code> permission).</p>
-
-<p>To configure the file browser, see the properties of the npElFinderinderConnector snippet. As always, you should create a property set if you want to change any of the default values to prevent them from being overwritten when you upgrade NewsPublisher. Most of the properties there are self-explanatory. In particular, you'll want to check the <code>&disableCommands</code> property. See the description of the property for a list of possible commands. To prevent users from accessing a specific feature, simply remove it from the list. The elFinder browser will automatically remove icons for commands that are disabled.</p>
-
-<p>The <code>&browserBasePath</code> and <code>&browserBaseURL</code> properties of the npElfinderConnector snippet are set to the <code>assets</code> directory. You may want to change them, but be sure they match. Users will not be able to browse above them.</p>
-
-<p>The <code>&browserStartPath</code> and <code>&browserStartURL</code> properties allow the browser to open in a lower directory. The two must match. Users will be able to browse above them, but only up to the <code>&browserBasePath</code> and <code>&browserBaseURL</code> directories.</p>
-
-<p>There are also three new System Settings in the <code>newspublisher</code> namespace that are used to configure elFinder: <code>np_elfinder_remember_last_dir</code>,
-    <code>np_elfinder_theme</code>, and <code>np_elfinder_tmb_size</code>.</p>
-
-<p>If <code>np_elfinder_remember_last_dir</code> is set to <code>Yes</code> (it's <code>No</code> by default), elFinder will open in the directory that was last accessed, though users can still browse above it up to the directory set in the <code>&browserBasePath</code> and <code>&browserBaseURL</code> properties of the npElfinderConnector snippet.</p>
-
-    <p>The <code>np_elfinder_theme</code> setting description lists the built-in themes, but you can add your own if you like. They go in the <code>assets\components\newspublisher\elfinder\elfinderthemes</code> directory. The file loaded is elfinderthemes/<i>theme name</i>/css/theme.css.</p>
-
-<p>The default elFinder theme is <code>osx</code>, which I think is the most attractive. The other themes are not always reliable. The <code>windows-10</code> theme, for example, hides the <code>X</code> that closes the window, though you can still click on the invisible <code>X</code> to close the window. You're welcome to fix problems you find with any of the themes and contribute them to future NewsPublisher releases. The <code>moono</code> theme seems to work well, but it you have to right-click on the images to see a preview.</p>
-
-    <p>The <code>np_elfinder_tmb_size</code> setting controls the size of the elFinder thumbnails. It's in pixels and the image is always square. The default is 48px. If you want to change that, you should do it before launching elFinder or uploading any images. If you forget, you can simply delete the existing thumbs. They are placed below each directory the images are in and are in a subdirectory named <code>.tmb</code>, unless you've changed the <code>&tmbPath</code> property of the npElFinderConnector snippet (which I don't recommend). You can use the elFinder thumbnails in your HTML code, but since their names are hashed, it's a pain, and it's not very well documented. I recommend using phpThumb or one of its replacements (e.g., phpThumbOf, or pThumb) for thumbnails.</p>
-
-<p>You can also edit the code of the npelFinderInitTpl chunk to alter elFinder in more advanced ways, though typically, the supplied properties should do most of what you want. Get elFinder working first. To modify it, create a duplicate chunk and specify its name in the <code>&elfinderinittpl</code> property of the NewsPublisher snippet tag.</p>
-
-<p>One use-case for modifying elFinder would be allowing users to browse in and under more than one directory. This requires modifying the npElFinderConnector snippet code. If you do this, duplicate the snippet and modify the tag on the npElFinderConnector Resource to point to your duplicate. See the docs <a href="https://github.com/Studio-42/elFinder/wiki/Multiple-Roots">here</a> for an example. Note that this will not apply to TVs, which will always limit browsing to the baseURL of the TV's Media Source.</p>
+    <p>NewsPublisher 3.0 uses the <a href="https://github.com/Studio-42/elFinder/wiki">elFinder Browser</a>.</p>
+    <p>To configure the file browser, see the <a href="[[~[[*id]]]]#np_configuring_elfinder">Configuring elFinder section above</a>.</p>
 
 <h3>Update: TinyMCE Configuration</h3>
 
-<p>There are three properties that affect TinyMCE in the NewsPublisher snippet properties: <code>tinyheight</code>, <code>tinywidth</code>, and <code>tinysource</code>. Their descriptions explain what each one does. You don't need to set these properties unless you want to change the defaults.</p>
+    <p>NewsPublisher 3.0 loads <a href="https://www.tinymce.com/docs/">TinyMCE 4</a> directly from <a href="tinymce.com">tinymce.com</a></p>
+    <p>To configure TinyMCE, see the <a href="[[~[[*id]]]]#np_configuring_tinymce">section above</a>.</p>
 
-<p>There is also a System Setting for the TinyMCE skin: <code>np_tinymce_skin</code>. The setting is in the <code>newspublisher</code> namespace on the System Settings grid. The built-in themes are listed in the description, but you're welcome to add additional themes. They go in the <code>assets/components/newspublisher/tinymceskins</code> directory.
-
-<p>For more fine-grained control of TinyMCE, you can edit the npTinyMCEInitTpl chunk, which contains initialization code for TinyMCE. If you want to do this, be sure to duplicate the chunk, then specify the duplicate's name in the <code>&tinymceinittpl</code> property of the NewsPublisher snippet.</p>
 
 </div>
 <p>&nbsp;</p>
