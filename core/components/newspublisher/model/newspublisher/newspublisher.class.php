@@ -219,7 +219,7 @@
 class Newspublisher {
 
    /** @var $version string current version */
-    protected $version = '2.1.0-pl';
+    protected $version = '3.0.0-pl';
    /**
     * @var modx object Reference pointer to modx object
     */
