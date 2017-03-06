@@ -88,12 +88,12 @@ When you preview the document, you should see a basic resource editing form. If 
 <h3>Login Redirect</h3>
 
 <p>As of Version 3.0, NewsPublisher checks for login status and redirects users to the Login page if they are not logged in. If you
-    don't want this, you can set the <code>&np_login_redirect</code> property of the NewsPublisher snippet to <code>No</code>. It is set to
+    don't want this, you can set the <code>&np_login_redirect</code> System Setting to <code>No</code>. It is set to
     <code>Yes</code> by default.</p>
 
 <p>If <code>&np_login_redirect</code> is set to <code>YES</code>, the <code>np_login_id</code>
     System Setting (in the newspublisher namespace) must be set to the ID of your login page. NewsPublisher will try to do this for you during
-    the install, but if the alias of your login page is not <code>login</code>, you'll have to do it yourself. I you want to use a separate login page for NewsPublisher, use an <code>&np_login_id</code> property in the NewsPublisher snippet tag set to the ID of that page.</p>
+    the install, but if the alias of your login page is not <code>login</code>, you'll have to do it yourself. I you want to use a separate login page for NewsPublisher, use an <code>&np_login_id</code> property in the NewsPublisher snippet tag set to the ID of that page. That will override the System Setting.</p>
 
 <br>
 
@@ -379,7 +379,7 @@ form.</p>
 
 <h3>NewsPublisher and getResources</h3>
 
-<p>As of NewsPublisher 1.2.0, you can put the edit button tag in the getResources Tpl chunk and have an edit button for each resource retrieved using the <code>np_edit_id property</code>. You can also hard-code a page with multiple NpEditThisButton tags. To use this technique with getResources, remove any NpEditThisButton tags from the page template and create a Tpl chunk something like this:</p>
+<p>As of NewsPublisher 1.2.0, you can put the edit button tag in the getResources Tpl chunk and have an edit button for each resource retrieved using the <code>&np_edit_id property</code>. You can also hard-code a page with multiple NpEditThisButton tags. To use this technique with getResources, remove any NpEditThisButton tags from the page template and create a Tpl chunk something like this:</p>
 
 <pre><fixedpre>
 <div class="MyItem">
