@@ -90,20 +90,10 @@ $properties = array (
     'name' => 'np_id',
     'desc' => 'np_id_desc',
     'type' => 'numberfield',
-    'options' => '',
-    'value' => 22,
-    'lexicon' => 'newspublisher:button',
-    'area' => '',
-  ),
-  'right' => 
-  array (
-    'name' => 'right',
-    'desc' => 'np_right_desc',
-    'type' => 'textfield',
     'options' => 
     array (
     ),
-    'value' => '20%',
+    'value' => '',
     'lexicon' => 'newspublisher:button',
     'area' => '',
   ),
@@ -116,6 +106,18 @@ $properties = array (
     array (
     ),
     'value' => false,
+    'lexicon' => 'newspublisher:button',
+    'area' => '',
+  ),
+  'right' => 
+  array (
+    'name' => 'right',
+    'desc' => 'np_right_desc',
+    'type' => 'textfield',
+    'options' => 
+    array (
+    ),
+    'value' => '20%',
     'lexicon' => 'newspublisher:button',
     'area' => '',
   ),
