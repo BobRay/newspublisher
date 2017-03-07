@@ -978,7 +978,7 @@ class Newspublisher {
      * @return string -  returns the finished form
      */
     public function displayForm($show) {
-
+        $show = rtrim(',', $show);
         $fields = explode(',',$show);
         $inner = '';
 
@@ -2568,6 +2568,8 @@ public function duplicate($id, $context) {
      * @return array parsed array or empty array
      */
     public function parseDoubleDelimitedString($s) {
+        /* remove final comma if any */
+        $s = rtrim(',', $s);
         $retVal = array();
         if (!empty($s)) {
             $c = explode(',', $s);
