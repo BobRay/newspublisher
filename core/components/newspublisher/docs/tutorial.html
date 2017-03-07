@@ -425,16 +425,18 @@ form.</p>
 
 <p>The <code>&browserStartPath</code> and <code>&browserStartURL</code> properties allow the browser to open in a lower directory. The two must match. Users will be able to browse above them, but only up to the <code>&browserBasePath</code> and <code>&browserBaseURL</code> directories.</p>
 
-<p>There are also three new System Settings in the <code>newspublisher</code> namespace that are used to configure elFinder: <code>np_elfinder_remember_last_dir</code>,
-    <code>np_elfinder_theme</code>, and <code>np_elfinder_tmb_size</code>.</p>
+<p>There are also new System Settings in the <code>newspublisher</code> namespace that are used to configure elFinder: <code>np_elfinder_remember_last_dir</code>,
+    <code>np_elfinder_theme</code>, <code>np_elfinder_tmb_size</code>, <code>np_elfinder_height</code>, and <code>np_elfinder_width</code>.</p>
 
 <p>If <code>np_elfinder_remember_last_dir</code> is set to <code>Yes</code> (it's <code>No</code> by default), elFinder will open in the directory that was last accessed, though users can still browse above it up to the directory set in the <code>&browserBasePath</code> and <code>&browserBaseURL</code> properties of the npElfinderConnector snippet.</p>
 
     <p>The <code>np_elfinder_theme</code> setting description lists the built-in themes, but you can add your own if you like. They go in the <code>assets\components\newspublisher\elfinder\elfinderthemes</code> directory. The only file loaded is elfinderthemes/<i>theme name</i>/css/theme.css, which sometimes uses other files in the same directory.</p>
 
-<p>The default elFinder theme is <code>osx</code>, which I think is the most attractive. The other themes are not always reliable. The <code>windows-10</code> theme, for example, hides the <code>X</code> that closes the window, though you can still click on the invisible <code>X</code> to close the window. You're welcome to fix problems you find with any of the themes and contribute them to future NewsPublisher releases. The <code>moono</code> theme seems to work well, but it you have to right-click on the images to see a preview.</p>
+<p>The default elFinder theme is <code>osx</code>, which I think is the most attractive. The other themes are not always reliable. The <code>windows-10</code> theme, for example, hides the <code>X</code> that closes the window, though you can still click on the invisible <code>X</code> to close the window. You're welcome to fix problems you find with any of the themes and contribute them to future NewsPublisher releases. The <code>moono</code> theme seems to work well, but it you have to right-click on the images to see a preview. The themes may look slightly different in TinyMCE than they do for file and image TVs because TinyMCE controls the border and the title background.</p>
 
     <p>The <code>np_elfinder_tmb_size</code> setting controls the size of the elFinder thumbnails. It's in pixels and the image is always square. The default is 48px. If you want to change that, you should do it before launching elFinder or uploading any images. If you forget, you can simply delete the existing thumbs. They are placed below each directory the images are in and are in a subdirectory named <code>.tmb</code>, unless you've changed the <code>&tmbPath</code> property of the npElFinderConnector snippet. You can use the elFinder thumbnails in your HTML code, but since their names are hashed, it's a pain, and it's not very well documented. I recommend using phpThumb or one of its replacements (e.g., phpThumbOf, or pThumb) for thumbnails.</p>
+
+<p>The <code>np_elfinder_height</code>, and <code>np_elfinder_width</code> settings are expressed as percentages of the screen height and width. The default is 80 for both. Use a whole number. Do not include the percent sign. </p>
 
 <p>You can also edit the code of the npelFinderInitTpl chunk to alter elFinder in more advanced ways, though typically, the supplied properties should do most of what you want. Get elFinder working first. To modify it, create a duplicate chunk and specify its name in the <code>&elfinderinittpl</code> property of the NewsPublisher snippet tag.</p>
 
@@ -495,6 +497,16 @@ form.</p>
         <td>np_elfinder_theme</td>
         <td>Theme for elFinder to use in NewsPublisher; built-in themes include: osx, windows-10, moono, material</td>
         <td>osx</td>
+    </tr>
+    <tr>
+        <td>np_elfinder_height</td>
+        <td>Height of elFinder window as percent of screen size</td>
+        <td>80</td>
+    </tr>
+    <tr>
+        <td>np_elfinder_width</td>
+        <td>Width of elFinder window as percent of screen size</td>
+        <td>80</td>
     </tr>
 </table>
 
@@ -958,6 +970,12 @@ form.</p>
     </tr>
 
 </table>
+
+<p>&nbsp;</p>
+
+<h3>Troubleshooting</h3>
+
+<p>If you are using elFinder and have to scroll down to see browser window, check to make sure that you have <code><fixedpre><!DOCTYPE html></fixedpre></code> at the top of your template.</p>
 
 <p>&nbsp;</p>
 <h3>Bugs, Feature Requests, and Questions</h3>

@@ -8,10 +8,13 @@
 
 <script>
 $('#elfinder_button').on('click', function() {
+   var ef_width = (("[[++np_elfinder_width]]" * 1)  || 80) / 100;
+   var ef_height = (("[[++np_elfinder_height]]" * 1) || 80) /100;
+
   $('<div id="editor" />').dialogelfinder({
-          modal: true, 
-          width: "80%",
-          height: '600px',
+          modal: true,
+          width: window.innerWidth * ef_width,
+          height: window.innerHeight * ef_height,
           title: '<b>elFinder 2.0 (double-click to select your file)</b>',
           zIndex: 99999,
 

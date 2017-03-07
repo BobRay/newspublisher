@@ -57,6 +57,26 @@ $systemSettings[3]->fromArray(array (
 ), '', true, true);
 $systemSettings[4] = $modx->newObject('modSystemSetting');
 $systemSettings[4]->fromArray(array (
+  'key' => 'np_elfinder_height',
+  'value' => '80',
+  'xtype' => 'textfield',
+  'namespace' => 'newspublisher',
+  'area' => 'elFinder',
+  'name' => 'elFinder Window Height',
+  'description' => 'setting_np_elfinder_height_desc',
+), '', true, true);
+$systemSettings[5] = $modx->newObject('modSystemSetting');
+$systemSettings[5]->fromArray(array (
+  'key' => 'np_elfinder_width',
+  'value' => '80',
+  'xtype' => 'textfield',
+  'namespace' => 'newspublisher',
+  'area' => 'elFinder',
+  'name' => 'elFinder Window Width',
+  'description' => 'setting_np_elfinder_width_desc',
+), '', true, true);
+$systemSettings[6] = $modx->newObject('modSystemSetting');
+$systemSettings[6]->fromArray(array (
   'key' => 'np_elfinder_tmb_size',
   'value' => '48',
   'xtype' => 'textfield',
@@ -65,8 +85,8 @@ $systemSettings[4]->fromArray(array (
   'name' => 'elFinder thumb size',
   'description' => 'setting_np_elfinder_tmb_size_desc',
 ), '', true, true);
-$systemSettings[5] = $modx->newObject('modSystemSetting');
-$systemSettings[5]->fromArray(array (
+$systemSettings[7] = $modx->newObject('modSystemSetting');
+$systemSettings[7]->fromArray(array (
   'key' => 'np_elfinder_remember_last_dir',
   'value' => '0',
   'xtype' => 'combo-boolean',
@@ -75,8 +95,8 @@ $systemSettings[5]->fromArray(array (
   'name' => 'elFinder remember last dir',
   'description' => 'setting_np_elfinder_remember_last_dir_desc',
 ), '', true, true);
-$systemSettings[6] = $modx->newObject('modSystemSetting');
-$systemSettings[6]->fromArray(array (
+$systemSettings[8] = $modx->newObject('modSystemSetting');
+$systemSettings[8]->fromArray(array (
   'key' => 'np_elfinder_theme',
   'value' => 'osx',
   'xtype' => 'textfield',
