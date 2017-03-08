@@ -219,7 +219,7 @@
 class Newspublisher {
 
    /** @var $version string current version */
-    protected $version = '3.0.0-pl';
+    protected $version = '3.0.1-pl';
    /**
     * @var modx object Reference pointer to modx object
     */
@@ -978,7 +978,6 @@ class Newspublisher {
      * @return string -  returns the finished form
      */
     public function displayForm($show) {
-        $show = rtrim(',', $show);
         $fields = explode(',',$show);
         $inner = '';
 
@@ -1013,7 +1012,9 @@ class Newspublisher {
 
         foreach($fields as $field) {
             $field = trim($field);
-
+            if (empty($field)) {
+                continue;
+            }
             if (in_array($field,$resourceFieldNames)) {
                 /* regular resource field */
                 $inner .= $this->_displayField($field);
@@ -2568,8 +2569,6 @@ public function duplicate($id, $context) {
      * @return array parsed array or empty array
      */
     public function parseDoubleDelimitedString($s) {
-        /* remove final comma if any */
-        $s = rtrim(',', $s);
         $retVal = array();
         if (!empty($s)) {
             $c = explode(',', $s);
@@ -2580,10 +2579,7 @@ public function duplicate($id, $context) {
                 }
             }
         }
-
         return $retVal;
     }
-
-
 
 } /* end class */
