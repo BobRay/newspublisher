@@ -1,7 +1,8 @@
 Changelog for NewsPublisher
 
-NewsPublisher 3.0.0-pl
+NewsPublisher 3.0.1-pl
 ----------------------
+Fix bug with unknown column in show property
 Remove all dependencies on extJS/modExt
 Remove all dependencies on TinyMCE extra
 Load TinyMCE from tinymce.com

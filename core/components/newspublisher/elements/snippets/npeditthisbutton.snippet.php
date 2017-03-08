@@ -3,7 +3,7 @@
  * NpEditThisButton
  * Copyright 2011-2015 Bob Ray
  *
- * @version Version 3.0.0-pl
+ * @version Version 3.0.1-pl
  *
  * NpEditThisButton is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
