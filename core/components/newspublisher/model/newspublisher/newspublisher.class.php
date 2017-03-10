@@ -109,6 +109,8 @@
  * @property &stopOnBadTv combo-boolean -- (optional) If set to No,
  *    &show can contain TVs not attached to the current template without an
  *    error; Default: Yes.
+ *  @property &stopOnNoRte combo-boolean -- (optional) If set to No,
+ *    &show can contain richtext fields without an error when initrte is off; Default: Yes.
  * @property &summarycols textfield -- (optional) Number of columns
  *    for the summary field; Default: 60.
  * @property &summaryrows textfield -- (optional) Number of rows for
@@ -363,6 +365,8 @@ class Newspublisher {
     protected $activeTab;
     /** @var $stopOnBadTv boolean - abort if &show contains a TV not attached to template  */
     protected $stopOnBadTv;
+    /** @var $stopOnNoRte boolean - abort if &show contains richtext files and initrte is no */
+    protected $stopOnNoRte;
     /** @var $templates array - comma-separated list of templates to display as options */
     protected $templates;
     /** @var $parents array - comma-separated list of parents to display as options */
@@ -729,6 +733,7 @@ class Newspublisher {
         }
 
         $this->stopOnBadTv = $this->modx->getOption('stopOnBadTv', $this->props, true);
+        $this->stopOnNoRte  = $this->modx->getOption('stopOnNoRte', $this->props, true);
 
         $this->modx->lexicon->load('core:resource');
         $this->template = (integer) $this->_getTemplate();
@@ -1877,9 +1882,11 @@ class Newspublisher {
                     $PHs['file_browser_function'] = 'fileBrowser' . $name;
                 }
             } else {
-                $msg = $this->modx->lexicon('np_no_rte');
-                $this->setError($msg . $name);
-                $this->setFieldError($name, $msg);
+                if ($this->stopOnNoRte) {
+                    $msg = $this->modx->lexicon('np_no_rte');
+                    $this->setError($msg . $name);
+                    $this->setFieldError($name, $msg);
+                }
                 $PHs['[[+npx.class]]'] = $noRTE_class;
             }
         } else {

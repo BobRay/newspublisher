@@ -337,6 +337,18 @@ $properties = array (
     'lexicon' => 'newspublisher:properties',
     'area' => 'NewsPublisher Control Settings',
   ),
+  'stopOnNoRte' => 
+  array (
+    'name' => 'stopOnNoRte',
+    'desc' => 'np_stopOnNoRte_desc',
+    'type' => 'combo-boolean',
+    'options' => 
+    array (
+    ),
+    'value' => true,
+    'lexicon' => 'newspublisher:properties',
+    'area' => 'NewsPublisher Control Settings',
+  ),
   'summarycols' => 
   array (
     'name' => 'summarycols',

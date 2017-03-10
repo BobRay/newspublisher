@@ -80,6 +80,7 @@ $_lang['np_contentcols_desc'] = '(optional) Columns to show in Content field; de
 $_lang['np_aliasdateformat_desc'] = '(optional) Format string for auto date alias -- see tutorial; default: PHP date + time format';
 $_lang['np_allowedtags_desc'] = '(optional) Tags allowed in text fields; default: see tutorial';
 $_lang['np_stopOnBadTv_desc'] = '(optional) If set to No, &show can contain TVs not attached to the current template without an error; default: Yes';
+$_lang['np_stopOnNoRte_desc'] = '(optional) If set to No, &show can contain richtext items without an error when initrte is set to No; default: Yes';
 $_lang['np_templates_desc'] = '(optional) Comma-separated list of template IDs for user to select from (must be IDs); if &template is set, it will be selected in the list; default: (empty)';
 $_lang['np_parents_desc'] = 'Comma-separated list of parent IDs for user to select from (must be IDs or Context keys); If &parentid is sent, it will be selected in the list. Note: new_document_in_root permission may be necessary for new resources); default: (empty)';
 $_lang['np_which_editor_desc'] = 'Rich-text editor to use; at present, TinyMCE is the only value that will work; default: TinyMCE';
