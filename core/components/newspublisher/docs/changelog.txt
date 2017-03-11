@@ -1,5 +1,12 @@
 Changelog for NewsPublisher
 
+NewsPublisher 3.0.2-pl
+----------------------
+Fix bug with invalid media sources caused by Quick Create
+Add stopOnNoRte property
+Add np_media_source_var System Setting
+Minor improvements
+
 NewsPublisher 3.0.1-pl
 ----------------------
 Fix bug with unknown column in show property
