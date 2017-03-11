@@ -118,7 +118,7 @@ $mediaSourceId =  $modx->getOption('media_source', $_GET, null, true);
 unset($_GET['media_source']);
 
 
-if ($mediaSourceId !== null) {
+if (!empty($mediaSourceId)) {
     $ms = $modx->getObject('modMediaSource', (int) $mediaSourceId);
     if ($ms) {
         $ms->initialize();
@@ -128,6 +128,8 @@ if ($mediaSourceId !== null) {
         $startPath = $path;
         $path = empty($path) ? $modx->getOption('base_path') : $path;
         $url = empty($path) ? $modx->getOption('site_url') : $url;
+    } else {
+        $modx->log(modX::LOG_LEVEL_ERROR, '[npElFinderConnector] Could not find Media Source with ID: ' . $mediaSourceId);
     }
 }
 
