@@ -105,4 +105,14 @@ $systemSettings[8]->fromArray(array (
   'name' => 'elFinder theme',
   'description' => 'setting_np_elfinder_theme_desc',
 ), '', true, true);
+$systemSettings[9] = $modx->newObject('modSystemSetting');
+$systemSettings[9]->fromArray(array (
+  'key' => 'np_media_source_var',
+  'value' => 'media_source',
+  'xtype' => 'textfield',
+  'namespace' => 'newspublisher',
+  'area' => 'elFinder',
+  'name' => 'elFinder Media Source Variable',
+  'description' => 'setting_np_media_source_var_desc',
+), '', true, true);
 return $systemSettings;

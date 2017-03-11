@@ -1717,8 +1717,9 @@ class Newspublisher {
      * @return string - HTML code */
 
     protected function _displayFileInput($name, $tplName, $mediaSourceId = null) {
+        $msVar = $this->modx->getOption('np_media_source_var', $this->props, 'media_source', true);
         $PHs = array(
-            '[[+media_source]]' => '?&media_source=' . $mediaSourceId,
+            '[[+media_source]]' => '?' . $msVar . '=' . $mediaSourceId,
         );
         $PHs['[[+np_assets_url]]'] = $this->assetsUrl;
         if ($tplName === 'imageTpl' && ($mediaSourceId !== null) ) {
@@ -1875,10 +1876,12 @@ class Newspublisher {
             if($this->initrte) {
                 $PHs['[[+npx.class]]'] = 'modx-richtext';
                 if ($mediaSourceId !== null) {
+                    $msVar = $this->modx->getOption('np_media_source_var', $this->props, 'media_source', true);
+
                     /* Rich text TVs */
                     $tpl = 'RichtextTpl';
                     $PHs['[[+npx.class]]'] = 'modx-richtext-tv';
-                    $PHs['[[+media_source]]'] = '?&media_source=' . $mediaSourceId;
+                    $PHs['[[+media_source]]'] = '?' . $msVar . '=' . $mediaSourceId;
                     $PHs['file_browser_function'] = 'fileBrowser' . $name;
                 }
             } else {

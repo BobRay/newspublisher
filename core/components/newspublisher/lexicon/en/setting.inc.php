@@ -9,3 +9,4 @@ $_lang['setting_np_login_id_desc'] = 'ID of login page; used to redirect not-log
 $_lang['setting_np_login_redirect_desc'] = 'If set to Yes, not-logged-in users will be directed to the login page; use &loginResourceId=`##` (where ## is the ID of the NewsPublisher page) in the login tag to bounce users back to newspublisher after login; Default: Yes';
 $_lang['setting_np_elfinder_height_desc'] = 'Height of elFinder window as percent of screen size; Default: 80; do not include percent sign';
 $_lang['setting_np_elfinder_width_desc'] = 'Width of elFinder window as percent of screen size; Default: 80; do not include percent sign';
+$_lang['setting_np_media_source_var_desc'] = 'Name for Media Source $_GET variable sent from NewsPublisher to the file browser; Default: media_source';
