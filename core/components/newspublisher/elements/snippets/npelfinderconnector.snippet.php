@@ -113,6 +113,14 @@ $path='';
 $url = '';
 $startPath = '';
 
+if (isset($_POST['q_elf_modx'])) { //if client JS requestType is 'post'
+    $_POST['q'] = $_POST['q_elf_modx'];
+}
+
+if (isset($_GET['q_elf_modx'])) {  //if client JS requestType is 'get'
+    $_GET['q'] = $_GET['q_elf_modx'];
+}
+
 $driver = $modx->getOption('driver', $scriptProperties, 'LocalFileSystem', true);
 $mediaSourceId =  $modx->getOption('media_source', $_GET, null, true);
 unset($_GET['media_source']);

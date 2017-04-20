@@ -50,7 +50,15 @@
 					};
 				}
 				// Make elFinder (REQUIRED)
-				$('#elfinder').elfinder(opts);
+                var elf = $('#elfinder').elfinder(opts).elfinder('instance');
+                var elf_request = elf.request;
+                elf.request = function (opts) {
+                    if (opts.data && opts.data.cmd && opts.data.cmd === 'search') { //fire only when search request is made
+                        opts.data.q_elf_modx = opts.data.q; //swap in your own parameter
+                        delete opts.data.q; //remove the conflict to survive htaccess redirect
+                    }
+                    return elf_request.call(elf, opts); //continue business as usual - send the info to backend
+                };
 			});
 		},
 		
