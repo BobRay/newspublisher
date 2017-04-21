@@ -2016,6 +2016,15 @@ class Newspublisher {
 
             if (! is_numeric($fields['parent'])) {
                 $this->resource->set('context_key', $fields['parent']);
+                $fields['context_key'] = $fields['parent'];
+            } else {
+                $parentObj = $this->modx->getObject('modResource', $fields['parent']);
+                if ($parentObj) {
+                    $ctx = $parentObj->get('context_key');
+                    $this->resource->set('context_key', $ctx);
+                    $fields['context_key'] = $ctx;
+                }
+                unset ($parentObj);
             }
 
             $fields['searchable'] = isset ($_POST['searchable'])
@@ -2029,9 +2038,6 @@ class Newspublisher {
                 : $this->richtext;
             $fields['createdby'] = $this->modx->user->get('id');
             $fields['content']  = $this->header . $fields['content'] . $this->footer;
-            $fields['context_key'] = isset ($fields['context_key'])
-                ? $fields['context_key']
-                : $this->modx->context->get('key');
         }
 
         /* Add TVs to $fields for processor */
