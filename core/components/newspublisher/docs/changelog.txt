@@ -2,6 +2,8 @@ Changelog for NewsPublisher
 
 NewsPublisher 3.0.2-pl
 ----------------------
+Fix bug with context_key for non-root docs in non-web context
+Fix issue with elFinder search
 Fix bug with invalid media sources caused by Quick Create
 Add stopOnNoRte property
 Add np_media_source_var System Setting
