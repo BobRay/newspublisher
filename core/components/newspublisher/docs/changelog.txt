@@ -1,5 +1,9 @@
 Changelog for NewsPublisher
 
+NewsPublisher 3.0.3-pl
+----------------------
+Fix bug with non-html resource content-type extensions
+
 NewsPublisher 3.0.2-pl
 ----------------------
 Fix bug with context_key for non-root docs in non-web context
