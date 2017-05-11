@@ -392,17 +392,20 @@ class Newspublisher {
     /** @var   $initFileBrowser bool - If true, initialize the  file browser */
     protected $initFileBrowser = false;
 
-    /** $var $confirmDelete bool - if true, show 'are you sure' dialog */
+    /** @var $confirmDelete bool - if true, show 'are you sure' dialog */
     protected $confirmDelete = true;
 
-    /** $var $presets string - Preset values for fields */
+    /** @var $presets string - Preset values for fields */
     protected $presets = array();
 
-    /** $var $tinyProperties array - properties for TinyMCEinit placeholders - elements may be overridden */
+    /** @var $tinyProperties array - properties for TinyMCEinit placeholders - elements may be overridden */
     protected $tinyProperties = array();
 
-    /** $var $tinyChunk string - Name of TinyMCE init chunk */
+    /** @var $tinyChunk string - Name of TinyMCE init chunk */
     protected $tinyChunk = array();
+
+    /** @var string $np_html_extension */
+    protected $np_html_extension = '';
 
 
     /** NewsPublisher constructor
@@ -454,6 +457,12 @@ class Newspublisher {
 
     public function init($context) {
         $this->context = $context;
+
+        /* Get html content type extension */
+        $query = $this->modx->newQuery('modContentType', array('mime_type' => 'text/html'));
+        $query->select('file_extensions');
+        $this->np_html_extension = $this->modx->getValue($query->prepare());
+
         $language = $this->modx->getOption('language', $this->props, '');
         $language = !empty($language)
             ? $language
@@ -776,7 +785,8 @@ class Newspublisher {
                 $efChunkName = $this->modx->getOption('elfinderinittpl', $this->props, 'npelFinderInitTpl', true);
                 $this->modx->regClientStartupScript('<script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js" type="text/javascript"></script>');
 
-                $this->modx->regClientStartupScript($this->modx->getChunk($efChunkName, array('file_browser_function' => 'autoFileBrowser')));
+
+                $this->modx->regClientStartupScript($this->modx->getChunk($efChunkName, array('file_browser_function' => 'autoFileBrowser', 'np_html_extension' => $this->np_html_extension)));
             }
 
         } else {
@@ -1721,7 +1731,10 @@ class Newspublisher {
         $PHs = array(
             '[[+media_source]]' => '?' . $msVar . '=' . $mediaSourceId,
         );
+
+        $PHs['[[+np_html_extension]]'] = $this->np_html_extension;
         $PHs['[[+np_assets_url]]'] = $this->assetsUrl;
+
         if ($tplName === 'imageTpl' && ($mediaSourceId !== null) ) {
             $source = $this->modx->getObject('sources.modMediaSource', $mediaSourceId);
 
@@ -1868,7 +1881,8 @@ class Newspublisher {
     protected function _displayTextarea($name, $RichText, $noRTE_class, $rows = 20, $columns = 60, $mediaSourceId = null) {
         $PHs = array(
             '[[+npx.rows]]' => $rows,
-            '[[+npx.cols]]' => $columns
+            '[[+npx.cols]]' => $columns,
+            '[[+np_html_extension]]' => $this->np_html_extension,
             );
         $tpl = 'TextAreaTpl';
         if ($RichText) {
@@ -1882,7 +1896,7 @@ class Newspublisher {
                     $tpl = 'RichtextTpl';
                     $PHs['[[+npx.class]]'] = 'modx-richtext-tv';
                     $PHs['[[+media_source]]'] = '?' . $msVar . '=' . $mediaSourceId;
-                    $PHs['file_browser_function'] = 'fileBrowser' . $name;
+                    $PHs['[[+file_browser_function]]'] = 'fileBrowser' . $name;
                 }
             } else {
                 if ($this->stopOnNoRte) {

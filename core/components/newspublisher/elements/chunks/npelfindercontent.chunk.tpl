@@ -42,7 +42,7 @@
                     },
                    */
                     loadtmbs: 50,
-                    url: '[[++site_url]]npelfinderconnector.html[[+media_source]]',
+                    url: '[[++site_url]]npelfinderconnector[[+np_html_extension]][[+media_source]]',
                     rememberLastDir : [[++np_elfinder_remember_last_dir]],
                     cssAutoLoad: [
                         '[[+npAssetsURL]]elfinder/elfinderthemes/[[++np_elfinder_theme]]/css/theme.css'

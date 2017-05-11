@@ -19,4 +19,10 @@ if (isset($_GET['media_source'])) {
     }
 }
 
+$query = $modx->newQuery('modContentType', array('mime_type' => 'text/html'));
+$query->select('file_extensions');
+$ext = $modx->getValue($query->prepare());
+
+$fields ['np_html_extension'] = $ext;
+
 return $modx->getChunk('npElFinderContent', $fields);

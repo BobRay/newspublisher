@@ -30,7 +30,7 @@
               //     download : {shortcuts : []}
               // },
 
-             url: '[[++site_url]]npelfinderconnector.html[[+media_source]]',
+             url: '[[++site_url]]npelfinderconnector[[+np_html_extension]][[+media_source]]',
              cssAutoLoad: [
                  '[[+np_assets_url]]elfinder/elfinderthemes/[[++np_elfinder_theme]]/css/theme.css'
              ],

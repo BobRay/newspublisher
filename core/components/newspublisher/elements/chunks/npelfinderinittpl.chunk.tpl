@@ -7,7 +7,7 @@ if(typeof [[+file_browser_function]] == "undefined" || [[+file_browser_function]
     [[+file_browser_function]] = function(field_name, url, type, win, gallery) {
     tinymce.activeEditor.windowManager.open({
     // file is the URL of of the npElFinder resource
-    file: '[[++site_url]]npelfinder.html',
+    file: '[[++site_url]]npelfinder[[+np_html_extension]]',
     title: 'elFinder 2.0 (double-click to select your file)',
     width : window.innerWidth * ef_width,
     height : window.innerHeight * ef_height,
