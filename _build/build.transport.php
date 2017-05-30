@@ -414,6 +414,42 @@ if ($hasResources) {
     unset($resources, $resource, $attributes);
 }
 
+/* NewsPublisher access policy template */
+$modx->log(modX::LOG_LEVEL_INFO, 'Adding access policy template.');
+$template = include $sources['data'] . 'transport.accesspolicytemplate.php';
+$vehicle = $builder->createVehicle($template, array(
+    xPDOTransport::PRESERVE_KEYS => false,
+    xPDOTransport::UPDATE_OBJECT => true,
+    xPDOTransport::UNIQUE_KEY => 'name',
+));
+$modx->log(modX::LOG_LEVEL_INFO, 'Adding access policy template resolver.');
+$vehicle->resolve('php', array(
+    'source' => $sources['resolvers'] . 'accesspolicytemplate.resolver.php',
+));
+$builder->putVehicle($vehicle);
+
+/* NewsPublisher access policy */
+$modx->log(modX::LOG_LEVEL_INFO, 'Adding access policy.');
+$policy = include $sources['data'] . 'transport.accesspolicy.php';
+$vehicle = $builder->createVehicle($policy, array(
+    xPDOTransport::PRESERVE_KEYS => false,
+    xPDOTransport::UPDATE_OBJECT => true,
+    xPDOTransport::UNIQUE_KEY => 'name',
+));
+$modx->log(modX::LOG_LEVEL_INFO, 'Adding access policy resolver.');
+$vehicle->resolve('php', array(
+    'source' => $sources['resolvers'] . 'accesspolicy.resolver.php',
+));
+
+$modx->log(modX::LOG_LEVEL_INFO, 'Adding filemove resolver.');
+$vehicle->resolve('php', array(
+    'source' => $sources['resolvers'] . 'filemove.resolver.php',
+));
+
+$builder->putVehicle($vehicle);
+
+unset($vehicle, $template, $policy);
+
 /* load new system settings */
 if ($hasSettings) {
     $settings = include $sources['data'] . 'transport.settings.php';
