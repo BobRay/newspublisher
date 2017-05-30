@@ -1217,7 +1217,7 @@ class Newspublisher {
             case 'description':
                 $rows = $this->modx->getOption('descriptionrows', $this->props, '5', true);
                 $cols =  $this->modx->getOption('descriptioncols', $this->props, '51', true);
-                $rtDescription = (bool) $this->modx->getOption('rtdescription', false, true);
+                $rtDescription = (bool) $this->modx->getOption('rtdescription', $this->props, false, true);
                 $inner .= $this->_displayTextarea($field,
                     $rtDescription,
                     'np-description', $rows, $cols);
@@ -1227,7 +1227,7 @@ class Newspublisher {
             case 'introtext':
                 $rows = $this->modx->getOption('summaryrows', $this->props, '10', true);
                 $cols = $this->modx->getOption('summarycols', $this->props, '60', true);
-                $rtSummary = (bool) $this->modx->getOption('rtsummary', false, true);
+                $rtSummary = (bool) $this->modx->getOption('rtsummary', $this->props, false, true);
                 $inner .= $this->_displayTextarea($field,
                     $rtSummary,
                     'np-introtext', $rows, $cols);
