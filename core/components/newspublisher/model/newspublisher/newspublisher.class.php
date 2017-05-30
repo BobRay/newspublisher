@@ -771,6 +771,8 @@ class Newspublisher {
 
         $this->initFileBrowser = $this->modx->getOption('initfilebrowser', $this->props, false, true);
 
+        $jQueryLoaded = false;
+
         if ($this->initFileBrowser) {
             if ( (!$this->modx->hasPermission('file_manager')) && (!$this->modx->user->get('sudo'))) {
                 $this->setError($this->modx->lexicon('np_file_manager_permission_denied'));
@@ -782,6 +784,7 @@ class Newspublisher {
                 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
                 '
                 );
+                $jQueryLoaded = true;
                 $efChunkName = $this->modx->getOption('elfinderinittpl', $this->props, 'npelFinderInitTpl', true);
                 $this->modx->regClientStartupScript('<script src="' . $this->assetsUrl . 'elfinder/js/elfinder.min.js" type="text/javascript"></script>');
 
@@ -794,6 +797,9 @@ class Newspublisher {
             $this->modx->regClientStartupScript("<script>var autoFileBrowser=null;</script>");
         }
 
+        if (!$jQueryLoaded && $this->useTabs) {
+            $this->modx->regClientStartupHTMLBlock('<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" type="text/javascript"></script>');
+        }
 
         /* Rich Text Editing  */
         if ($this->initrte) {
@@ -1010,7 +1016,7 @@ class Newspublisher {
                     'activeButton' => $this->activeTab,
                     'buttonsJson' => $this->tabs,
                 ));
-                $this->modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript');
+               // $this->modx->regClientStartupScript('//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript');
                 $this->modx->regClientStartupScript($tabsJs);
                 unset($tabsJs);
                 //$this->setError('json_passed');
