@@ -1,5 +1,7 @@
 <script type="text/javascript">
+
 $(document).ready(function(){
+    "use strict";
 
     /* Original code by Gregor Šekoranja */
 
@@ -94,15 +96,15 @@ $(document).ready(function(){
                     '</section>';
 
     /* ****************************
-    /* insert filter buttons
-    /******************************/
+          insert filter buttons
+     ******************************/
 
     /* insert filter buttons after insertAfterElement element */
     $(htmlButtons).insertAfter(insertAfterElement);
 
     /* ****************************
-    /* apply filter
-    /******************************/
+             apply filter
+     ******************************/
 
     var filterItems = form.find('.' + filterItemClass);
     /* console.log('filter-items length: ' + filterItems.length);
