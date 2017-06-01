@@ -1,5 +1,12 @@
 Changelog for NewsPublisher
 
+NewsPublisher 3.0.4-pl
+----------------------
+Fix bug with &rtsummary and &rtdescription not registering
+Fix bug with using file browser with tabs on
+Fix bug with installing NP Policy and Policy Template
+Fix JSLint errors in tabs js chunk
+
 NewsPublisher 3.0.3-pl
 ----------------------
 Fix bug with non-html resource content-type extensions
