@@ -18,7 +18,7 @@
  *
  * @package newspublisher
  * @author Raymond Irving
- * @author Bob Ray <http://bobsguides.com>
+ * @author Bob Ray <https://bobsguides.com>
  
  *
  * Description: The NewsPublisher snippet presents a form in the front end for

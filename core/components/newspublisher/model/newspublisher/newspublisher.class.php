@@ -5,7 +5,7 @@
  *
  * Copyright 2011-2017 Bob Ray
  *
- * @author Bob Ray <http://bobsguides.com>
+ * @author Bob Ray <https://bobsguides.com>
  * @author Raymond Irving
  * 7/10/11
  *

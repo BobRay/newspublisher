@@ -3,7 +3,7 @@
  * Utility snippet for NewsPublisher development
  *
  * Copyright 2011-2015 Bob Ray
- * @author Bob Ray <http://bobsguides.com>
+ * @author Bob Ray <https://bobsguides.com>
  * created 1/15/11
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
