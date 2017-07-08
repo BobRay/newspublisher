@@ -1,7 +1,7 @@
 <?php
 /**
  * NpEditThisButton
- * Copyright 2011-2015 Bob Ray
+ * Copyright 2011-2017 Bob Ray
  *
  * @version Version 3.0.1-pl
  *

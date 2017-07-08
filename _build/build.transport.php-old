@@ -2,7 +2,7 @@
 /**
  * NewsPublisher Build Script
  *
- * Copyright 2011-2015 Bob Ray
+ * Copyright 2011-2017 Bob Ray
 
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
@@ -51,7 +51,7 @@ $sources= array (
 );
 unset($root);
 
-/* instantiate MODx */
+/* instantiate MODX */
 require_once $sources['build'].'build.config.php';
 require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
 $modx= new modX();

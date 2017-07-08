@@ -11,7 +11,7 @@
  *
  * Build Script for MyComponent extra
  *
- * Copyright 2013-2017 by Bob Ray <https://bobsguides.com>
+ * Copyright 2013-2017 Bob Ray <https://bobsguides.com>
  * Created on 10-23-2012
  *
  * MyComponent is free software; you can redistribute it and/or modify it under the
@@ -37,7 +37,7 @@
  *
 
  */
-/* See the tutorial at http://https://bobsguides.com/mycomponent-tutorial.html
+/* See the tutorial at https://bobsguides.com/mycomponent-tutorial.html
  * for more detailed information about using the package.
  */
 

@@ -11,7 +11,7 @@ NewsPublisher Extra for MODX Revolution
      
 **Bugs and requests:** [NewsPublisher Issues](https://github.com/BobRay/NewsPublisher/issues)
 
-**Questions about using NewsPublisher** [MODx Forums](https://forums.modx.com)     
+**Questions about using NewsPublisher** [MODX Forums](https://forums.modx.com)     
  
 
 NewsPublisher is a front-end resource editing and creation tool for MODX Revolution.
