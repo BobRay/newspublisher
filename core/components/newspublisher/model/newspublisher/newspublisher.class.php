@@ -1450,7 +1450,7 @@ class Newspublisher {
 
         $replace = array();
         $description = isset($fields['description'])? $fields['description']: '';
-        $replace['[[+npx.help]]'] = $this->modx->getOption('hoverhelp', $description, '', true);
+        $replace['[[+npx.help]]'] = $this->modx->getOption('hoverhelp', $this->props, false, true) ? $description : '';
         unset($description);
         $replace['[[+npx.caption]]'] = $caption;
         $replace['[[+npx.fieldName]]'] = $name;
