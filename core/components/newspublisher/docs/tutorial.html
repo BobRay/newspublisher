@@ -1,5 +1,5 @@
 
-<p>NewsPublisher is a front-end resource creation and editing tool for MODX Revolution. It allows users to create new documents and edit existing documents in the front end of your site. Editing existing documents involves placing a tag for the NpEditThisButton snippet in your page template. Clicking on the button produced by the snippet launches NewsPublisher for that resource. You do not have to create *any* form fields. NewsPublisher creates them based on the field or TV type and its current or default value (if any).</p>
+<p>NewsPublisher is a front-end resource creation and editing tool for MODX Revolution. It allows users to create new documents and edit existing documents in the front end of your site without needing access to the MODX Manager. Editing existing documents involves placing a tag for the NpEditThisButton snippet in your page template. Clicking on the button produced by the snippet launches NewsPublisher for that resource. You do not have to create *any* form fields. NewsPublisher creates them based on the field or TV type and its current or default value (if any).</p>
 
 <div class="box">
     <p><b>Important: If you are upgrading from a version prior to NewsPublisher 3.0, be sure to see the <a href="[[~[[*id]]]]#np_upgrade_notes">Upgrade Notes</a> at the bottom of this page.</b></p>
@@ -21,6 +21,8 @@
 
 <p>Markus Schlegel, who developed an earlier version of the NewsPublisher browser for files and images, the NewsPublisherEditor Policy and Policy Template, and who vastly improved the datepicker, was kind enough to step in and solve the many problems necessary to make the version 2.0 file browser work in MODX Version 2.3.</p>
 
+<p>Lucy Iannotti's suggested improvements to this page were invaluable.</p>
+
 
 <h3>Installing NewsPublisher for MODX Revolution</h3>
 <p>
@@ -28,7 +30,7 @@ Go to System | Package Management on the main menu in the MODX Manager and click
 
 <h3>Using NewsPublisher</h3>
 
-<p>If you are used to using NewsPublisher in MODX Evolution, this version will take a little getting used to. Many of the properties are different, but you will have much more control over the content and style of your form. Each type of field has its own Tpl chunk (as does the form itself) and every individual field has a separate ID so they can be styled using CSS.
+<p>If you used NewsPublisher in MODX Evolution, this version will take a little getting used to. Many of the properties are different, but you will have much more control over the content and style of your form. Each type of field has its own Tpl chunk (as does the form itself) and every individual field has a separate ID so they can be styled using CSS.
 </p>
 
 <p>
@@ -37,11 +39,17 @@ Setting up a basic form is very simple. Create a document called &quot;NewsPubli
 
 <p><pre><fixedpre>[[!NewsPublisher]]</fixedpre></pre></p>
 
+<br>
+<div class="box">
+    <p>Since you don't want just anyone creating resources at your site, you'll need to install the Login extra to use NewsPublisher. When testing NewsPublisher, remember that even though you're logged in to the Manager you're not necessarily logged in to the front end.</p>
+</div>
+<br>
+
 <p>
 When you preview the document, you should see a basic resource editing form. If you fill it in and click on the "Submit" button, the resource should be created. The basic form shows several standard fields, but you can change that with the <code>&show</code> property. It should contain a comma-delimited list (no spaces) of the fields you would like to display in the form. It can include TV fields listed by name or by ID (shown in the Elements tree next to the TV's name). The fields will appear in the form in the order you list them in the property. You can create multiple NewsPublisher pages showing different sets of fields for different users.
 </p>
 
-<p>The form is highly flexible and you can show any fields or TVs in any order. Some fields will require you to set certain properties. For example, if you have any rich text fields, you'll need to set the <code>&initrte</code> property. If you show any date fields, you'll need the <code>&initdatepicker</code> property. The <code>&rtcontent</code> and <code>&rtsummary</code> properties control whether those fields will have rich text editing. See the list below for more information on the available properties. If you'll be using the elFinder file/image browser, either for TinyMCE, or file, richtext, or image TVs, you'll need to set the <code>&initfilebrowser</code> property. The properties can be in any order. Here's an example:</p>
+<p>The form is highly flexible and you can show any fields or TVs in any order. Some fields will require you to set certain properties. For example, if you have any rich text fields, you'll need to set the <code>&initrte</code> property. If you show any date fields, you'll need the <code>&initdatepicker</code> property. The <code>&rtcontent</code> and <code>&rtsummary</code> properties control whether the content and summary fields will have rich text editing. See the list below for more information on the available properties. If you'll be using the elFinder file/image browser, either for TinyMCE, or file, richtext, or image TVs, you'll need to set the <code>&initfilebrowser</code> property. The properties can be in any order. Here's an example:</p>
 
 <pre><fixedpre>
     [[!NewsPublisher?
@@ -60,7 +68,7 @@ When you preview the document, you should see a basic resource editing form. If 
 <p>&nbsp;</p>
 <p>The example above will show the fields in the <code>&show</code> property in the order they appear in that property. The new resource will be published and both the content and introtext (summary) fields will have rich text editing. The pub_date field will display a datepicker widget.</p>
 
-<p>The captions field is optional, so try the form and see if the default captions will work for you. If not, add the <code>&captions</code> property. If your captions are long, you may have to adjust the CSS to keep them from wrapping.</p>
+<p>The captions field is optional, so try the form and see if the default captions will work for you. If not, add the <code>&captions</code> property as shown in the example above. The part before the <code>:</code> is the field name, the part after it is the caption that will be shown. The fields are separated by commas. If your captions are long, you may have to adjust the CSS to keep them from wrapping.</p>
 
 <h3>Security</h3>
 <p>NewsPublisher responds to the MODX security permission system, so users can only create resources if they are logged in and have permission to do so. As the admin Super User, you'll have full rights (unless you've done something that takes them away) to create and edit any document in the front end. Other users, however, will have to be granted permission before they can do either and their ability to edit existing resources will depend on the resource group settings.</p>
@@ -87,13 +95,11 @@ When you preview the document, you should see a basic resource editing form. If 
 
 <h3>Login Redirect</h3>
 
-<p>As of Version 3.0, NewsPublisher checks for login status and redirects users to the Login page if they are not logged in. If you
-    don't want this, you can set the <code>&np_login_redirect</code> System Setting to <code>No</code>. It is set to
-    <code>Yes</code> by default.</p>
+<p>As of Version 3.0, NewsPublisher checks for login status and redirects users to the Login page if they are not logged in. If you don't want this, you can set the <code>&np_login_redirect</code> System Setting to <code>No</code>. It is set to
+    <code>Yes</code> by default. Important: this feature won't work if the NewsPublisher page is protected by a Resource Group Access ACL entry. That ACL entry hides the page so the NewsPublisher snippet never executes. The user will be sent to the error (page not found) page instead.</p>
 
 <p>If <code>&np_login_redirect</code> is set to <code>YES</code>, the <code>np_login_id</code>
-    System Setting (in the newspublisher namespace) must be set to the ID of your login page. NewsPublisher will try to do this for you during
-    the install, but if the alias of your login page is not <code>login</code>, you'll have to do it yourself. I you want to use a separate login page for NewsPublisher, use an <code>&np_login_id</code> property in the NewsPublisher snippet tag set to the ID of that page. That will override the System Setting.</p>
+    System Setting (in the newspublisher namespace) must be set to the ID of your login page. NewsPublisher will try to do this for you during the install, but if the alias of your login page is not <code>login</code>, you'll have to do it yourself. I you want to use a separate login page for NewsPublisher, use an <code>&np_login_id</code> property in the NewsPublisher snippet tag set to the ID of that page. That will override the System Setting.</p>
 
 <br>
 
@@ -111,8 +117,7 @@ When you preview the document, you should see a basic resource editing form. If 
 <p>Using the <code>&redirectToPrior</code> property in the Login snippet tag to redirect users back to the NewsPublisher
     page is not entirely reliable, since some browsers don't set the <code>$_SERVER[HTTP_REFERER]</code> variable
     properly. It's recommended instead to set the <code>&loginResourceId</code> property to the ID of the NewsPublisher
-    page. If necessary, you can have a separate Login page for NewsPublisher. If you do this, be sure to use an <code>&np_login_id</code>
-    property in the NewsPublisher snippet tag set to the ID of your NewsPublisher Login page. </p>
+    page. If necessary, you can have a separate Login page for NewsPublisher. If you do this, be sure to use an <code>&np_login_id</code> property in the NewsPublisher snippet tag set to the ID of your NewsPublisher Login page. </p>
 
 <h3>Editing Existing Resources</h3>
 
@@ -133,8 +138,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 <p>You can make many changes to the look of the form using CSS rules for styling. You can find the CSS file at assets/components/newspublisher/css/newspublisher.css. Using CSS, you can change the text color, background color, size, and/or position of any field, though the control of richtext fields is limited. You can put fields side-by-side by using &quot;display:inline;&quot; for the appropriate field(s). If you plan to make changes, it's recommended that you make a copy of the CSS file, the <code>assets/components/newspublisher/css</code> directory and put the name of your new file in the <code>&cssfile</code> property.</p>
 
-<p>If you feel you must, you can alter the Tpl chunks for any of the field types. Again, you should duplicate the existing chunk and put the name of your duplicate in the appropriate property. Be careful not to change the prefixes of any of the placeholders in the Tpl chunks, even if you specify a custom prefix for the form as a property. The prefixes will be altered automatically by the snippet. Note that there are both
-<code>np.</code> and <code>npx.</code> prefixes. The <code>npx.</code> prefixes are used internally by the snippet, the <code>np.</code> prefixes are usually in the value field of the element and will be set via placeholders.
+<p>If you feel you must, you can alter the Tpl chunks for any of the field types. Again, you should duplicate the existing chunk and put the name of your duplicate in the appropriate property. Be careful not to change the prefixes of any of the placeholders in the Tpl chunks, even if you specify a custom prefix for the form as a property. The prefixes will be altered automatically by the snippet. Note that there are both <code>np.</code> and <code>npx.</code> prefixes. The <code>npx.</code> prefixes are used internally by the snippet, the <code>np.</code> prefixes are usually in the value field of the element and will be set via placeholders.
 </p>
 
 <h3>NewsPublisher Tabs</h3>
@@ -419,7 +423,9 @@ form.</p>
     NewsPublisher snippet to <code>Yes</code> (in addition to checking the <code>file_manager</code> permission).</p>
 
 
-<p>To configure the elFinder Browser, see the properties of the npElFinderConnector snippet. As always, you should create a property set if you want to change any of the default values to prevent them from being overwritten when you upgrade NewsPublisher. Most of the properties there are self-explanatory. In particular, you'll want to check the <code>&disableCommands</code> property. See the description of the property for a list of possible commands. To prevent users from accessing a specific feature, simply remove it from the list. The elFinder browser will automatically remove icons for commands that are disabled.</p>
+<p>To configure the elFinder Browser, see the properties of the npElFinderConnector snippet. As always, you should create a property set if you want to change any of the default values to prevent them from being overwritten when you upgrade NewsPublisher. Most of the properties there are self-explanatory.</p>
+
+<p>In particular, you'll want to check the <code>&disableCommands</code> property. It contains a long list of commands that are disabled in the file browser. The ability to upload files, for example, is disabled by default and the upload button won't appear in the file browsers. To let users upload files, remove <code>,upload</code> from the <code>&disableCommand</code> property. See the description of the property for a list of possible commands. To allow users to access a specific feature, simply remove it from the list. The elFinder browser will automatically show icons for any commands that are *not* disabled.</p>
 
 <p>The <code>&browserBasePath</code> and <code>&browserBaseURL</code> properties of the npElfinderConnector snippet are set to the <code>assets</code> directory. You may want to change them, but be sure they match. Users will not be able to browse above them.</p>
 
