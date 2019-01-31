@@ -1921,6 +1921,15 @@ class Newspublisher {
             $this->getTpl($tpl));
     }
 
+    public function sanitizeAlias($alias) {
+        $alias = strtolower($alias);
+        $alias = preg_replace('/&.+?;/', '', $alias); // kill entities
+        $alias = preg_replace('/[^\.%a-z0-9 _-]/', '', $alias);
+        $alias = preg_replace('/\s+/', '-', $alias);
+        $alias = preg_replace('|-+|', '-', $alias);
+        $alias = trim($alias, '-');
+        return $alias;
+    }
 
     /** Saves the resource to the database.
      *
@@ -1981,26 +1990,24 @@ class Newspublisher {
         $fields = array_merge($oldFields, $_POST);
         if (!$this->existing) { /* new document */
             $alias = $this->modx->getOption('alias', $fields, '', true);
+
+
             /* set alias name of document used to store articles */
             if (empty($fields['alias'])) { /* leave it alone if filled */
+                $cleanPagetitle = $this->sanitizeAlias($this->modx->stripTags($_POST['pagetitle']));
+                $aliasPrefix = $this->modx->getOption('aliasprefix', $this->props, null, true);
+                $aliasPrefix = $aliasPrefix === 'pagetitle' ? $cleanPagetitle : $aliasPrefix;
+                $suffix = isset($this->props['aliasdateformat']) && (!empty($this->props['aliasdateformat']))
+                    ? date($this->props['aliasdateformat'])
+                    : '';
                 if (!$this->aliasTitle) {
-                    $suffix = isset($this->props['aliasdateformat']) && (!empty($this->props['aliasdateformat']))
-                        ? date($this->props['aliasdateformat'])
-                        : '-' . time();
-                    if (isset($this->props['aliasprefix']) && (!empty($this->props['aliasprefix']))) {
-                        $alias = $this->props['aliasprefix'] . $suffix;
+                    if ($aliasPrefix) {
+                        $alias = $aliasPrefix . $suffix;
                     } else {
                         $alias = $suffix;
                     }
                 } else { /* use pagetitle */
-                    $alias = $this->modx->stripTags($_POST['pagetitle']);
-                    $alias = strtolower($alias);
-                    $alias = preg_replace('/&.+?;/', '', $alias); // kill entities
-                    $alias = preg_replace('/[^\.%a-z0-9 _-]/', '', $alias);
-                    $alias = preg_replace('/\s+/', '-', $alias);
-                    $alias = preg_replace('|-+|', '-', $alias);
-                    $alias = trim($alias, '-');
-
+                    $alias = $cleanPagetitle;
                 }
                 $fields['alias'] = $alias;
             }
