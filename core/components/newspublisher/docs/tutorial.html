@@ -23,6 +23,8 @@
 
 <p>Lucy Iannotti's suggested improvements to this page were invaluable.</p>
 
+<p>Thanks to todd.b for help testing the use of <code>&ownpagesonly</code> on aggregating pages.</p>
+
 
 <h3>Installing NewsPublisher for MODX Revolution</h3>
 <p>
@@ -366,7 +368,7 @@ form.</p>
 
 <p><code>&shownotify</code> &mdash; (0/1 - optional) If set, the &quot;Launch Notify&quot; option is set. If selected, Notify will be launched for the resource on successful submission; default: 0.</p>
 
-<p><code>&amp;notifychecked</code> &mdash; (0/1 - optional) If is this option and <code>&shownotify</code> are set, the &quot;Launch Notify&quot; option will be checked by default; default: 0.</p>
+<p><code>&notifychecked</code> &mdash; (0/1 - optional) If is this option and <code>&shownotify</code> are set, the &quot;Launch Notify&quot; option will be checked by default; default: 0.</p>
 
 
 <p><b>NpEditThisButton Snippet</b></p>
@@ -387,12 +389,20 @@ form.</p>
 
 <pre><fixedpre>
 <div class="MyItem">
-   [[+pagetitle]]
-   [[+introtext]] . . . [[!NpEditThisButton? &np_edit_id=`[[+id]]`]]
+    [[+pagetitle]]
+    [[+introtext]] . . . [[!NpEditThisButton? &np_edit_id=`[[+id]]` ]]
 </div>
 </fixedpre></pre>
 
 <p>This is handy if you'd like to present a list of resources that the user might want to edit with NewsPublisher.</p>
+
+<p>As of version 3.1.0 you can combine the technique above with <code>&ownpagesonly</code> by adding this property to the NpEditThisButton tag example above:</p>
+
+<pre><fixedpre>
+    [[!NpEditThisButton? &np_edit_id=`[[+id]]` &createdby=`[[+createdby]]` ]]
+
+</fixedpre></pre>
+
 
 <h3>NewsPublisher and Articles</h3>
 
