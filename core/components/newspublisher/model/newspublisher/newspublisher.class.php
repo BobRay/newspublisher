@@ -805,7 +805,7 @@ class Newspublisher {
         if ($this->initrte) {
 
             /* Get location to load TinyMCE fom */
-            $tinySource = $this->modx->getOption('tinysource', $this->props, "//cdn.tinymce.com/4/tinymce.min.js", true);
+            $tinySource = $this->modx->getOption('tinysource', $this->props, "//cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.11/tinymce.min.js", true);
             // $this->modx->log(modX::LOG_LEVEL_ERROR, 'tinysource ' . $tinySource);
 
             /* Get name of TinyMCE configuration chunk */
