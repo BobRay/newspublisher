@@ -1,5 +1,11 @@
 Changelog for NewsPublisher
 
+NewsPublisher 3.1.0-pl
+Implement use of &ownpagesonly on aggregating pages
+Fix TinyMCE warning
+Add option to generate alias from pagetitle and timestamp
+Fix bug with hoverhelp
+
 NewsPublisher 3.0.4-pl
 ----------------------
 Fix bug with &rtsummary and &rtdescription not registering
