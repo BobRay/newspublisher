@@ -125,7 +125,7 @@
  * @property &tinyheight textfield -- (optional) Height of richtext
  *    areas; Default: 400px.
  * @property &tinysource textfield -- Source to load TinyMCE from;
- *    Default: //cdn.tinymce.com/4/tinymce.min.js.
+ *    Default: //cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.11/tinymce.min.js
  * @property &tinywidth textfield -- (optional) Width of richtext
  *    areas; Default: 95%.
  * @property &usetabs combo-boolean -- (optional) Show tabbed display;
