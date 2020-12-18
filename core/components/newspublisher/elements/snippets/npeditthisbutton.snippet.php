@@ -67,7 +67,7 @@ $right = $modx->getOption('right', $props, '20%', true);
 
 
 $assetsUrl = $modx->getOption('np.assets_url', null, MODX_ASSETS_URL . 'components/newspublisher/');
-$modx->regClientCss($assetsUrl . 'css/button.css');
+$modx->regClientCSS($assetsUrl . 'css/button.css');
 
 /* value will be unchanged if there are no errors  */
 $defaultButtonCaption = $buttonCaption;
@@ -75,9 +75,19 @@ $defaultButtonCaption = $buttonCaption;
 $npId = $modx->getOption('np_id', $props, '');
 $npEditId = $modx->getOption('np_edit_id', $props, '');
 
+/* get 'createdby' if sent */
+$createdby = $modx->getOption('createdby', $props, '-1', true);
+
 if (!empty($ownPagesOnly)) {
-    if ($modx->resource->get('createdby') !== $modx->user->get('id')) {
-        $defaultButtonCaption = $modx->lexicon('np_not_your_page');
+    if ($createdby !== '-1') {
+        /* compare it to the ID of the current user */
+        if ($createdby != $modx->user->get('id')) {
+            $defaultButtonCaption = $modx->lexicon('np_not_your_page');
+        }
+    } else {
+        if ($modx->resource->get('createdby') !== $modx->user->get('id')) {
+            $defaultButtonCaption = $modx->lexicon('np_not_your_page');
+        }
     }
 }
 
