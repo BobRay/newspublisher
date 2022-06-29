@@ -1,22 +1,22 @@
 elFinder
 ========
-<pre>
-      _ ______ _           _           
-     | |  ____(_)         | |          
-  ___| | |__   _ _ __   __| | ___ _ __ 
- / _ \ |  __| | | '_ \ / _` |/ _ \ '__|
-|  __/ | |    | | | | | (_| |  __/ |   
- \___|_|_|    |_|_| |_|\__,_|\___|_|   
-</pre>
+
+**WARNING: IF YOU HAVE OLDER (IN PARTICULAR 2.1.60 OR EARLIER) VERSIONS OF ELFINDER ON PUBLIC SERVERS, IT MAY CAUSE SERIOUS DAMAGE TO YOUR SERVER AND VISITED USER. YOU SHOULD UPDATE TO THE LATEST VERSION OR REMOVE IT FROM THE SERVER.**
+
+[![elFinder file manager for the Web](https://studio-42.github.io/elFinder/images/elFinderScr.png "elFinder file manager for the Web")](https://studio-42.github.io/elFinder/)
 
 elFinder is an open-source file manager for web, written in JavaScript using
 jQuery UI. Creation is inspired by simplicity and convenience of Finder program
 used in Mac OS X operating system.
 
-[![Download now!](http://studio-42.github.io/elFinder/images/download-icon.png)](https://github.com/Studio-42/elFinder/releases/latest)
-[![Packagist License](https://poser.pugx.org/studio-42/elfinder/license.png)](http://choosealicense.com/licenses/bsd-3-clause/)
+[![Download now!](https://studio-42.github.io/elFinder/images/download-icon.png)](https://github.com/Studio-42/elFinder/releases/latest)
+[![Packagist License](https://poser.pugx.org/studio-42/elfinder/license.png)](https://choosealicense.com/licenses/bsd-3-clause/)
 [![Latest Stable Version](https://poser.pugx.org/studio-42/elfinder/version.png)](https://packagist.org/packages/studio-42/elfinder)
 [![Total Downloads](https://poser.pugx.org/studio-42/elfinder/d/total.png)](https://packagist.org/packages/studio-42/elfinder)
+[![CDNJS version](https://img.shields.io/cdnjs/v/elfinder.svg)](https://cdnjs.com/libraries/elfinder)
+[![Donate Paypal(nao-pon)](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FF5FKRSMKYDVA)
+[![Donate Bitcoin(nao-pon)](https://img.shields.io/badge/Donate-Bitcoin-orange.svg)](https://studio-42.github.io/elFinder/tools/donate-bitcoin/)
+[![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/naopon)
 
 Contents
 --------
@@ -38,54 +38,49 @@ Branches
 --------
 -  [master](https://github.com/Studio-42/elFinder/tree/master) - Main development branch
 -  [2.1-src](https://github.com/Studio-42/elFinder/tree/2.1-src) - 2.1 development branch, auto build to 2.1 on commit
--  [2.0-src](https://github.com/Studio-42/elFinder/tree/2.0-src) - 2.0 development branch (Security fix only), auto build to 2.0 on commit
 -  [2.1](https://github.com/Studio-42/elFinder/tree/2.1) - 2.1 nightly build branch
--  [2.0](https://github.com/Studio-42/elFinder/tree/2.0) - 2.0 nightly build branch
 
 Features
 --------
-**2.0.x**
+ * Usability like the MacOS Finder or Windows Explorer
+ * Mobile friendly view for touch devices
  * All operations with files and folders on a remote server (copy, move,
    upload, create folder/file, rename, etc.)
  * High performance server backend and light client UI
  * Multi-root support
- * Local file system, MySQL, FTP volume storage drivers
- * Background file upload with Drag & Drop HTML5 support
+ * Local file system, MySQL, FTP, SFTP, Box, Dropbox, GoogleDrive and OneDrive volume storage drivers
+ * Support AWS S3, Azure, Digital Ocean Spaces and more with [League\Flysystem](https://github.com/barryvdh/elfinder-flysystem-driver) Flysystem driver
+ * Cloud storage (Box, Dropbox, GoogleDrive and OneDrive) drivers
+ * Background file/folder upload with Drag & Drop HTML5 support
+ * Chunked file upload for large file
+ * Upload directly to the folder
+ * Upload form URL (or list)
  * List and Icons view
  * Keyboard shortcuts
  * Standard methods of file/group selection using mouse or keyboard
  * Move/Copy files with Drag & Drop
+ * Drag & Drop to outside by starting drag with alt/option key press
  * Archives create/extract (zip, rar, 7z, tar, gzip, bzip2)
  * Rich context menu and toolbar
  * Quicklook, preview for common file types
  * Edit text files and images
  * "Places" for your favorites
  * Calculate directory sizes
- * Thumbnails for image files
+ * Thumbnails for image, movie files
  * Easy to integrate with web editors (elRTE, CKEditor, TinyMCE)
  * Flexible configuration of access rights, upload file types, user interface
    and other
- * Extensibility
+ * Extensibility by event handling of backend and client side
  * Simple client-server API based on JSON
-
-**2.1.x**
- * More High performance server backend and light client UI
+ * Supports custom information in info dialog
+ * Configuable columns of list view
+ * Supports custom CSS class function for the custom folder icon
  * Connector plugin
      * [AutoRotate](https://github.com/Studio-42/elFinder/blob/2.1-src/php/plugins/AutoRotate/plugin.php) : Auto rotation on file upload of JPEG file by EXIF Orientation.
      * [AutoResize](https://github.com/Studio-42/elFinder/blob/2.1-src/php/plugins/AutoResize/plugin.php) : Auto resize on file upload.
      * [Normalizer](https://github.com/Studio-42/elFinder/blob/2.1-src/php/plugins/Normalizer/plugin.php) : UTF-8 Normalizer of file-name and file-path etc.
      * [Sanitizer](https://github.com/Studio-42/elFinder/blob/2.1-src/php/plugins/Sanitizer/plugin.php) : Sanitizer of file-name and file-path etc.
      * [Watermark](https://github.com/Studio-42/elFinder/blob/2.1-src/php/plugins/Watermark/plugin.php) : Print watermark on file upload.
- * Folder upload with Chrome, Firefox and Edge
- * Chunked file upload
- * Upload directly to the folder
- * Upload form URL (or list)
- * Creating the archive by specifying the file name
- * Direct extraction to the current working directory (you do not want to create a folder)
- * Supports Dropbox.com&copy; (Configurable & As network volume)
- * Supports custom information in info dialog
- * Configuable columns of list view
- * Supports custom CSS class function of tree view
  * For more details, see the [Changelog](https://github.com/Studio-42/elFinder/blob/master/Changelog)
 
 Requirements
@@ -93,16 +88,19 @@ Requirements
 ### jQuery / jQuery UI
  * jQuery 1.8.0+
  * jQuery UI 1.9.0+
+    * Required: draggable, droppable, resizable, selectable, button and slider
+    * Recommend: sorter (To make sortable the List column and the Places)
 
 **However, we recommend newest version.**
 
 ### Client
- * Modern browser. elFinder was tested in Internet Explorer 8
-   and newest Firefox, Chrome, IE, Edge and Opera
+ * Modern browsers both of desktop or mobile. elFinder was tested in newest Chrome, Edge, Firefox, IE and Opera
+     - **Caution**: Web App mode ("apple-mobile-web-app-capable" meta tag) on iOS is not work perfectly in elFinder
 
 ### Server
  * Any web server
  * PHP 5.2+ (Recommend PHP 5.4 or higher) And for thumbnails - GD / Imagick module / convert(imagemagick) require
+     * Recommend PHP 7.1 or higher to supports non-ASCII character of file path/name on the Windows server
 
 Installation
 ------------
@@ -127,25 +125,19 @@ Installation
 Downloads
 ------------
 **Stable releases** ([Changelog](https://github.com/Studio-42/elFinder/blob/master/Changelog))
- + [elFinder 2.1.19](https://github.com/Studio-42/elFinder/archive/2.1.19.zip)
- + [elFinder 2.0.7](https://github.com/Studio-42/elFinder/archive/2.0.7.zip)
+ + [elFinder 2.1.61](https://github.com/Studio-42/elFinder/archive/2.1.61.zip)
+ + [elFinder 2.0.9](https://github.com/Studio-42/elFinder/archive/2.0.9.zip) (deprecated)
 
 **Nightly builds**
  + [elFinder 2.1.x (Nightly)](https://github.com/Studio-42/elFinder/archive/2.1.zip)
- + [elFinder 2.0.x (Nightly)](https://github.com/Studio-42/elFinder/archive/2.0.zip)
 
 Demo sites
 ------------
 **2.1.x Nightly**
  + https://studio-42.github.io/elFinder/ (with CORS)
- + https://hypweb.net/elFinder-nightly/demo/2.1/
 
 FAQs
 ------------
-### Which version of elFinder should I use?
-* **2.0.x** if you do not need 2.1 of the advanced features.
-
-* **2.1.x** if you want to try the experimental (*bleeding edge, but API 2.1 connector is PHP only*). It is also available from the connector on the API 1.x and 2.0.
 
 ### Should I use elFinder builds (compressed) or source (uncompressed)?
 
@@ -158,28 +150,42 @@ Check out the [wiki](https://github.com/studio-42/elFinder/wiki#howtos) for indi
 
 You can create or modify the language file to use translation tool. Please refer to the pull request the results to the respective branch.
  * [2.1 branch translation tool](http://studio-42.github.io/elFinder/tools/langman/#2.1)
- * [2.0 branch translation tool](http://studio-42.github.io/elFinder/tools/langman/#2.0)
 
 
 3rd party connectors
 --------------------
- * [ASP.NET](https://github.com/leniel/elFinder.Net)
+ * [ASP.NET](https://github.com/leniel/elFinder.Net) / [ASP.NET Core](https://github.com/gordon-matt/elFinder.NetCore) / [.NET Standard](https://github.com/mguinness/elFinder.AspNet)
  * [Java Servlet](https://github.com/trustsystems/elfinder-java-connector)
+ * [JavaScript/Efw](https://github.com/efwGrp/efw3.X/blob/master/help/tag.elfinder.md)
+ * [Nodejs](https://github.com/dekyfin/elfinder-node)
  * [Python](https://github.com/Studio-42/elfinder-python)
  * [Ruby/Rails](https://github.com/phallstrom/el_finder)
- * [Django](https://github.com/mikery/django-elfinder)
- * [Laravel](https://github.com/barryvdh/laravel-elfinder)
 
 3rd party Volume Drivers
 --------------------
- * [League\Flysystem (PHP)](https://github.com/barryvdh/elfinder-flysystem-driver) (for elFinder 2.1+)
+ * [League\Flysystem (PHP)](https://github.com/barryvdh/elfinder-flysystem-driver) (for elFinder 2.1+) driver for the [Flysystem](https://github.com/thephpleague/flysystem)
 
 3rd party Themes
 --------------------
+Hint: [How to load CSS with RequireJS?](https://github.com/Studio-42/elFinder/wiki/How-to-load-CSS-with-RequireJS%3F)
+
  * [lokothodida/elfinder-theme-moono](https://github.com/lokothodida/elfinder-theme-moono)
  * [lokothodida/elfinder-theme-windows-10](https://github.com/lokothodida/elfinder-theme-windows-10)
- * [StudioJunkyard/elfinder-boostrap-theme](https://github.com/StudioJunkyard/LibreICONS/tree/master/themes/elFinder)
  * [RobiNN1/elFinder-Material-Theme](https://github.com/RobiNN1/elFinder-Material-Theme)
+ * [StudioJunkyard/elfinder-boostrap-theme](https://github.com/StudioJunkyard/LibreICONS/tree/master/themes/elFinder)
+
+3rd party Integrations
+--------------------
+ * [Django](https://github.com/mikery/django-elfinder)
+ * [Drupal](https://gitlab.com/667bdrm/elfinder)
+ * [Laravel](https://github.com/barryvdh/laravel-elfinder)
+ * [Roundcube](https://github.com/Offerel/roundcube_elfinder)
+ * [Symfony](https://github.com/helios-ag/FMElfinderBundle)
+ * [Tiki Wiki](https://doc.tiki.org/elFinder)
+ * [WordPress](https://wordpress.org/plugins/file-manager/)
+ * [XOOPS](https://github.com/nao-pon/xelfinder)
+ * [Yii](http://www.yiiframework.com/extension/elfinder/)
+ * [Zenphoto](http://www.zenphoto.org/news/elfinder/)
 
 Support
 -------
@@ -193,10 +199,11 @@ Support
 Authors
 -------
 
+ * Current main developer: Naoki Sawada <hypweb+elfinder@gmail.com> [![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/naopon)
  * Chief developer: Dmitry "dio" Levashov <dio@std42.ru>
  * Maintainer: Troex Nevelin <troex@fury.scancode.ru>
- * Developers: Alexey Sukhotin <strogg@yandex.ru>, Naoki Sawada <hypweb@gmail.com>
- * Icons: [PixelMixer](http://pixelmixer.ru), [Yusuke Kamiyamane](http://p.yusukekamiyamane.com)
+ * Developers: Alexey Sukhotin, Naoki Sawada <hypweb+elfinder@gmail.com>
+ * Icons: PixelMixer, [Yusuke Kamiyamane](http://p.yusukekamiyamane.com), [Icons8](https://icons8.com)
 
 We hope our tools will be helpful for you.
 
