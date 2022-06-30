@@ -22,19 +22,23 @@
 $modx =& $object->xpdo;
 $success = false;
 $templateName = 'NewsPublisherPolicyTemplate';
+$prefix = $modx->getVersionData()['version'] >= 3
+    ? 'MODX\Revolution\\'
+    : '';
+
 
 
 switch($options[xPDOTransport::PACKAGE_ACTION]) {
 
     case xPDOTransport::ACTION_INSTALL:
     case xPDOTransport::ACTION_UPGRADE:
-        $template = $modx->getObject('modAccessPolicyTemplate', array('name' => $templateName));
+        $template = $modx->getObject($prefix . 'modAccessPolicyTemplate', array('name' => $templateName));
         if (!$template) {
             $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the '.$templateName);
             break;
         }
 
-        $group = $modx->getObject('modAccessPolicyTemplateGroup', array('name' => 'Admin'));
+        $group = $modx->getObject($prefix . 'modAccessPolicyTemplateGroup', array('name' => 'Admin'));
         if (!$group) {
             $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the admin access policy template group'. $templateName);
             break;
@@ -44,7 +48,7 @@ switch($options[xPDOTransport::PACKAGE_ACTION]) {
         /* Copy all permissions from the AdministratorTemplate (not necessary if upgrading, they will already exist)  */
         $existingPermissions = $template->getMany('Permissions');
         if (empty($existingPermissions)) {
-            $adminTemplate = $modx->getObject('modAccessPolicyTemplate', array('id' => 1));
+            $adminTemplate = $modx->getObject($prefix . 'modAccessPolicyTemplate', array('id' => 1));
             if (!$adminTemplate) {
                 $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the AdministratorTemplate modAccessPolicyTemplate');
                 break;
@@ -52,14 +56,14 @@ switch($options[xPDOTransport::PACKAGE_ACTION]) {
             $modx->log(xPDO::LOG_LEVEL_INFO,'Setting permissions for '. $templateName);
             $permissions = $adminTemplate->getMany('Permissions');
             $modx->lexicon->load('newspublisher:permissions');
-            $permissions[] = $modx->newObject('modAccessPermission',array(
+            $permissions[] = $modx->newObject($prefix . 'modAccessPermission',array(
                 'name' => 'allow_modx_tags',
                 'description' => $modx->lexicon('np_allow_modx_tags_desc'),
                 'value' => true,
             ));
             if (!empty($permissions)) {
                 foreach ($permissions as $permission) {
-                    $newPerm = $modx->newObject('modAccessPermission');
+                    $newPerm = $modx->newObject($prefix . 'modAccessPermission');
                     $newPerm->fromArray($permission->toArray());
                     $newPerm->set('template',$template->get('id'));
                     $newPerm->save();

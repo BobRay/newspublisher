@@ -15,14 +15,16 @@ $modx =& $object->xpdo;
 $success = false;
 $policyName = 'NewsPublisherEditor';
 $templateName = 'NewsPublisherPolicyTemplate';
-
+$prefix = $modx->getVersionData()['version'] >= 3
+    ? 'MODX\Revolution\\'
+    : '';
 
 switch($options[xPDOTransport::PACKAGE_ACTION]) {
     case xPDOTransport::ACTION_INSTALL:
     case xPDOTransport::ACTION_UPGRADE:
-        $template = $modx->getObject('modAccessPolicyTemplate', array('name' => $templateName));
+        $template = $modx->getObject($prefix . 'modAccessPolicyTemplate', array('name' => $templateName));
         if ($template) {
-            $policy = $modx->getObject('modAccessPolicy', array('name' => $policyName));
+            $policy = $modx->getObject($prefix . 'modAccessPolicy', array('name' => $policyName));
             if (!$policy) {
                 $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the '.$policyName);
                 break;

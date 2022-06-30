@@ -28,6 +28,10 @@
 
 if ($object->xpdo) {
     $modx =& $object->xpdo;
+    $prefix = $modx->getVersionData()['version'] >= 3
+        ? 'MODX\Revolution\\'
+        : '';
+
     switch ($options[xPDOTransport::PACKAGE_ACTION]) {
         /** @noinspection PhpMissingBreakStatementInspection */
         case xPDOTransport::ACTION_UPGRADE:
@@ -45,13 +49,13 @@ if ($object->xpdo) {
         case xPDOTransport::ACTION_INSTALL:
 
             /* Try to set np_login_is System Setting if it's empty */
-            $doc = $modx->getObject('modResource', array('alias' => 'login'));
+            $doc = $modx->getObject($prefix . 'modResource', array('alias' => 'login'));
             if (! $doc) {
-                $doc = $modx->getObject('modResource', array('pagetitle' => "Login"));
+                $doc = $modx->getObject($prefix . 'modResource', array('pagetitle' => "Login"));
             }
 
             if ($doc) {
-                $setting = $modx->getObject('modSystemSetting', array('key' => 'np_login_id'));
+                $setting = $modx->getObject($prefix . 'modSystemSetting', array('key' => 'np_login_id'));
                 if ($setting) {
                     $val = $setting->get('value');
                     if (empty($val)) {
