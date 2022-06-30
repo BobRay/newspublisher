@@ -2,7 +2,7 @@
 /**
  * systemSettings transport file for NewsPublisher extra
  *
- * Copyright 2013-2021 Bob Ray <https://bobsguides.com>
+ * Copyright 2013-2022 Bob Ray <https://bobsguides.com>
  * Created on 02-09-2017
  *
  * @package newspublisher
@@ -32,7 +32,7 @@ $systemSettings[1]->fromArray(array (
   'xtype' => 'combo-boolean',
   'namespace' => 'newspublisher',
   'area' => 'NewsPublisher',
-  'name' => 'NewsPublisher redirect to login',
+  'name' => 'setting_np_login_redirect',
   'description' => 'setting_np_login_redirect_desc',
 ), '', true, true);
 $systemSettings[2] = $modx->newObject('modSystemSetting');
@@ -42,7 +42,7 @@ $systemSettings[2]->fromArray(array (
   'xtype' => 'textfield',
   'namespace' => 'newspublisher',
   'area' => 'NewsPublisher',
-  'name' => 'NewsPublisher login page ID',
+  'name' => 'setting_np_login_id',
   'description' => 'setting_np_login_id_desc',
 ), '', true, true);
 $systemSettings[3] = $modx->newObject('modSystemSetting');
@@ -52,7 +52,7 @@ $systemSettings[3]->fromArray(array (
   'xtype' => 'textfield',
   'namespace' => 'newspublisher',
   'area' => 'TinyMCE',
-  'name' => 'TinyMCE skin',
+  'name' => 'setting_np_tinymce_skin',
   'description' => 'setting_np_tinymce_skin_desc',
 ), '', true, true);
 $systemSettings[4] = $modx->newObject('modSystemSetting');
@@ -62,7 +62,7 @@ $systemSettings[4]->fromArray(array (
   'xtype' => 'textfield',
   'namespace' => 'newspublisher',
   'area' => 'elFinder',
-  'name' => 'elFinder Window Height',
+  'name' => 'setting_np_elfinder_height',
   'description' => 'setting_np_elfinder_height_desc',
 ), '', true, true);
 $systemSettings[5] = $modx->newObject('modSystemSetting');
@@ -72,7 +72,7 @@ $systemSettings[5]->fromArray(array (
   'xtype' => 'textfield',
   'namespace' => 'newspublisher',
   'area' => 'elFinder',
-  'name' => 'elFinder Window Width',
+  'name' => 'setting_np_elfinder_width',
   'description' => 'setting_np_elfinder_width_desc',
 ), '', true, true);
 $systemSettings[6] = $modx->newObject('modSystemSetting');
@@ -82,7 +82,7 @@ $systemSettings[6]->fromArray(array (
   'xtype' => 'textfield',
   'namespace' => 'newspublisher',
   'area' => 'elFinder',
-  'name' => 'elFinder thumb size',
+  'name' => 'setting_np_elfinder_tmb_size',
   'description' => 'setting_np_elfinder_tmb_size_desc',
 ), '', true, true);
 $systemSettings[7] = $modx->newObject('modSystemSetting');
@@ -92,7 +92,7 @@ $systemSettings[7]->fromArray(array (
   'xtype' => 'combo-boolean',
   'namespace' => 'newspublisher',
   'area' => 'elFinder',
-  'name' => 'elFinder remember last dir',
+  'name' => 'setting_np_elfinder_remember_last_dir',
   'description' => 'setting_np_elfinder_remember_last_dir_desc',
 ), '', true, true);
 $systemSettings[8] = $modx->newObject('modSystemSetting');
@@ -102,7 +102,7 @@ $systemSettings[8]->fromArray(array (
   'xtype' => 'textfield',
   'namespace' => 'newspublisher',
   'area' => 'elFinder',
-  'name' => 'elFinder theme',
+  'name' => 'setting_np_elfinder_theme',
   'description' => 'setting_np_elfinder_theme_desc',
 ), '', true, true);
 $systemSettings[9] = $modx->newObject('modSystemSetting');
@@ -112,7 +112,7 @@ $systemSettings[9]->fromArray(array (
   'xtype' => 'textfield',
   'namespace' => 'newspublisher',
   'area' => 'elFinder',
-  'name' => 'elFinder Media Source Variable',
+  'name' => 'setting_np_media_source_var',
   'description' => 'setting_np_media_source_var_desc',
 ), '', true, true);
 return $systemSettings;
