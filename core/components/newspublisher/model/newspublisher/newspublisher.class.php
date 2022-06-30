@@ -407,6 +407,9 @@ class Newspublisher {
     /** @var string $np_html_extension */
     protected $np_html_extension = '';
 
+    protected string $classPrefix = '';
+    protected string $mediaSourcePrefix = '';
+
 
     /** NewsPublisher constructor
      *
@@ -417,6 +420,13 @@ class Newspublisher {
 
     public function __construct(&$modx, &$props) {
         $this->modx =& $modx;
+        $this->classPrefix = $modx->getVersionData()['version'] >= 3
+            ? 'MODX\Revolution\\'
+            : '';
+        $this->mediaSourcePrefix = $modx->getVersionData()['version'] >= 3
+            ? 'MODX\Revolution\Sources\\'
+            : 'sources.';
+
         $this->props =& $props;
         /* NP paths; Set the np. System Settings only for development */
         $this->corePath = $this->modx->getOption('np.core_path',
@@ -565,7 +575,7 @@ class Newspublisher {
         if($this->existing) {
 
 
-            $this->resource = $this->modx->getObject('modResource', $this->existing);
+            $this->resource = $this->modx->getObject($this->classPrefix . 'modResource', $this->existing);
             if ($this->resource) {
                 if (isset($_POST['Duplicate'])) {
                     if (! $this->resource->checkPolicy('copy')) {
@@ -642,7 +652,7 @@ class Newspublisher {
             }
 
             /* Create new resource object */
-            $this->resource = $this->modx->newObject($this->classKey);
+            $this->resource = $this->modx->newObject($this->classPrefix . $this->classKey);
 
             /* get folder id where we should store the new resource,
              else store under current document */
@@ -862,10 +872,10 @@ class Newspublisher {
             /* get parent if we don't already have it */
             if (! $this->parentObj) {
                 if (is_numeric($this->parentId)) {
-                    $this->parentObj = $this->modx->getObject('modResource',
+                    $this->parentObj = $this->modx->getObject($this->classPrefix . 'modResource',
                         $this->parentId);
                 } else {
-                    $this->parentObj = $this->modx->getObject('modResource',
+                    $this->parentObj = $this->modx->getObject($this->classPrefix . 'modResource',
                         array('pagetitle' => $this->parentId));
                 }
             }
@@ -1247,7 +1257,7 @@ class Newspublisher {
 
                 }
 
-                $templates = $this->modx->getCollection('modTemplate', $c);
+                $templates = $this->modx->getCollection($this->classPrefix . 'modTemplate', $c);
                 foreach ($templates as $template) {
                     if ($template->checkPolicy('list')) {
                         $options[$template->get('id')] =
@@ -1346,10 +1356,10 @@ class Newspublisher {
         /* @var $resource modResource */
 
         if (is_numeric($tvNameOrId)) {
-           $tvObj = $this->modx->getObject('modTemplateVar',
+           $tvObj = $this->modx->getObject($this->classPrefix . 'modTemplateVar',
                (integer) $tvNameOrId);
         } else {
-           $tvObj = $this->modx->getObject('modTemplateVar',
+           $tvObj = $this->modx->getObject($this->classPrefix . 'modTemplateVar',
                array('name' => $tvNameOrId));
         }
         if (empty($tvObj)) {
@@ -1358,7 +1368,7 @@ class Newspublisher {
         } else {
             /* make sure requested TV is attached to this template*/
             $tvId = $tvObj->get('id');
-            $found = $this->modx->getCount('modTemplateVarTemplate', array(
+            $found = $this->modx->getCount($this->classPrefix . 'modTemplateVarTemplate', array(
                 'templateid' => $this->template,
                 'tmplvarid' => $tvId,
             ));
@@ -1532,7 +1542,7 @@ class Newspublisher {
 
                 $parentList = array();
                 foreach ($parents as $parent) {
-                    $parent = $this->modx->getObject('modResource',$parent);
+                    $parent = $this->modx->getObject($this->classPrefix . 'modResource',$parent);
                     if ($parent) $parentList[] = $parent;
                 }
 
@@ -1565,7 +1575,7 @@ class Newspublisher {
                     if (!empty($params['limit'])) {
                         $c->limit($params['limit']);
                     }
-                    $resources = $this->modx->getCollection('modResource',$c);
+                    $resources = $this->modx->getCollection($this->classPrefix . 'modResource',$c);
                 }
 
                 /* iterate */
@@ -1742,7 +1752,7 @@ class Newspublisher {
         $PHs['[[+np_assets_url]]'] = $this->assetsUrl;
 
         if ($tplName === 'imageTpl' && ($mediaSourceId !== null) ) {
-            $source = $this->modx->getObject('sources.modMediaSource', $mediaSourceId);
+            $source = $this->modx->getObject($this->mediaSourcePrefix . 'modMediaSource', $mediaSourceId);
 
             if (!$source) {
                 $this->modx->log(modX::LOG_LEVEL_ERROR, '[NewsPublisher] Failed to get Media Source in _displayFileInput');
@@ -2045,7 +2055,7 @@ class Newspublisher {
                 $this->resource->set('context_key', $fields['parent']);
                 $fields['context_key'] = $fields['parent'];
             } else {
-                $parentObj = $this->modx->getObject('modResource', $fields['parent']);
+                $parentObj = $this->modx->getObject($this->classPrefix . 'modResource', $fields['parent']);
                 if ($parentObj) {
                     $ctx = $parentObj->get('context_key');
                     $this->resource->set('context_key', $ctx);
@@ -2161,7 +2171,7 @@ class Newspublisher {
             $postId = $object['id'];
 
             if ($this->launchNotify) {
-                $notifyObj = $this->modx->getObject('modResource', array('alias' => 'notify'));
+                $notifyObj = $this->modx->getObject($this->classPrefix . 'modResource', array('alias' => 'notify'));
                 if ($notifyObj) {
                     if (isset($_POST['pageType']) && (!empty($_POST['pageType']))) {
                         $pageType = $_POST['pageType'];
@@ -2267,9 +2277,9 @@ class Newspublisher {
             /* @var $groupObj modResourceGroup */
             $group = trim($group);
             if (is_numeric($group)) {
-                $groupObj = $this->modx->getObject('modResourceGroup', (integer) $group);
+                $groupObj = $this->modx->getObject($this->classPrefix . 'modResourceGroup', (integer) $group);
             } else {
-                $groupObj = $this->modx->getObject('modResourceGroup',
+                $groupObj = $this->modx->getObject($this->classPrefix . 'modResourceGroup',
                     array('name' => $group));
             }
             if (! $groupObj) {
@@ -2333,7 +2343,7 @@ class Newspublisher {
                 $this->setError($this->modx->lexicon('np_parent_not_sent'));
             }
             if (empty($this->parentObj)) {
-                $this->parentObj = $this->modx->getObject('modResource',
+                $this->parentObj = $this->modx->getObject($this->classPrefix . 'modResource',
                     $this->parentId);
             }
             if ($this->parentObj) {
@@ -2345,15 +2355,15 @@ class Newspublisher {
 
         } elseif (!empty($template)) {
             if (is_numeric($template)) { /* user sent a number */
-                $t = $this->modx->getObject('modTemplate',
+                $t = $this->modx->getObject($this->classPrefix . 'modTemplate',
                     (int) $template);
                 /* make sure it exists */
                 if (! $t) {
-                    $this->SetError($this->modx->lexicon('np_no_template_name') .
+                    $this->setError($this->modx->lexicon('np_no_template_name') .
                         $template);
                 }
             } else { /* user sent a template name */
-                $t = $this->modx->getObject('modTemplate',
+                $t = $this->modx->getObject($this->classPrefix . 'modTemplate',
                     array(
                         'templatename' => $template,
                     ));
@@ -2481,11 +2491,11 @@ public function my_debug($message, $clear = false) {
     /* @var $chunk modChunk */
     global $modx;
 
-    $chunk = $modx->getObject('modChunk', array('name'=>'debug'));
+    $chunk = $modx->getObject($this->classPrefix . 'modChunk', array('name'=>'debug'));
     if (! $chunk) {
-        $chunk = $modx->newObject('modChunk', array('name'=>'debug'));
+        $chunk = $modx->newObject($this->classPrefix . 'modChunk', array('name'=>'debug'));
         $chunk->save();
-        $chunk = $modx->getObject('modChunk', array('name'=>'debug'));
+        $chunk = $modx->getObject($this->classPrefix . 'modChunk', array('name'=>'debug'));
     }
     if ($clear) {
         $content = '';
@@ -2511,7 +2521,7 @@ public function getParents() {
                     /* Doc can't be its own parent */
                     continue;
                 }
-                $obj = $this->modx->getObject('modResource', (int) $parent);
+                $obj = $this->modx->getObject($this->classPrefix . 'modResource', (int) $parent);
                 if ($obj) {
                     $parentArray[$obj->get('id')] = $obj->get('pagetitle');
                 } else {
@@ -2520,7 +2530,7 @@ public function getParents() {
                     . ': '  . $parent);
                 }
             } else {
-                if ($this->modx->getCount('modContext', $parent)) {
+                if ($this->modx->getCount($this->classPrefix . 'modContext', $parent)) {
                     $parentArray[$parent] = $parent;
                 } else {
                     $this->setError(
