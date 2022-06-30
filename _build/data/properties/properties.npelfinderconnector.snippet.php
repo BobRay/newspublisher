@@ -2,7 +2,7 @@
 /**
  * Properties file for npElFinderConnector snippet
  *
- * Copyright 2013-2021 Bob Ray <https://bobsguides.com>
+ * Copyright 2013-2022 Bob Ray <https://bobsguides.com>
  * Created on 02-02-2017
  *
  * @package newspublisher

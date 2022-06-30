@@ -2,7 +2,7 @@
 /**
  * chunks transport file for NewsPublisher extra
  *
- * Copyright 2013-2021 Bob Ray <https://bobsguides.com>
+ * Copyright 2013-2022 Bob Ray <https://bobsguides.com>
  * Created on 07-11-2014
  *
  * @package newspublisher

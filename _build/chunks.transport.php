@@ -2,7 +2,7 @@
 /**
  * Utility snippet for NewsPublisher development
  *
- * Copyright 2011-2021 Bob Ray
+ * Copyright 2011-2022 Bob Ray
  * @author Bob Ray <https://bobsguides.com>
  * created 1/15/11
  *
