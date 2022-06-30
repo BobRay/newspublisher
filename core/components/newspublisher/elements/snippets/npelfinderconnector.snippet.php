@@ -126,8 +126,12 @@ $mediaSourceId =  $modx->getOption('media_source', $_GET, null, true);
 unset($_GET['media_source']);
 
 
+
 if (!empty($mediaSourceId)) {
-    $ms = $modx->getObject('modMediaSource', (int) $mediaSourceId);
+    $mediaSourcePrefix = $this->isMODX3
+        ? $this->prefix . 'Sources\\'
+        : 'sources.';
+    $ms = $modx->getObject($mediaSourcePrefix . 'modMediaSource', (int) $mediaSourceId);
     if ($ms) {
         $ms->initialize();
         $bases = $ms->getBases();

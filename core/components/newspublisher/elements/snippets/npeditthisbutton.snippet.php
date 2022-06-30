@@ -49,6 +49,11 @@
 
 /* @var $modx modX */
 
+$classPrefix = $modx->getVersionData()['version'] >= 3
+    ? 'MODX\Revolution\\'
+    : '';
+
+
 $props =& $scriptProperties;
 $thisId = $modx->resource->get('id');
 /* let user &language property override default language */
@@ -95,15 +100,15 @@ if (!empty($ownPagesOnly)) {
  * on first run if possible, error message if not */
 if (empty($npId)) {
 
-    $npObj = $modx->getObject('modResource', array('pagetitle' => 'NewsPublisher'));
+    $npObj = $modx->getObject($classPrefix . 'modResource', array('pagetitle' => 'NewsPublisher'));
     if (!$npObj) { /* Try lowercase version */
-        $npObj = $modx->getObject('modResource', array('pagetitle' => 'Newspublisher'));
+        $npObj = $modx->getObject($classPrefix . 'modResource', array('pagetitle' => 'Newspublisher'));
     }
     $success = true;
     if ($npObj) {
         /* @var $npObj modSnippet */
         $npId = $npObj->get('id');
-        $npObj = $modx->getObject('modSnippet', array('name' => 'NpEditThisButton'));
+        $npObj = $modx->getObject($classPrefix . 'modSnippet', array('name' => 'NpEditThisButton'));
         if ($npObj) {
             $props = array(
                 array(
