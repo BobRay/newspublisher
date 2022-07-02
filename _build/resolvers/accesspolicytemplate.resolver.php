@@ -22,10 +22,9 @@
 $modx =& $object->xpdo;
 $success = false;
 $templateName = 'NewsPublisherPolicyTemplate';
-$prefix = '';/* $modx->getVersionData()['version'] >= 3
-    ? $this->prefix . 'Transport\\'
-    : 'transport.';*/
-
+$prefix = $modx->getVersionData()['version'] >= 3
+    ? 'MODX\Revolution\\'
+    : '';
 
 
 switch($options[xPDOTransport::PACKAGE_ACTION]) {
@@ -38,12 +37,13 @@ switch($options[xPDOTransport::PACKAGE_ACTION]) {
             break;
         }
 
-        $group = $modx->getObject($prefix . 'modAccessPolicyTemplateGroup', array('name' => 'Administrator'));
+        $group = $modx->getObject($prefix . 'modAccessPolicyTemplateGroup', array('name' => 'Admin'));
         if (!$group) {
-            $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the admin access policy template group '. $templateName);
+            $groupId = 1;
             break;
+        } else {
+            $template->set('template_group', $group->get('id'));
         }
-        $template->set('template_group', $group->get('id'));
         $modx->log(xPDO::LOG_LEVEL_INFO,'Setting template_group for '. $templateName);
         /* Copy all permissions from the AdministratorTemplate (not necessary if upgrading, they will already exist)  */
         $existingPermissions = $template->getMany('Permissions');
