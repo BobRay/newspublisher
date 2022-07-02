@@ -22,9 +22,9 @@
 $modx =& $object->xpdo;
 $success = false;
 $templateName = 'NewsPublisherPolicyTemplate';
-$prefix = $modx->getVersionData()['version'] >= 3
-    ? 'MODX\Revolution\\'
-    : '';
+$prefix = '';/* $modx->getVersionData()['version'] >= 3
+    ? $this->prefix . 'Transport\\'
+    : 'transport.';*/
 
 
 
@@ -38,9 +38,9 @@ switch($options[xPDOTransport::PACKAGE_ACTION]) {
             break;
         }
 
-        $group = $modx->getObject($prefix . 'modAccessPolicyTemplateGroup', array('name' => 'Admin'));
+        $group = $modx->getObject($prefix . 'modAccessPolicyTemplateGroup', array('name' => 'Administrator'));
         if (!$group) {
-            $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the admin access policy template group'. $templateName);
+            $modx->log(xPDO::LOG_LEVEL_ERROR,'Cannot get the admin access policy template group '. $templateName);
             break;
         }
         $template->set('template_group', $group->get('id'));
