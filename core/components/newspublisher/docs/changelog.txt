@@ -1,207 +1,214 @@
 Changelog for NewsPublisher
 
+NewsPublisher 3.1.3-pl
+----------------------
+Fix critical security issue in elFinder
+Mods for MODX 3
+Improve internationalization for settings
+
 NewsPublisher 3.1.0-pl
-Implement use of &ownpagesonly on aggregating pages
-Fix TinyMCE warning
-Add option to generate alias from pagetitle and timestamp
-Fix bug with hoverhelp
+----------------------
+ - Implement use of &ownpagesonly on aggregating pages
+ - Fix TinyMCE warning
+ - Add option to generate alias from pagetitle and timestamp
+ - Fix bug with hoverhelp
 
 NewsPublisher 3.0.4-pl
 ----------------------
-Fix bug with &rtsummary and &rtdescription not registering
-Fix bug with using file browser with tabs on
-Fix bug with installing NP Policy and Policy Template
-Fix JSLint errors in tabs js chunk
+ - Fix bug with &rtsummary and &rtdescription not registering
+ - Fix bug with using file browser with tabs on
+ - Fix bug with installing NP Policy and Policy Template
+ - Fix JSLint errors in tabs js chunk
 
 NewsPublisher 3.0.3-pl
 ----------------------
-Fix bug with non-html resource content-type extensions
+ - Fix bug with non-html resource content-type extensions
 
 NewsPublisher 3.0.2-pl
 ----------------------
-Fix bug with context_key for non-root docs in non-web context
-Fix issue with elFinder search
-Fix bug with invalid media sources caused by Quick Create
-Add stopOnNoRte property
-Add np_media_source_var System Setting
-Minor improvements
+ - Fix bug with context_key for non-root docs in non-web context
+ - Fix issue with elFinder search
+ - Fix bug with invalid media sources caused by Quick Create
+ - Add stopOnNoRte property
+ - Add np_media_source_var System Setting
+ - Minor improvements
 
 NewsPublisher 3.0.1-pl
 ----------------------
-Fix bug with unknown column in show property
-Remove all dependencies on extJS/modExt
-Remove all dependencies on TinyMCE extra
-Load TinyMCE from tinymce.com
-Integrate elFinder file/image browser
-Enable image editing in file browser
-Check Login status before any code executes
-Add redirect to Login option
-Add properties: filetpl, imagetpl, richtexttpl
-Add properties: tinymceinittpl, tinysource
-Add properties: initfilebrowser, elfinderinittpl
-Allow direct configuration of TinyMCE
-Allow direct configuration of elFinder
-Force Media Source path for richtext TVs
-Pass Media Source ID as _$GET variable
-Allow disabling specific elFinder commands
-Numerous bug fixes, sanity checks, and other improvements
+ - Fix bug with unknown column in show property
+ - Remove all dependencies on extJS/modExt
+ - Remove all dependencies on TinyMCE extra
+ - Load TinyMCE from tinymce.com
+ - Integrate elFinder file/image browser
+ - Enable image editing in file browser
+ - Check Login status before any code executes
+ - Add redirect to Login option
+ - Add properties: filetpl, imagetpl, richtexttpl
+ - Add properties: tinymceinittpl, tinysource
+ - Add properties: initfilebrowser, elfinderinittpl
+ - Allow direct configuration of TinyMCE
+ - Allow direct configuration of elFinder
+ - Force Media Source path for richtext TVs
+ - Pass Media Source ID as _$GET variable
+ - Allow disabling specific elFinder commands
+ - Numerous bug fixes, sanity checks, and other improvements
 
 
 NewsPublisher 2.2.0-pl
 ----------------------
-Add presets property to set fields for new document
-Add readonly placeholder to text Tpls
+ - Add presets property to set fields for new document
+ - Add readonly placeholder to text Tpls
 
 NewsPublisher 2.1.0-pl
 ----------------------
-Add optional Duplicate button to NP form
-Add optional Delete button to NP form
-Add confirmdelete option for popup dialog
-Fix bug with setting language
-Prevent parent=self bug
-Fix unauthorized document error with multiple edit buttons
-Fix bug with blank date TVs
-Allow custom TV types
-Add OwnPagesOnly option for edit button
-Change description field to a textarea
-Fix Template and TV bugs
-Set parentid properly for existing resources
+ - Add optional Duplicate button to NP form
+ - Add optional Delete button to NP form
+ - Add confirmdelete option for popup dialog
+ - Fix bug with setting language
+ - Prevent parent=self bug
+ - Fix unauthorized document error with multiple edit buttons
+ - Fix bug with blank date TVs
+ - Allow custom TV types
+ - Add OwnPagesOnly option for edit button
+ - Change description field to a textarea
+ - Fix Template and TV bugs
+ - Set parentid properly for existing resources
 
 
 NewsPublisher 2.0.2-pl
 ----------------------
-Fix bug with cancelid/cancelUrl
-Mods to allow launching Notify
-Clear cache for updated resource
-Fix bug with parentid
-Fix bug with syncsite
+ - Fix bug with cancelid/cancelUrl
+ - Mods to allow launching Notify
+ - Clear cache for updated resource
+ - Fix bug with parentid
+ - Fix bug with syncsite
 
 NewsPublisher 2.0.0-pl
 ----------------------
-Allow editing MODX tags with allow_tags_in_post off
-Mods for MODX 2.3 (thanks to Markus Schlegel)
-Remove support for MODX versions < 2.2
-Show parent and template as drop-down lists
-Added &stopOnBadTv property to prevent error when a TV is not attached to current template
-Allow users to unset pub_date
-Fix bug with filebrowser/image TVs
-Allow parent and templateid as property aliases
-Fix bug with Articles class_key
-Refactor noShow tests in NpEditThisButton
-Prevent NpEditThisButton from executing on NewsPublisher page
-Added &allowedtags property
-Added missing tags to default allowed tags
-Allow users to edit Home page with &editHome property
-Cachebust CSS file
-Fixed bug with dash in Resource List TV
-Fixed more E_NOTICE bugs
-Corrected Lexicon strings
-Prevent switching of Media Source
-Added Italian lexicon files -- Thanks to Alberto Ramacciotti (obert2k11)
-Update German lexicon files -- thanks to Markus Schlegel
-Many bug fixes and corrections
+ - Allow editing MODX tags with allow_tags_in_post off
+ - Mods for MODX 2.3 (thanks to Markus Schlegel)
+ - Remove support for MODX versions < 2.2
+ - Show parent and template as drop-down lists
+ - Added &stopOnBadTv property to prevent error when a TV is not attached to current template
+ - Allow users to unset pub_date
+ - Fix bug with filebrowser/image TVs
+ - Allow parent and templateid as property aliases
+ - Fix bug with Articles class_key
+ - Refactor noShow tests in NpEditThisButton
+ - Prevent NpEditThisButton from executing on NewsPublisher page
+ - Added &allowedtags property
+ - Added missing tags to default allowed tags
+ - Allow users to edit Home page with &editHome property
+ - Cachebust CSS file
+ - Fixed bug with dash in Resource List TV
+ - Fixed more E_NOTICE bugs
+ - Corrected Lexicon strings
+ - Prevent switching of Media Source
+ - Added Italian lexicon files -- Thanks to Alberto Ramacciotti (obert2k11)
+ - Update German lexicon files -- thanks to Markus Schlegel
+ - Many bug fixes and corrections
 
 NewsPublisher 1.4.2-pl
 ----------------------
-Bug fix for misnamed tabs Tpl
+ - Bug fix for misnamed tabs Tpl
 
 NewsPublisher 1.4.1-rc
 ----------------------
-Displays form with Tabs (thanks to Gregor Šekoranja)
-Fixed E_NOTICE bugs with TinyMCE
-Now Works with Articles
-Added some missing snippet properties
-Properties displayed in areas
-Updates to tutorial and CSS
-Misc. bug fixes
+ - Displays form with Tabs (thanks to Gregor Šekoranja)
+ - Fixed E_NOTICE bugs with TinyMCE
+ - Now Works with Articles
+ - Added some missing snippet properties
+ - Properties displayed in areas
+ - Updates to tutorial and CSS
+ - Misc. bug fixes
 
 NewsPublisher 1.3.0-rc2
 -----------------------
-Fixed bug with name of TextArea Tpl chunk
+ - Fixed bug with name of TextArea Tpl chunk
 
 NewsPublisher 1.3.0-rc1
 -----------------------
-Better error messages
-Improved security
-Fixed critical bug with multiple RTE areas (thanks Markus)
-Added NewsPublisher policy and policy template
-Now handles both file and image TVs; preview for selected images
-Updates for MODX 2.2
-Implemented custom captions property
-Support for ResourceList TVs
-Added 'aliasdateformat' property for formatting the date suffix
-Removed hasimagetv, imagetvwidth, and imagetvheight properties
-Display some fields as lists (template, class_key, content_dispo)
-Datepicker TV: now supports date ranges, disabled dates and disabled days
-Internationalization of invalid date message
-Tweaks to template chunks to allow consistent CSS styling
-Only loads required Tpl chunks
-Many bug fixes, code simplification, and cleanup
+ - Better error messages
+ - Improved security
+ - Fixed critical bug with multiple RTE areas (thanks Markus)
+ - Added NewsPublisher policy and policy template
+ - Now handles both file and image TVs; preview for selected images
+ - Updates for MODX 2.2
+ - Implemented custom captions property
+ - Support for ResourceList TVs
+ - Added 'aliasdateformat' property for formatting the date suffix
+ - Removed hasimagetv, imagetvwidth, and imagetvheight properties
+ - Display some fields as lists (template, class_key, content_dispo)
+ - Datepicker TV: now supports date ranges, disabled dates and disabled days
+ - Internationalization of invalid date message
+ - Tweaks to template chunks to allow consistent CSS styling
+ - Only loads required Tpl chunks
+ - Many bug fixes, code simplification, and cleanup
 
 NewsPublisher 1.2.1-pl
 ----------------------
-Fixed serious bug with TV values being lost for TVs not shown in form due to bug in resource update processor
+ - Fixed serious bug with TV values being lost for TVs not shown in form due to bug in resource update processor
 
 NewsPublisher 1.2.0-rc2
 -----------------------
-Fixed bug with hidemenu property
-Fixed bug with template property
-German translation is complete
+ - Fixed bug with hidemenu property
+ - Fixed bug with template property
+ - German translation is complete
 
 NewsPublisher 1.2.0-rc1
 ----------------------
-Fixed bug with user-supplied CSS file
-Updated DatePicker to V5
-Better International dates (thanks to mschlegel)
-Fixed bug with forward to new page
-Updated Translations
-Revised Edit button to allow multiple buttons on a page (thanks to mschlegel)
-Better handling of presubmit errors - no form shown
+ - Fixed bug with user-supplied CSS file
+ - Updated DatePicker to V5
+ - Better International dates (thanks to mschlegel)
+ - Fixed bug with forward to new page
+ - Updated Translations
+ - Revised Edit button to allow multiple buttons on a page (thanks to mschlegel)
+ - Better handling of presubmit errors - no form shown
 
 NewsPublisher 1.1.1-pl
 ----------------------
-Fixed bug with specifying template
-Fixed bug with missing context_key
+ - Fixed bug with specifying template
+ - Fixed bug with missing context_key
 
 NewsPublisher 1.1.0-pl
 --------------------
-Fixed bug with deprecated isFrontend() call
-Fixed bug with specifying no CSS file
+ - Fixed bug with deprecated isFrontend() call
+ - Fixed bug with specifying no CSS file
 
 NewsPublisher 1.0.8
 -------------------
-Added makeUrl() code back in for proper redirection
-Fixed bug with cancelid orthography
+ - Added makeUrl() code back in for proper redirection
+ - Fixed bug with cancelid orthography
 
 NewsPublisher 1.0.7
 -------------------
-Fixed bug with phantom checkbox
-Handle @ binding TVs
-Handle dropdown TVs
-Fixed bug with == TVs
+ - Fixed bug with phantom checkbox
+ - Handle @ binding TVs
+ - Handle dropdown TVs
+ - Fixed bug with == TVs
 
 
 NewsPublisher 1.0.6
 -------------------
-Fixed bug with hasimagetv and TinyMCE init
-Added hasimagetv, imagetvheight, imagetvwidth properties
-Added id prefixes to avoid CSS collisions
-Added support for Image TVs
-Fixed bug with published status
-Fixed bug with in_array() error from readonly property
+ - Fixed bug with hasimagetv and TinyMCE init
+ - Added hasimagetv, imagetvheight, imagetvwidth properties
+ - Added id prefixes to avoid CSS collisions
+ - Added support for Image TVs
+ - Fixed bug with published status
+ - Fixed bug with in_array() error from readonly property
 
 NewsPublisher 1.0.5
 -------------------
-Fixed bug in transport package
-Added tutorial to docs
+ - Fixed bug in transport package
+ - Added tutorial to docs
 
 NewsPublisher 1.0.4
 -------------------
-Changed a few defaults
-Updated property descriptions
-Removed cancelbutton property
-Updated file headers
-fixed bug with unknown resource group
+ - Changed a few defaults
+ - Updated property descriptions
+ - Removed cancelbutton property
+ - Updated file headers
+ - fixed bug with unknown resource group
 
 NewsPublisher 1.0.3
 -------------------
