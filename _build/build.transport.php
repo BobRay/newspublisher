@@ -898,6 +898,9 @@ $attr = array(
     'license' => file_get_contents($sources['docs'] . 'license.txt'),
     'readme' => file_get_contents($sources['docs'] . 'readme.txt'),
     'changelog' => file_get_contents($sources['docs'] . 'changelog.txt'),
+    'requires' => array(
+        'login' => '>=1.9.0',
+    )
 );
 
 if ($hasSetupOptions && !empty($props['install.options'])) {
