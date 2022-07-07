@@ -37,14 +37,6 @@ switch($options[xPDOTransport::PACKAGE_ACTION]) {
             break;
         }
 
-        $group = $modx->getObject($prefix . 'modAccessPolicyTemplateGroup', array('name' => 'Admin'));
-        if (!$group) {
-            $groupId = 1;
-            break;
-        } else {
-            $template->set('template_group', $group->get('id'));
-        }
-        $modx->log(xPDO::LOG_LEVEL_INFO,'Setting template_group for '. $templateName);
         /* Copy all permissions from the AdministratorTemplate (not necessary if upgrading, they will already exist)  */
         $existingPermissions = $template->getMany('Permissions');
         if (empty($existingPermissions)) {
@@ -66,11 +58,16 @@ switch($options[xPDOTransport::PACKAGE_ACTION]) {
                     $newPerm = $modx->newObject($prefix . 'modAccessPermission');
                     $newPerm->fromArray($permission->toArray());
                     $newPerm->set('template',$template->get('id'));
-                    $newPerm->save();
+                    if (! $newPerm->save()) {
+                       $modx->log(modX::LOG_LEVEL_ERROR, 'Could not save permission ');
+                    }
                 }
             }
         }
         $success = $template->save();
+        if (! $success) {
+            $modx->log(modX::LOG_LEVEL_ERROR, 'Could not save Policy Template');
+        }
         break;
 
     case xPDOTransport::ACTION_UNINSTALL:
