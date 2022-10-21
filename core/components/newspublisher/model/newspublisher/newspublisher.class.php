@@ -1057,6 +1057,12 @@ class Newspublisher {
                 if ($retVal) {
                     $inner .= "\n" . $retVal;
                 }
+
+                /* See if it's a chunk */
+                $chunk = $this->modx->getChunk($field);
+                if (! empty ($chunk)) {
+                    $inner .= "\n" . $chunk;
+                }
             }
         }
 
