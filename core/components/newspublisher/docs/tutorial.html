@@ -27,31 +27,29 @@
 
 
 <h3>Installing NewsPublisher for MODX Revolution</h3>
-<p>
-Go to System | Package Management on the main menu in the MODX Manager and click on the "Download Extras" button. That will take you to the Revolution Repository. Put NewsPublisher in the search box and press Enter. Click on the "Download" button. When the download has finished, click on the "Back to Package Manager" button. That should bring you back to your Package Management grid. Click on the "Install" button next to NewsPublisher in the grid and follow the prompts. The NewsPublisher snippet should now be installed.</p>
+<p>If you haven't installed the Login package, do that before installing NewsPublisher.</p>
+
+<p>To install NewsPublisher, go to Extras | Installer on the main menu in the MODX Manager and click on the "Download Extras" button. That will take you to the Revolution Repository. Put NewsPublisher in the search box and press Enter. Click on the "Download" button. When the download has finished, click on the "Back to Package Manager" button. That should bring you back to your Package Management grid. Click on the "Install" button next to NewsPublisher in the grid and follow the prompts. The NewsPublisher snippet should now be installed.</p>
+
+<div class="box">
+    <p>On a fresh install, NewsPublisher will install a Resource called "NewsPublisher" containing an example NewsPublisher snippet tag. You can modify it to meet your needs and change the `pagetitle` and `alias` if you like, but <b>don't delete it!</b>. It's important that it keep the same ID because other parts of NewsPublisher will use that ID to find it.</p>
+
+    <p>NewsPublisher will not change the resource during upgrades, and will not remove it when uninstalled to prevent the loss of any children you might like to keep.</p>
+</div>
 
 <h3>Using NewsPublisher</h3>
 
-<p>If you used NewsPublisher in MODX Evolution, this version will take a little getting used to. Many of the properties are different, but you will have much more control over the content and style of your form. Each type of field has its own Tpl chunk (as does the form itself) and every individual field has a separate ID so they can be styled using CSS.
-</p>
-
-<p>
-Setting up a basic form is very simple. Create a document called &quot;NewsPublisher&quot; in the Manager and put the following code in the Resource Content field:
-</p>
-
-<p><pre><fixedpre>[[!NewsPublisher]]</fixedpre></pre></p>
-
-<br>
 <div class="box">
     <p>Since you don't want just anyone creating resources at your site, you'll need to install the Login extra to use NewsPublisher. When testing NewsPublisher, remember that even though you're logged in to the Manager you're not necessarily logged in to the front end.</p>
 </div>
 <br>
 
-<p>
-When you preview the document, you should see a basic resource editing form. If you fill it in and click on the "Submit" button, the resource should be created. The basic form shows several standard fields, but you can change that with the <code>&show</code> property. It should contain a comma-delimited list (no spaces) of the fields you would like to display in the form. It can include TV fields listed by name or by ID (shown in the Elements tree next to the TV's name). The fields will appear in the form in the order you list them in the property. You can create multiple NewsPublisher pages showing different sets of fields for different users.
+<p>View the NewPublisher Resource. You should see a basic resource editing form. If you fill it in and click on the "Submit" button, the resource should be created (it will be under the NewsPublisher resource, though you can change that).</p>
+
+<p>The example form shows several standard fields, but you can change that with the <code>&show</code> property. It should contain a comma-delimited list (no spaces) of the fields you would like to display in the form. It can include TV fields listed by name or by ID (shown in the Elements tree next to the TV's name). The fields will appear in the form in the order you list them in the <code>&show</code> property. You can also create multiple NewsPublisher pages showing different sets of fields for different users.
 </p>
 
-<p>The form is highly flexible and you can show any fields or TVs in any order. Some fields will require you to set certain properties. For example, if you have any rich text fields, you'll need to set the <code>&initrte</code> property. If you show any date fields, you'll need the <code>&initdatepicker</code> property. The <code>&rtcontent</code> and <code>&rtsummary</code> properties control whether the content and summary fields will have rich text editing. See the list below for more information on the available properties. If you'll be using the elFinder file/image browser, either for TinyMCE, or file, richtext, or image TVs, you'll need to set the <code>&initfilebrowser</code> property. The properties can be in any order. Here's an example:</p>
+<p>The form is highly flexible, and you can show any fields or TVs in any order. Some fields will require you to set certain properties. For example, if you have any rich text fields, you'll need to set the <code>&initrte</code> property. If you show any date fields, you'll need the <code>&initdatepicker</code> property. The <code>&rtcontent</code> and <code>&rtsummary</code> properties control whether the content and summary fields will have rich text editing. See the list below for more information on the available properties. If you'll be using the elFinder file/image browser, either for TinyMCE, or file, richtext, or image TVs, you'll need to set the <code>&initfilebrowser</code> property. The properties can be in any order. Here's an example:</p>
 
 <pre><fixedpre>
     [[!NewsPublisher?
@@ -101,7 +99,7 @@ When you preview the document, you should see a basic resource editing form. If 
     <code>Yes</code> by default. Important: this feature won't work if the NewsPublisher page is protected by a Resource Group Access ACL entry. That ACL entry hides the page so the NewsPublisher snippet never executes. The user will be sent to the error (page not found) page instead.</p>
 
 <p>If <code>&np_login_redirect</code> is set to <code>YES</code>, the <code>np_login_id</code>
-    System Setting (in the newspublisher namespace) must be set to the ID of your login page. NewsPublisher will try to do this for you during the install, but if the alias of your login page is not <code>login</code>, you'll have to do it yourself. I you want to use a separate login page for NewsPublisher, use an <code>&np_login_id</code> property in the NewsPublisher snippet tag set to the ID of that page. That will override the System Setting.</p>
+    System Setting (in the newspublisher namespace) must be set to the ID of your login page. NewsPublisher will try to do this for you during the install, but if the alias of your login page is not <code>login</code>, you'll have to do it yourself. If you want to use a separate login page for NewsPublisher, use an <code>&np_login_id</code> property in the NewsPublisher snippet tag set to the ID of that page. That will override the System Setting.</p>
 
 <br>
 
@@ -118,12 +116,12 @@ When you preview the document, you should see a basic resource editing form. If 
 
 <p>Using the <code>&redirectToPrior</code> property in the Login snippet tag to redirect users back to the NewsPublisher
     page is not entirely reliable, since some browsers don't set the <code>$_SERVER[HTTP_REFERER]</code> variable
-    properly. It's recommended instead to set the <code>&loginResourceId</code> property to the ID of the NewsPublisher
+    properly. It's recommended instead to set the login snippet's <code>&loginResourceId</code> property to the ID of the NewsPublisher
     page. If necessary, you can have a separate Login page for NewsPublisher. If you do this, be sure to use an <code>&np_login_id</code> property in the NewsPublisher snippet tag set to the ID of your NewsPublisher Login page. </p>
 
 <h3>Editing Existing Resources</h3>
 
-<p>To edit existing resources, simply place a tag for the NpEditThisButton snippet anywhere in the <code><body></code> section of your template(s) or in the Resource Content field of a Resource. The button is positioned absolutely in the lower right section of the page. The <code>&right</code> property controls the distance from the right side of the page and the <code>&bottom</code> property controls the distance from the bottom. The default for these properties is `20%`. Like NewsPublisher, the button also responds to security permissions and is not shown on pages the user has no right to edit or save. It also does not show on the NewsPublisher page or the home page. If there are other pages where you would like to hide it, you can include a comma-delimited list of their IDs in the <code>&noShow</code> property of the NpEditThisButton snippet tag.</p>
+<p>To edit existing resources, simply place a tag for the NpEditThisButton snippet anywhere in the <code><body></body></code> section of your template(s) or in the Resource Content field of a Resource. The button is positioned absolutely in the lower right section of the page. The <code>&right</code> property controls the distance from the right side of the page and the <code>&bottom</code> property controls the distance from the bottom. The default for these properties is `20%`. Like NewsPublisher, the button also responds to security permissions and is not shown on pages the user has no right to edit or save. It also does not show on the NewsPublisher page or the home page. If there are other pages where you would like to hide it, you can include a comma-delimited list of their IDs in the <code>&noShow</code> property of the NpEditThisButton snippet tag.</p>
 
 <p>Because the button will be hidden until you get the permissions correct, it's recommended that you start with the button tag like this:</p>
 <p><pre><fixedpre>[[!NpEditThisButton? &debug=`1`]]</fixedpre></pre></p>
@@ -173,7 +171,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 
 </ul>
 
-<p>The Tab names are on the left and you can use any names you like and as many or as few tabs as you need. NewsPublisher will add a &quot;Show All&quot; button that will show all fields at once. If you include a field that is not in the <code>&show</code> property, you'll see an error message telling you that the tab field can't be found. If there is a field in the <code>&show</code> property that is not in your <code>&tabs</code> list, it will go on the &quot;Other&quot; tab (which will not be shown if all the fields are accounted for).</p>
+<p>The Tab names are on the left, and you can use any names you like and as many or as few tabs as you need. NewsPublisher will add a &quot;Show All&quot; button that will show all fields at once. If you include a field that is not in the <code>&show</code> property, you'll see an error message telling you that the tab field can't be found. If there is a field in the <code>&show</code> property that is not in your <code>&tabs</code> list, it will go on the &quot;Other&quot; tab (which will not be shown if all the fields are accounted for).</p>
 
 <h3>Duplicate Button</h3>
 
@@ -206,8 +204,11 @@ NewsPublisher form. When the user clicks on the button, the page currently being
 
 <p>Unless the user has the <code>view_unpublished</code> permission, the three pages must also be published, though they can be hidden from menus. If you are using tabs for the NewsPublisher display, you may have to select the &quot;Show All&quot; tab in order to see the &quot;Launch Notify&quot; section.</p>
 
+<p>Notify requires the installation of the Subscribe extra, so be sure that it's installed if you want to use Notify.</p>
+
 
 <h3>Configuring NewsPublisher</h3>
+
 <p>NewsPublisher has many options, but almost all of them are optional. You can see the list by editing the NewsPublisher snippet and clicking on the Properties tab. Unlock the default properties by clicking on the &quot;Default Properties Locked&quot; button. Then, click the little plus sign next to a property to see what it does. It is <b>strongly</b> recommended that you not change the default properties on the Properties tab of the snippet. Either put properties in the snippet tag to override them, or create a property set by clicking on the &quot;Add Property Set&quot; button and specify it in the snippet tag like this:</p>
 
 <p><pre><fixedpre>[[!NewsPublisher@PropertySetName]]</fixedpre></pre></p>
