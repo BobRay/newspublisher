@@ -30,8 +30,8 @@
 /* @var array $options */
 
 if (!function_exists('checkFields')) {
-    function checkFields($required, $objectFields) {
-        global $modx;
+    function checkFields($modx, $required, $objectFields) {
+
         $fields = explode(',', $required);
         foreach ($fields as $field) {
             if (! isset($objectFields[$field])) {
@@ -43,7 +43,7 @@ if (!function_exists('checkFields')) {
     }
 }
 
-/** @var $transport modTransportPackage */
+/** @var modTransportPackage $transport */
 
 if ($transport) {
     $modx =& $transport->xpdo;
@@ -63,22 +63,22 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
     case xPDOTransport::ACTION_UPGRADE:
 
         $intersects = array (
-            0 =>  array (
-              'pagetitle' => 'npElFinder',
-              'parent' => 'NewsPublisher',
-              'template' => 'npElFinderTemplate',
-            ),
-            1 =>  array (
-              'pagetitle' => 'npElFinderConnector',
-              'parent' => 'NewsPublisher',
-              'template' => 'npElFinderTemplate',
-            ),
-        );
+                0 =>  array (
+                  'pagetitle' => 'npElFinder',
+                  'parent' => 'NewsPublisher',
+                  'template' => 'npElFinderTemplate',
+                ),
+                1 =>  array (
+                  'pagetitle' => 'npElFinderConnector',
+                  'parent' => 'NewsPublisher',
+                  'template' => 'npElFinderTemplate',
+                ),
+            );
 
         if (is_array($intersects)) {
             foreach ($intersects as $k => $fields) {
                 /* make sure we have all fields */
-                if (! checkFields('pagetitle,parent,template', $fields)) {
+                if (! checkFields($modx, 'pagetitle,parent,template', $fields)) {
                     continue;
                 }
                 $resource = $modx->getObject($classPrefix . 'modResource',
@@ -88,9 +88,9 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
                 }
 
                 /* Set class_key if MODX 3+ */
-                if ($isMODX3Plus) {
+               /* if ($isMODX3Plus) {
                     $resource->set('class_key', 'MODX\Revolution\modDocument');
-                }
+                }*/
 
                 if ($fields['template'] == 'default') {
                     $resource->set('template', $modx->getOption('default_template'));
