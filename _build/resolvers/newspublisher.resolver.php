@@ -26,54 +26,61 @@
 
 /* @var array $options */
 
-if ($object->xpdo) {
+/** @var $transport modTransportPackage */
+
+if ($transport) {
+    $modx =& $transport->xpdo;
+} else {
     $modx =& $object->xpdo;
-    $prefix = $modx->getVersionData()['version'] >= 3
-        ? 'MODX\Revolution\\'
-        : '';
+}
 
-    switch ($options[xPDOTransport::PACKAGE_ACTION]) {
-        /** @noinspection PhpMissingBreakStatementInspection */
-        case xPDOTransport::ACTION_UPGRADE:
-            $cp = MODX_CORE_PATH;
-            $files = array(
-                $cp . 'components/newspublisher/controllers/filebrowser.class.php',
-                $cp . 'components/newspublisher/filebrowser.class.php',
-                $cp . 'components/newspublisher/templates/filebrowser-2.2.tpl',
-                $cp . 'components/newspublisher/templates/filebrowser.tpl',
-            );
-            foreach ($files as $file) {
-                @unlink($file);
-            }
-        /* Intentional fallthrough */
-        case xPDOTransport::ACTION_INSTALL:
+$modx =& $object->xpdo;
+$prefix = $modx->getVersionData()['version'] >= 3
+    ? 'MODX\Revolution\\'
+    : '';
 
-            /* Try to set np_login_is System Setting if it's empty */
-            $doc = $modx->getObject($prefix . 'modResource', array('alias' => 'login'));
-            if (! $doc) {
-                $doc = $modx->getObject($prefix . 'modResource', array('pagetitle' => "Login"));
-            }
+switch ($options[xPDOTransport::PACKAGE_ACTION]) {
+    /** @noinspection PhpMissingBreakStatementInspection */
+    case xPDOTransport::ACTION_UPGRADE:
+        $cp = MODX_CORE_PATH;
+        $files = array(
+            $cp . 'components/newspublisher/controllers/filebrowser.class.php',
+            $cp . 'components/newspublisher/filebrowser.class.php',
+            $cp . 'components/newspublisher/templates/filebrowser-2.2.tpl',
+            $cp . 'components/newspublisher/templates/filebrowser.tpl',
+        );
+        foreach ($files as $file) {
+            @unlink($file);
+        }
+    /* Intentional fallthrough */
+    case xPDOTransport::ACTION_INSTALL:
 
-            if ($doc) {
-                $setting = $modx->getObject($prefix . 'modSystemSetting', array('key' => 'np_login_id'));
-                if ($setting) {
-                    $val = $setting->get('value');
-                    if (empty($val)) {
-                        $setting->set('value', $doc->get('id'));
-                        if ($setting->save()) {
-                            $modx->log(modX::LOG_LEVEL_INFO, 'Setting np_login_id System Setting to ID of login page');
-                        }
+        /* Try to set np_login_is System Setting if it's empty */
+        $doc = $modx->getObject($prefix . 'modResource', array('alias' => 'login'));
+        if (! $doc) {
+            $doc = $modx->getObject($prefix . 'modResource', array('pagetitle' => "Login"));
+        }
+
+        if ($doc) {
+            $setting = $modx->getObject($prefix . 'modSystemSetting', array('key' => 'np_login_id'));
+            if ($setting) {
+                $val = $setting->get('value');
+                if (empty($val)) {
+                    $setting->set('value', $doc->get('id'));
+                    if ($setting->save()) {
+                        $modx->log(modX::LOG_LEVEL_INFO, 'Setting np_login_id System Setting to ID of login page');
                     }
                 }
-            } else {
-                $modx->log(modX::LOG_LEVEL_ERROR, 'Could not set np_login_id System Settings; Set it manually to the ID of the Login page');
             }
+        } else {
+            $modx->log(modX::LOG_LEVEL_ERROR, 'Could not set np_login_id System Settings; Set it manually to the ID of the Login page');
+        }
 
-            break;
+        break;
 
-        case xPDOTransport::ACTION_UNINSTALL:
-            break;
-    }
+    case xPDOTransport::ACTION_UNINSTALL:
+        break;
 }
+
 
 return true;

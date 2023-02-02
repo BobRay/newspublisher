@@ -11,7 +11,14 @@
 /* @var $object array */
 /* @var $template modAccessPolicyTemplate */
 
-$modx =& $object->xpdo;
+/** @var $transport modTransportPackage */
+
+if ($transport) {
+    $modx =& $transport->xpdo;
+} else {
+    $modx =& $object->xpdo;
+}
+
 $success = true;
 
 if (!function_exists("rrmdir")) {

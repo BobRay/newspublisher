@@ -18,8 +18,14 @@
 /* @var $newPerm modAccessPermission */
 /* @var $existingPermissions array */
 
+/** @var $transport modTransportPackage */
 
-$modx =& $object->xpdo;
+if ($transport) {
+    $modx =& $transport->xpdo;
+} else {
+    $modx =& $object->xpdo;
+}
+
 $success = false;
 $templateName = 'NewsPublisherPolicyTemplate';
 $prefix = $modx->getVersionData()['version'] >= 3

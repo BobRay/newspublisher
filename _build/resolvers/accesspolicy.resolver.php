@@ -5,13 +5,20 @@
  * @package newspublisher
  */
 
-/* @var $modx modX */
-/* @var $policy modAccessPolicy */
-/* @var $options array */
-/* @var $object array */
-/* @var $template modAccessPolicyTemplate */
+/** @var $modx modX */
+/** @var $policy modAccessPolicy */
+/** @var $options array */
+/** @var $object array */
+/** @var $template modAccessPolicyTemplate */
 
-$modx =& $object->xpdo;
+/** @var $transport modTransportPackage */
+
+if ($transport) {
+    $modx =& $transport->xpdo;
+} else {
+    $modx =& $object->xpdo;
+}
+
 $success = false;
 $policyName = 'NewsPublisherEditor';
 $templateName = 'NewsPublisherPolicyTemplate';

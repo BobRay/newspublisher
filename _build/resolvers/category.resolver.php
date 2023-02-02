@@ -42,55 +42,61 @@ if (!function_exists('checkFields')) {
         return true;
     }
 }
-if ($object->xpdo) {
+
+/** @var $transport modTransportPackage */
+
+if ($transport) {
+    $modx =& $transport->xpdo;
+} else {
     $modx =& $object->xpdo;
-
-    $classPrefix = $modx->getVersionData()['version'] >= 3
-            ? 'MODX\Revolution\\'
-            : '';
-
-
-    switch ($options[xPDOTransport::PACKAGE_ACTION]) {
-        case xPDOTransport::ACTION_INSTALL:
-        case xPDOTransport::ACTION_UPGRADE:
-
-            $intersects = array (
-                'NewsPublisher' =>  array (
-                  'category' => 'NewsPublisher',
-                  'parent' => '',
-                ),
-                'npElFinder' =>  array (
-                  'category' => 'npElFinder',
-                  'parent' => 'NewsPublisher',
-                ),
-                'npTinyMCE' =>  array (
-                  'category' => 'npTinyMCE',
-                  'parent' => 'NewsPublisher',
-                ),
-            );
-
-            if (is_array($intersects)) {
-                foreach ($intersects as $k => $fields) {
-                    /* make sure we have all fields */
-                    if (!checkFields('category,parent', $fields)) {
-                        continue;
-                    }
-                    $categoryObj = $modx->getObject($classPrefix . 'modCategory', array('category' => $fields['category']));
-                    if (!$categoryObj) {
-                        continue;
-                    }
-                    $parentObj = $modx->getObject($classPrefix . 'modCategory', array('category' => $fields['parent']));
-                        if ($parentObj) {
-                            $categoryObj->set('parent', $parentObj->get('id'));
-                        }
-                    $categoryObj->save();
-                }
-            }
-            break;
-
-        case xPDOTransport::ACTION_UNINSTALL:
-            break;
-    }
 }
+
+$classPrefix = $modx->getVersionData()['version'] >= 3
+        ? 'MODX\Revolution\\'
+        : '';
+
+
+switch ($options[xPDOTransport::PACKAGE_ACTION]) {
+    case xPDOTransport::ACTION_INSTALL:
+    case xPDOTransport::ACTION_UPGRADE:
+
+        $intersects = array (
+            'NewsPublisher' =>  array (
+              'category' => 'NewsPublisher',
+              'parent' => '',
+            ),
+            'npElFinder' =>  array (
+              'category' => 'npElFinder',
+              'parent' => 'NewsPublisher',
+            ),
+            'npTinyMCE' =>  array (
+              'category' => 'npTinyMCE',
+              'parent' => 'NewsPublisher',
+            ),
+        );
+
+        if (is_array($intersects)) {
+            foreach ($intersects as $k => $fields) {
+                /* make sure we have all fields */
+                if (!checkFields('category,parent', $fields)) {
+                    continue;
+                }
+                $categoryObj = $modx->getObject($classPrefix . 'modCategory', array('category' => $fields['category']));
+                if (!$categoryObj) {
+                    continue;
+                }
+                $parentObj = $modx->getObject($classPrefix . 'modCategory', array('category' => $fields['parent']));
+                    if ($parentObj) {
+                        $categoryObj->set('parent', $parentObj->get('id'));
+                    }
+                $categoryObj->save();
+            }
+        }
+        break;
+
+    case xPDOTransport::ACTION_UNINSTALL:
+        break;
+}
+
 
 return true;
