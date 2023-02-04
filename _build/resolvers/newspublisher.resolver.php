@@ -33,8 +33,7 @@ if ($transport) {
 } else {
     $modx =& $object->xpdo;
 }
-
-$modx =& $object->xpdo;
+$modx->log(modX::LOG_LEVEL_INFO, 'Running newspublisher resolver');
 $prefix = $modx->getVersionData()['version'] >= 3
     ? 'MODX\Revolution\\'
     : '';
@@ -55,25 +54,51 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
     /* Intentional fallthrough */
     case xPDOTransport::ACTION_INSTALL:
 
-        /* Try to set np_login_is System Setting if it's empty */
-        $doc = $modx->getObject($prefix . 'modResource', array('alias' => 'login'));
-        if (! $doc) {
-            $doc = $modx->getObject($prefix . 'modResource', array('pagetitle' => "Login"));
-        }
+        /* Try to set np_login_id System Setting if it's empty */
+        $modx->log(modX::LOG_LEVEL_INFO,
+            'Attempting to set np_login_id System Setting');
+        $success = true;
 
-        if ($doc) {
-            $setting = $modx->getObject($prefix . 'modSystemSetting', array('key' => 'np_login_id'));
-            if ($setting) {
-                $val = $setting->get('value');
-                if (empty($val)) {
-                    $setting->set('value', $doc->get('id'));
-                    if ($setting->save()) {
-                        $modx->log(modX::LOG_LEVEL_INFO, 'Setting np_login_id System Setting to ID of login page');
+        $loginPage = $modx->getObject($prefix . 'modResource', array('alias' => 'login'));
+        if (!$loginPage) {
+            $loginPage = $modx->getObject($prefix . 'modResource', array('pagetitle' => "Login"));
+        }
+        /* Create login page if there isn't one */
+        if (!$loginPage) {
+            $loginPage = $modx->newObject($prefix . 'modResource');
+            if ($loginPage) {
+                $loginPage->set('pagetitle', 'Login');
+                $loginPage->set('longtitle', 'Login');
+                $loginPage->setContent('[[!Login]]');
+                $loginPage->set('published', true);
+                if ($loginPage->save()) {
+                    $modx->log(modX::LOG_LEVEL_INFO, 'Created Login Page');
+
+                    $setting = $modx->getObject($prefix . 'modSystemSetting', array('key' => 'np_login_id'));
+                    if ($setting) {
+                        $val = $setting->get('value');
+
+                        $setting->set('value', $loginPage->get('id'));
+                        if ($setting->save()) {
+                            $modx->log(modX::LOG_LEVEL_INFO, 'Set np_login_id System Setting to ID of login page');
+                        } else {
+                            $success = false;
+                            $modx->log(modX::LOG_LEVEL_INFO, 'Could not create Login Page');
+                        }
+                    } else {
+                        $success = false;
+                        $modx->log(modX::LOG_LEVEL_INFO, 'Could not find np_login_id SystemSetting');
                     }
+                } else {
+                    $success = false;
+                    $modx->log(modX::LOG_LEVEL_INFO, 'Could not create Login Page');
                 }
             }
-        } else {
-            $modx->log(modX::LOG_LEVEL_ERROR, 'Could not set np_login_id System Settings; Set it manually to the ID of the Login page');
+        }
+        if (!$success) {
+
+            $modx->log(modX::LOG_LEVEL_ERROR,
+                'Could not set np_login_id System Settings; Set it manually to the ID of the Login page');
         }
 
         break;
@@ -81,6 +106,4 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
     case xPDOTransport::ACTION_UNINSTALL:
         break;
 }
-
-
 return true;
