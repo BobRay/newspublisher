@@ -30,8 +30,7 @@
 /* @var array $options */
 
 if (!function_exists('checkFields')) {
-    function checkFields($required, $objectFields) {
-        global $modx;
+    function checkFields($modx, $required, $objectFields) {
         $fields = explode(',', $required);
         foreach ($fields as $field) {
             if (!isset($objectFields[$field])) {
@@ -61,24 +60,24 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
     case xPDOTransport::ACTION_UPGRADE:
 
         $intersects = array (
-            'NewsPublisher' =>  array (
-              'category' => 'NewsPublisher',
-              'parent' => '',
-            ),
-            'npElFinder' =>  array (
-              'category' => 'npElFinder',
-              'parent' => 'NewsPublisher',
-            ),
-            'npTinyMCE' =>  array (
-              'category' => 'npTinyMCE',
-              'parent' => 'NewsPublisher',
-            ),
-        );
+                'NewsPublisher' =>  array (
+                  'category' => 'NewsPublisher',
+                  'parent' => '',
+                ),
+                'npElFinder' =>  array (
+                  'category' => 'npElFinder',
+                  'parent' => 'NewsPublisher',
+                ),
+                'npTinyMCE' =>  array (
+                  'category' => 'npTinyMCE',
+                  'parent' => 'NewsPublisher',
+                ),
+            );
 
         if (is_array($intersects)) {
             foreach ($intersects as $k => $fields) {
                 /* make sure we have all fields */
-                if (!checkFields('category,parent', $fields)) {
+                if (!checkFields($modx, 'category,parent', $fields)) {
                     continue;
                 }
                 $categoryObj = $modx->getObject($classPrefix . 'modCategory', array('category' => $fields['category']));

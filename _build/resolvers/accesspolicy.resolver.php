@@ -18,7 +18,7 @@ if ($transport) {
 } else {
     $modx =& $object->xpdo;
 }
-
+$modx->log(modX::LOG_LEVEL_INFO, 'Running access policy resolver');
 $success = false;
 $policyName = 'NewsPublisherEditor';
 $templateName = 'NewsPublisherPolicyTemplate';

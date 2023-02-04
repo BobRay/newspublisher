@@ -18,7 +18,7 @@ if ($transport) {
 } else {
     $modx =& $object->xpdo;
 }
-
+$modx->log(modX::LOG_LEVEL_INFO, 'Running filemove resolver');
 $success = true;
 
 if (!function_exists("rrmdir")) {

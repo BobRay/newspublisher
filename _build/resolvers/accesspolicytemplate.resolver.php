@@ -25,7 +25,7 @@ if ($transport) {
 } else {
     $modx =& $object->xpdo;
 }
-
+$modx->log(modX::LOG_LEVEL_INFO, 'Running access policy template resolver');
 $success = false;
 $templateName = 'NewsPublisherPolicyTemplate';
 $prefix = $modx->getVersionData()['version'] >= 3
