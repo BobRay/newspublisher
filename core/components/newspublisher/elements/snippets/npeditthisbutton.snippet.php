@@ -77,12 +77,9 @@ $modx->regClientCSS($assetsUrl . 'css/button.css');
 /* value will be unchanged if there are no errors  */
 $defaultButtonCaption = $buttonCaption;
 
-$npId = $modx->getOption('np_id', $props, '');
-$npEditId = $modx->getOption('np_edit_id', $props, '');
-
+/* Deny use if ownPagesOnly is true */
 /* get 'createdby' if sent */
 $createdby = $modx->getOption('createdby', $props, '-1', true);
-
 if (!empty($ownPagesOnly)) {
     if ($createdby !== '-1') {
         /* compare it to the ID of the current user */
@@ -96,42 +93,42 @@ if (!empty($ownPagesOnly)) {
     }
 }
 
+/* $np_id is the property value */
+$np_id = $modx->getOption('np_id', $props, '');
+$npEditId = $modx->getOption('np_edit_id', $props, '');
+
 /* set the np_id property to the ID of the NewsPublisher page
  * on first run if possible, error message if not */
-if (empty($npId)) {
 
-    $npObj = $modx->getObject($classPrefix . 'modResource', array('pagetitle' => 'NewsPublisher'));
-    if (!$npObj) { /* Try lowercase version */
-        $npObj = $modx->getObject($classPrefix . 'modResource', array('pagetitle' => 'Newspublisher'));
+$success = true;
+
+if (empty($np_id)) {
+    $npPage = $modx->getObject($classPrefix . 'modResource', array('alias' => 'newspublisher'));
+    if (!$npPage) { /* Try pagetitle */
+        $npPage = $modx->getObject($classPrefix . 'modResource', array('pagetitle' => 'NewsPublisher'));
     }
-    $success = true;
-    if ($npObj) {
-        /* @var $npObj modSnippet */
-        $npId = $npObj->get('id');
-        $npObj = $modx->getObject($classPrefix . 'modSnippet', array('name' => 'NpEditThisButton'));
-        if ($npObj) {
-            $props = array(
-                array(
-                    'name' => 'np_id',
-                    'desc' => 'np_id_desc',
-                    'type' => 'numberfield',
-                    'options' => '',
-                    'value' => $npId,
-                    'lexicon' => 'newspublisher:button',
 
-                ),);
-            if ($npObj->setProperties($props, true)) {
-                $npObj->save();
-                unset($npObj);
-            } else {
+    if (!$npPage) {
+        $success = false;
+    }
+
+    if ($npPage) {
+        /* @var $snippetObj modSnippet */
+        /* $npId is the true value of NewsPublisher page */
+        $npId = $npPage->get('id');
+        /* Set property to $npId */
+        $snippetObj = $modx->getObject($classPrefix . 'modSnippet', array('name' => 'NpEditThisButton'));
+        if ($snippetObj) {
+            $snippetProps = $snippetObj->getProperties();
+            $snippetProps['np_id'] = $npId;
+            $snippetObj->setProperties($snippetProps);
+            if ( !$snippetObj->save()) {;
                 $success = false;
             }
-
+            unset($snippetObj, $npPage);
         } else {
             $success = false;
         }
-    } else {
-        $success = false;
     }
     /* Failed - turn on debug so error message will display in button */
     if (!$success) {
