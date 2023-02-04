@@ -1059,9 +1059,12 @@ class Newspublisher {
                 }
 
                 /* See if it's a chunk */
-                $chunk = $this->modx->getChunk($field);
-                if (! empty ($chunk)) {
-                    $inner .= "\n" . $chunk;
+                if ($field[0] === '$') {
+                    $chunk = $this->modx->getChunk(substr($field, 1));
+                    if (!empty ($chunk)) {
+                        $inner .= "\n" . $chunk;
+                        continue;
+                    }
                 }
             }
         }
