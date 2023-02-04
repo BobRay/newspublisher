@@ -87,11 +87,6 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
                     continue;
                 }
 
-                /* Set class_key if MODX 3+ */
-               /* if ($isMODX3Plus) {
-                    $resource->set('class_key', 'MODX\Revolution\modDocument');
-                }*/
-
                 if ($fields['template'] == 'default') {
                     $resource->set('template', $modx->getOption('default_template'));
                 } elseif (empty($fields['template'])) {
