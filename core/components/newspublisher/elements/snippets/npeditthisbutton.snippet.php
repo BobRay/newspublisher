@@ -135,6 +135,8 @@ if (empty($np_id)) {
         $defaultButtonCaption = $modx->lexicon('np_no_np_id');
         $debug = true;
     }
+} else {
+    $npId = $np_id;
 }
 
 /* Don't execute on NewsPublisher Page */
@@ -160,7 +162,7 @@ $npEditId = $modx->getOption('np_edit_id',$props,'');
 $resourceToEdit = empty($npEditId)? $thisId : $npEditId;
 $editHome = $modx->getOption('editHome', $props, false);
 
-/* Don't show on the the home page unless &editHome is set to 1 */
+/* Don't show on the home page unless &editHome is set to 1 */
 if (! $editHome) {
     if ($thisId == $modx->getOption('site_start')) {
         if ($resourceToEdit == $modx->getOption('site_start')) {
