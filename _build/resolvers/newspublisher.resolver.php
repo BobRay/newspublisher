@@ -2,7 +2,7 @@
 /**
  * Resolver for NewsPublisher extra
  *
- * Copyright 2013-2022 Bob Ray <https://bobsguides.com>
+ * Copyright 2013-2023 Bob Ray <https://bobsguides.com>
  * Created on 02-25-2017
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it under the

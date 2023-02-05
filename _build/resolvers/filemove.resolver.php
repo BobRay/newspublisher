@@ -1,6 +1,7 @@
 <?php
 /**
  * NewsPublisher filemove resolver script
+ * Copyright 2013-2023 Bob Ray <https://bobsguides.com>
  *
  * @package newspublisher
  */
