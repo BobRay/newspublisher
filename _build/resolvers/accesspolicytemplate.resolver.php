@@ -1,6 +1,7 @@
 <?php
 /**
  * NewsPublisher access policy template resolver script
+ * Copyright 2013-2023 Bob Ray <https://bobsguides.com>
  *
  * @package newspublisher
  */
@@ -56,7 +57,7 @@ switch($options[xPDOTransport::PACKAGE_ACTION]) {
             $modx->lexicon->load('newspublisher:permissions');
             $permissions[] = $modx->newObject($prefix . 'modAccessPermission',array(
                 'name' => 'allow_modx_tags',
-                'description' => $modx->lexicon('np_allow_modx_tags_desc'),
+                'description' => 'Allow editing of resources with MODX tags using NewsPublisher.',
                 'value' => true,
             ));
             if (!empty($permissions)) {
