@@ -27,5 +27,5 @@
  */
 
 
-$_lang['np_allow_modx_tags_desc'] = "Autoriser la modification des ressources avec des balises MODX à l'aide de NewsPublisher .";
+$_lang['np_allow_modx_tags_desc'] = "Autoriser la modification des ressources avec des balises MODX à l'aide de NewsPublisher.";
 
