@@ -43,6 +43,24 @@ switch($options[xPDOTransport::PACKAGE_ACTION]) {
         break;
 
     case xPDOTransport::ACTION_UNINSTALL:
+        $template = $modx->getObject($prefix . 'modAccessPolicyTemplate', array('name' => $templateName));
+        if ($template) {
+             if ($template->remove()) {
+                 $modx->log(modX::LOG_LEVEL_INFO, 'Removed NP Policy Template');
+             } else {
+                 $modx->log(modX::LOG_LEVEL_INFO, 'Could not remove NP Policy');
+             }
+        }
+        $policy = $modx->getObject($prefix . 'modAccessPolicy', array('name' => $policyName));
+        if ($policy) {
+
+            if ($policy->remove()) {
+                $modx->log(modX::LOG_LEVEL_INFO, 'Removed NP Policy');
+            } else {
+                $modx->log(modX::LOG_LEVEL_INFO, 'Could not removed NP Policy');
+            }
+        }
+
         $success = true;
         break;
 }
