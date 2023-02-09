@@ -13,9 +13,9 @@ NewsPublisher Extra for MODX Revolution
 
 **Questions about using NewsPublisher** [MODX Forums](https://forums.modx.com)     
  
+**Fully Updated for MODX 3**
 
 NewsPublisher is a front-end resource editing and creation tool for MODX Revolution.
-
 
 NewsPublisher is based on the NewsPublisher snippet for MODX
 Evolution but has been completely refactored from the ground up for
