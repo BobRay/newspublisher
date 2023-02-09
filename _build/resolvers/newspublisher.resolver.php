@@ -99,6 +99,9 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
 
             $modx->log(modX::LOG_LEVEL_ERROR,
                 'Could not set np_login_id System Settings; Set it manually to the ID of the Login page');
+        } else {
+            $modx->log(modX::LOG_LEVEL_INFO,
+                'Set np_login_id System Setting');
         }
 
         break;
