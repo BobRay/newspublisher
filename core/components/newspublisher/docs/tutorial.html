@@ -3,8 +3,25 @@
 
 <h3>Fully Updated for MODX 3</h3>
 
+<h3>Version 3.1.5 Notes</h3>
+
+<p>NewsPublisher now creates the NewsPublisher page and the Login page on any new install if there are not already pages with the aliases <code>login</code> and <code>NewsPublisher</code>. If you have changed the aliases of those pages, you may get a second NewsPublisher page or a second Login page. This should only apply to new installs, so it's unlikely to affect the NewsPublisher page, but you might end up with a second login page. The best solution is to change the alias back to 'login' before installing NewsPublisher.</p>
+
+<p>If you forget to do that, Change the <code>np_id</code> property of the NpEditThisButton snippet to the ID of your original Login page. </p>
+
+<p>Another nice update is the opportunity to customize the NewPublisher page with MODX chunks. Just add as many the chunk names in the &show property of the NewsPublisher snippet like this:</p>
+
+<pre><fixedpre>
+    &show=`pagetitle,longtitle,someChunk,content,SomeOtherChunk`
+</fixedpre></pre>
+
+<p>The show properties are displayed in the order they appear in the <code>&show</code> property, If anything in the list is not a resource field or TV, NewsPublisher will inject the chunk content at that point. Obviously, the chunk names shouldn't match any resource fields or TVs.</p>
+
+<p>Another change is that the permissions in your NewsPublisherEditor policy won't be overwritten when you upgrade NewsPublisher.</p>
+
+
 <div class="box">
-    <p><b>Important: If you are upgrading from a version prior to NewsPublisher 3.0, be sure to see the <a href="[[~[[*id]]]]#np_upgrade_notes">Upgrade Notes</a> at the bottom of this page.</b></p>
+    <p><b>Important: If you are upgrading from a version prior to NewsPublisher 3.0, be sure to see the <a href="[[~[[*id]]]]#np_upgrade_notes">Version 3.0 Upgrade Notes</a> at the bottom of this page.</b></p>
 </div>
 
 <p>(Jump to <a href="[[~[[*id]]]]#np_SettingsTable">NewsPublisher System Settings Table</a>.)</p>
@@ -34,7 +51,7 @@
 <p>To install NewsPublisher, go to Extras | Installer on the main menu in the MODX Manager and click on the "Download Extras" button. That will take you to the Revolution Repository. Put NewsPublisher in the search box and press Enter. Click on the "Download" button. When the download has finished, click on the "Back to Package Manager" button. That should bring you back to your Package Management grid. Click on the "Install" button next to NewsPublisher in the grid and follow the prompts. The NewsPublisher snippet should now be installed.</p>
 
 <div class="box">
-    <p>On a fresh install, NewsPublisher will install a Resource called "NewsPublisher" containing an example NewsPublisher snippet tag. You can modify it to meet your needs and change the `pagetitle` and `alias` if you like, but <b>don't delete it!</b>. It's important that it keep the same ID because other parts of NewsPublisher will use that ID to find it.</p>
+    <p>On a fresh install, NewsPublisher will install a Resource called "NewsPublisher" containing an example NewsPublisher snippet tag. You can modify it to meet your needs and change the `pagetitle` but don't change the `alias` and <b>don't delete it!</b>. It's important that it keep the same ID because other parts of NewsPublisher will use that ID to find it.</p>
 
     <p>NewsPublisher will not change the resource during upgrades, and will not remove it when uninstalled to prevent the loss of any children you might like to keep.</p>
 </div>
@@ -93,8 +110,6 @@
 <p>The NewsPublisherEditor Policy is based on the NewsPublisherPolicyTemplate, which in turn is based on the Administrator Policy Template, but with the addition of the <code>allow_modx_tags</code> permission. Both the Policy and the Policy Template should be installed automatically when you install the NewsPublisher Package.</p>
 
 
-    <a name="np_login_redirect"></a>
-
 <h3>Login Redirect</h3>
 
 <p>As of Version 3.0, NewsPublisher checks for login status and redirects users to the Login page if they are not logged in. If you don't want this, you can set the <code>&np_login_redirect</code> System Setting to <code>No</code>. It is set to
@@ -119,11 +134,19 @@
 <p>Using the <code>&redirectToPrior</code> property in the Login snippet tag to redirect users back to the NewsPublisher
     page is not entirely reliable, since some browsers don't set the <code>$_SERVER[HTTP_REFERER]</code> variable
     properly. It's recommended instead to set the login snippet's <code>&loginResourceId</code> property to the ID of the NewsPublisher
-    page. If necessary, you can have a separate Login page for NewsPublisher. If you do this, be sure to use an <code>&np_login_id</code> property in the NewsPublisher snippet tag set to the ID of your NewsPublisher Login page. </p>
+    page.</p>
+
+<p>If you use the Login page only for NewsPublisher, and you have only one NewsPublisher page, you can use the following property in the Login tag to redirect users back the NewsPublisher page (where ## is the ID of the NewsPublisher page): </p>
+
+<pre><fixepre>
+    &loginResourceId=`##`
+</fixepre></pre>
+
+<p>If necessary, you can have a separate Login page for NewsPublisher. If you do this, be sure to use an <code>&np_login_id</code> property in the NewsPublisher snippet tag set to the ID of your NewsPublisher Login page. </p>
 
 <h3>Editing Existing Resources</h3>
 
-<p>To edit existing resources, simply place a tag for the NpEditThisButton snippet anywhere in the <code><body></body></code> section of your template(s) or in the Resource Content field of a Resource. The button is positioned absolutely in the lower right section of the page. The <code>&right</code> property controls the distance from the right side of the page and the <code>&bottom</code> property controls the distance from the bottom. The default for these properties is `20%`. Like NewsPublisher, the button also responds to security permissions and is not shown on pages the user has no right to edit or save. It also does not show on the NewsPublisher page or the home page. If there are other pages where you would like to hide it, you can include a comma-delimited list of their IDs in the <code>&noShow</code> property of the NpEditThisButton snippet tag.</p>
+<p>To edit existing resources, simply place a tag for the NpEditThisButton snippet anywhere in the <code>&lt;body>&lt;/body></code> section of your template(s) or in the Resource Content field of a Resource. The button is positioned absolutely in the lower right section of the page. The <code>&right</code> property controls the distance from the right side of the page and the <code>&bottom</code> property controls the distance from the bottom. The default for these properties is `20%`. Like NewsPublisher, the button also responds to security permissions and is not shown on pages the user has no right to edit or save. It also does not show on the NewsPublisher page or the home page. If there are other pages where you would like to hide it, you can include a comma-delimited list of their IDs in the <code>&noShow</code> property of the NpEditThisButton snippet tag.</p>
 
 <p>Because the button will be hidden until you get the permissions correct, it's recommended that you start with the button tag like this:</p>
 <p><pre><fixedpre>[[!NpEditThisButton? &debug=`1`]]</fixedpre></pre></p>
@@ -276,7 +299,7 @@ form.</p>
 &searchable_default
 &richtext_default</fixedpre></pre>
 
-<a name="np_presets"></a>
+<a id="np_presets"></a>
 
 <h3>Presets Property</h3>
 
@@ -423,7 +446,7 @@ form.</p>
 
 <p>NewsPublisher should also work with other Custom Resource Classes as long as they are implemented properly, but I haven't had an opportunity to test it with anything but Articles.</p>
 
-<a name="np_configuring_elfinder"></a>
+<a id="np_configuring_elfinder"></a>
 
 <h3>Configuring elFinder</h3>
 
@@ -461,7 +484,7 @@ form.</p>
 
 <p>One use-case for modifying elFinder would be allowing users to browse in and under more than one directory (i.e., multiple roots). This requires modifying the npElFinderConnector snippet code. If you do this, duplicate the snippet and modify the tag on the npElFinderConnector Resource to point to your duplicate. See the docs <a href="https://github.com/Studio-42/elFinder/wiki/Multiple-Roots">here</a> for an example. Note that this will not apply to any TVs. For TVs, the user's browsing will always be limited to the baseURL/basePath of each TV's Media Source. One great feature of elFinder using multiple roots is that the user can have different capabilities in each root. You might, for example, have one directory where users can only upload files and another where they can only download files. This would not be possible with the MODX file browser.</p>
 
-<a name="np_configuring_tinymce"></a>
+<a id="np_configuring_tinymce"></a>
 
 <h3>Configuring TinyMCE</h3>
 
@@ -483,7 +506,7 @@ form.</p>
     components.</p>
 
 
-<a name="np_SettingsTable"></a>
+<a id="np_SettingsTable"></a>
 
 <h3>NewsPublisher System Settings</h3>
 
@@ -542,7 +565,7 @@ form.</p>
 
 
 <br>
-<a name="np_propertiesTable"></a>
+<a id="np_propertiesTable"></a>
 
 <h3>NewsPublisher Snippet Properties</h3>
 
@@ -877,7 +900,7 @@ form.</p>
 </table>
 
 <br>
-<a name="np_elFinderConnectorTable"></a>
+<a id="np_elFinderConnectorTable"></a>
 
 <h3>npElFinderConnector Snippet Properties</h3>
 <table class="properties">
@@ -951,7 +974,7 @@ form.</p>
 </table>
 
 <br>
-<a name="npet_propertiesTable"></a>
+<a id="npet_propertiesTable"></a>
 
 <h3>NpEditThisButton Snippet Properties</h3>
 
@@ -1012,6 +1035,8 @@ form.</p>
 
 <p>If you are using elFinder and have to scroll down to see browser window, check to make sure that you have <code><fixedpre><!DOCTYPE html></fixedpre></code> at the top of your template.</p>
 
+<p>If the NpEditThisButton doesn't work, be sure the NpEditThisButton property <code>np_id</code> is set to the ID of the page with the NewsPublisher snippet tag.</p>
+
 <p>&nbsp;</p>
 <h3>Bugs, Feature Requests, and Questions</h3>
 
@@ -1025,7 +1050,7 @@ Questions should be posted in the NewsPublisher topic at <a href="https://forums
 
 
 
-<a name="np_upgrade_notes"></a>
+<a id="np_upgrade_notes"></a>
 
 <div class="box">
     <h2>NewsPublisher 3.0 Upgrade Notes</h2>
@@ -1043,8 +1068,6 @@ Questions should be posted in the NewsPublisher topic at <a href="https://forums
 <p>New Tpl chunks for initializing TinyMCE and elFinder allow you to customize their operation by creating and specifying your own custom Tpl chunks, and you can set the directory for file browsing within richtext sections of any of your non-TV richtext sections.</p>
 
 <p>There are also several changes to make NewsPublisher more secure.</p>
-
-
 
 <h3>Upgrade Checklist</h3>
     <p>Here are the main things you'll want to deal with after the upgrade. See the text below for details.</p>

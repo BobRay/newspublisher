@@ -1,5 +1,22 @@
 Changelog for NewsPublisher
 
+NewsPublisher 3.1.5-pl
+----------------------
+ - Update resolvers for MODX 3
+ - Fix installation issues
+ - Create Login page in Validator if it doesn't exist
+ - Create NewsPublisher Page in Resolver if it doesn't exist
+ - Improve feedback during install
+ - Fix bug with placeholder in edit button snippet
+ - Fix permission description in policy template
+ - Fix issue with NewsPublisher page template assignment
+ - Simplify setting np_id property of edit button snippet
+ - Get rid of global $modx
+ - Allow chunk names in &show list
+ - Speed up chunk processing in displayForm()
+ - Fix lexicon strings for allow_modx_tags
+ - Don't overwrite permission settings.
+
 NewsPublisher 3.1.4-pl
 ----------------------
  - Fix bug with policy template installation
