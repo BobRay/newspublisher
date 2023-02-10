@@ -414,12 +414,14 @@ if ($hasResources) {
     unset($resources, $resource, $attributes);
 }
 
-/* NewsPublisher access policy template */
+/* NewsPublisher access policy template
+   (removed in resolver)
+*/
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding access policy template.');
 $template = include $sources['data'] . 'transport.accesspolicytemplate.php';
 $vehicle = $builder->createVehicle($template, array(
     xPDOTransport::PRESERVE_KEYS => false,
-    xPDOTransport::UPDATE_OBJECT => true,
+    xPDOTransport::UPDATE_OBJECT => false,
     xPDOTransport::UNIQUE_KEY => 'name',
 ));
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding access policy template resolver.');
@@ -428,12 +430,14 @@ $vehicle->resolve('php', array(
 ));
 $builder->putVehicle($vehicle);
 
-/* NewsPublisher access policy */
+/* NewsPublisher access policy
+   (removed in resolver)
+ */
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding access policy.');
 $policy = include $sources['data'] . 'transport.accesspolicy.php';
 $vehicle = $builder->createVehicle($policy, array(
     xPDOTransport::PRESERVE_KEYS => false,
-    xPDOTransport::UPDATE_OBJECT => true,
+    xPDOTransport::UPDATE_OBJECT => false,
     xPDOTransport::UNIQUE_KEY => 'name',
 ));
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding access policy resolver.');

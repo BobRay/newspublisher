@@ -16,14 +16,14 @@ $components = array(
     'packageName' => 'NewsPublisher',  /* No spaces, no dashes */
     'packageNameLower' => $packageNameLower,
     'packageDescription' => 'NewsPublisher project for MyComponent extra',
-    'version' => '3.1.4',
+    'version' => '3.1.5',
     'release' => 'pl',
     'author' => 'Bob Ray',
     'email' => '<https://bobsguides.com>',
     'authorUrl' => 'https://bobsguides.com',
     'authorSiteName' => "Bob's Guides",
     'packageDocumentationUrl' => 'https://bobsguides.com/newspublisher-tutorial.html',
-    'copyright' => '2013-2022',
+    'copyright' => '2013-2023',
 
     /* no need to edit this except to change format */
     'createdon' => strftime('%m-%d-%Y'),
@@ -473,6 +473,7 @@ $components = array(
      *  named after the package suffix 'validator.php' will be added */
 
     'validators' => array(
+        'default',
     ),
 
     /* (optional) install.options is needed if you will interact
