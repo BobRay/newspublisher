@@ -38,6 +38,8 @@ $prefix = $modx->getVersionData()['version'] >= 3
     ? 'MODX\Revolution\\'
     : '';
 
+$languages = array('en', 'fr', 'it', 'de', 'ru');
+
 switch ($options[xPDOTransport::PACKAGE_ACTION]) {
     /** @noinspection PhpMissingBreakStatementInspection */
     case xPDOTransport::ACTION_UPGRADE:
@@ -104,9 +106,63 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
                 'Set np_login_id System Setting');
         }
 
+
+        /* Create lexicon entries for allow_modx_tags description */
+
+        /** @var array $_lang */
+        foreach ($languages as $language) {
+            $file = MODX_CORE_PATH . 'components/newspublisher/lexicon/' . $language . '/' . 'permissions.inc.php';
+            /* Next line has to be inside the loop */
+            include($file);
+
+            $value = $_lang['np_allow_modx_tags_desc'];
+
+            $fields = array(
+                'name' => 'np_allow_modx_tags_desc',
+                'language' => $language,
+            );
+            $entry = $modx->getObject($prefix . 'modLexiconEntry', $fields);
+
+            if (!$entry) {
+                $entry = $modx->newObject('modLexiconEntry');
+                $entry->set('name', 'np_allow_modx_tags_desc');
+                $entry->set('language', $language);
+                $entry->set('topic', 'permissions');
+                $entry->set('namespace', 'core');
+                $entry->set('value', $value);
+                if ($entry->save()) {
+                    $modx->log(modX::LOG_LEVEL_INFO, 'Set ' . $language .
+                        ' lexicon strings for allow_modx_tags setting');
+                } else {
+                    $modx->log(modX::LOG_LEVEL_INFO, 'Could not set lexicon strings for allow_modx_tags setting');
+                }
+            }
+        }
         break;
 
     case xPDOTransport::ACTION_UNINSTALL:
+        /* Remove lexicon entries for allow_modx_tags description */
+
+        $modx->log(modX::LOG_LEVEL_INFO, "Attempting to remove Lexicon entries");
+
+        foreach($languages as $language) {
+            $fields = array(
+                'name' => 'np_allow_modx_tags_desc',
+                'language' => $language,
+            );
+            $entry = $modx->getObject($prefix . 'modLexiconEntry', $fields);
+
+            if ($entry) {
+                if ($entry->remove()) {
+                    $modx->log(modX::LOG_LEVEL_INFO, 'Removed ' . $language .
+                        ' lexicon strings for allow_modx_tags setting');
+                } else {
+                    $modx->log(modX::LOG_LEVEL_INFO, 'Could not remove ' .
+                        $language . ' lexicon string for allow_modx_tags setting');
+                }
+            }
+        }
+
         break;
 }
 return true;
