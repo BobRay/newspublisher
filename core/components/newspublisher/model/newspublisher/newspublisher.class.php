@@ -1050,14 +1050,7 @@ class Newspublisher {
                 /* regular resource field */
                 $inner .= $this->_displayField($field);
             } else {
-                /* see if it's a TV */
-                /* (presets done inside  _displayTv() ) */
-
-                $retVal = $this->_displayTv($field);
-                if ($retVal) {
-                    $inner .= "\n" . $retVal;
-                }
-
+             
                 /* See if it's a chunk */
                 if ($field[0] === '$') {
                     $chunk = $this->modx->getChunk(substr($field, 1));
@@ -1065,6 +1058,13 @@ class Newspublisher {
                         $inner .= "\n" . $chunk;
                         continue;
                     }
+                }
+
+                /* see if it's a TV */
+                /* (presets done inside  _displayTv() ) */
+                $retVal = $this->_displayTv($field);
+                if ($retVal) {
+                    $inner .= "\n" . $retVal;
                 }
             }
         }
