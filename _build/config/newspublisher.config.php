@@ -16,14 +16,14 @@ $components = array(
     'packageName' => 'NewsPublisher',  /* No spaces, no dashes */
     'packageNameLower' => $packageNameLower,
     'packageDescription' => 'NewsPublisher project for MyComponent extra',
-    'version' => '3.1.5',
+    'version' => '3.1.6',
     'release' => 'pl',
     'author' => 'Bob Ray',
     'email' => '<https://bobsguides.com>',
     'authorUrl' => 'https://bobsguides.com',
     'authorSiteName' => "Bob's Guides",
     'packageDocumentationUrl' => 'https://bobsguides.com/newspublisher-tutorial.html',
-    'copyright' => '2013-2023',
+    'copyright' => '2013-2025',
 
     /* no need to edit this except to change format */
     'createdon' => strftime('%m-%d-%Y'),
