@@ -1,5 +1,11 @@
 Changelog for NewsPublisher
 
+NewsPublisher 3.1.6-pl
+----------------------
+ - Fix bug with chunk and TV fields (thanks to frischnetz)
+ - Add troubleshooting note about TinyMCE conflicts
+ - Update copyrights
+
 NewsPublisher 3.1.5-pl
 ----------------------
  - Update resolvers for MODX 3

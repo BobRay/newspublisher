@@ -149,7 +149,8 @@
 <p>To edit existing resources, simply place a tag for the NpEditThisButton snippet anywhere in the <code>&lt;body>&lt;/body></code> section of your template(s) or in the Resource Content field of a Resource. The button is positioned absolutely in the lower right section of the page. The <code>&right</code> property controls the distance from the right side of the page and the <code>&bottom</code> property controls the distance from the bottom. The default for these properties is `20%`. Like NewsPublisher, the button also responds to security permissions and is not shown on pages the user has no right to edit or save. It also does not show on the NewsPublisher page or the home page. If there are other pages where you would like to hide it, you can include a comma-delimited list of their IDs in the <code>&noShow</code> property of the NpEditThisButton snippet tag.</p>
 
 <p>Because the button will be hidden until you get the permissions correct, it's recommended that you start with the button tag like this:</p>
-<p><pre><fixedpre>[[!NpEditThisButton? &debug=`1`]]</fixedpre></pre></p>
+<pre><fixedpre>
+    [[!NpEditThisButton? &debug=`1`]]</fixedpre></pre>
 
 <p>
 In debug mode, the button will always show, and if it would normally be hidden, the button itself will display a message explaining why it would not be shown.
@@ -167,6 +168,7 @@ In debug mode, the button will always show, and if it would normally be hidden, 
 </p>
 
 <h3>NewsPublisher Tabs</h3>
+
 <p>As of NewsPublisher 1.4.1, you can show the Resource fields on separate tabs like in the Manager (thanks to Gregor Šekoranja). The tabs and fields can be in any order and any field can go on any tab. You can have as many tabs as you want. The names of the tabs are arbitrary. Whatever names you use will be displayed in the tab menu on the form.</p>
 
 <p>Set <code>&usetabs=`1`</code> in the NewsPublisher snippet tag and include a <code>&tabs</code> property in the following form:</p>
@@ -236,7 +238,9 @@ NewsPublisher form. When the user clicks on the button, the page currently being
 
 <p>NewsPublisher has many options, but almost all of them are optional. You can see the list by editing the NewsPublisher snippet and clicking on the Properties tab. Unlock the default properties by clicking on the &quot;Default Properties Locked&quot; button. Then, click the little plus sign next to a property to see what it does. It is <b>strongly</b> recommended that you not change the default properties on the Properties tab of the snippet. Either put properties in the snippet tag to override them, or create a property set by clicking on the &quot;Add Property Set&quot; button and specify it in the snippet tag like this:</p>
 
-<p><pre><fixedpre>[[!NewsPublisher@PropertySetName]]</fixedpre></pre></p>
+<pre><fixedpre>
+    [[!NewsPublisher@PropertySetName]]
+</fixedpre></pre>
 
 
 <h3>Common Properties</h3>
@@ -394,7 +398,7 @@ form.</p>
 
 <p><code>&shownotify</code> &mdash; (0/1 - optional) If set, the &quot;Launch Notify&quot; option is set. If selected, Notify will be launched for the resource on successful submission; default: 0.</p>
 
-<p><code>&notifychecked</code> &mdash; (0/1 - optional) If is this option and <code>&shownotify</code> are set, the &quot;Launch Notify&quot; option will be checked by default; default: 0.</p>
+<p><code>&amp;notifychecked</code> &mdash; (0/1 - optional) If is this option and <code>&shownotify</code> are set, the &quot;Launch Notify&quot; option will be checked by default; default: 0.</p>
 
 
 <p><b>NpEditThisButton Snippet</b></p>
@@ -407,7 +411,8 @@ form.</p>
 
 <p>If you would like to have different NewsPublisher pages with different fields and settings, create a separate page for each one with a different snippet tag on each page. The NpEditThisButton, by default launches the page specified in its <code>&np_id</code> property. If you use the following snippet tag for the button, you can have it launch the appropriate NewsPublisher page by creating a TV for each page called NpId and setting the correct NewsPublisher page ID in it:</p>
 
-<p><pre><fixedpre>[[!NpEditThisButton? &np_id=`[[*NpId]]`</fixedpre></pre></p>
+<pre><fixedpre>
+    [[!NpEditThisButton? &np_id=`[[*NpId]]`</fixedpre></pre>
 
 <h3>NewsPublisher and getResources</h3>
 
@@ -934,7 +939,7 @@ form.</p>
     </tr>
     <tr>
         <td>disableCommands</td>
-        <td>Comma-separated list of commands to disable. To enable a command, delete it from the list.<br><br><b</td>
+        <td>Comma-separated list of commands to disable. To enable a command, delete it from the list.</td>
         <td>archive, download, cut, copy, paste, duplicate, edit, open, mkdir, mkfile, netmount, netunmount, rm, rename,
             quicklook, upload, view
         </td>
@@ -1008,7 +1013,7 @@ form.</p>
     </tr>
     <tr>
         <td>np_edit_id</td>
-        <td>ID of page to edit (bottom and right properties are ignored -- button is displayed inline). You can use this in an edit button tag in your getResources Tpl chunk to have multiple buttons on a page: [[!NpEditThisButton? &np_edit_id=`[[+id]]`]]</td>
+        <td>ID of page to edit (bottom and right properties are ignored -- button is displayed inline). You can use this in an edit button tag in your getResources Tpl chunk to have multiple buttons on a page: <fixedpre>[[!NpEditThisButton? &np_edit_id=`[[+id]]`]]</fixedpre></td>
         <td>(empty)</td>
     </tr>
     <tr>
@@ -1037,13 +1042,15 @@ form.</p>
 
 <p>If the NpEditThisButton doesn't work, be sure the NpEditThisButton property <code>np_id</code> is set to the ID of the page with the NewsPublisher snippet tag.</p>
 
+<p>If the TinyMCE rich text editor doesn't work, it may be because you're using a version of TinyMCE in the MODX Manager and viewing the front end from the same browser. This can create a conflict between the two versions of TinyMCE. You can avoid this by testing NewsPublisher using a different browser, where you are not logged in to the Manager. In normal use, your users won't have this problem when using NewsPublisher because they will not be logged in to the MODX Manager.</p>
+
 <p>&nbsp;</p>
 <h3>Bugs, Feature Requests, and Questions</h3>
 
 <p>Bugs and feature requests should be reported here: <a href="https://github.com/BobRay/newspublisher/issues">GitHub NewsPublisher Page</a>.</p>
 
 <p>
-Questions should be posted in the NewsPublisher topic at <a href="https://forums.modx.com">MODX Forums</a>.</p>
+Questions should be posted in the NewsPublisher topic at <a href="https://community.modx.com">MODX Forums</a>.</p>
 
 
 <p>&nbsp;</p>
