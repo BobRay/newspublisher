@@ -3,7 +3,7 @@
 /**
  * NewsPublisher
  *
- * Copyright 2011-2023 Bob Ray
+ * Copyright 2011-2025 Bob Ray
  *
  * @author Bob Ray <https://bobsguides.com>
  * @author Raymond Irving
@@ -257,7 +257,7 @@ class Newspublisher {
      */
     protected $parentObj;
     /**
-     * @var boolean Indicates that we're editing an existing resource (ID of resource) 
+     * @var boolean Indicates that we're editing an existing resource (ID of resource)
      */
     protected $existing;
     /**
@@ -628,7 +628,7 @@ class Newspublisher {
                             return;
                         }
                     }
-                    
+
                     $this->modx->toPlaceholders($ph,$this->prefix);
                     unset($ph);
                 }
@@ -1217,7 +1217,7 @@ class Newspublisher {
                             $rtContent, 'np-content', $rows, $cols);
                         unset($rtContent);
                         break;
-                    
+
                     case 'modWebLink':
                     case 'modSymLink':
                         $class_key = strtolower(substr($class_key, 3));
@@ -1304,7 +1304,7 @@ class Newspublisher {
                 $inner .= $this->_displayList($field, 'listbox',
                     $options, $this->resource->get('class_key'));
                 break;
-                
+
             case 'content_dispo':
                 $options = array();
                 $dispo = array('inline', 'attachment');
@@ -1348,7 +1348,7 @@ class Newspublisher {
 
         return $inner;
     }
-    
+
 
     /** displays an individual TV
      *
@@ -1450,12 +1450,12 @@ class Newspublisher {
                 }
             }
 
-        
+
             if (stristr($ph,'@EVAL')) {
                 $this->setError($this->modx->lexicon('np_no_evals') .
                     $tv->get('name'));
                 return null;
-                
+
             } else {
                 /* Do presets for TVs */
                 if (isset($this->presets[$name])) {
@@ -1507,7 +1507,7 @@ class Newspublisher {
             case 'listbox':
             case 'listbox-multiple':
             case 'dropdown':
-            
+
                 /* handle @ binding TVs */
                 if (preg_match('/^@/',$fields['elements'])) {
                     $fields['elements'] = $tv->processBindings($fields['elements']);
@@ -1606,7 +1606,7 @@ class Newspublisher {
                     $options, $selected, $params['allowBlank']!='false');
                 break;
 
-                
+
             case 'image':
             case 'file':
                 $mediaSourceId = $tv->get('source');
@@ -1626,14 +1626,14 @@ class Newspublisher {
                 break;
 
         }  /* end switch */
-        
+
         $formTpl = $this->strReplaceAssoc($replace, $formTpl);
 
         /* Add TV to required fields if blank values are not allowed */
         if (isset($params['allowBlank']) && ($params['allowBlank'] == 'false')) {
             $this->props['required'] .= ',' . $name;
         }
-        
+
         return $formTpl;
     }
 
@@ -1646,7 +1646,7 @@ class Newspublisher {
     public function strReplaceAssoc(array $replace, $subject) {
        return str_replace(array_keys($replace), array_values($replace), $subject);
     }
-    
+
 
     /** Produces the HTML code for date fields/TVs
      * Splits time string into date and time and sets
@@ -1659,7 +1659,7 @@ class Newspublisher {
      *     'disabledDays', 'minDateValue' and 'maxDateValue' (in the format used
      *     for the corresponding TV input options)
      * @return string - date field/TV HTML code */
-    
+
     protected function _displayDateInput($name, $timeString, $options = array()) {
 
         $initDatePicker = (bool) $this->modx->getOption('initdatepicker', $this->props, false, true);
@@ -1669,7 +1669,7 @@ class Newspublisher {
             $this->setFieldError($name, $msg);
         }
         unset($initDatePicker);
-        
+
         if (! $this->isPostBack) {
             $s = $timeString? $s = substr($timeString, 11, 5):'';
             $this->modx->toPlaceholder($name . '_time' , $s, $this->prefix);
@@ -1690,7 +1690,7 @@ class Newspublisher {
             }
             $this->modx->toPlaceholder($name, $s, $this->prefix);
         }
-          
+
         /* Set disabled dates */
 
         $disabled = '';
@@ -1728,9 +1728,9 @@ class Newspublisher {
 
         return $this->strReplaceAssoc($PHs, $this->getTpl('DateTpl'));
     }
-    
+
     /** Produces the HTML code for simple text fields/TVs
-     * 
+     *
      * @access protected
      * @param $name string - name of the field/TV
      * @param $tplName string - name of the template chunk that should be used
@@ -1744,7 +1744,7 @@ class Newspublisher {
 
 
     /** Produces the HTML code for file/image TVs
-     * 
+     *
      * @access protected
      * @param $name string - name of the TV
      * @param $tplName string - name of the template chunk that should be used
@@ -1783,9 +1783,9 @@ class Newspublisher {
         return $this->strReplaceAssoc($PHs, $this->getTpl($tplName));
 
     }
-    
+
     /** Produces the HTML code for boolean (checkbox) fields/TVs
-     * 
+     *
      * @access protected
      * @param $name string - name of the field/TV
      * @param $checked bool - Is the Checkbox activated?  (ignored on postback)
@@ -1800,9 +1800,9 @@ class Newspublisher {
         return $this->strReplaceAssoc($PHs, $this->getTpl('BoolTpl'));
     }
 
-    
+
     /** Produces the HTML code for list fields/TVs
-     * 
+     *
      * @access protected
      * @param $name string  - name of the field/TV
      * @param $type string  - type of list (checkbox, listbox, listbox-multiple)
@@ -1821,7 +1821,7 @@ class Newspublisher {
 
         $postfix = ($type == 'checkbox' || $type=='listbox-multiple' ||
             $type=='listbox')? '[]' : '';
-        
+
         $PHs = array('[[+npx.name]]' => $name . $postfix);
 
         if($type == 'listbox' || $type == 'listbox-multiple' || $type == 'dropdown') {
@@ -1893,7 +1893,7 @@ class Newspublisher {
 
 
     /** Produces the HTML code for textarea fields/TVs
-     * 
+     *
      * @access protected
      * @param $name string - name of the field/TV
      * @param $RichText bool - Is this a Richtext field?
@@ -1972,7 +1972,7 @@ class Newspublisher {
             }
             return '';
         }
-        
+
         /* strip any unwanted tags */
         foreach ($_POST as $k => $v) {
             if (!is_array($v)) {

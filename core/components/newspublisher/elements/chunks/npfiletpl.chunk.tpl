@@ -51,4 +51,3 @@ $('#elfinder_button').on('click', function() {
   });
 });
 </script>
-

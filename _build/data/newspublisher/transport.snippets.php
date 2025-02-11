@@ -2,7 +2,7 @@
 /**
  * snippets transport file for NewsPublisher extra
  *
- * Copyright 2013-2023 Bob Ray <https://bobsguides.com>
+ * Copyright 2013-2025 Bob Ray <https://bobsguides.com>
  * Created on 07-11-2014
  *
  * @package newspublisher

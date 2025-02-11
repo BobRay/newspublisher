@@ -2,7 +2,7 @@
 /**
  * templates transport file for NewsPublisher extra
  *
- * Copyright 2013-2023 Bob Ray <https://bobsguides.com>
+ * Copyright 2013-2025 Bob Ray <https://bobsguides.com>
  * Created on 02-06-2017
  *
  * @package newspublisher

@@ -3,7 +3,7 @@
 * Resource resolver  for NewsPublisher extra.
 * Sets template, parent, and (optionally) TV values
 *
-* Copyright 2013-2023 Bob Ray <https://bobsguides.com>
+* Copyright 2013-2025 Bob Ray <https://bobsguides.com>
 * Created on 12-20-2016
 *
  * NewsPublisher is free software; you can redistribute it and/or modify it under the
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License along with
  * NewsPublisher; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA 02111-1307 USA
+
 * @package newspublisher
 * @subpackage build
 */
@@ -63,17 +64,17 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
     case xPDOTransport::ACTION_UPGRADE:
 
         $intersects = array (
-                0 =>  array (
-                  'pagetitle' => 'npElFinder',
-                  'parent' => 'NewsPublisher',
-                  'template' => 'npElFinderTemplate',
-                ),
-                1 =>  array (
-                  'pagetitle' => 'npElFinderConnector',
-                  'parent' => 'NewsPublisher',
-                  'template' => 'npElFinderTemplate',
-                ),
-            );
+            0 =>  array (
+                'pagetitle' => 'npElFinder',
+                'parent' => 'NewsPublisher',
+                'template' => 'npElFinderTemplate',
+            ),
+            1 =>  array (
+                'pagetitle' => 'npElFinderConnector',
+                'parent' => 'NewsPublisher',
+                'template' => 'npElFinderTemplate',
+            ),
+        );
 
         if (is_array($intersects)) {
             foreach ($intersects as $k => $fields) {

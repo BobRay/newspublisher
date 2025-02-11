@@ -1,7 +1,7 @@
 <?php
 /**
  * NewsPublisher
- * Copyright 2011-2023 Bob Ray
+ * Copyright 2011-2025 Bob Ray
  *
  * NewsPublisher is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -19,7 +19,7 @@
  * @package newspublisher
  * @author Raymond Irving
  * @author Bob Ray <https://bobsguides.com>
- 
+
  *
  * Description: The NewsPublisher snippet presents a form in the front end for
  * creating resources. Rich text editing is available for text fields and TVs.
@@ -357,7 +357,7 @@ if ($isPostBack) {
 
     /* if user has set postid, use it, otherwise use ID of the doc */
     $postId = empty($scriptProperties['postid']) ? $docId : $scriptProperties['postid']  ;
-    
+
 
     /* handle save errors */
     $errors = $np->getErrors();

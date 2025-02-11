@@ -2,7 +2,7 @@
 /**
  * templates transport file for NewsPublisher extra
  *
- * Copyright 2013-2023 Bob Ray <https://bobsguides.com>
+ * Copyright 2013-2025 Bob Ray <https://bobsguides.com>
  * Created on 12-20-2016
  *
  * @package newspublisher
@@ -33,7 +33,7 @@ $templates[1]->fromArray(array (
   'description' => 'Template for elFinder in NewsPublisher',
   'icon' => '',
   'template_type' => 0,
-  'properties' => 
+  'properties' =>
   array (
   ),
 ), '', true, true);
